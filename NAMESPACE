@@ -1,0 +1,7 @@
+import(learnr)
+import(ReacTran, deSolve, rootSolve, plot3D)
+importFrom("utils", "browseURL")
+
+export(RTMtutorial)
+export(RTMexercise)
+export(RTMreader)

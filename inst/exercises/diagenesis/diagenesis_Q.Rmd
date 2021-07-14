@@ -1,0 +1,223 @@
+---
+title: "The Coupled Cycles of Carbon, Oxygen, Nitrogen and Sulfur in Marine Sediments"
+subtitle: "Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
+author: "Karline Soetaert and Lubos Polerecky, Utrecht University"
+date: 'July 2021'
+output:
+  pdf_document: default
+  html_document: default
+#indent: true
+---
+
+```{r setup_A, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introduction
+
+After mineral and organic matter particles are deposited from the water column onto the sediment surface, they undergo a series of physical and chemical transformations resulting from the water-mineral interactions, microbial activity and compaction. The process that encompasses these transformations is called *diagenesis*.
+
+In this exercise, you will implement a model of early diagenesis in marine sediments. The model will be simplified in the sense that it will only consider a *subset* of possible diagenetic transformations including aerobic mineralisation, nitrification, denitrification, sulphate reduction, sulphide oxidation, and methanogenesis. The model will also include the effects of transport (deposition, molecular diffusion, and bioturbation) and sediment compaction (decrease in porosity with sediment depth). However, for the sake of simplicity, the model will ignore many important processes, such as dissolution and precipitation of minerals, the cycling of manganese, iron, or phosphorus, etc. 
+
+The overall objective of this exercise is to demonstrate how to *approach* modelling of coupled biogeochemical cycles of $C$, $O$, $N$, and $S$ in marine sediments, and to illustrate the so-called *biogeochemical cascade*, a concept where the organic matter mineralisation pathway switches on or off depending on the availability of substances such as $O_2$, $NO_3^-$, $SO_4^{2-}$, or $CO_2$ and the free energy they yield when used as oxidants of organic matter. 
+
+# Key state variable and assumptions
+
+The key state variable considered in this exercise is organic matter, denoted as $Corg$. Although organic matter is a highly complex and diverse ensemble of molecules, we will represent it in this exercise by a chemical formula $(CH_2O)_1(NH_3)_{NC}(H_3PO_4)_{PC}$, where $NC=16/106$ and $PC=1/106$.\footnote{This corresponds to the so-called Redfield organic matter, where the (molar!) $C:N:P$ ratio is equal to $106:16:1$.} This simplification reflects the aim of the model, which is to describe the effects of the processes mentioned above on the *mass balance* and dynamics of $C$, $O$, $N$, and $S$.
+
+Although all processes considered in this exercise are mediated by organisms (e.g., bacteria, archaea, but also more complex organisms), these organisms will *not* be explicitly included in the model. Instead, we will only model the result of their activity, assuming that the organisms are present and actively performing a specific process as long as the required chemical conditions are present. In other words, we will assume that the processes are limited by substrates but *not* by the organisms that mediate them (i.e., the "workers").
+
+On the other hand, we do consider important principles that govern the growth and fitness of organisms involved in the modelled processes. Specifically, we assume that if the amount of free energy gained from a process 'A' is greater than that from a process 'B', the organisms performing the process 'A' will outcompete those performing the process 'B'. Thus, in effect, we will consider that the process 'B' can only become quantitatively important if the conditions become unfavourable for the process 'A'. We will model this by assuming specific limitation and inhibition terms in the expressions for the process rates (as explained in class).
+
+# Processes and their reaction stoichiometry
+
+To model mass balances of $C$, $O$, $N$ and $S$ in the system, we need to specify how these elements are coupled by the different processes involved. We do this by specifying the stoichiometry and rates of the net reactions that transform the elements from one form to another.
+
+## Organic matter mineralisation
+
+Microbial mineralisation of organic matter\footnote{Depending on the perspective, there are several terms used when referring to the process of organic matter mineralisation, including organic matter decay, respiration, or oxidation.} can proceed via different pathways depending on the availability of oxidants (i.e., terminal electron acceptors), as described in the following. 
+
+In *aerobic mineralisation*, molecular oxygen ($O_2$) is the oxidant and the corresponding reaction stoichiometry is 
+$$AeroMin: \qquad (CH_2O)_1(NH_3)_{NC}(H_3PO_4)_{PC} + O_2  \rightarrow  CO_2 + {NC} \cdot NH_3 + {PC} \cdot H_3PO_4 + H_2O.$$
+This reaction yields the greatest amount of free (Gibbs) energy and thus is the dominant process of organic matter mineralisation if $O_2$ is available. If $O_2$ becomes depleted, suboxic or anaerobic mineralisation processes can take over. 
+
+The most favoured suboxic process is *denitrification*, where nitrate ($NO_3^-$) is used as the oxidant. The corresponding reaction stoichiometry is
+$$Denitri: \qquad (CH_2O)_1(NH_3)_{NC}(H_3PO_4)_{PC} + \frac{4}{5}\cdot HNO_3 \rightarrow CO_2 + \frac{2}{5}\cdot N_2 + {NC} \cdot NH_3 + {PC} \cdot H_3PO_4 + \frac{7}{5}\cdot H_2O$$
+Denitrification is an important biogeochemical process as it produces $N_2$ gas and thus leads to a loss of reactive N species ($NO_3^-$) from the system.
+
+Excluding manganese and iron reduction, the next favoured anaerobic process is *sulphate reduction*, where sulphate ($SO_4^{2-}$) is used as the oxidant. The corresponding reaction stoichiometry is
+$$Sred: \qquad (CH_2O)_1(NH_3)_{NC}(H_3PO_4)_{PC} + \frac{1}{2}\cdot SO_4^{2-} + H^+ \rightarrow CO_2 + \frac{1}{2}\cdot H_2S + {NC} \cdot NH_3 + {PC} \cdot H_3PO_4 + H_2O$$
+Sulphate reduction is important because a large fraction of organic matter is mineralised via this pathway, which is due to the relatively high seawater concentration of sulphate compared to $O_2$ or $NO_3^-$. Additionally, it is environmentally relevant because it produces free sulphide ($H_2S$), which is a toxic gas soluble in water.
+
+When $O_2$, $NO_3^-$ and $SO_4^{2-}$ are not available, organic matter is mineralised by a process called *methanogenesis*, where $CO_2$ is used as the terminal electron acceptor and methane is produced. Although this process involves several steps, we write its stoichiometry in the following simplified form:
+$$
+CH4gen:  \qquad (CH_2O)_1(NH_3)_{NC}(H_3PO_4)_{PC} \rightarrow \frac12\cdot CO_2 + \frac{1}{2}\cdot CH_4 + {NC} \cdot NH_3 + {PC} \cdot H_3PO_4$$
+This process is environmentally relevant because the produced methane is a very potent greenhouse gas.
+
+## Secondary reactions
+
+As shown by the above reactions, organic matter mineralisation leads to the production of compounds that are relevant in the context of early diagenesis. Of interest in this exercise are ammonia ($NH_3$) and free sulphide ($H_2S$), because they can be used as energy sources for chemosynthetic organisms when reacting with molecular oxygen. Specifically, ammonia can be utilized by a process called nitrification according to the stoichiometry
+
+$$Nitri: \qquad NH_3 + 2 \cdot O_2   \rightarrow  HNO_3 + H_2O$$
+leading to the production of nitrate. Similarly, free sulphide can be utilized by a process called sulphide oxidation according to the stoichiometry
+$$Sox: \qquad H_2S + 2\cdot O_2  \rightarrow SO_4^{2-}+2\cdot H^+$$
+
+# Process rates
+
+Assuming that aerobic mineralisation is limited by $O_2$ (Michaelis-Menten kinetics, half-saturation parameter $k_{O_2} = 0.001~mol~m^{-3}$) and is first-order with respect to organic carbon (rate constant $rMin = 0.01~d^{-1}$), its rate can be mathematically formulated as\footnote{Note that, for simplicity, we omit the brackets when denoting the concentration of a specific component. Thus, for instance, $Corg$ concentration is denoted as $Corg$ (instead of $[Corg]$), $O_2$ concentration is denoted as $O_2$ (instead of $[O_2])$, etc.}
+$$AeroMin = rMin \cdot \frac{O_2}{O_2+k_{O_2}} \cdot Corg$$
+Because $Corg$ is a solid substance (units of $mol~C~m^{-3}_S$), the rate is expressed in units of $mol~C~m^{-3}_S~d^{-1}$.
+
+## Task 1
+
+Formulate rate expressions for the remaining processes, assuming that
+
+* Nitrification is 
+
+  - limited by oxygen (Michaelis-Menten kinetics, the same half-saturation parameter $k_{O_2} = 0.001~mol~m^{-3}$), 
+  - first-order with respect to ammonia (rate constant $rNit = 10~d^{-1}$).
+
+* Denitrification is 
+
+  - limited by nitrate (Michaelis-Menten kinetics, half-saturation *limitation* parameter $k_{NO3} = 0.0001~mol~N~m^{-3}$), 
+  - first-order with respect to organic carbon (rate constant $rMin = 0.01~d^{-1}$),
+  - inhibited by $O_2$ (use the previously defined parameter $k_{O_2}$ as the corresponding half-saturation *inhibition* constant).
+
+* Sulphate reduction is 
+
+  - limited by sulphate (Michaelis-Menten kinetics, $k_{SO4} = 0.1~mol~S~m^{-3}$),
+  - first-order with respect to organic carbon (rate constant $rMin = 0.01~d^{-1}$), 
+  - inhibited by both oxygen ($k_{O_2}$) and nitrate ($k_{NO3}$).
+
+* Sulphide oxidation is 
+
+  - limited by oxygen (Michaelis-Menten kinetics, $k_{O_2}$), 
+  - first-order with respect to sulphide (rate constant $rSox = 10~d^{-1}$).
+  
+* Methanogenesis is
+ 
+  - first-order with respect to organic carbon (rate constant $rMin = 0.01~d^{-1}$),
+  - inhibited by both oxygen ($k_{O_2}$), nitrate ($k_{NO3}$) and sulphate ($k_{SO4}$).
+  
+What are the units of the rates?
+
+# Mass balance equations
+
+Assuming the following transport and reaction processes in the system
+
+* transport: molecular diffusion, sediment accretion and mixing by bioturbation,
+* reactions: aerobic mineralisation and nitrification,
+
+we can write the following mass balance equations for the solid substance $Corg$ (units of $mol~C~m^{-3}_S$) and the dissolved substances $O_2$, $NO_3^-$, $NH_3$ and $CO_2$ (in units of $mol~m^{-3}_L$):
+
+$$\frac{\partial Corg}{\partial t} = \frac{1}{1-\phi}\cdot \frac{\partial}{\partial x}\left[(1-\phi)\cdot D_b\cdot \frac{ \partial Corg}{\partial x}\right] 
+-\frac{1}{1-\phi}\cdot \frac{ \partial }{\partial x}\left[(1-\phi)\cdot v\cdot Corg\right]
+- AeroMin $$
+
+$$\frac{\partial O_2}{\partial t} = \frac{1}{\phi}\cdot \frac{\partial}{\partial x}\left[\phi \cdot D_{O2}\cdot \frac{ \partial O_2}{\partial x}\right]
+-\frac{1}{\phi}\cdot \frac{ \partial }{\partial x}\left[\phi\cdot v\cdot O_2\right]
+- AeroMin \cdot f_{2L} - 2 \cdot Nitri$$
+
+$$\frac{\partial NH_3}{\partial t} = \frac{1}{\phi}\cdot  \frac{\partial}{\partial x}\left[\phi \cdot D_{NH_3}\cdot  \frac{ \partial NH_3}{\partial x}\right] 
+-\frac{1}{\phi}\cdot \frac{ \partial }{\partial x}\left[\phi\cdot v\cdot NH_3\right]
++ \frac{16}{106} \cdot  AeroMin \cdot  f_{2L} - Nitri$$
+
+$$\frac{\partial NO_3^-}{\partial t} = \frac{1}{\phi} \cdot \frac{\partial}{\partial x}\left[\phi\cdot  D_{NO_3^-}\cdot  \frac{ \partial NO_3^-}{\partial x}\right] 
+-\frac{1}{\phi}\cdot \frac{ \partial }{\partial x}\left[\phi\cdot v\cdot NO_3^-\right]
++ Nitri$$
+
+$$\frac{\partial CO_2}{\partial t} = \frac{1}{\phi} \cdot \frac{\partial}{\partial x}\left[\phi\cdot  D_{CO_2}\cdot  \frac{ \partial CO_2}{\partial x}\right] 
+-\frac{1}{\phi}\cdot \frac{ \partial }{\partial x}\left[\phi\cdot v\cdot CO_2\right]
++ AeroMin\cdot f_{2L}$$
+where $f_{2L}$ is a factor that converts from $mol~m^{-3}_S$ (solid) to $mol~m^{-3}_L$ (liquid), i.e., $f_{2L}=\frac{1-\phi}{\phi}$.
+
+## Task 2
+
+Assuming that transport processes are the same for all dissolved substances, update the mass balance equations above to include the processes of denitrification, sulphate reduction, sulphide oxidation, and methanogenesis.
+
+# Model domain and boundary conditions
+
+To find a unique solution to differential equations, we need to specify the model domain and boundary conditions. In this exercise, the model domain is a sediment column with a depth of $0.1~m$. The porosity, $\phi$, exponentially decreases with depth according to $$\phi(x) = 0.7 + 0.2\cdot e^{-porcoef\cdot x}$$
+where $porcoef=100~m^{-1}$.
+
+With respect to the boundary conditions, we impose 
+
+* the flux of $Corg$ at the sediment-water interface ($depoPOC$, see below) 
+* concentrations for the dissolved species at the sediment-water interface, equal to the bottom-water concentrations: 
+  - $O_{2,bw}  = 0.3~mol~O_2~m^{-3}$
+  - $NO_{3,bw}^- = 0.01~mol~N~m^{-3}$
+  - $NH_{3,bw} = 0.001~mol~N~m^{-3}$
+  - $CO_{2,bw} = 2~mol~C~m^{-3}$
+  - $SO_{4,bw}^{2-} = 28~mol~S~m^{-3}$
+  - $H_2S_{bw} = 0~mol~S~m^{-3}$
+  - $CH_{4,bw} = 0~mol~C~m^{-3}$
+  
+* zero concentration gradient at the lower boundary of the sediment column.
+
+# Model implementation in R
+
+## Task 3: Add aerobic mineralisation and nitrification
+
+Open the template file that describes the dynamics of particulate organic carbon and DIC.\footnote{In Rstudio: File $\rightarrow$ new file $\rightarrow$ R markdown $\rightarrow$ from template $\rightarrow$ RTM\_porous1D.} Change this model so that it describes the effects of aerobic mineralisation and nitrification on $Corg$, $O_2$, $NO_3^-$, $NH_3$, and $CO_2$ according to the reactions above.
+
+* Add oxygen, ammonia, and nitrate as new state variables. To implement the transport and reaction terms for these new state variables, you can use the R-code lines for DIC as a "template", as this is also a dissolved substance.\footnote{Be careful when copying and pasting code chunks!}
+
+     - Add the new parameters to the parameter vector: rNit = 10 $d^{-1}$, kO2 = 0.001 $mol~m^{-3}$, bwO2 = 0.3 $mol~m^{-3}$, bwNO3 = 0.01 $mol~m^{-3}$, bwNH3 = 0.001 $mol~m^{-3}$.
+     - You need to change the *names* of the state variables (5 species), and unpack the new state variables at the beginning of the model function in the *correct order*.
+     - You also need to estimate the sediment diffusion coefficients for the new dissolved substances. To do that, use the package *marelac* and the lecture notes to account for tortuosity.
+     - Implement transport of $O_2$, $NH_3$, $NO_3^-$, using these diffusion coefficients (beware that they are dissolved substances).
+     - Implement rate expressions for aerobic mineralisation and nitrification, and use them to estimate the mass balances for all state variables in the model.
+     - Implement depth-integration of the rates of aerobic mineralisation and nitrification.
+     - In addition to time derivatives, include depth-integrated process rates (expressed in $mol~m^{-2}~d^{-1}$) as well as fluxes at the top and bottom of the model domain as output variables from the model function. These will be useful to construct budgets.
+
+* Run the model in steady state for three values of the $Corg$ deposition flux:
+  - $depoPOC = 1\times 10^{-3}~mol~m^{-2}~d^{-1}$ (default)
+  - $depoPOC = 20\times 10^{-3}~mol~m^{-2}~d^{-1}$
+  - $depoPOC = 200\times 10^{-3}~mol~m^{-2}~d^{-1}$
+
+* Plot depth profiles of state variables ($Corg$, $CO_2$, $O_2$, $NH_3$, etc.) for these three runs.
+
+* Plot depth profiles of the process rates as well. Why are the processes stratified?
+
+## Task 4: Add denitrification
+
+Expand the model from Task 3 to include denitrification. 
+
+  - Although it is not essential, you can add $N_2$ as a new state variable to your model, if you want. It is a useful quantity to track $N$ in the system. If you do so, you can assume the bottom-water concentration of $N_{2,bw} = 0$.
+  - Implement depth-integration of the denitrification rate.
+
+## Task 5: Add sulphate reduction and sulphide oxidation
+
+Expand the model from Task 4 to include sulphate reduction and sulphide oxidation. This expansion adds basic $S$ cycling to your model. 
+
+  - Add two new state variables: $SO_4^{2-}$ and $H_2S$.
+  - Implement depth-integration of the rates of sulphate reduction and sulphide oxidation.
+
+## Task 6: Add methanogenesis
+
+Expand the model from Task 5 to include methanogenesis. 
+
+  - Add $CH_4$ as a new state variable.
+  - Implement depth-integration of the methanogenesis rate.
+
+# Model application
+
+## Task 7: Quantify the contributions of mineralisation pathways
+
+For each of the three runs, calculate the relative contribution of the aerobic mineralisation, denitrification, sulphate reduction, and methanogenesis to the total mineralisation of organic matter.
+
+  - When is organic matter mineralisation mostly aerobic?
+  - Why is the contribution of denitrification so low?
+  - When, and why, is the contribution of sulphate reduction high?
+  - When is the contribution of methanogenesis significant?
+
+## Task 8: Oxygen budget
+
+Create an oxygen budget for the three runs.
+
+  - Which process consumes most of the oxygen diffusing into the sediment from the overlying water column? 
+  - How does this depend on the POC deposition flux?
+
+## Task 9: Sulphur budget
+
+If you have time, it is also interesting to create a sulphur budget. Here you can, for instance, look at the flux of sulphate that is recycled within the sediment and compare it with the flux of sulphate that enters the sediment from the overlying water.

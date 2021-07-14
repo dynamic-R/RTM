@@ -1,0 +1,81 @@
+---
+title: "Dissolution of spherical silica particles"
+subtitle: "Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
+author: "Lubos Polerecky & Karline Soetaert, Utrecht University"
+date: "February 2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introduction
+
+Silica is a common material in the natural environment, and its dissolution or precipitation is of significant interest. You will make a model of the dissolution and precipitation of silica. Using the model, you will then investigate the conditions under which dissolution or precipitation occurs.
+
+As explained in class, dissolution of silica, $SiO_2(s)$, in water results in the formation of silicic acid, $Si(OH)_4(aq)$. This process can be written as the following reversible reaction:
+$$ Reaction~1:\quad SiO_2(s) + 2 H_2O \leftrightarrow Si(OH)_4(aq)$$ 
+
+This reaction is governed by the differential equation
+$$
+\frac{dC_s}{dt} = -\frac{dC}{dt} = k_p \times \frac{A}{V} \times (C-C_{eq}), \qquad (1)
+$$
+where $C$ is the concentration of silicic acid (i.e., dissolved silica), and $C_s$ is the concentration of  solid silica (both in $mol~Si~m^{-3}$). $A$ is the area of the reactive silica surface in a volume of water $V$, $k_p$ is the rate constant of the precipitation reaction, and $C_{eq}$ is the silica solubility.
+
+# Problem formulation
+
+Diatoms are microscopic algae whose cell wall is made of silica. After the cell dies, diatom frustules sink from the surface waters towards the sea bottom. As the silica frustules encounter waters that are undersaturated in silicic acid, they will start to dissolve. You will develop a model to mimic this dissolution process, approximating the frustules as small spherical particles.
+
+Our model system contains $N$ spherical silica particles suspended in a volume $V$. We assume that the particles are identical (radius $r$) and that the particle density ($N/V$) remains constant. You may recall that the volume of a sphere with radius $r$ is $(4/3) \pi r^3$, while its surface area is $4 \pi r^2$. 
+
+Because the solid silica is in the form of many small spherical particles, the total concentration of solid silica, $C_s$, and the radius of each particle, $r$, are related according to:  
+$$
+C_{s} = \frac{N}{V}\times \frac{4\pi r^3}{3} \frac{\rho}{MW}, \qquad (2)
+$$
+where $MW$ and $\rho$ is, respectively, the molar weight (60.08 $g~mol^{-1}$) and the density (2196 $kg~m^{-3}$) of amorphous silica.
+
+# Tasks
+
+## Task 1. Model development
+Write a model for predicting the dissolution (or precipitation) of silica particles in water.
+
+ * What are the state variables? What are their units?
+ * Draw the conceptual diagram.
+ * What are the corresponding mass balance equations?
+ * What are the rate expressions?
+ 
+## Task 2. Model implementation
+ 
+* Implement the model in R. Make sure to output also these two variables:
+
+  - the radius of the silica particles, and 
+  - the total Si concentration.
+
+* Assume $k_p=1~m~yr^{-1}$ and $C_{eq}=1~mmol~L^{-1}$. (Note: the value of the rate constant may not be correct, but it is not so important in this exercise.)
+* The particle density is $8\times 10^6$ particles $m^{-3}$. 
+* The initial radius of the spherical silica particles is $r_{ini} = 0.1~mm$. 
+* For the first run, assume that the initial concentration of dissolved silica is 0.
+  
+Note: in your R-code you will need to calculate $x^n$, where $n$ is a non-integer value. This at times gives numerical problems if $x<0$. Many programming languages, including *R*, then return a *NaN*, i.e., "not a number". In an ideal world, and when dealing with concentrations, the value of $x$ should *not* be negative. But, due to finite precision of the integration methods, very small negative numbers *may* arise. It is therfore prudent to set to 0 any negative values representing concentrations. That is, rather than writing *x^(1/2)*, write *max(0, x)^(1/2)*.
+  
+## Task 3. Model application
+
+ * Run the model dynamically for 30 years; use function *ode* from the *deSolve* package to solve the model.
+   - Explain the dynamics.
+ 
+ * Find the steady-state solution.
+   - Use function *runsteady* from package *rootSolve* to find this solution. 
+   - What is the value of the sphere's radius at steady-state? 
+
+## Task 4. Explore the model dynamics
+
+Make a number of runs where you vary the initial concentrations of the silica particles or of the silicic acid. 
+
+ * Which conditions correspond to the scenarios where the particles dissolve *partially* or *fully*?
+ * Under which initial conditions does *precipitation* of silica occur?
+
+ * Perform a sensitivy analysis to evaluate how the steady-state size of particles varies as a function of the particle density. Perform this analysis for the initial silicic acid concentration of zero. 
+   - Vary the particle density between $1\times 10^6$ and $10\times 10^6$ particles $m^{-3}$ (create a sequence). 
+   - Estimate the steady-state for each of these densities, using *runsteady*, and store the resulting radius and dissolved Si concentration. (Hint: use a for loop.)
+   - Plot the steady-state particle radius and dissolved Si concentration as a function of the particle density.

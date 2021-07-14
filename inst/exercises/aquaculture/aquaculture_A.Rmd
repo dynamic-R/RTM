@@ -1,0 +1,139 @@
+---
+title: "A Bioeconomic model of Scallop Cultures"
+subtitle: "Exercises Accompanying the Course Environmental Modelling"
+author: "Karline Soetaert and Dries Bonte, Ghent University"
+date: "2021"
+output: 
+  pdf_document:
+    toc: no 
+  header-includes: 
+    \usepackage{float} 
+    \floatplacement{figure}{H} 
+---
+
+# Answers
+
+The equations describing the ecological part of this problem are given:
+$$\frac{dL}{dt}=k\cdot (L_\infty-L)$$
+$$\frac{dN}{dt}=-z \cdot N$$
+where the density of the scallops continuously declines due to mortality. The initial conditions are:
+$L_{(t=0)} = 20~mm$ and $N_{(t=0)} = 5\times 10^4$.
+
+
+For the economical part, we take the *cost* as a state variable that increases with the daily cost of culturing:
+$$\frac{dCost}{dt} = Culturecost$$
+We assume $Cost_{(t=0)}=0$.
+
+At each time step, we can estimate the price the manager would get if she sold the Scallops. Substracting the current costs from this revenue then gives the current profit or loss that would be obtained if they were sold.
+
+To test whether it is worthwhile to invest in new trays, the cost is augmented, at the beginning with the investment cost, i.e., the initial condition is changed $Cost_{(t=0)}=InvestCost$. Also the initial condition for the density is doubled: $N_{(t=0)} = 10\times 10^4$.
+
+# R implementation
+
+## Model implementation
+
+```{r}
+
+require(deSolve)  # package with solution methods
+
+# state variables
+state <- c(L = 20,        # Scallop length, [mm]
+           N = 5*10^4,    # Scallop number  [ind]   
+           Cost = 0)      # Integrated cost [dollars]
+
+# parameters
+parms <- c(
+  k    = 0.8,            # growth rate constant       [/yr] 
+  Linf = 100,            # asymptotic length          [mm]
+  z    = 0.5,            # mortality rate constant    [/yr]
+  a    = 8E-6, 
+  b    = 3.4,            # allometric coefficients to estimate weight
+  numtrays    = 100,     # number of trays
+  minWeight   = 30,      # Minimal weight at which Scallops can be sold
+  culturecost = 150,     # cost for culturing          [/yr]
+  price_kg    = 1.43,    # price per/KG 
+  price_a     = 0.1      # increased price per gram over minW
+)
+
+#The derivative function
+Scallops <- function(t, state, params){
+  with (as.list(c(state, params)), {
+  
+    dL    <- k*(Linf-L)
+    dN    <- -z*N
+    dCost <- culturecost          # daily cost for culturing adds to total
+
+    weight <- a * L^b             # [g ind-1] 
+    biom   <- weight*N/1000       # biomass, [kg]
+    price  <- (price_kg + price_a*(weight-minWeight))*(weight > minWeight)
+    profit <- (biom*price - Cost)* numtrays # total profit = price minus integrated cost
+    
+    return (list(c(dL, dN, dCost),
+                 weight = weight,
+                 biomass = biom,
+                 price = price,
+                 profit = profit))
+  })
+}
+
+``` 
+
+## Model runs
+
+```{r, fig.height = 10, fig.width = 8}
+
+# output times           
+outtimes <- seq(from = 0, to = 3, length.out = 100)
+
+#solve the equation
+out <- ode(y = state, parms = parms, func = Scallops, times = outtimes)
+head(out)
+max(out[,"profit"] )
+
+# ---------------------------------------------------
+# second run - a warmer climate, but more expensive
+# ---------------------------------------------------
+pars <- parms
+pars["k"] <- 1
+pars["culturecost"] <- pars["culturecost"]*2
+out2 <- ode(y = state, parms = pars, func = Scallops, times = outtimes)
+plot(out, out2, xlab = "year")
+max(out[,"profit"]) 
+
+# ... and without the extra profit for larger scallops
+p2 <- parms
+p2["price_a"] <- 0
+outb <- ode(y = state, parms = p2, func = Scallops, times = outtimes)
+plot(out, outb, xlab = "year")
+
+
+# ---------------------------------------------------
+# third run - increase the size of the farm? 
+# ---------------------------------------------------
+# first year
+stateb <- state
+stateb["Cost"] <- 250   # initial investment cost
+
+parsb <- parms
+parsb["culturecost"] <- parms["culturecost"]*1.2   # maintenance is more expensive
+parsb["numtrays"] <- 2*parms["numtrays"]   # number of trays * 2
+
+out3 <- ode(y = stateb, parms = parsb, func = Scallops, times = outtimes)
+
+# second year: no investment cost 
+statec <- stateb; statec["Cost"] <- 0
+out4 <- ode(y = statec, parms = parsb, func = Scallops, times = outtimes)
+```
+
+```{r, fig.height = 5, fig.width = 10}
+par(mfrow = c(1, 2))
+plot(out, out2, which = "profit", lwd = 2, xlab = "year", ylab = "dollar", mfrow = NULL)
+legend("bottomright", col = 1:2, lwd = 2, lty = 1:2, c("original", "warmer"))
+
+
+plot(out, out3, out4, which = "profit", lwd = 2, xlab = "year", ylab = "dollar", 
+     mfrow = NULL)
+legend("topleft", col = 1:3, lwd = 2, lty = 1:3, 
+       c("original", "doubling, 1st year", "doubling, 2nd year"))
+
+```

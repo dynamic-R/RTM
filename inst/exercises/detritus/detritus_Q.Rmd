@@ -1,0 +1,59 @@
+---
+title: 'Rate expressions in biogeochemistry: Detritus Mineralization by Bacteria'
+author: "Karline Soetaert and Lubos Polerecky, Utrecht University"
+subtitle: "Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
+date: "March 2021"
+output: 
+  pdf_document:
+    toc: yes 
+  header-includes: 
+    \usepackage{float} 
+    \floatplacement{figure}{H} 
+---
+
+# Modelling detritus mineralization by bacteria
+
+In class you have seen how to write rate expressions for ecological interactions: you need to distinguish between compartments that are actively performing the task (the "worker"), and compartments that are taken up as a result (the "resource"). This exercise is meant to make you think about these different roles that compartments may play.
+
+You already made the conceptual diagram for this problem. Now you need to find rate expressions for each of the flows. If you have time, you can also implement the model in R.
+
+## Problem formulation
+
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=3.4in]{Detritus.jpg}
+\caption{Conceptual diagram of the detritus model.}
+\end{figure}
+
+Detritus in the marine system is degraded by the action of heterotrophic bacteria. This is not a one-step process: bacteria cannot 'eat' detritus! You will make a model that is closer to the reality of the process. 
+
+The model considers that particulate detritus (POC) is first hydrolysed by the action of bacterial exoenzymes to high-molecular-weight dissolved organic carbon (HMWC). This in turn is attacked by bacterial enzymes to yield low-molecular-weight dissolved organic carbon (LMWC), which can then be taken up by the bacteria (BACT) to grow on it. The conceptual diagram of this model is shown in Figure 1.
+
+## Tasks
+
+* Create the mass balance equations for this model.
+* Find suitable rate expressions for the fluxes. For ecological or biogeochemical interactions, think which compartment is the "worker" and which is the "resource". The units of the parameters may provide guidance as to which rate expressions you may want to implement.
+
+The parameters are:
+
+|   parameter    | 	value	       |  Description                            | units                         | 
+|----------------| --------------| --------------------------------------- | ----------------------------- |
+| rPOC	         | 0.75          | rate constant of hydrolysis of POC      |	$d^{-1}$                     |
+| rHMWC	         | 0.5           | rate constant of hydrolysis of HMWC      |	$d^{-1}$                     |
+| rup   	       | 2	           | uptake rate constant of LMWC by bacteria | $d^{-1}$                      |
+| ksPOC	         | 0.10	         | Monod ct for POC hydrolysis             | $mol~C~m^{-3}$                 |
+| ksHMWC	       | 0.005         | Monod ct for HMWC hydrolysis            | $mol~C~m^{-3}$                 |
+| ksLMWC         | 0.0005        | Monod ct for LMWC uptake by bacteria    | $mol~C~m^{-3}$                 |
+| rBas	         | 0.1	         | basal respiration rate constant         | $d^{-1}$                      |
+| pResp	         | 0.5           | fraction of LMWC uptake respired        |	-                            |
+| rClos	         | 50	           | quadratic mortality rate constant for bacteria     | $(mol~C~m^{-3})^{-1}~d^{-1}$   |
+| fluxPOC        | 0.0005        | constant influx of POC                  | $mol~C~m^{-3}~d^{-1}$          |
+
+* Check the dimensionality of your model.
+
+## If you have time
+
+* Use the model template file *RTM_0D.Rmd* to implement this model.\footnote{You can obtain this file from Rstudio: File $\rightarrow$ new File $\rightarrow$ Rmarkdown $\rightarrow$ from template $\rightarrow$ RTM\_0D. Save this file under a different name. Do not forget to change the heading of this file.}
+
+* The initial conditions are: POC = 0.1, HMWC = 0.005, LMWC = 0.00015, BACT = 0.005, all in $mol~C~m^{-3}$.

@@ -1,0 +1,66 @@
+---
+title: 'Plant Coexistence and Herbivory'
+subtitle: "Exercises Accompanying the Course Environmental Modelling"
+author: "Dries Bonte and Karline Soetaert, Ghent University"
+date: "July 2021"
+output: 
+  pdf_document:
+    default
+---
+
+# Problem formulation
+
+In wetlands, grasses and unpalatable plant species like *Iris* coexist. Iris grows slower but is competitively superior, with a logistic population growth only dependent on its own density. 
+In contrast, the growth rates of the competitively inferior grasses are logistically determined by the combined biomass of grasses + iris. 
+
+Herbivores only consume grasses, but their consumption rate slows down when Iris is present. This is because the herbivores spend more energy to pick the grasses growing between the Iris plants. 
+
+Your task is to make a model that describes the interactions between grasses, iris and herbivores. 
+
+## Assumptions
+
+The following assumptions are made: 
+
+* Use a carrying capacity formulation to restrict the growth of both grasses and iris.
+* Use the Monod-type functional response for grazing. 
+    - The half-saturation coefficient for grazing in the absence of Iris is $ks$.
+    - Herbivore grazing is inhibited by an increasing Iris biomass. The strength of this inhibition is modeled with an exponential function, determined by the parameter $inhibct$ (default 0).
+* 35% of the consumed biomass is accumulated into herbivore body mass.
+
+Use the following starting values (all in $g~dry~biomass~m^{-2}$):
+
+```{r}
+state <- c(GRASS = 50, IRIS = 2, HERB = 0.2)  # g/m2
+```
+
+
+The following parameter settings are typical for a temperate grassland:
+
+```{r}
+parms <- c(
+  ktot    = 200,   # [g/m2] carrying capacity of grass and unpalatable Iris
+  assEff  = 0.35,  # [-] efficiency at which cattle incorporate biomass into body mass
+  ks      = 50,    # [g/m2] half-saturation constant for functional response of grazing on grass
+  rGraz   = 0.17,  # [/d] grazing rate constant of herbivores
+  rGrowG  = 0.05,  # [/d] growth rate constant grass
+  rGrowI  = 0.04,  # [/d] growth rate constant Iris
+  rResp   = 0.018, # [/d] basal metabolic rate constant 
+  inhibct = 0      # [/(g/m2)] strength of inhibition by Iris
+)
+```
+
+## Tasks
+
+1. Use the above information to create the model and run it for 10 years. In a first run remove the grazing dependency on the IRIS density. Is there coexistence possible with these parameter settings?
+2. What happens if you include inhibition of grazing by Iris?  How does this affect coexistence? 
+3. To further  increase realism, assume that in addition to grasses being grazed upon by large herbivores, unpalatable IRIS species also have their enemies, and are attacked by below-ground nematodes (round worms). Such pathogenic nematodes are prevalent, and we assume their impact is second-order with respect to the biomass density of their host. The rate constant that determines this infection equals to $0.01~(g/m^2)^{-1}d^{-1}$. 
+4. One final elaboration is that the herbivores can leave the area, whereas nematodes cannot. This emigration is a second-order process with respect to the herbivore density characterized by the rate constant $0.001~(g/m^2)^{-1}d^{-1}$.
+
+* Implement this model in *R*. You can start with the R-markdown template model file *RTM_0D.Rmd*.\footnote{You can obtain this file from Rstudio: File $\rightarrow$ new File $\rightarrow$ Rmarkdown $\rightarrow$ from template $\rightarrow$ RTM\_0D. Save this file under a different name, and do not forget to change the heading of this file.}
+* Plot the model output. 
+  - Under which conditions do you find temporal coexistence for these competing species? 
+
+## If you have time
+
+* What happens if nematode virulence is decreasing due to local adaptation (trading off with r)? 
+* What happens if herbivore emigration rates are conditional on the iris density?

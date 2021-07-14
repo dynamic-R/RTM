@@ -1,0 +1,209 @@
+---
+title: "RTM course - Rate Laws for Irreversible Chemical Reactions"
+author: "Karline Soetaert and Lubos Polerecky"
+description: "video and exercises on creating rate expressions for elementary chemical reactions"
+date: "June 2021"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(learnr)
+```
+
+## Tutorial
+
+You are advised to watch the following video first. Only the first part (0:00-5:21) is relevant for this tutorial.
+
+### Video timeline
+* 0:00 Elementary chemical reactions
+* 5:20 Reversible reactions
+* 8:07 Chemical equilibrium
+* 9:30 Modelling processes occurring at vastly different time-scales
+* 17:24 Application to ammonia dissociation and pH modelling
+
+![](https://www.youtube.com/watch?v=loHVpLNQBZE&list=PLx8PHcDdmF-uD1Pr07TU9SzlhlGpfrxqn&index=5)
+
+You can also read the following section(s) of the textbook:
+
+* Chapter 2.3. Formulation of chemical reaction
+
+(You can download each chapter of the textbook via the e-book University library for free!)
+
+## True/False statements
+
+```{r statements, echo=FALSE}
+question("Check boxes with a TRUE statement", type = "learnr_checkbox",
+ answer("Stoichiometric coefficients in an elementary chemical reaction directly determine the exponents in the expression for the reaction rate", correct=TRUE),
+ answer("Stoichiometric coefficients in any chemical reaction directly determine the exponents in the expression for the reaction rate", correct=FALSE),
+ answer("Monod kinetics can be derived from an enzymatic reaction", correct=TRUE) 
+)
+```
+
+## Reaction rate expression
+
+Consider the following irreversible elementary chemical reaction:
+$$
+2A + B \rightarrow A_2B
+$$
+
+```{r elementary, echo=FALSE}
+msg <- "There are two correct answers; answer 1 assumes that the rate R is expressed in mole of B per time; answer 4 assumes that R is expressed in mole of A per time - it is simplest to express the rate in terms of mole of B"
+
+question("Which of the following expressions correctly describe the reaction rate?", type = "learnr_checkbox",
+ answer(sprintf("$R=r \\times [A]^2 \\times [B]$"), correct=TRUE),
+ answer(sprintf("$R=r \\times [A] \\times [B]^2$"), correct=FALSE),
+ answer(sprintf("$R=-r \\times [A_2B]$"), correct=FALSE),
+ answer(sprintf("$R=r \\times [A] \\times [B]^{1/2}$"), correct=TRUE),
+ answer(sprintf("$R=r \\times [A]^{1/2} \\times [B]$"), correct=FALSE),
+
+ incorrect=msg,  
+ correct=msg)
+```
+
+## Units
+
+Consider the following irreversible elementary chemical reaction:
+$$
+2A + B \rightarrow A_2B
+$$
+
+Concentrations of A, B and $A_2B$ are expressed in $mol~m^{-3}$, and the expression for the reaction rate is 
+$$
+R=r \times [A]^2 \times [B]
+$$
+
+```{r rate, echo=FALSE}
+question("What is the unit of the rate *R*?", type = "learnr_checkbox",
+ answer(sprintf("$mol~m^{-3}$"), correct=FALSE),
+ answer(sprintf("$mol~m^{-3} s^{-1}$"), correct=TRUE),
+ answer(sprintf("$mol^2~m^{-6} s^{-1}$"), correct=FALSE)
+)
+```
+
+
+```{r ct, echo=FALSE}
+question("What is the unit of the rate constant *r*?", type = "learnr_checkbox",
+ answer(sprintf("$mol~m^{-3}$"), correct=FALSE),
+ answer(sprintf("$mol~m^{-3} s^{-1}$"), correct=FALSE),
+ answer(sprintf("$(mol~m^{-3})^{-2} s^{-1}$"), correct=TRUE)
+)
+```
+
+## Mass balance equation
+
+Consider the following irreversible elementary chemical reaction and rate expression:
+$$
+2A + B \rightarrow A_2B
+$$
+$$
+R=r \times [A]^2 \times [B]
+$$
+
+```{r massbal, echo=FALSE}
+question("Toggle the correct mass balance equations:", type = "learnr_checkbox",
+ answer(sprintf("$\\frac{d[A]}{dt}=-R^2$"), correct=FALSE),
+ answer(sprintf("$\\frac{d[A]}{dt}= -2\\times R$"), correct=TRUE),
+ answer(sprintf("$\\frac{d[A]}{dt}= -R/2$"), correct=FALSE),
+ answer(sprintf("$\\frac{d[B]}{dt}= R$"), correct=FALSE),
+ answer(sprintf("$\\frac{d[B]}{dt}= -R$"), correct=TRUE),
+ answer(sprintf("$\\frac{d[B]}{dt}= -R/2$"), correct=FALSE),
+ answer(sprintf("$\\frac{d[A_2B]}{dt}= R$"), correct=TRUE),
+ answer(sprintf("$\\frac{d[A_2B]}{dt}= R^2$"), correct=FALSE),
+ answer(sprintf("$\\frac{d[A_2B]}{dt}= 2 \\times R$"), correct=FALSE),
+ answer(sprintf("$\\frac{d[A_2B]}{dt}= R/2$"), correct=FALSE)
+)
+```
+
+## R-implementation
+
+We repeat the equations from the previous question here:
+
+$$
+\frac{d[A]}{dt}=-2 \times R; \qquad
+\frac{d[B]}{dt}= - R; \qquad
+\frac{d[A_2B]}{dt}= R \\
+R = r \times [A]^2 \times [B]
+$$
+
+It is quite easy to implement this chemical model in R, as shown here.
+
+```{r, message=FALSE}
+require(deSolve)   # package with the solution methods
+
+y.ini <- c(A=1, B=1, A2B=0)  # initial concentrations of the state variables, [mol/m3]
+pars  <- c(r=0.01)           # rate constant, [(molA/m3)^{-2}/s]
+
+# time-derivative function
+elementaryReaction <- function(t, y, p){  # t=time, y=state variables, p=parameters
+  with (as.list(c(y,p)),{
+    # Rate expressions
+    R <- r * A^2 * B         # molB/m3/s
+    # Mass balance equations
+    dA.dt   <- -2*R
+    dB.dt   <- -  R
+    dA2B.dt <-    R
+    # return vector of time-derivatives and ordinary variables
+    list(c(dA.dt, dB.dt, dA2B.dt),  # NOTE: same order as the definition of y.ini!
+      sumA = A + 2*A2B,    # lump-sum of A, molA/m3
+      sumB = B +   A2B     # lump-sum of B, molB/m3
+    )
+  })
+}
+```
+
+The model is run twice, each time with a different value of the rate constant $r$:
+```{r}
+# model solution
+times <- seq(from=0, to=3600, length.out=100)  # time in seconds, 100 equally spaced values
+out  <- ode(y=y.ini, times=times, parms=pars, func=elementaryReaction)
+
+pars2 <- c(r=0.05) # 5-fold faster reaction
+out2  <- ode(y=y.ini, times=times, parms=pars2, func=elementaryReaction)
+
+plot(out, out2, lty=1:2, col=1:2)
+```
+
+**TASK:** Run the model with a rate that is twice as slow as the default rate. Plot all three model results in one graph.
+
+```{r run2, exercise=TRUE, exercise.cap = "Three model runs", exercise.lines = 10}
+# model solution
+times <- seq(from=0, to=3600, length.out=100)
+out   <- ode(y=y.ini, times=times, parms=pars, func=elementaryReaction)
+
+pars2 <- c(r=0.05)
+out2  <- ode(y=y.ini, times=times, parms=pars2, func=elementaryReaction)
+
+out3  <-     ### RUN WITH r=0.005
+plot(out, out2, out3, lty=1:3, col=1:3)
+```
+
+## More exercises
+
+To learn more about modelling of chemical reactions --- and specifically of irreversible elementary chemical reactions --- try to solve the *ozone* model available in the R-package RTM. To display this exercise, type the following commands in the R-console:
+
+```
+require(RTM)
+RTMexercise("ozone")
+```
+
+## Finally
+
+```{r feedback, echo = FALSE}
+question("give your feedback ", type = "learnr_text", answer(" ", correct=TRUE), correct="thank you", incorrect = "thank you")
+```
+
+## References
+
+R Core Team (2020). R: A language and environment for statistical computing. R
+  Foundation for Statistical Computing, Vienna, Austria. https://www.R-project.org/.
+
+Karline Soetaert, Thomas Petzoldt, R. Woodrow Setzer (2010). Solving Differential
+  Equations in R: Package deSolve. Journal of Statistical Software, 33(9), 1--25.
+  DOI: 10.18637/jss.v033.i09. http://www.jstatsoft.org/v33/i09/
+
+Karline Soetaert, Peter M.J. Herman (2009). A Practical Guide to Ecological Modelling. Springer Netherlands. DOI: 10.1007/978-1-4020-8624-3.

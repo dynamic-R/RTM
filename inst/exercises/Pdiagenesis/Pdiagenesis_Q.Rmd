@@ -1,0 +1,72 @@
+---
+title: "Reaction-transport in porous media: a simple model of phosphorus cycling in marine sediments"
+subtitle: "Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
+author: "Karline Soetaert and Lubos Polerecky, Utrecht University"
+date: "March 2021"
+output: pdf_document
+---
+
+# Problem formulation
+
+The dynamics of phosphorus (P) in sediments is complex because it is impacted by biogeochemical and physical processes. Among other processes, phosphate that is released by mineralization of organic matter (biogeochemistry) can adsorb to iron oxides, precipitate as apatite (calcium phosphate mineral), or adsorb to calcium carbonate ($CaCO_3$). Adsorption to iron oxides occurs in the oxic zone, while phosphate is released again when iron oxides are reduced in the anoxic zone of the sediment. The last two processes (authigenic apatite formation and P adsorption to $CaCO_3$) can play an important role in the long-term removal of P. 
+
+In this exercise, you will make a very simple model of P dynamics in sediments. Assume that P is only exchanging between two pools: dissolved phosphate\footnote{Dissolved phosphate has four species: $H_3PO_4$, $H_2PO4^-$, $HPO_4^{2-}$ and $PO_4^{3-}$. The speciation depends on pH. At ambient pH, temperature and salinity assumed in this exercise, $H_2PO_4^-$ is the dominant species.} ($H_2PO_4^{-}$), and the phosphate adsorbed to $CaCO_3$ ($P_{ads}$, solid phase). The other processes involved in P dynamics will be ignored. 
+
+Assuming an *unlimited* availability of $CaCO_3$, consider that adsorption and desorption of phosphate can be represented by the following reversible reaction:
+$$P_{ads} \leftrightarrow H_2 PO_4^{-} + H^+.$$
+
+# Assumptions
+
+* The depth of the modelled sediment column is $60~cm$.
+* Bottom water concentration of dissolved phosphate is 0.0005 $mol~P~m^{-3}$. 
+* The sediment accretion velocity equals to $v=0.1~cm~yr^{-1}$. 
+* The bioturbation mixing coefficient is $5~cm^2~yr^{-1}$. 
+* Due to sediment compaction, the sediment porosity $[m^3~liquid~m^{-3}~solid]$ declines with depth from 0.9 at the surface to 0.6 at depth, with a depth attenuation factor of $0.5~cm^{-1}$. Although this variation in porosity influences the advective velocity, we will ignore this in our model.
+
+* Use the R-package *marelac* to estimate the molecular diffusion coefficient of phosphate assuming a temperature of $10~^\circ$C and a salinity of 35. Assume *constant* $pH$ of 7. At this $pH$, temperature and salinity, the most abundant phosphate species is $H_2PO_4^{2-}$. The diffusion coefficient needs to be corrected for tortuosity, as explained in the lectures.
+
+For the P dynamics, assume:
+
+* Phosphate is released from the mineralization of organic matter.
+   - Assume that the rate constant describing the organic matter mineralization is $0.01~d^{-1}$. 
+   - The deposition rate of organic carbon is $0.001~mol~C~m^{-2}~d^{-1}$. 
+   - The *P:C* ratio in the organic matter is according to Redfield: 1 mole of P per 106 moles of C.
+
+* Phosphate adsorption to $CaCO_3$ is described by first-order kinetics with respect to $H_2PO_4^{-}$ (rate constant $r_{ads}$). This is a reasonable assumption if the concentration of $CaCO_3$ in the sediment is so high that it never becomes limiting. 
+   - In the initial model run, set $r_{ads} = 5\times 10^{-4}~d^{-1}$.
+   - Later, perform a sensitivity analysis assuming that the value of $r_{ads}$ varies between 0 and $5\times 10^{-3}~d^{-1}$. 
+
+* Phosphate desorption from $CaCO_3$ is described by first-order kinetics with respect to $P_{ads}$. The corresponding rate constant is $r_{des} = 1\times 10^{-5}~d^{-1}$. 
+
+# Tasks
+
+## Task 1: Implementation in R
+
+Add P dynamics to the template markdown file for early diagenesis *RTM_porous1D.Rmd*.\footnote{You can obtain this file from Rstudio: File $\rightarrow$ new File $\rightarrow$ Rmarkdown $\rightarrow$ from template $\rightarrow$ RTM\_porous1D. Save this file under a different name. Do not forget to change the heading of this file.} You can use the description for the carbon diagenesis in the template as a basis for the present exercise. There is no need to remove the DIC state variable from the model. However, you can ignore the posibility that DIC may be removed or added to the system due to precipitation or dissolution of $CaCO_3$.
+
+* Use *m*, *mol*, and *d* to create the units used in the model. Convert all input parameters into these units (e.g., POC deposition flux, bioturbation mixing coefficient, diffusion coefficient). 
+
+* First add dissolved phosphate as a state variable, and make sure that the model can be solved with only this species added. Then add the adsorbed phosphate and implement the dynamics.
+
+* Make sure to return from the model function ordinary output variables that will be needed when creating the P budget and interpreting the results:
+   - All depth-integrated rates.
+   - The fluxes in and out of the model domain.
+   - Depth profiles of the process rates (think about the units in which the results will be best displayed).
+   - Quotient ($Q=[PO_4^{3-}]/[P_{ads}]$), which is a measure of how far from an equilibrium the dissolved and adsorbed phosphate pools are. (Tip: when calculating Q, consider the units of the different P pools and the value of Q that you expect in an equilibrium.)
+
+## Task 2: Model applications
+
+* Run three simulations, with the adsorption rate constant set to 0, $1\times 10^{-3}$, and $5\times 10^{-3}~d^{-1}$.
+
+* Plot the results and try to understand what happens. Plot in separate R-chunks the depth profiles of concentrations, process rates and the quotient. This will help you better understand and interpret the results. Discuss with the teachers to check your understanding.
+
+* Check the sensitivity of your model to the depth of the sediment column in which you model the P dynamics. That is, run your model with the depth of the sediment column set to $60~cm$ (initial), $100~cm$ and $200~cm$. Try to understand what happens and why. Discuss your ideas with the teachers.
+
+## Task 3: Phosphorus budget
+
+* For scenario 1 (no adsorption) and scenario 3 (maximal adsorption), draw the vertically integrated mass balance budget for P, taking into account:
+   - the input from the overlying water, 
+   - the burial rate, and 
+   - the (vertically integrated) conversions between the different P pools. 
+* Convert the units to $\mu mol~P~m^{-2}~yr^{-1}$.
+* Discuss your diagram and P budget with the teachers.

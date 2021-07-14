@@ -1,0 +1,114 @@
+---
+title: 'Viruses in the aquatic environment'
+subtitle: "Exercises Accompanying the Course Environmental Modelling"
+author: "Karline Soetaert and Dries Bonte, Ghent University"
+date: "July 2021"
+output: 
+  pdf_document:
+    default
+---
+
+# Answers
+
+## Units
+
+Reasonable units for the state variables are
+
+* algal cells: $cells~ml^{-1}$
+* viruses: $virions~ml^{-1}$ 
+
+## Mass balances and rate expressions
+
+* Healthy (uninfected) algal cells (*H*) are created by cell division, and die due to natural causes (i.e., independent of the presence of viruses). The net growth of the algal cells is described by the logistic growth model characterized by the rate constant *lambda* (units of $d^{-1}$) and the carrying capacity *k* (units of $cells~ml^{-1}$). 
+
+* Viral infection of algal cells depends on a random encounter between free virions and algae. Thus, the process is proportional to the product of the concentration of healthy cells, $H$, and the concentration of free virions, $V$. The corresponding rate constant, *beta*, has units of $(virions~ml^{-1})^{-1}~d^{-1}$. 
+
+* Death of infected cells (by bursting) is a first-order process characterized by a rate constant *delta* (units of $d^{-1}$). 
+
+* When an infected algal cell bursts, it releases *n* free virions. Conversely, it takes *one* virion to infect a healthy algal cell. Thus, the infection efficiency parameter is $e=1~virions~cell^{-1}$.
+
+* Free virions are not immortal but decay at a first-order rate characterized by the rate constant *c* (units of $d^{-1}$).
+
+Based on these considerations, the mass balance equation for the uninfected (*H*) and infected (*I*) algal cells and for the free virions are:
+
+$$\frac{dH}{dt} = NetAlgalGrowth - Infection$$
+$$\frac{dI}{dt} = Infection - Bursting$$
+$$\frac{dV}{dt} = n\cdot Bursting  - VirusDeath - e\cdot Infection$$
+
+where
+
+$$NetAlgalGrowth = lambda \cdot H \cdot \left(1 - \frac{H}{k}\right)$$
+$$Infection = beta \cdot H \cdot V$$
+$$Bursting = delta\cdot I$$
+$$VirusDeath = c \cdot V$$
+
+## Parameters
+
+The parameter values are in the following table:
+
+| parameter | Value   | Units     | Description |
+|-----------| --------|-----------|-------------|
+| lambda    |	1       |$d^{-1}$   | Net growth rate constant of healthy cells  |
+| delta 	  | 0.55  	|$d^{-1}$  	| Burst rate constant of infected cells    |
+| beta	    | 0.00002	|$(virions~ml^{-1})^{-1}d^{-1}$| Infection rate constant |
+| c	        | 5.5	    |$d^{-1}$   | Death rate constant of viruses          |
+| k	        | 1e5     |$cells~ml^{-1}$ | Algal carrying capacity             |
+| n  	      | 100	    |$virions~cell^{-1}$ | Burst size                        |
+| e         | 1       |$virions~cell^{-1}$  | Infection efficiency     |
+
+## R-implementation
+
+Here is the code specifying the model:
+
+```{r, eval = TRUE, cache = FALSE, echo = TRUE, warning=FALSE, message=FALSE}
+require(deSolve)  # package with solution methods
+
+# state variables, units = cells/ml (H, I) or virions/ml (V)
+state <- c(H = 100, I = 150, V = 50000)
+
+# parameters 
+parms <- c(
+  lambda = 1,     # [/d] net growth rate constant of healthy algal cells
+  delta = 0.55,   # [/d] burst rate constant of infected cells
+  beta = 0.00002, # [(virions/ml)^-1 d-1] infection rate constant
+  c = 5.5,        # [/d] death rate constant of virus
+  k = 1e5,        # [cells/ml] carrying capacity for algal cells
+  n = 100,        # [virus/cell] burst size
+  e = 1           # [virus/cell] number of viruses required to infect an algal cell
+)
+
+# Model function
+VirusDynamics <- function(t, state, params) {
+  with (as.list(c(state, params)), {
+
+   # Rate expressions
+    NetAlgalGrowth <- lambda*H*(1-H/k)  # [cells/ml/d]
+    Infection      <- beta * H * V      # [cells/ml/d]
+    Bursting       <- delta*I           # [cells/ml/d]
+    VirusDeath     <- c*V               # [virions/ml/d]
+ 
+   # Mass balances [cells/ml/d]
+    dH <- NetAlgalGrowth - Infection
+    dI <- Infection - Bursting
+    dV <- n*Bursting - VirusDeath - e*Infection
+    
+    list(c(dH, dI, dV), Cells = H + I, Bursting = Bursting, 
+      Infection = Infection, logV = log10(V), logC = log10(H+I))
+  })
+
+}
+```
+
+Here are plots of the model solution:
+
+```{r, fig.height = 10, fig.width = 10}
+# output time
+outtimes <- seq(from = 0, to = 365, length.out = 365*10)  # run for 365 days
+
+# solve this model, using the ode function from deSolve
+out <- ode(y = state, parms = parms, func = VirusDynamics, times = outtimes)
+
+plot(out, mfrow = c(3, 3), xlab="time (d)")
+plot(out[,c(4,5)], type = "l", main = "phase-plane view", 
+      xlab = "Viruses", ylab = "Algae")
+```

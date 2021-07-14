@@ -1,0 +1,517 @@
+---
+title: "Earth's global C cycle: the $CO_2$ Problem and Mitigation Strategies"
+author: "Lubos Polerecky and Karline Soetaert"
+subtitle: "Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
+date: "February 2021"
+output:
+  pdf_document:
+    toc: no
+  html_document:
+    toc: yes
+  word_document:
+    toc: yes
+---
+
+# Answers
+
+# Global carbon model with *two* compartments
+
+## Model implementation
+
+Units used:
+
+* Time : year
+* Mass : Pg C
+
+Assumptions:
+
+* C reservoirs on Earth are represented as *homogeneous* boxes.
+* Total C in each reservoir is modelled.
+* All natural fluxes are *first-order* with respect to the *source* reservoir.
+* Perturbations due to anthropogenic activity are modeled by *changing the initial condition*.
+
+```{r}
+library(deSolve)
+
+# Initial conditions, corresponding to the equilibrium (steady state)
+state.eq <- c(
+ M1.ATMOSPHERE     = 590,         # carbon mass in atmosphere, PgC
+ M2.BIOSPHERE      = 2300         # carbon mass in biosphere,  PgC
+)
+
+# Model parameters
+parms <- with (as.list(state.eq), c(
+  # rate constants, yr-1 (first-order kinetics for all fluxes)
+  k1.2 = 60 / M1.ATMOSPHERE,    #  atmosphere -> biosphere, [1/yr]
+  k2.1 = 60 / M2.BIOSPHERE  )   #  biosphere  -> atmosphere [1/yr]
+)
+
+# model equations 
+Cmodel_2comp  <- function(t, C, p) {       # 2-compartment carbon model
+  with(as.list (c(C, p)),{
+    
+    # rate laws (first-order kinetics)
+    F1.2 <- k1.2*M1.ATMOSPHERE    # atm  -> bio
+    F2.1 <- k2.1*M2.BIOSPHERE     # bio  -> atm
+
+    # mass balance equations
+    dM1.ATMOSPHERE    <- F2.1 - F1.2
+    dM2.BIOSPHERE     <- F1.2 - F2.1
+   
+    return(list(c(dM1.ATMOSPHERE, dM2.BIOSPHERE)))
+  })
+}  # end of model equations
+```
+
+## Model application
+
+### Steady-state
+
+Run the model for 100 years and plot the results.
+```{r, fig.width = 8, fig.height = 5}
+
+time_seq <- 0:100   # run the model for 100 years
+out1 <- ode(y = state.eq, times = time_seq, func = Cmodel_2comp, parms = parms)
+
+par(oma = c(0,0,2,0)) # for wider margins
+plot (out1, xlab = "years", ylab = "PgC")
+title(main = "STEADY STATE", outer = TRUE)
+
+out1[nrow(out1),]  # look at last values
+```
+
+The masses stay constant, hence the model is correctly implemented.
+
+### Scenario 1: instantaneous DEFORESTATION
+
+50 Pg C is transferred from M2.BIOSPHERE to M1.ATMOSPHERE. This is implemented by *changing the initial condition* while keeping the *same model parameters*.
+
+```{r, fig.width = 8, fig.height = 5}
+Cdeforest <- 50
+
+# define new initial state
+state2 <- state.eq
+state2["M1.ATMOSPHERE"] <- state2["M1.ATMOSPHERE"] + Cdeforest
+state2["M2.BIOSPHERE"]  <- state2["M2.BIOSPHERE"]  - Cdeforest
+
+# Calculate, plot and print the solution, including also the original solution
+out2 <- ode(y = state2, times = time_seq, func = Cmodel_2comp, parms = parms)
+
+par(oma = c(0,0,2,0))   # for wider margins
+plot(out2, out1, lty = 1, lwd = 2, xlab = "years", ylab = "PgC")
+legend("bottomright", legend = c("Deforestation", "Steady-state"), 
+       col = 1:2, lwd = 2, lty = 1)
+title(main= "DEFORESTATION ", outer = TRUE)
+```
+
+The system returns to the *original* steady state after about 40 years. 
+
+### Scenario 2: instantaneous burning of FOSSIL FUEL
+
+10 Pg C is transferred to M1.ATMOSPHERE from a compartment that is *not* part of the model. This is implemented by *changing the initial condition* (M1.ATMOSPHERE only) while keeping the *same model parameters*.
+
+```{r, fig.width = 8, fig.height = 5}
+FossilFuel <- 10 # Pg C
+state3     <- state.eq    # start from the steady state
+state3["M1.ATMOSPHERE"] <- state3["M1.ATMOSPHERE"] + FossilFuel
+
+out3 <- ode(y = state3, times = time_seq, func = Cmodel_2comp, parms = parms)
+
+par(oma = c(0,0,2,0))
+plot(out3, out1, lty = 1, lwd = 2, xlab = "years", ylab = "PgC")
+legend("right", legend = c("Burning of fossil fuel", "Steady-state"), 
+       col = 1:2, lwd = 2, lty = 1)
+title(main = "FOSSIL FUEL", outer = TRUE)
+```
+
+The system reaches an equilibrium after about 40 years. However, in this scenario, the equilibrium values are *different* compared to those in scenario 1. This is because, in scenario 2, carbon was *added* to the system. In the equilibrium, the fluxes $F_{12}$ and $F_{21}$ are *equal*, so that the time-derivative of each state variable is zero. Based on the rate laws used, this yields the relationship $$k_{12}\cdot M1.ATM^* = k_{21}\cdot M2.BIO^* \quad \rightarrow \quad \frac{M1.ATM^*}{M2.BIO^*} = \frac{k_{21}}{k_{12}} = \frac{60}{2300} \cdot \frac{590}{60} =\frac{590}{2300},$$ 
+where * denotes the equilibrium value. We note that the *total* carbon in the system remains *constant*, as follows from the summation of the mass balance equations for both state variables [$d(M1.ATM + dM2.BIO)/dt=0$]. Therefore, the amount of carbon in the system at an equilibrium is *the same* as at the beginning, i.e.,
+$$ M1.ATM^* + M2.BIO^* = 2300 + 10 + 590.$$
+Using the two last equations and some simple algebra, we can calculate the equilibrium amounts of C in both compartments. We obtain values $M1.ATM^* = 592.0415$ and $M2.BIO^* = 2307.958$, which are identical to those obtained by the model, as shown by the command below. 
+```{r}
+out3[nrow(out3),]  # look at last values
+```
+We conclude that the 10 Pg C initially added to the system was *redistributed* such that about 20% ends up in the atmosphere and 80% ends up in the biosphere. More C ends up in the biosphere because the rate constant describing the flux from the biosphere to the atmosphere is lower.
+
+# Global carbon cycle model with *seven* compartments
+
+## Model implementation
+
+Units used:
+
+* Time : year
+* Mass : PgC
+
+Assumptions:
+
+* C reservoirs on Earth are represented as homogeneous boxes.
+* Total C in each reservoir is modelled.
+* All fluxes are first-order with respect to the source reservoir, except for the anthropogenic fluxes, which are modeled as described in text.
+
+Note before you start reading the code:
+
+* Implementation of the model is very *neat*. This makes the model much easier to *read an understand* by someone who has not done the modelling. Additionally, it makes the model much easier to *modify or expand*, by you or by anyone else. Do not underestimate this aspect of R-coding.
+
+* We develop *one* model that can handle *all* scenarios. The different scenarios are implemented by *changing initial conditions or model parameters*, and *not* by implementing a separate model function for each scenario.
+
+```{r}
+# define names of state variables and their initial values
+state.eq <- c(
+ M1.ATMOSPHERE     = 590,            # atmosphere
+ M2.SURFACEOCEAN   = 900,            # surface ocean
+ M3.MARINEBIOTA    = 3,              # marine biota
+ M4.DEEPOCEAN      = 37100,          # deep ocean
+ M5.SEDIMENTOCEAN  = 150,            # ocean sediment
+ M6.LANDBIOTA      = 2300,           # land biosphere
+ M7.ROCKS_FOSSIL   = 60e6+15e6+11e3, # sediments & rocks & fossil
+ M8.EMITTED        = 0               # total emitted fossil C (auxillary)
+)
+
+#=============================================================================
+# Model parameters: 
+#=============================================================================
+
+parms <- with (as.list(state.eq), c(
+
+  # rate constants, yr-1 (first-order kinetics for all natural fluxes)
+  k1.2 = 70.2 /M1.ATMOSPHERE,    # atm     -> surfoc (Uptake+weathering)
+  k2.1 = 70.6 /M2.SURFACEOCEAN,  # surfoc  -> atm
+  k2.3 = 50   /M2.SURFACEOCEAN,  # surfoc  -> marbio
+  k3.2 = 39   /M3.MARINEBIOTA,   # marbio  -> surfoc
+  k3.4 = 11   /M3.MARINEBIOTA,   # marbio  -> deepoc
+  k4.2 = 101  /M4.DEEPOCEAN,     # deepoc  -> surfoc
+  k2.4 = 90.2 /M2.SURFACEOCEAN,  # surfoc  -> deepoc
+  k4.5 = 0.2  /M4.DEEPOCEAN,     # deepoc  -> sed
+  k5.7 = 0.2  /M5.SEDIMENTOCEAN, # sed     -> rocks
+  k6.2 = 0.4  /M6.LANDBIOTA,     # landbio -> surfoc            
+  k1.6 = 60   /M1.ATMOSPHERE,    # atm     -> landbio
+  k6.1 = 59.6 /M6.LANDBIOTA,     # landbio -> atm
+  k7.2 = 0.2  /M7.ROCKS_FOSSIL,  # rocks_fossil   -> surface ocean
+  k7.4 = 0.0  /M7.ROCKS_FOSSIL,  # rocks_fossil   -> deep ocean
+  
+  # constants for additional input of C by anthropogenic burning of 
+  # fossil fuels, which is described as an extra flux 
+  # F14 <- (aFuel*t + bFuel)*(t<tmax_input)  
+  aFuel = 0,          # rate of increase of fuel burning, PgC yr-2
+  bFuel = 0,          # baseline fuel burning, PgC yr-1
+  tmax_input = 1000,  # after this period, fossil fuel burning stops, yr
+  
+  # constant mitigation flux of C from atmosphere directly into the deep ocean
+  Fatm2deep = 0       # PgC yr-1
+  )
+) # end of with(as.list(...
+
+#=============================================================================
+# model function 
+#=============================================================================
+
+Cmodel  <- function(t, C, p) {
+
+  with(as.list (c(C, p)),{
+    
+    # define expressions for all fluxes
+    F1.2 <- k1.2*M1.ATMOSPHERE    # atm     -> surfoc   (Uptake+weathering)
+    F1.6 <- k1.6*M1.ATMOSPHERE    # atm     -> landbio
+    F2.1 <- k2.1*M2.SURFACEOCEAN  # surfoc  -> atm
+    F2.3 <- k2.3*M2.SURFACEOCEAN  # surfoc  -> marbio
+    F2.4 <- k2.4*M2.SURFACEOCEAN  # surfoc  -> deepoc
+    F3.2 <- k3.2*M3.MARINEBIOTA   # marbio  -> surfoc
+    F3.4 <- k3.4*M3.MARINEBIOTA   # marbio  -> deepoc
+    F4.2 <- k4.2*M4.DEEPOCEAN     # deepoc  -> surfoc
+    F4.5 <- k4.5*M4.DEEPOCEAN     # deepoc  -> sed
+    F5.7 <- k5.7*M5.SEDIMENTOCEAN # sed     -> rocks
+    F6.1 <- k6.1*M6.LANDBIOTA     # landbio -> atm
+    F6.2 <- k6.2*M6.LANDBIOTA     # landbio -> surfoc            
+    F7.2 <- k7.2*M7.ROCKS_FOSSIL  # rocks   -> surface ocean
+    
+    # fossil fuel burning
+    F.fuel <- (bFuel + aFuel*t) * (t <= tmax_input)
+
+    # mass balance equations for each state variable
+    dM1.ATMOSPHERE    <- F2.1 + F6.1 - F1.2 - F1.6 + F.fuel - Fatm2deep 
+    dM2.SURFACEOCEAN  <- F1.2 + F3.2 + F4.2 + F6.2 + F7.2 - F2.1 - F2.3 - F2.4
+    dM3.MARINEBIOTA   <- F2.3 - F3.2 - F3.4
+    dM4.DEEPOCEAN     <- F2.4 + F3.4 - F4.2 - F4.5 + Fatm2deep 
+    dM5.SEDIMENTOCEAN <- F4.5 - F5.7
+    dM6.LANDBIOTA     <- F1.6 - F6.1 - F6.2
+    dM7.ROCKS_FOSSIL  <- F5.7 - F7.2 - F.fuel
+    # track the amount of emitted and sequestered C
+    dM8.EMITTED       <- F.fuel - Fatm2deep
+   
+    return(list(c(
+      dM1.ATMOSPHERE, dM2.SURFACEOCEAN, dM3.MARINEBIOTA, dM4.DEEPOCEAN, 
+      dM5.SEDIMENTOCEAN, dM6.LANDBIOTA, dM7.ROCKS_FOSSIL, dM8.EMITTED )))
+  })
+}  # end of model equations
+```
+
+## Scenarios
+
+### Steady-state
+
+```{r, fig.width=6, fig.height=6}
+time_seq <- 0:1000   # run the model for 1000 years
+par(oma = c(0,0,2,0))
+out1 <- ode(y = state.eq, times = time_seq, func = Cmodel, parms = parms)
+plot(out1, xlab = "years", ylab = "PgC")
+title(main = "STEADY STATE", outer = TRUE)
+out1[nrow(out1),]
+```
+
+As expected, there is no change in the C content in any of the modeled compartments when the initial conditions corresponding to the steady-state are used.
+
+### Scenario 1: Instantaneous deforestation
+
+100 Pg C is transferred from M6.LANDBIOTA to M1.ATMOSPHERE. This is implemented by *changing the initial condition*.
+
+```{r, fig.width=8, fig.height=8}
+Cdeforest <- 100      # Pg C transferred from M6.LANDBIOTA to M1.ATMOSPHERE
+time_seq <- 0:1000    # run the model for 1000 years
+
+# new initial state
+state2 <- state.eq
+state2["M1.ATMOSPHERE"] <- state2["M1.ATMOSPHERE"] + Cdeforest
+state2["M6.LANDBIOTA"]  <- state2["M6.LANDBIOTA"]  - Cdeforest
+
+# Calculate, plot and print the solution, adding the original solution
+out2 <- ode(y = state2, times = time_seq, func = Cmodel, parms = parms)
+par(oma = c(0,0,2,0))
+plot(out2, out1, lty = 1, lwd = 2, xlab = "years", ylab = "PgC")
+plot.new()
+legend("top", legend = c("Deforestation", "Steady-state"), 
+       col = 1:2, lwd = 2, lty = 1)
+title(main= "SCENARIO 1: DEFORESTATION ", outer = TRUE)
+```
+
+### Scenario 2: Constant emissions
+
+Constant emissions are implemented by changing one model parameter ("bFuel") and leaving the rest of the model unchanged. Different outputs are produced for different emission rates.
+
+```{r, fig.width=8, fig.height=8}
+emission_rate <- 10 # Pg C yr-1
+time_seq <- 0:1000  # run the model for 1000 years
+
+state3 <- state.eq  # initial state corresponds to the stead state
+
+# define new set of model parameters and run the model
+parms3 <- parms
+parms3["bFuel"] <- emission_rate
+out3 <- ode(y = state3, times = time_seq, func = Cmodel, parms = parms3)
+
+# half the emission rate
+parms3b <- parms
+parms3b["bFuel"] <- emission_rate/2
+out3b <- ode(y = state3, times = time_seq, func = Cmodel, parms = parms3b)
+
+# double the emission rate
+parms3c <- parms
+parms3c["bFuel"] <- emission_rate*2
+out3c <- ode(y = state3, times = time_seq, func = Cmodel, parms = parms3c)
+
+# display results
+par(oma = c(0,0,2,0))
+plot(out3, out3b, out3c, out1, lty = 1, lwd = 2, xlab = "years", ylab = "PgC")
+plot.new()
+legend("top",
+       legend = c("Emission 10 PgC/yr", "Emission 5 PgC/yr",
+                  "Emission 20PgC/yr",  "Steady-state"), 
+       col = 1:4, lwd = 2, lty = 1)
+title(main = "CONSTANT EMISSIONS", outer = TRUE)
+```
+
+As expected, the total amount of C emitted into the atmosphere, which is tracked by the state variable M8.EMITTED, increases linearly with time. For example, the emission rate of 10 PgC/yr yields 10,000 PgC of emitted carbon over 1000 years, consistent with what the black line in the lower-right graph shows. 
+
+Calculation of the change in the amount of C in each compartment after 10, 100 and 1000 years is implemented with a new function *CalcChange*.  The function is then called for the output of the scenario with the emission rate of 10 PgC/yr (out3).
+
+```{r}
+# function to calculate reservoir changes
+CalcChange <- function(out, time){
+  time_seq <- out[,1]   # times of the solution
+  Cini <- out[1, 2:9 ]  # initial condition          
+  Cend <- out[which(time_seq == time), 2:9] # C at time
+  return(Tot <- Cend - Cini) # Change relative to initial condition
+}
+
+cat (" after  10 years, of the", CalcChange(out3, 10)["M8.EMITTED"],
+     "PgC emmitted, ", CalcChange(out3, 10)["M1.ATMOSPHERE"], 
+     " PgC is present in the atmosphere\n")
+cat (" after 100 years, of the", CalcChange(out3, 100)["M8.EMITTED"],
+     "PgC emmitted, ", CalcChange(out3, 100)["M1.ATMOSPHERE"], 
+     " PgC is present in the atmosphere\n")
+change <- CalcChange(out3, 1000)
+cat(" after 1000 years, the % of emitted carbon in each reservoir is:\n")
+round(change[1:7]/change[8]*100,1)
+```
+We conclude that after 1000 years of constant emissions, about 84% of the emitted C ends up in the deep ocean, 10% in the land biota, and minor fractions in the other compartments.
+
+### Scenario 3: Linearly increasing emissions
+
+Emissions are now linearly increasing with time, starting from 0 and they stop after 200 years.
+
+```{r, fig.width=8, fig.height=8}
+emission_rate         <- 0    # Pg C yr-1
+emission_acceleration <- 0.05 # Pg C yr-2
+
+parms5 <- parms       # new set of model parameters
+parms5["bFuel"] <- emission_rate
+parms5["aFuel"] <- emission_acceleration
+parms5["tmax_input"] <- 200   # emissions stop after 200 years
+state5 <- state.eq
+
+out5 <- ode(y = state5, times = time_seq, func = Cmodel, parms = parms5)
+
+par(oma = c(0,0,2,0))
+plot(out5, out1, lty = 1, lwd = 2, xlab = "years", ylab = "PgC")
+plot.new()
+legend("top", legend = c("Increasing emission [0-200yr]", "Steady-state"), 
+      col = 1:2, lwd = 2, lty = 1)
+title(main = "TIME-DEPENDENT EMISSIONS", outer = TRUE)
+```
+Now we use the function *CalcChange* to calculate changes in the C contents (absolute and relative) after 200 and 1000 years.
+
+```{r}
+change200 <- CalcChange(out5, 200)
+change1000 <- CalcChange(out5, 1000)
+change200
+round(change200[1:7]/change200[8]*100,1)
+round(change1000[1:7]/change1000[8]*100,1)
+```
+We conclude that if the emissions linearly increase for 200 years (from 0, with an acceleration of 0.05 PgC yr$^{-2}$) and then abruptly stop, the total emitted C amounts to 1000 PgC (consistent with the expected value of the integrated emission rate: $0.05\times t^2/2 = 0.05/2\times 200^2 = 1000$). At the end of the 200 years period, about 10% of the emitted C ends up in the atmosphere, 7% in the surface ocean, 53% in the deep ocean, and 30% in the land biota. If the emissions continue to be zero after the initial 200 year period, after 1000 years most of the emitted carbon will be present in the deep ocean (90%), a small part in the land biota (5.6%), and minor parts in the other compartments.
+
+### Scenario 3': Long-term recovery after 200 years of linearly increasing fossil fuel burning
+
+Here we explore the long-term dynamics of the global C cycle following the perturbation caused by the linearly increasing rate of fossil fuel emission over 200 years. Thus, we run the same model as in the previous section but over 1 million years.
+
+Note how the time sequence is defined to allow capture of both the faster dynamics during the initial 1000 years and the slower dynamics afterwards. If we kept the step size of 10 years for the entire duration of 1 million years, the output would be unnecessarily large (100,000 values!), which would lead to unnecessarily large output figures (and long R-markdown "knitting"). The time-axis is displayed in a log-scale to visualize both the fast and slow dynamics.
+
+```{r, fig.width=8, fig.height=8, warning = FALSE, message = FALSE}
+time_seq1M <- c(seq(from=0, to=1000, by=10),              # denser first 1000 years
+                seq(from=1000, to=1e6, length.out = 5000)) # less dense afterwards
+
+# linearly increasing emission rate until 200 years, then stop
+out5_1M  <- ode(y = state.eq, times = time_seq1M, func = Cmodel, parms = parms5)
+# also run the model in steady state
+out_1M <- ode(y = state.eq, times = time_seq1M, func = Cmodel, parms = parms)
+
+par(oma = c(0,0,2,0))
+plot(out5_1M, out_1M, log="x", lty = 1, lwd = 2, xlab = "years", ylab = "PgC")
+plot.new()
+legend("top", legend = c("Perturbed system", "Original steady-state"),
+  col = 1:2, lwd = 2, lty = 1)
+title(main = "LONG-TERM RECOVERY", outer = TRUE)
+```
+
+We see that the *response* of the global C cycle to the perturbation by fossil fuel burning over 200 years occurs largely on *two time scales*. As discussed above, during the initial approximately 1000 years, most (90%) of the carbon emitted to the atmosphere is transferred to the deep ocean. Then, it takes around 1 million years until the system reaches the original steady state (assuming, of course, that no rate constants change over time). This is due to the combination of two effects: (i) there is an intense recycling of carbon between the deep ocean, surface ocean and marine biota; (ii) the carbon burial flux is very small (0.2 PgC yr$^{-1}$ in steady state, slightly larger if the size of the deep sea compartment increases) compared to most of the other fluxes. 
+
+### Scenario 4: Mitigation by increasing oceanic primary production
+
+First, we consider that emissions linearly increased for 200 years and then abruptly stopped. We use the status of the system after the 200 years of such emissions as the *initial condition* for modelling the effects of the mitigation strategy involving stimulation of the oceanic primary production. This mitigation strategy is implemented by *increasing the parameter* $k2.3$, which defines the magnitude of the flux from M2.SURFACEOCEAN to M3.MARINEBIOTA. We use trial end error to vary the stimulation parameter (*ppFraction*) so that the atmospheric C content decreases towards the original level after 1000 years. We compare the results with the scenario where this mitigation strategy is not employed (using original model parameters but a perturbed initial conditions; scenario 3).
+
+```{r, fig.width=8, fig.height=8}
+# start from the status after 200 years of linearly increasing emissions
+state7 <- state.eq + CalcChange(out5, 200)
+
+# use the original model parameters (no emissions), but stimulate oceanic 
+# primary productivity (surface->marinebiota) by a factor ppFraction
+parms7 <- parms
+ppFraction <- 0.24
+parms7["k2.3"]  <- parms["k2.3"]*(1 + ppFraction)   
+
+# mitigation implemented (parms7)
+out7  <- ode(y = state7, times = time_seq, func = Cmodel, parms = parms7)
+# no mitigation implemented (parms)
+out7a <- ode(y = state7, times = time_seq, func = Cmodel, parms = parms)
+
+par(oma = c(0,0,2,0))
+plot(out7, out7a, out1, lty = 1, lwd = 2, xlab = "years", ylab = "PgC")
+plot.new()
+legend("top", legend = c("Increased Marine PProd", "No mitigation", 
+                         "Original steady-state"), col = 1:3, lwd = 2, lty = 1)
+title(main = "AFTER 200 yr: EMISSIONS STOPPED & PRIMARY PRODUCTION INCREASED",
+      outer = TRUE)
+```
+
+The above graphs show that the stimulation of the oceanic productivity leads to an increased C content of the marine biota, the deep ocean and marine sediments, and a decrease in the C content of the atmosphere, surface ocean and terrestrial biota (black lines). Within about 400 years, the atmospheric C content will reach the original steady state level (i.e., prior to anthropogenic emissions); however, this will require a *continuous* stimulation of the oceanic primary productivity by *24%*! In contrast, if no such mitigation strategy were employed, the decrease in the atmospheric C would proceed in a similar way, albeit to a level that is by about 15 PgC higher than the original steady state level (i.e., 2.5% higher). Notably, the initial rapid decrease in the atmospheric C (by about 50 PgC) following the abrupt stop in fossil fuel emissions is similar with or without the mitigation strategy employed.
+
+Together, this suggests that an immediate stopping of fossil fuel emissions is the most important factor to reduce atmospheric C. The system will "heal itself" to similar levels within about 400 years, regardless whether oceanic primary productivity is stimulated or not (at least based on this model, which is still quite simple). At this point, most of the emitted fossil fuel C will end up in the deep ocean. As discussed above, it will take about 1 million years until a "full recovery" of the system to the original state.
+
+### Scenario 5: Sequestration of atmospheric C directly into the deep ocean
+
+Again, we first consider that emissions linearly increased for 200 years and then abruptly stopped. We use the status of the system after the 200 years of such emissions as the *initial condition* for modelling the effects of this second mitigation strategy. This mitigation strategy is implemented by setting the sequestration flux (model parameter *Fatm2deep*) to 1 PgC yr$^{-1}$. 
+Over 1000 years, this sequestration rate would remove the same amount of C from the atmosphere as the total amount added by fossil fuel burning over the period of 200 years with the linearly increasing rate (scenario 3). We compare the results with the scenario where this mitigation strategy is not employed (scenario 3) as well as with the one employing stimulation of oceanic productivity (scenario 4).
+
+```{r, fig.width=8, fig.height=8}
+# start from the status after 200 years of linearly increasing emissions
+state8 <- state.eq + CalcChange(out5, 200)
+
+parms8 <- parms          # original model parameters
+parms8["Fatm2deep"] <- 1 # sequestration flux 1 PgC yr-1
+
+# mitigation implemented (parms8)
+out8  <- ode(y = state8, times = time_seq, func = Cmodel, parms = parms8)
+# no mitigation implemented (parms)
+out8a <- ode(y = state8, times = time_seq, func = Cmodel, parms = parms)
+
+par(oma = c(0,0,2,0))
+plot(out8, out7, out8a, out1, lty = 1, lwd = 2, xlab = "years", ylab = "PgC")
+plot.new()
+legend("top", legend = c("Direct atm to deep ocean", "Increased Marine Prod", 
+                         "No mitigation", "Original steady-state"),
+       col = 1:4, lwd = 2, lty = 1)
+title(main = "SEQUESTRATION OF ATMOSPHERIC C INTO DEEP OCEAN", outer = TRUE)
+```
+
+We see that the effects of this second mitigation approach are very much the same as of the first mitigation approach (compare black and red lines in the above graphs), except for the compartments of the surface ocean and marine biota, which follow a similar path as if no mitigation strategy were employed. This is, clearly, due to the fact that in this modelling approach we have by-passed the "D-tour" via the surface ocean and marine biota on the way from the atmosphere to the deep ocean. 
+
+<!-- ## Formal analysis of the deforestation scenario -->
+
+<!-- In this scenario, 50 Pg C was transferred from M6.LANDBIOTA to M1.ATMOSPHERE  -->
+
+<!-- To start the formal analysis, the Jacobian matrix needs to be compiled; as the model is linear this can be done analytically : the elements of the Jacobian are simply the rate coefficients.  -->
+
+<!-- It is checked that matrix multiplication with the steady-state vector returns all zero (or quasi-zero) values. -->
+
+<!-- ```{r, fig.width=6, fig.height=6} -->
+<!-- Jacobian <- with (as.list(parms),  -->
+<!--   matrix(nrow = 7, ncol = 7, byrow = TRUE, data = c( -->
+<!--    -k1.2-k1.6, k2.1,           0,         0,         0,    k6.1,      0, -->
+<!--     k1.2,     -k2.1-k2.3-k2.4, k3.2,      k4.2,      0,    k6.2,      k7.2, -->
+<!--     0,         k2.3,          -k3.2-k3.4, 0,         0,    0,         0, -->
+<!--     0,         k2.4,           k3.4,     -k4.2-k4.5, 0,    0,         0, -->
+<!--     0,         0,              0,         k4.5,     -k5.7, 0,         0, -->
+<!--     k1.6,      0,              0,         0,         0,   -k6.1-k6.2, 0, -->
+<!--     0,         0,              0,         0,         k5.7, 0,        -k7.2 -->
+<!--    )) -->
+<!--   ) -->
+<!-- state.eq[1:7] -->
+<!-- Jacobian%*%state.eq[1:7] -->
+<!-- ``` -->
+
+<!-- Next the Jacobian is decomposed for the eigenvalues ($lambda$) and eigenvectors ($V$). The response time of the perturbed reservoirs can be estimated, e.g. as $abs(3/lambda)$: -->
+
+<!-- ```{r} -->
+
+<!-- eig <- eigen(Jacobian) -->
+<!-- (lambda <- eig$values ) -->
+<!-- V <- eig$vectors  -->
+<!-- (Responsetime <- -1/Re(lambda)) -->
+<!-- (Responsetime1 <- abs(3/lambda)) -->
+<!-- ``` -->
+
+<!-- The perturbation vector $dC.ini$ has 100 PgC added to $M1.ATMOSPHERE$ and 100 PgC removed from $M6.LANDBIOTA$. -->
+
+<!-- This is used to calculate the reservoirs of exchanged quantities $dP.ini$. Note that, in R, $solve(V)$ calculates the inverse of matrix $V$. -->
+
+
+<!-- ```{r} -->
+<!-- # 100 PgC added to M1.ATMOSPHERE, and removed from M6.LANDBIOTA -->
+<!-- dC.ini <- c(100, 0, 0, 0, 0, -100, 0) -->
+<!-- (P.ini <- solve(V) %*% dC.ini)   -->
+<!-- ``` -->
+
+<!-- Based on the magnitude of P.ini, it appears that there are only 3 pools that exchange a lot of carbon: the surface ocean, the marine biota and the deep ocean. The characteristic time scales of these pools (Tau) are ~ 10, 25 and 290 years respectively: -->
+
+<!-- ```{r} -->
+<!-- RES <-  data.frame(names = names (state.eq[1:7]), Lambda = lambda, P.ini = P.ini, Tau = Responsetime) -->
+<!-- knitr::kable(RES) -->
+<!-- ``` -->

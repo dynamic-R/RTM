@@ -1,0 +1,67 @@
+---
+title: "Local equilibrium chemistry in R --- part I ANSWER"
+subtitle: "Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
+author: "Karline Soetaert and Lubos Polerecky, Utrecht University"
+date: "March 2021"
+output:
+  pdf_document:
+    number_sections: true
+  html_document: default
+---
+
+## Solution
+
+The solution to this problem follows directly from the above explanation once we realize that the species A corresponds to NH$_3$, species B corresponds to H$^+$, species AB corresponds to NH$_4^+$, the lump-sum species $Atot$ corresponds to total dissolved ammonium ($NH_x = NH_3 + NH_4^+$), and $Btot$ corresponds to total positive charge ($H_x^+ = H^+ + NH_4^+$). A small modification is required, though, because we do not know the actual rate constants for the forward and backward reaction (this is typically the case for this type of problems). Thus, we will use $K_{eq}$ as the model parameter instead of $k_f$ and $k_b$.
+
+We define the model function in analogy to the *EqModel_num* function. We can leave the solveB function untouched and reuse it.
+
+```{r}
+AmmoniaDegassing <- function(t, state, parms) {
+  with (as.list(c(state,parms)), {
+    
+    # calculate H from NHx and Hx numerically, using solveB
+    H   <- solveB(Keq = Keq, Atot = NHx, Btot = Hx) 
+    # calculate NH3 and NH4+ from NHx and H (eq. 7 and 8)
+    NH3 <- Keq/(Keq+H) * NHx
+    NH4 <- NHx - NH3
+    
+    # mass balance equations for NHx and Hx (eq. 5)
+    dNHx <- -lambda * NH3
+    dHx  <- 0
+    
+    return(list(c(dNHx, dHx), 
+                H = H, NH3 = NH3, NH4 = NH4, # NH4 corresponds to [NH4+]
+                pH = -log10(H),     # return also pH
+                Q = NH3*H/NH4 ))    # return also Q
+  })
+}
+```
+
+Now, we define the model parameters and initial conditions. Here, we need to keep in mind that $pH=-log([H^+])$, where the proton concentration is in mol/L. Thus, all state variables, as well as the equilibrium constant $K_{eq}$, must be in this unit, too. Because the rate constant is in the unit of $d^{-1}$, we are going to solve the model on the time-scale of days.
+
+```{r}
+parms <- c (Keq = 5.38e-10,     # mol/L
+            lambda = 1)         # 1/d
+
+# Initial concentration of total dissolved ammonia (given)
+NHx.ini <- 1e-3 # mol/L
+# Initial proton concentration, calculated from pH (given)
+H.ini  <- 10^(-8) # 10^(-pH), mol/L
+# Initial total positive charge concentration, calculated from eq. 6
+Hx.ini <- H.ini + H.ini/(parms[["Keq"]] + H.ini) * NHx.ini
+
+# initial conditions, lump-sum state variables NHx and Hx
+yini <- c(NHx = NHx.ini, Hx = Hx.ini)
+```
+
+Now we are ready to run the model and plot the results as a function of time. We calculate the results for 20 days.
+
+```{r, fig.height=5, fig.width=10}
+require(deSolve)
+times <- seq(from=0, to=20, length.out=100) # days
+out <- ode(y=yini, times=times, func=AmmoniaDegassing, parms=parms)
+plot(out, mfrow=c(2,4), xlab="time (d)")
+```
+We see that the most dramatic changes occur within the first 5 days, where the pH decreases from 8 until about 6. This shift towards a lower pH (higher [H$^+$]) causes the speciation of total ammonium to shift towards low [NH$_3$]. After 5 days, the NH$_3$ concentration is so low that the rate of its removal is close to zero (because the rate is proportional to [NH$_3$]), leading to a much slower pH dynamics.
+
+An interesting outcome of the model is that the *total* ammonia concentration in the lake does *not* decrease appreciably (from 1 mmol/L to about 0.95 mmol/L). This means that degassing of ammonia from a pH-unbuffered system is *not* going to remove the ammonia from the lake water. The lake would stop smelling bad, but it would not stop being polluted. Note, however, that this corresponds to an unrealistic assumption that ammonia degassing is the only process that affects the pH of the lake water.

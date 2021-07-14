@@ -1,0 +1,106 @@
+---
+title: 'Chemistry: Ozone in the troposphere'
+author: "Karline Soetaert and Lubos Polerecky, Utrecht University"
+subtitle: "Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
+date: "February 2021"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+# Answers
+
+## Rate expressions
+
+The reactions to be considered are:
+
+$$Reaction~1:\qquad NO_2 + hv \rightarrow NO+O,$$
+$$Reaction~2:\qquad O+O_2 \rightarrow O_3,$$
+$$Reaction~3:\qquad NO+O_3 \rightarrow O_2 + NO_2,$$
+where $O_2$ is assumed to be constant and thus not modeled explicitly. 
+
+Based on the reactions and the input flux of $NO$ ($\sigma$), we write mass balance equations for the *total* mass of $O$, $NO$, $NO_2$, and $O_3$ in the lower atmosphere as follows:
+
+$$\frac{d[O]}{dt}  = R_1 - R_2,$$
+$$\frac{d[NO]}{dt}   = R_1 - R_3 + \sigma,$$
+$$\frac{d[NO_2]}{dt}  = - R_1 + R_3,$$
+$$\frac{d[O_3]}{dt}  = R_2 - R_3,$$
+where $R_1$, $R_2$ and $R_3$ denote the rates of the reactions 1, 2 and 3, respectively. Here, we denote the *total mass* in the compartment $x$ as $[x]$. This notation should not be confused with the notation often used for concentrations.
+
+To derive the rate expressions, we assume that each reaction is an elementary rection and thus its rate is described by the first-order kinetics. Thus, for $R_1$, $R_2$ and $R_3$ we write:
+
+$$R_1 = k_1\cdot [NO_2],$$
+$$R_2 = k_{2a}\cdot [O]\cdot [O_2],$$
+$$R_3 = k_3\cdot [NO]\cdot [O_3].$$
+The rate expression for $R_2$ can be simplified if we assume the total mass of oxygen $[O_2]$ to be constant. Thus, we obtain:
+$$R_2 = k_2\cdot [O],$$
+where $k_2 = k_{2a}*[O_2]$.
+
+To implement the dependency of the photo-dissociation rate on the light intensity, we write the corresponding reaction rate constant  as
+$$k_1 = k_{1a}+k_{1b}\cdot radiation.$$
+ 
+
+## Model implementation in R
+
+This model is implemented and solved in R. We impose variable light intensity that changes over a day.
+
+```{r, eval = TRUE, cache = FALSE, echo = TRUE, warning=FALSE, message=FALSE}
+require(deSolve)  # package with solution methods
+
+# state variables, units = moles
+state <- c(O = 0, NO = 1.3e8, NO2 = 5e11, O3 = 8e11)  # initial conditions
+
+# parameters: rate coefficients
+parms <- c(
+  k3     = 1e-11,     # [/(mol/d)] 
+  k2     = 1e10,      # [/d]
+  k1a    = 1e-30,     # [/d] note: k1 = k1a + k1b*radiation
+  k1b    = 1,         # [/(microEinst/m2/s)/d]
+  sigma  = 1e11,      # [mol/d]           NO emission rate
+  maxrad = 1200       # [microEinst/m2/s] maximal radiation
+)
+
+# Model function
+Ozone <- function(t, state, params) {
+  with (as.list(c(state, params)), {
+
+  radiation <- max(0, sin(t*2*pi))*maxrad    # radiation at time t (if time in days)
+
+  # Rate expressions
+  k1 <- k1a + k1b*radiation
+
+  R1 <- k1*NO2
+  R2 <- k2*O
+  R3 <- k3*NO*O3
+  
+  # Mass balances [moles/day]
+  dO   <-  R1 - R2
+  dNO  <-  R1      - R3 + sigma
+  dNO2 <- -R1      + R3
+  dO3  <-       R2 - R3
+
+  list(c(dO, dNO, dNO2, dO3), 
+       radiation = radiation)
+  })
+
+}
+```
+
+The model is run for 5 days; it is solved using the ode function from package deSolve. We compare the dynamics with and without the anthropogenic emissions.
+
+```{r, eval = TRUE, cache = FALSE, echo = TRUE, warning=FALSE, message=FALSE}
+
+outtimes <- seq(from = 0, to = 5, length.out = 300)  # run for 5 days
+
+out <- ode(y = state, parms = parms, func = Ozone, times = outtimes, method = "vode")
+
+parms2 <- parms
+parms2["sigma"] <- 0.0
+out2 <- ode(y = state, parms = parms2, func = Ozone, times = outtimes, method = "vode")
+
+plot(out, out2, las = 1, lwd=1, lty=1) # las specifies the rotation of axis labels
+plot.new()
+legend("top", legend=c("with emissions", "no emissions"), lty=1, lwd=1, col=1:2)
+```
+
+The model output shows that, at the onset of the day, the masses of $O$ and $NO$ increase drastically due to the photo-dissociation reaction, which rapidly exhausts $NO_2$. As most of the $O$ produced reacts with $O_2$ at a very high rate to form $O_3$, the mass of $O$ increases only little compared to $NO$. The continuous input of NO, however, leads to a gradual build-up of $NO_2$, which then yields a gradual decrease in the ozone levels during the night. 

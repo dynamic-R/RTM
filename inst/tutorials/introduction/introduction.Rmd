@@ -1,0 +1,144 @@
+---
+title: "RTM course - Introduction"
+author: "Karline Soetaert and Lubos Polerecky"
+description: "video and simple questions about model types, model steps, language"
+date: "June 2021"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(learnr)
+```
+
+## Tutorial
+
+You are advised to watch the following video first.
+
+### Video timeline 
+* 0:17 Course philosophy and focus
+* 1:19 Professors
+* 2:12 Format of the course
+* 4:01 Requirements to pass the course
+* 5:57 Textbook
+* 6:26 Models covered in the course
+* 8:34 Topics of final projects
+
+![](https://www.youtube.com/watch?v=r45xetHO8bI&list=PLx8PHcDdmF-uD1Pr07TU9SzlhlGpfrxqn&index=1)
+
+You can also read the following section(s) of the textbook:
+
+* Chapter 1. Introduction
+
+(You can download each chapter of the textbook via the e-book University library for free!)
+
+## Model steps
+
+```{r model_steps, echo=FALSE}
+question(" Models are typically made in a number of subsequent steps. Toggle the steps that are *not* correctly positioned:", type = "checkbox",
+ answer("1 Problem definition"),
+ answer("2 Formulation of mathematical equations (differential equations)", correct  =TRUE),
+ answer("3 Translation of the problem to a conceptual diagram", correct  =TRUE),
+ answer("4 Implementation of the equations in a computer program"),
+ answer("5 Solution of equations to make quantitative predictions"),
+ answer("6 Interpretation of the model predictions in the context of the original problem")
+)
+```
+
+## Programming language
+
+```{r programming_platform, echo=FALSE}
+msg <- "In this list, only R, matlab and python are programming languages, and R is the one that we will use in this course. Rmarkdown is a platform to merge an R-code with text;  Rstudio provides an integrated development environment (IDE), or an interface, that facilitates using R; ReacTran is one of the many R-packages that we will use."
+  
+question("Which programming language are we going to use in this course to solve our models?", type = "learnr_radio",
+ answer("Rstudio"),
+ answer("R", correct=TRUE),
+ answer("Rmarkdown"),
+ answer("Matlab"),
+ answer("Python"),
+ answer("ReacTran"),
+ 
+ incorrect = msg,
+ correct = msg)
+```
+
+## Learning goals
+
+```{r Learning_goals, echo=FALSE}
+msg <- "We recommend interaction with your classmates on the course topics - compare your model steps and model solutions with each other!"
+
+question("What are our recommendations to you to reach best learning outcomes in this course?", type = "learnr_checkbox",
+ answer("Start by searching model solutions on the internet. It is likely that someone had the same problem as you before, so you can see their solution and learn from it.", correct=FALSE),
+ answer("Memorize model equations.", correct=FALSE),
+ answer("Memorize important code-lines that you will often use. This will speed up the development of your imodels.", correct=FALSE),
+ answer("Explain to classmates your formulation of the model (including the conceptual diagram, equations, computer code).", correct=TRUE),
+ answer("Compare your computer code with those written by your classmates.", correct=TRUE),
+ answer("Share your computer code with your classmates.", correct=FALSE),
+
+ incorrect=msg,
+ correct=msg)
+```
+
+## Course topics
+
+```{r Course_topics, echo=FALSE}
+msg <- "We will cover a lot of different topics, from chemistry, ecology, physics, and even economy - but this does not include cryptocurrency."
+  
+question("Which processes are we NOT going to cover in this course?", type = "learnr_checkbox",
+ answer("Ecological interactions (e.g. predator-prey)", correct=FALSE),
+ answer("Organic matter production", correct=FALSE),
+ answer("Organic matter mineralisation", correct=FALSE),
+ answer("Mineral dissolution/formation", correct=FALSE),
+ answer("Chemical reactions", correct=FALSE),
+ answer("Bio-economic interactions", correct=FALSE),   
+ answer("Cryptocurrency transactions", correct=TRUE),
+ answer("Viral outbreaks", correct=FALSE),
+ 
+ incorrect=msg,
+ correct=msg
+)
+```
+
+## Course systems
+
+```{r Course_systems, echo=FALSE}
+msg <- "We will cover a lot of different systems, but we will stay close to the Earth's surface."
+
+question("Which systems are we going to study in this course?", type = "learnr_checkbox",
+ answer("Rivers", correct=TRUE),
+ answer("Lakes and Oceans", correct=TRUE),
+ answer("Aquifers", correct=TRUE),
+ answer("Soils", correct=TRUE),
+ answer("Lower atmosphere", correct=TRUE),
+ answer("Earth's mantle", correct=FALSE),
+ answer("Aquatic sediments", correct=TRUE),
+ answer("Surface of planets in our Solar system", correct=FALSE),
+ 
+ incorrect=msg,
+ correct=msg)
+```
+
+## Model types
+
+```{r Model_types, echo=FALSE}
+question("Which type of models are we going to develop in this course?", type = "learnr_radio",
+ answer("Qualitative models"),
+ answer("Mechanistic models", correct=TRUE),
+ answer("Statistical models"),
+ answer("Black-box models")
+)
+```
+
+## Finally
+
+```{r feedback, echo = FALSE}
+question("give your feedback ", type = "learnr_text", answer(" ", correct=TRUE), correct="thank you", incorrect = "thank you")
+```
+
+## Textbook
+
+Karline Soetaert, Peter M.J. Herman (2009). A Practical Guide to Ecological Modelling. Springer Netherlands. DOI: 10.1007/978-1-4020-8624-3.

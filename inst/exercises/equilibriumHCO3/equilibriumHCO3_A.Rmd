@@ -1,0 +1,215 @@
+---
+title: 'Local equilibrium chemistry in R --- part II: Two Equilibrium Reactions'
+subtitle: "Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
+author: "Karline Soetaert and Lubos Polerecky, Utrecht University"
+date: "February 2021"
+output:
+  pdf_document:
+    number_sections: false
+  html_document: default
+---
+
+# Answers
+
+## Task 1: Mass balance equations of the carbonate system
+
+Assuming that the forward and backward reactions are elementary, we can use the first-order kinetics to describe the rate laws for each reaction. Considering the stoichiometries of R1 and R2, we obtain the following mass balance equations:
+
+$$
+\begin{array}{rclr}
+\displaystyle
+\frac{d[H_2CO_3]}{dt} & = & R_1 + R_C & \qquad (1a)\\[5mm]
+\displaystyle
+\frac{d[HCO_3^-]}{dt} & = & -R_1 + R_2 & \qquad (1b) \\[5mm]
+\displaystyle
+\frac{d[CO_3^{2-}]}{dt} & = & -R_2  & \qquad (1c)\\[5mm]
+\displaystyle
+\frac{d[H^+]}{dt} & = & -R_1 - R_2 & \qquad (1d)
+\end{array}
+$$
+
+where the individual rates are defined as the sum of rates of the forward and backward reactions:
+
+$$
+R_1 = - k_{1f} \cdot [H_2CO_3] + k_{1b} \cdot [HCO_3^-] \cdot [H^+] 
+\qquad\hspace{2cm} (2a)
+$$
+
+$$
+R_2 = - k_{2f} \cdot [HCO_3^{-}] + k_{2b} \cdot [CO_3^{2-}] \cdot [H^+] 
+\qquad\hspace{2cm} (2b)
+$$
+
+Note that the rate $R_C$ of the slow process only affects $H_2CO_3$.
+
+## Task 2: Equilibrium conditions
+
+In the absence of the removal process RC, the carbonate species will reach an equilibrium as a result of the reversible reactions R1 and R2. In this equilibrium, the time derivative of each species in the system is zero. Based on equations 1a and 2a, we obtain $R_1=0$, which yields the relationship
+
+$$
+K_{1} = \frac{ [HCO_3^-] \cdot [H^+] }{ [H_2CO_3] } \qquad\hspace{2cm} (3a)
+$$
+Similarly, based on equation 1c and 2b, we obtain $R_2=0$, which yields the relationship
+$$
+K_{2}  = \frac{ [CO_3^{2-}] \cdot [H^+] }{[HCO_3^-]} 
+\qquad\hspace{2cm} (3b)
+$$
+
+Here, we defined the dissociation constants $K_1$ and $K_2$ as $K_1 = k_{1f}/k_{1b}$ and $K_2 = k_{2f}/k_{2b}$. If relationships 3a and 3b are true, then the time derivatives in equations 1b and 1d are zero. This means that these two equations do *not* provide any *extra* information for the equilibrium concentrations.
+
+## Task 3: Lump-sum species
+
+By summing equations 1a, 1b and 1c, we obtain 
+$$
+\frac{d[DIC]}{dt} = R_C \qquad\hspace{2cm} (4a)
+$$
+Similarly, by summing equation 1b with equation 1c multiplied with a factor of 2, and finally subtracting equation 1d, we obtain
+$$
+\frac{d[ALK]}{dt} = 0 \qquad\hspace{2cm} (4b)
+$$
+These equations show that DIC is *added* at a rate of the *slow process* ($R_C$), while ALK is *conserved* (not changing in time). Notably, both DIC and ALK are *not* effected by the fast equilibration reactions.
+
+## Task 4: From lump-sum species to original species
+
+By solving for $[H_2CO_3]$ and $[CO_3^{2-}]$ in equations 3a and 3b, and by substituting the result to the definition of $[DIC]$, we obtain 
+
+$$
+[DIC] = [HCO_3^-] + [H^+] \frac{[HCO_3^-]}{K_{1}} + K_{2} \frac{ [HCO_3^-]}{[H^+]}
+$$
+
+When we bring each term on the right-hand side to the common denominator ($K_1\cdot [H^+]$), we obtain
+
+$$
+[DIC] = \frac{K_1\cdot[H^+]\cdot[HCO_3^-]}{K_1\cdot[H^+]} + \frac{ [H^+]^2\cdot[HCO_3^-]}{K_1 \cdot[H^+]} + \frac{ K_1 \cdot K_{2} \cdot[HCO_3^-]}{K_1 \cdot [H^+]}
+$$
+
+This equation can easily be solved for $[HCO_3^-]$:
+
+$$
+[HCO_3^-]= \frac{K_{1}[H^+]}{[H^+][H^+] + K_{1}[H^+] +  K_{1} K_{2}} [DIC]
+\qquad\hspace{2cm} (5a)
+$$
+
+Combining this result with equation 3a, we obtain 
+
+$$
+[H_2CO_3] = \frac{[H^+][H^+]}{[H^+][H^+] + K_{1}[H^+] +  K_{1} K_{2}} [DIC]
+\qquad\hspace{2cm} (5b)
+$$
+
+Similarly, combining the result with equation 3b, we obtain
+
+$$
+[CO_3^{2-}] = \frac{K_1 K_2}{[H^+][H^+] + K_{1}[H^+] +  K_{1} K_{2}}[DIC]
+\qquad\hspace{2cm} (5c)
+$$
+
+Once the concentrations $[HCO_3^-]$, $[CO_3^{2-}]$ and $[H^+]$ are known, the carbonate alkalinity is calculated based on the definition:
+
+$$
+[ALK] = [HCO_3^-] + 2\cdot [CO_3^{2-}] - [H^+]
+\qquad\hspace{2cm} (5d)
+$$
+
+Because $[HCO_3^-]$ and $[CO_3^{2-}]$ depend on $[DIC]$ and $[H^+]$ (see 5a and 5c), \bf equation 5d provides an intimate relationship between $[ALK]$, $[DIC]$ and $[H^+]$ \rm when the carbonate species are in an equilibrium. Using this relationship, one can calculate 
+
+* $[ALK]$ if the values of $[DIC]$ and $[H^+]$ are known, or
+
+* $[H^+]$ if the values of $[DIC]$ and $[ALK]$ are known, or
+
+* $[DIC]$ if the values of $[H^+]$ and $[ALK]$ are known.
+
+Because equation 5d is highly non-linear, these calculations are done numerically.
+
+## Task 5: Application to atmospheric CO2 exchange 
+
+### Implementation in R
+
+First, we define a function that calculates carbonate alkalinity from the known concentration of DIC and pH (equation 5d).
+
+```{r}
+solveALK <- function(K1 = 1.422e-06, K2 = 1.082e-09, DIC, pH){
+  
+  H <- 10^{-pH}
+  HCO3   <- K1*H /  (H^2 + K1*H + K1*K2) * DIC    # eq 5a
+  CO3    <- K1*K2 / (H^2 + K1*H + K1*K2) * DIC    # eq 5c
+  ALK    <- HCO3 + 2*CO3 - H                      # eq 5d
+  
+  return(ALK)
+}
+```
+
+Second, we define a function that calculates $[H^+]$ from the known carbonate alkalinity and DIC concentration (equation 5d). This is done by finding a root of a function defined as the left-hand-side minus the right-hand-side of equation 5d.
+
+```{r}
+solveH <- function(K1 = 1.422e-06, K2 = 1.082e-09, DIC, ALK){
+  
+  # function whose root has to be sought
+  rootFun <- function(H) {
+    
+    HCO3    <- K1*H /  (H^2 + K1*H + K1*K2) * DIC   # eq 5a
+    CO3     <- K1*K2 / (H^2 + K1*H + K1*K2) * DIC   # eq 5c
+    ALK.est <- HCO3 + 2*CO3 - H  # right-hand-side of eq. 5d
+    
+    return(ALK.est - ALK)
+  }
+  
+  # uniroot will find the root    
+  h <- uniroot(f = rootFun, lower = 0, upper = 1e-3, tol = 1e-30)
+  return(h$root)
+}
+```
+
+It is always good to test the functions
+
+```{r}
+(pH  <- -log10(solveH(DIC = 2e-3, ALK = 2.18e-3)))
+(ALK <- solveALK(DIC = 2e-3, pH = 8))
+```
+
+The model function that implements the model based on the local equilibrium assumption is defined below. Note that the equilibrium constants (dissociation constants) are in $mol~L^{-1}$, so all species should be in this unit!
+
+```{r}
+CO2dissol <- function(t, state, parms) {
+  with (as.list(c(state,parms)), {
+
+    # mass balance equations
+    dDIC <- RC
+    dALK <- 0
+
+    # for output
+    H <- solveH(K1 = K1, K2 = K2, DIC = DIC, ALK = ALK)
+    HCO3    <- K1*H /  (H^2 + K1*H + K1*K2) * DIC   # eq 5a
+    CO3     <- K1*K2 / (H^2 + K1*H + K1*K2) * DIC   # eq 5c
+    
+    return(list(c(dDIC, dALK), 
+                pH = -log10(H), H = H, 
+                H2CO3 = DIC - HCO3 - CO3,
+                HCO3 = HCO3,
+                CO3  = CO3))
+  })
+}
+```
+
+Now we run the model for 10 days, using the initial conditions given in the task.
+
+```{r, fig.height=6, fig.width=10}
+require(deSolve)
+
+parms <- c(RC = 0.1e-3,    # [mol/L/day]
+           K1 = 1.422e-06, # [mol/L]
+           K2 = 1.082e-09) # [mol/L]
+
+pH.ini  <- 8
+DIC.ini <- 2e-3
+ALK.ini <- solveALK(DIC = DIC.ini, pH = pH.ini)
+
+yini  <- c(DIC = DIC.ini, ALK = ALK.ini)
+times <- seq(from=0, to=10, length.out=100)
+
+out   <- ode(y=yini, times=times, func=CO2dissol, parms=parms)
+
+plot(out, mfrow = c(2,4), las = 1)
+```
+
+We see that the addition of $CO_2$ at the given rate leads to an acidification of the water from the initial pH of 8 to pH of about 6.3 after 10 days.

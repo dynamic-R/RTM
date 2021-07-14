@@ -1,0 +1,189 @@
+---
+title: "Response of Systems to a Perturbation from an Equilibrium --- Part I"
+subtitle: "Reader Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
+author: "Lubos Polerecky and Karline Soetaert, Utrecht University"
+date: "April 2021"
+output:
+  pdf_document: default
+  html_document: default
+vignette: >
+  %\VignetteIndexEntry{Response of Systems to a Perturbation from Equilibrium --- Part I: accessory material}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{utf8}
+abstract: \noindent In many models developed in this course, we have seen that, at some point, the modelled system reached an equilibrium. Here we explain a mathematical approach that allows the analysis of the system's behaviour when it is *perturbed* out of this equilibrium. The approach --- called the perturbation theory --- combines calculus with algebra, and eventually leads to the calculation of the Jacobian matrix and its eigen values and eigen vectors. Here we show how these values can be used to estimate the *characteristic time scales* at which the system responds to the perturbation, and the corresponding *amplitudes* of the response for each state variable. In Part I we develop the theoretical background and derive the most important formulas. In Part II we illustrate the results with hands-on examples.
+---
+
+\newcommand{\dif}[1]{\Delta#1}
+\newcommand{\eq}[2]{#2\qquad (#1)}
+\setlength\parindent{1em}
+\setlength\parskip{0.25em}
+
+# Problem definition
+
+We start by considering a simple model containing two state variables, $N$ and $M$. The time-evolution of the state variables is described by a set of coupled differential equations. Their general form can be written as follows:
+$$\eq{1a}{\frac{d N}{d t} = f(N,M),}$$
+$$\eq{1b}{\frac{d M}{d t} = g(N,M).}$$
+Here, $f$ and $g$ are functions describing the *interactions* between the state variables, i.e.,  they represent the rate-laws (or rate expressions) that you are familiar with from other Readers.\footnote{For example, for a simplified two-box C cycle model, the state variables represent the carbon contents of the atmosphere ($ATM$) and biosphere ($BIO$), and the differential equations have the form
+$$\frac{d ATM}{d t} = -r_{AB} \cdot ATM + r_{BA}  \cdot BIO,$$
+$$\frac{d BIO}{d t} = r_{AB} \cdot ATM - r_{BA}  \cdot BIO.$$
+Thus, in this case, we have $f =  -r_{AB} \cdot ATM + r_{BA}  \cdot BIO$, and $g=-f$.}
+They may depend on the state variables $N$ and $M$, but must be *independent* of time. This is because the approach described here is only valid if, on the time scales where we want to model the system, the differential equations 1a--b are time-independent. 
+
+Suppose that the system has reached an *equilibrium*. By definition, this corresponds to the situation where the values of the state variables do not change in time: $d N/d t = d M/d t = 0$. Based on equations 1a--b, this translates into a set of two algebraic equations,
+$$\eq{2a}{0 = f(N_{eq},M_{eq}),}$$
+$$\eq{2b}{0 = g(N_{eq},M_{eq}),}$$
+where $N_{eq}$ and $M_{eq}$ denote the *equilibrium values* of the state variables $N$ and $M$, respectively. The relationships 2a--b combined with the constraint on the lump-sum $Tot = N+M$ can be used to calculate the equilibrium values $N_{eq}$ and $M_{eq}$ of the two state variables. When the functions $f$ and $g$ are simple (e.g., linear), the solution can be found analytically; if not, then the solution needs to be found numerically.\footnote{For the example shown in footnote 1, we have $f =  -r_{AB} \cdot ATM_{eq} + r_{BA}  \cdot BIO_{eq} = 0$, which implies the equilibrium relationship $ATM_{eq}/BIO_{eq} = r_{BA}/r_{AB}$. Thus, if the total C content in the two compartments is given ($C_{tot}$), i.e., if we have for the lump-sum $C_{tot}=ATM+BIO$, this relationship yields the following expressions for the equilibrium values: 
+$$ATM_{eq} = \frac{r_{BA}}{r_{AB}+r_{BA}}C_{tot},$$
+$$BIO_{eq} = \frac{r_{AB}}{r_{AB}+r_{BA}}C_{tot}.$$}
+
+Suppose that the equilibrium values $N_{eq}$ and $M_{eq}$ are known. *How fast will the system respond if it is perturbed from this equilibrium state?* Here we explain mathematical foundations for an approach --- called the perturbation theory --- that allows us to answer this type of questions.
+
+# Perturbation theory
+
+The mathematical formulation of the perturbation theory follows from the Taylor expansion of a function around a point, and from the application of theorems of linear algebra. 
+
+## Reformulation of the differential equations for the perturbations
+
+First, we write the state of the system as a sum of the equilibrium state ($N_{eq}$ and $M_{eq}$) and the perturbations ($\Delta N_t$ and $\Delta M_t$): 
+$$\eq{3a}{N_t=N_{eq} + \Delta N_t,}$$
+$$\eq{3b}{M_t=M_{eq} + \Delta M_t.}$$
+Note that in this formulation, $N_{eq}$ and $M_{eq}$ are constant (they correspond to the steady state), whereas $\Delta N_t$ and $\Delta M_t$ depend on time (they describe how far from the equilibrium state the system is at a given time), as indicated with the subscript $t$.
+Based on these definitions, we rewrite the original differential equations 1a--b in the following form:
+$$\eq{4a}{\frac{d (N_{eq}+\Delta N_t)}{d t} = f(N_{eq}+\Delta N_t, M_{eq}+\Delta M_t),}$$
+$$\eq{4b}{\frac{d (M_{eq}+\Delta M_t)}{d t} = g(N_{eq}+\Delta N_t, M_{eq}+\Delta M_t).}$$
+
+Second, we take advantage of the Taylor expansion, which tells us that the behavior of a smooth function $f$ *around* a point $x_e$ can be calculated from the following infinite series:
+$$f(x_e+\dif{x}) = f(x_e) + \dif{x}\left.\frac{1}{1!}\frac{\partial f}{\partial x}\right|_{x_e}  
++ \dif{x}^2 \left.\frac{1}{2!}\frac{\partial^2 f}{\partial x^2}\right|_{x_e} 
++ \dif{x}^3 \left.\frac{1}{3!}\frac{\partial^3 f}{\partial x^3}\right|_{x_e}  + \cdots,$$
+where all the derivatives are calculated *in* the point $x=x_e$. We assume that $\dif{x}$ is small, so that the above infinite sum can be *approximated* by the first two terms:
+$$f(x_e+\dif{x}) \approx f(x_e) + \dif{x}\left.\frac{\partial f}{\partial x}\right|_{x_e} .$$
+This means that the function's behaviour around the point $x_e$ is approximated by a *line* with the slope equal to the derivative of the function $f$ in point $x_e$.
+
+The Taylor expansion can be generalized for functions of multiple variables. For example, if $f$ is a function of *two* variables, $x$ and $y$, the Taylor expansion can be written, up to the linear terms, as follows:
+$$\eq{5}{f(x_e+\dif{x},y_e+\dif{y}) \approx f(x_e,y_e) + \dif{x} \left.\frac{\partial f}{\partial x}\right|_{[x_e,y_e]}  + \dif{y} \left.\frac{\partial f}{\partial y}\right|_{[x_e,y_e]} .}$$
+Note that the second and third term involve *partial derivatives* of $f$ with respect to $x$ and $y$, respectively, both evaluated in the point $[x_e, y_e]$. 
+
+Now, we combine the results in equations 2--5. Specifically, we realise that $N_{eq}$ and $M_{eq}$ on the left-hand-side of equations 4a--b are constants and can therefore be ignored in the time-derivatives.\footnote{That is, $$\frac{d (N_{eq}+\Delta N_t)}{d t}=\frac{d N_{eq}}{d t} + \frac{d \Delta N_t}{d t} = 0 + \frac{d \Delta N_t}{d t} = \frac{d \Delta N_t}{d t}.$$} Furthermore, when rewriting the right-hand-side of equations 4a--b using the Taylor expansion of the functions $f$ and $g$ based on Eq. 5, we realise that the functions evaluated in the equilibrium point $[N_{eq}, M_{eq}]$ are equal to zero (see Eq. 2a--b). Thus, we obtain:
+
+$$\eq{6a}{\frac{d \dif{N_t}}{d t} = \dif{N_t}  \left.\frac{\partial f}{\partial N}\right|_{[N_e,M_e]} + \dif{M_t} \left.\frac{\partial f}{\partial M}\right|_{[N_e,M_e]},}$$
+$$\eq{6b}{\frac{d \dif{M_t}}{d t} = \dif{N_t}  \left.\frac{\partial g}{\partial N}\right|_{[N_e,M_e]} + \dif{M_t} \left.\frac{\partial g}{\partial M}\right|_{[N_e,M_e]}.}$$
+We see that the rates of change in the *perturbations* of the state variables $N$ and $M$ are proportional to the *linear* combination of the *perturbations* of the state variables $N$ and $M$. The linearity originates from the fact that we approximated the Taylor series of the functions $f$ and $g$ up to the linear terms.
+
+## The Jacobian matrix
+
+In the next steps, we exploit the knowledge of *linear algebra*, which is the branch of mathematics dealing with all things linear. First, we realize that equations 6a--b can be written in a compact matrix form:
+$$\eq{7a}{\frac{d\vec\delta_t}{d t} = J \vec\delta_t,}$$
+where $\vec\delta_t$ is a (column) *vector* comprising the *perturbations* of the individual state variables,
+$$\eq{7b}{\vec\delta_t \equiv \left[\begin{array}{c}\dif{N_t}\\ \dif{M_t}\end{array}\right],}$$
+and $J$ is the so-called *Jacobian matrix* comprising the partial derivatives of the functions $f$ and $g$,
+$$\eq{7c}{J = \left[\begin{array}{cc}\displaystyle \frac{\partial f}{\partial N} & \displaystyle\frac{\partial f}{\partial M}\\[4mm] \displaystyle\frac{\partial g}{\partial N} & \displaystyle\frac{\partial g}{\partial M}
+\end{array}\right]_{[N_e,M_e]}.}$$
+
+\noindent Note that the partial derivatives in the Jacobian matrix are evaluated in the equilibrium point $[N_{eq},M_{eq}]$, as indicated by the subscript.\footnote{Continuing with the example in footnotes 1--2, we obtain $\partial f/\partial ATM = -r_{AB}$, $\partial f/\partial BIO = r_{BA}$, $\partial g/\partial ATM = r_{AB}$, and $\partial g/\partial BIO = -r_{BA}$. Thus, the corresponding Jacobian matrix for the two-box global C cycle model is written as $$J = \left[\begin{array}{cc}-r_{AB} & r_{BA}\\[4mm] r_{AB} & -r_{BA}\end{array}\right].$$ Note that because the rate laws in this particular model are linearly proportional to the state variables, the Jacobian matrix is not only time-idependent, it is also \emph{independent} of the equilibrium values $ATM_{eq}$ or $BIO_{eq}$. This is, however, not generally true, particularly if the rate laws are described by \emph{non-linear} functions of the state variables.} Also note that because functions $f$ and $g$ are time-\emph{independent}, the Jacobian matrix is also time-independent. This is in contrast to the perturbation vector $\vec\delta_t$, which depends on time as indicated by the subscript *t*.
+
+## Time-evolution of the perturbations
+
+To calculate how the perturbations of the state variables vary in time, all that needs to be done now is to solve the differential equation 7a for the time-dependent vector of perturbations $\vec\delta_t$. If $\delta_t$ were a simple function (i.e., not a vector function), and if $J$ were a simple number (i.e., not a matrix), the solution would be straight-forward to find: 
+$$\eq{8a}{\delta_t = \delta_{ini}\cdot e^{J \cdot t},}$$ 
+where $\delta_{ini}$ is the initial value of $\delta_t$ (i.e., at time $t=0$). It turns out that the solution to equation 7a is formally the same even though $\delta_t$ is a *vector*! However, there are a few caveats: one needs to calculate the *exponential* of the matrix $J \cdot t$.  Additionally, one needs to write the result in a correct order (because *order matters* when multiplying matrices and vectors):
+$$\eq{8b}{\vec\delta_t = e^{J \cdot t}\cdot \vec\delta_{ini}.}$$ 
+
+## Exponential of a matrix
+
+To calculate the exponential of a matrix, we apply an important theorem from linear algebra. This theorem states that *any matrix*, including the Jacobian matrix, can be decomposed\footnote{Or, using a mathematical jargon, ``factorised''.} as the following product of *three* matrices: 
+$$\eq{9}{J = V\cdot D\cdot V^{-1}.}$$
+In this factorisation, $D$ is a *diagonal* matrix\footnote{A diagonal matrix has all elements zero except for those on the diagonal.} constructed from the *eigen values* of the matrix $J$, whereas $V$ is constructed from the corresponding *eigen-vectors*, and $V^{-1}$ is the inverse of $V$ (i.e., the product $V^{-1}\cdot V$ is the unity matrix).\footnote{See Appendix 1 for more explanation about eigen values and eigen vectors, and Appendix 2 for a numerical example of this theorem.}
+
+Based on this factorisation, we can now calculate the exponential of the matrix and thus, ultimately, solve the differential equation 7a for the perturbation vector $\vec{\delta_t}$. First, we rewrite Eq. 7a, substituting $J$ from Eq. 9, multiply the entire equation with $V$ from the left, and take advantage of the fact that the matrix $V$ (and therefore also its inverse) is time-independent. We obtain:
+$$\eq{10}{\frac{d\vec\delta_t}{d t} = V\cdot D\cdot V^{-1} \cdot \vec\delta_t \quad\rightarrow \quad
+V^{-1}\cdot \frac{d \vec\delta_t}{d t} = D\cdot V^{-1}\cdot \vec\delta_t 
+\quad\rightarrow \quad 
+\frac{d (V^{-1}\cdot\vec\delta_t)}{d t} = D\cdot(V^{-1}\cdot \vec\delta_t).}$$
+In the last step, we used parentheses to visually highlight the product $V^{-1}\cdot \vec\delta_t$. This product is a vector with two components, $[\gamma_{1,t}, \gamma_{2,t}]$, which we denote as $\vec\gamma_t$:
+$$\eq{11a}{\vec\gamma_t \equiv V^{-1}\cdot \vec\delta_t.}$$
+By combining this definition with Eq. 10, we obtain 
+$$\eq{11b}{\frac{d\vec\gamma_t}{d t} = D \cdot \vec\gamma_t.}$$
+
+Equations 7a and 11b are formally the same. However, there is an important difference: while the Jacobian $J$ was a full matrix, $D$ is *diagonal*! If we denote the eigen-values of the matrix $J$ as $\lambda_1$ and $\lambda_2$, the matrix $D$ has the form
+$$\eq{12a}{D = \left[\begin{array}{cc}\lambda_1 & 0\\[2mm] 0 & \lambda_2\end{array}\right],}$$
+and the corresponding *exponential* of the diagonal matrix $D \cdot t$ is easy to find:
+$$\eq{12b}{e^{D \cdot t} =
+\left[\begin{array}{cc}e^{\lambda_1 t} & 0\\[2mm] 0 & e^{\lambda_2 t}\end{array}\right].}$$
+Thus, based on Eq. 11b, the vector $\vec\gamma_t$ can be calculated at any time point as 
+$$\eq{13a}{\vec\gamma_t = e^{D \cdot t}\cdot\vec\gamma_{ini}\quad\leftrightarrow\quad
+\left[\begin{array}{c}\gamma_{1,t} \\[2mm]\gamma_{2,t}\end{array}\right] = 
+\left[\begin{array}{cc}e^{\lambda_1 t} & 0\\[2mm] 0 & e^{\lambda_2 t}\end{array}\right]\cdot
+\left[\begin{array}{c}\gamma_{1,ini} \\[2mm]\gamma_{2,ini}\end{array}\right].}$$
+
+By combining this result with Eq. 11a, the solution in Eq. 8b can be written in the following matrix form
+$$\eq{13b}{\vec\delta_t = e^{J \cdot t}\cdot \vec\delta_{ini}\quad\leftrightarrow\quad
+\left[\begin{array}{c}\Delta N_t \\[2mm]\Delta M_t\end{array}\right] = e^{J \cdot t} \cdot
+\left[\begin{array}{c}\Delta N_{ini} \\[2mm]\Delta M_{ini}\end{array}\right],}$$
+where the exponential of the matrix $J \cdot t$ is calculated as a product of three matrices:
+$$\eq{13c}{e^{J \cdot t} = 
+V\cdot\left[\begin{array}{cc}e^{\lambda_1 t} & 0\\[2mm] 0 & e^{\lambda_2 t}\end{array}\right]\cdot V^{-1} .}$$
+
+## Home run: perturbation as a sum of components
+
+Although the above analysis may appear rather daunting, it actually leads to a simple result. 
+Specifically, when we multiply the vectors and matrices in equations 13a--c, we obtain that the time evolution of each perturbation is expressed as a \emph{sum of two components}:
+$$
+\begin{array}{rcl}
+\Delta N_t & = & a_{N,1}\cdot e^{\lambda_1 t} + a_{N,2}\cdot e^{\lambda_2 t},\\[4mm] 
+\Delta M_t & = & a_{M,1}\cdot e^{\lambda_1 t} + a_{M,2}\cdot e^{\lambda_2 t}.
+\end{array}\qquad (14b)
+$$
+The amplitudes of the components, $a_{N,i}$ and $a_{M,i}$, where $i=1,2$, are calculated using the values in the first and second \emph{row} of the matrix $V$, respectively, and the corresponding first and second elements of the vector $\vec\gamma_{ini}$:
+$$
+\begin{array}{c}
+a_{N,1} = V_{1,1} \cdot \gamma_{1,ini}\qquad \mathrm{and} \qquad a_{N,2} = V_{1,2} \cdot \gamma_{2,ini}\\[4mm]
+a_{M,1} = V_{2,1} \cdot \gamma_{1,ini}\qquad \mathrm{and} \qquad a_{M,2} = V_{2,2} \cdot \gamma_{2,ini}.
+\end{array} \quad (14c)
+$$
+
+We emphasize that the perturbations of the state variables are described by a *sum of two exponential functions*, i.e., the response of the perturbed system will have an "exponential character." Specifically, it will occur on \emph{two characteristic time scales} calculated as the inverse of the eigen values of the Jacobian matrix: $\tau_1=1/\lambda_1$ and $\tau_2 = 1/\lambda_2$.\footnote{Sometimes, the eigen value of the Jacobian matrix can be a complex number (i.e., $\lambda = a + ib$, where $a$ is the real part and $b$ is the imaginary part of the complex number). In this case, the evolution of a perturbed system will have an \emph{oscillatory} character. The periodicity of the oscillation is calculated from the imaginary part ($T_{period} = 2\pi/|b|$), whereas the response time is calculated from the real part ($\tau_{resp} = 1/|a|$) of the eigen-value. If the real part is negative ($a<0$), the perturbed system will return to the equilibrium, whereas it will diverge from the equilibrium if the real part is positive ($a>0$). Thus, the analysis of the Jacobian matrix can inform us whether the equilibrium state of a system is \emph{stable} or not. Although these are interesting ideas, exploring them further would go beyond the scope of this Reader.}
+
+
+## Generalization to multiple state variables
+
+It is rather straight-forward to generalize the above analysis for a system with $n$ state variables. We denote the state variables as $S_j$, and the corresponding perturbation from an equilibrium as $\Delta S_j$.
+
+If the system is perturbed from an equilibrium, and (for non-linear systems) the perturbation is not too large, the system's evolution in time can be described as a *sum of independent components*. Specifically, the perturbation $\Delta S_j$ will vary in time according to the following sum of exponential functions:
+$$
+\Delta S_{j,t} = a_{j,1}\cdot e^{\lambda_1 t} + a_{j,2}\cdot e^{\lambda_2 t} + \cdots +
+a_{j,n}\cdot e^{\lambda_n t}, \qquad (15a)
+$$
+where $\lambda_1$, $\lambda_2$, $\dots$, $\lambda_n$ are eigen values of the Jacobian matrix. The amplitudes $a_{j,i}$ are calculated as
+$$
+a_{j,i} = V_{j,i}\cdot \gamma_{i,ini}, \qquad (15b)
+$$
+where $V_{j,i}$ is the $j$th row and $i$th column of the matrix $V$ constructed from the eigen vectors of the Jacobian matrix, and $\gamma_{i,ini}$ is the $i$th element of the vector $\vec\gamma_{ini}$ calculated from the initial perturbation (column) vector $\vec\delta_{ini} = [\Delta S_1, \Delta S_2, \dots, \Delta S_n]^T$ according to 
+$$
+\vec\gamma_{ini}=V^{-1}\cdot \vec\delta_{ini}. \qquad (15c)
+$$ 
+
+# Conclusion
+
+The analysis above shows that by calculating the eigen values of the Jacobian matrix, one can estimate the *characteristic time scales* in which the system responds to a perturbation. Because the response is described by exponential functions $e^{\lambda_i t}$, the characteristic response times are calculated as the *inverse* of the eigen values: $\tau_i = 1/\lambda_i$, $i=1,2,\dots, n$. By calculating the eigen vectors of the Jacobian matrix, one can additionally calculate the *amplitudes* that characterize the response of each state variable on a given time scale ($a_{j,i}$; Eq. 15b). This conclusion will be illustrated in Part II of this Reader using the 7-component global C cycle model that you have seen in class.
+
+If the interactions between state variables (i.e., the rate expressions) are described by \emph{linear} functions of the state variables, such as in the example shown in the footnotes, the analysis shown here is generally applicable for \emph{any} magnitude of the initial perturbation of the system. In contrast, if the interactions are described by \emph{non-linear} functions of the state variables, the results will only be valid in the \emph{close vicinity} of the equilibrium. This is because the analysis hinges on the accuracy by which the Taylor approximation up to the linear term (see Eq. 5) describes the dependence of the rate expression on the perturbation in the state variables around the equilibrium state.
+
+# Appendix 1
+
+In general, multiplication with a matrix $A$ corresponds to a \emph{linear transformation} in space that involves \emph{rotation} and \emph{stretching}. For example if $\vec v$ is a vector that points to a certain direction and has a certain length, the vector $\vec u$ calculated as $\vec u=A\cdot \vec v$ will point to a \emph{different direction} and will have a \emph{different length} (longer or shorter). Interestingly, for every matrix $A$, there are vectors that do \emph{not} change their direction when they are multiplied by the matrix! We call them \emph{eigen vectors} and denote them here as $\vec\epsilon$. Specifically, an eigen vector satisfies the equation 
+$$A\cdot \vec\epsilon = \lambda\cdot \vec\epsilon,$$
+where $\lambda$ is a \emph{number} --- called the \emph{eigen value} ---  that indicates by how much the eigen vector stretches upon multiplication with the matrix $A$. It turns out that, for every matrix with a size $n\times n$, one can find $n$ vectors that only stretch but do not rotate when multiplied by the matrix $A$.
+
+# Appendix 2
+
+Using the example in footnotes 1--2 and 4, suppose we have $r_{AB}=2$ and $r_{BA}=0.5$. Thus, the Jacobian matrix is
+$$J=\left[\begin{array}{rr}-2 & 0.5\\[2mm] 2 & -0.5\end{array}\right].$$ 
+For this matrix, there are two eigen value and eigen vector pairs: 
+$$\lambda_1=-2.5~/~\vec \epsilon_1= \left[\begin{array}{r}1 \\[2mm] -1\end{array}\right]\quad \mathrm{and}\quad  \lambda_2=0~/~\vec \epsilon_2= \left[\begin{array}{r}1 \\[2mm] 4\end{array}\right].$$ 
+Thus, the Jacobian matrix can be written as a product 
+$$\left[\begin{array}{rr}-2 & 0.5\\[2mm] 2 & -0.5\end{array}\right] = 
+\underbrace{\left[\begin{array}{rr}1 & 1\\[2mm] -1 & 4\end{array}\right]}_{V} \cdot
+\underbrace{\left[\begin{array}{rr}-2.5 & 0\\[2mm] 0 & 0\end{array}\right]}_{D} \cdot
+\underbrace{\left[\begin{array}{rr}1 & 1\\[2mm] -1 & 4\end{array}\right]^{-1}}_{V^{-1}}.$$ 
+Note that the matrix $V$ was constructed from the eigen vectors written as \emph{columns}. Also note that one of the eigen values is 0. However, this only happens if the sum of values in each column of the matrix $J$ is zero, as in this particular example.

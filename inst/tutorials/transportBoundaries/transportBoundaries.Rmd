@@ -1,0 +1,147 @@
+---
+title: "RTM course - boundary conditions"
+author: "Karline Soetaert and Lubos Polerecky"
+description: "video and exercises on formulating boundary conditions for transport models"
+date: "June-2021"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(learnr)
+```
+
+## Tutorial
+
+You are advised to watch the following video first 
+
+### Video timeline
+* 0:00 Introduction
+* 0:25 Spatial and temporal domains
+* 1:10 Boundary conditions for steady state solutions
+* 3:18 Boundary conditions for transient solutions
+
+![](https://www.youtube.com/watch?v=ec3B41FXsjw&list=PLx8PHcDdmF-uD1Pr07TU9SzlhlGpfrxqn&index=13)
+
+You can also read the following section(s) of the textbook:
+
+* Chapter 3.4.6. One-Dimensional Diffusion in Porous Media (Sediments)
+
+(You can download each chapter of the textbook via the e-book University library for free!)
+
+## Reaction-transport in an estuary
+
+The following differential equation describes a reaction-transport model for organic carbon (concentration $C$) in an estuary of length $L$:
+
+$$
+\frac{\partial C}{\partial t} = \frac{\partial}{\partial x}\left(D\cdot \frac{ \partial C}{\partial x}\right) -\frac{\partial}{\partial x}(v \cdot C)  - r \cdot C
+$$
+
+```{r GTE, echo=FALSE}
+question("Which is a good boundary condition for $C$ at the upstream boundary ($x=0$)?", type = "learnr_checkbox",
+ answer(sprintf("No boundary condition needed.")),
+ answer(sprintf("An imposed flux value."), correct = TRUE),
+ answer(sprintf("An imposed concentration value."), correct = TRUE)
+)  
+```
+
+```{r GTE2, echo=FALSE}
+question("Which is a good boundary condition for $C$ at the downstream boundary ($x=L$)?", type = "learnr_checkbox",
+ answer(sprintf("No boundary condition needed.")),
+ answer(sprintf("An imposed flux value."), correct = TRUE),
+ answer(sprintf("An imposed concentration value."), correct = TRUE)
+)  
+```
+
+## Reaction-transport in a river
+
+The following differential equation describes a reaction-transport model for organic carbon (concentration $C$) in a river of length $L$:
+
+$$
+\frac{\partial C}{\partial t} =  -\frac{\partial}{\partial x}(v \cdot C) - r \cdot C
+$$
+
+```{r GTE3, echo=FALSE}
+question("Which is a good boundary condition for $C$ at the upstream boundary ($x=0$)? '", type = "learnr_checkbox",
+ answer(sprintf("No boundary condition needed.")),
+ answer(sprintf("An imposed flux value."), correct = TRUE),
+ answer(sprintf("A zero-gradient boundary condition.")),
+ answer(sprintf("An imposed concentration value."), correct = TRUE)
+)  
+```
+
+```{r GTE4, echo=FALSE}
+question("Which is a good boundary condition for $C$ at the downstream boundary ($x=L$)?", type = "learnr_checkbox",
+ answer(sprintf("No boundary condition needed."), correct = TRUE),
+ answer(sprintf("An imposed flux value.")),
+ answer(sprintf("An imposed concentration value."))
+)  
+```
+
+## Early diagenesis
+
+Consider a two-component model in a porous media with porosity $\phi$. The two components are:
+
+* dissolved $SO_4^{2-}$, which is a solute whose porewater concentration is in $mol~S~m^{-3}_L$ ($S$ refers to sulphur, $m^{-3}_L$ refers to the volume of the liquid phase).
+* particulate organic matter, POM, which is a solid whose concentration is in $mol~C~m^{-3}_S$ ($C$ refers to carbon, $m^{-3}_S$ refers to the volume of the solid phase). 
+
+The two components are involved in the process called "sulphate reduction", whose stoichiometry is as follows:
+
+$$
+POM + 0.5\cdot SO_4^{2-} \rightarrow CO_2 + 0.5\cdot S^{2-} + \cdots
+$$
+The rate of sulphate reduction, $R_{sr}$ is expressed in $mol~C~m^{-3}_S~d^{-1}$.
+
+```{r earlydia1, echo = FALSE}
+question("Which is a good boundary condition for $POM$ at the sediment-water interface ($x=0$)? ", type = "learnr_checkbox",
+ answer(sprintf("No boundary condition needed.")),
+ answer(sprintf("An imposed flux value."), correct = TRUE),
+ answer(sprintf("A zero-gradient boundary condition.")),
+ answer(sprintf("An imposed concentration value."))
+)  
+```
+
+```{r earlydia2, echo = FALSE}
+question(sprintf("Which is a good boundary condition for $SO_4^{2-}$ at the sediment-water interface ($x=0$)? "), type = "learnr_checkbox",
+ answer(sprintf("No boundary condition needed.")),
+ answer(sprintf("An imposed flux value.")),
+ answer(sprintf("A zero-gradient boundary condition.")),
+ answer(sprintf("An imposed concentration value."), correct = TRUE)
+)  
+```
+
+```{r earlydia3, echo = FALSE}
+question(sprintf("Which is a good boundary condition for $POM$ deep down in the sediment ($x\\rightarrow \\infty$)?"), type = "learnr_checkbox",
+ answer(sprintf("No boundary condition needed.")),
+ answer(sprintf("An imposed flux value.")),
+ answer(sprintf("A zero-gradient boundary condition."), correct = TRUE),
+ answer(sprintf("An imposed concentration value."))
+)  
+```
+
+```{r earlydia4, echo = FALSE}
+msg <- "The zero-gradient boundary condition is usually chosen for deep concentrations of solutes in diagenetic models. However, sometimes concentrations are imposed, e.g., if there has been a historic build-up of solutes at depth."
+
+question(sprintf("Which is a good boundary condition for $SO_4^{2-}$ deep down in the sediment ($x\\rightarrow \\infty$)?"), type = "learnr_checkbox",
+ answer(sprintf("No boundary condition needed.")),
+ answer(sprintf("An imposed flux value.")),
+ answer(sprintf("A zero-gradient boundary condition."), correct = TRUE),
+ answer(sprintf("An imposed concentration value."), correct = TRUE),
+ correct=msg,
+ incorrect=msg)  
+
+```
+
+## Finally
+
+```{r feedback, echo = FALSE}
+question("give your feedback ", type = "learnr_text", answer(" ", correct=TRUE), correct="thank you", incorrect = "thank you")
+```
+
+## References
+
+Karline Soetaert, Peter M.J. Herman (2009). A Practical Guide to Ecological Modelling. Springer Netherlands. DOI: 10.1007/978-1-4020-8624-3.

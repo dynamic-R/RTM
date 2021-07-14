@@ -1,0 +1,486 @@
+---
+title: "RTM course - Ecological Rate Laws"
+author: "Karline Soetaert and Lubos Polerecky"
+description: "video and exercises on creating rate expressions for ecological processes"
+date: "June 2021"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(learnr)
+```
+
+## Tutorial
+
+You are advised to watch the following video first.
+
+### Video timeline
+* 0:00 Worker vs. Resource (limitation, inhibition)
+* 2:21 Logistic growth model
+* 4:49 Lotka-Volterra model
+
+![](https://www.youtube.com/watch?v=CUckCAwNj1s&list=PLx8PHcDdmF-uD1Pr07TU9SzlhlGpfrxqn&index=9)
+
+You can also read the following section(s) of the textbook:
+
+* Chapter 2.5. Basic Formulation of Ecological Interactions
+* Chapter 2.6. Coupled Model Equations
+* Chapter 2.7. Model Simplifications
+
+(You can download each chapter of the textbook via the e-book University library for free!)
+
+## Ecological interactions: algal N-uptake
+
+```{r Nuptake, echo=FALSE}
+question("Algal N-uptake is stimulated by nitrate (NO3) and inhibited by ammonia (NH3) concentrations. What would be a suitable expression for the rate of algal growth?", type = "learnr_checkbox",
+ answer(sprintf("$r \\times \\frac{[NO3]}{[NO3]+K_{NO3}} \\times [ALGAE] + \\frac{K_{NH3}}{[NH3]+K_{NH3}} \\times [ALGAE]$")),
+ answer(sprintf("$r \\times \\frac{[NO3]}{[NO3]+K_{NO3}} \\times \\frac{K_{NH3}}{[NH3]+K_{NH3}} \\times [ALGAE]$"), correct=TRUE),
+ answer(sprintf("$r \\times \\frac{[NO3]}{[NO3]+K_{NO3}} \\times \\frac{K_{NH3}}{[NH3]+K_{NH3}}$")),
+ answer(sprintf("$r \\times \\frac{[NO3]}{[NO3]+K_{NO3}} \\times [NH3]$")),
+ answer(sprintf("$r \\times \\frac{[NO3]}{[NO3]+K_{NO3}} \\times \\left(1 - \\frac{[NH3]}{[NH3]+K_{NH3}}\\right) \\times [ALGAE]$"), correct=TRUE),
+ answer(sprintf("$\\frac{[NO3]}{[NO3]+K_{NO3}} \\times \\frac{K_{NH3}}{[NH3]+K_{NH3}} \\times [ALGAE]$")),
+ answer(sprintf("$r \\times \\frac{K_{NO3}}{[NO3]+K_{NO3}} \\times [ALGAE]$"))
+)
+```
+
+## Ecological interactions: predation
+
+```{r predation, echo=FALSE}
+msg <- "There are several correct answers. Answer 1 assumes a linear functional response (type I); answer 4 assumes a type II functional response, and answer 5 assumes a type III functional response."
+
+question("Foxes (F) predate on rabbits (R). What is a suitable expression for the predation rate?", type = "learnr_checkbox",
+ answer(sprintf("$r \\times F \\times R$"), correct=TRUE),
+ answer(sprintf("$r \\times F \\times R^2$"), correct=FALSE),
+ answer(sprintf("$r \\times F \\times (1-\\frac{F}{R})$"), correct=FALSE),
+ answer(sprintf("$r \\times F \\times \\frac{R}{R+ K_R}$"), correct=TRUE),
+ answer(sprintf("$r \\times F \\times \\frac{R^2}{R^2+ K_R^2}$"), correct=TRUE),
+ answer(sprintf("$r \\times F \\times (1-\\frac{F}{K}) \\times R$"), correct=FALSE),
+ 
+ incorrect=msg,  
+ correct=msg)
+```
+
+## Simple differential equations - I
+
+```{r diffeq1, echo=FALSE}
+question(sprintf("The change in time of a quantity M (in moles) is described by the differential equation $$\\frac{dM}{dt} = -r \\times M,$$ where $r > 0$. Which of the following statements is true?"), type = "learnr_checkbox",
+ answer("this describes zero-order kinetics"),
+ answer("this describes first-order kinetics", correct = TRUE),
+ answer("this describes second-order kinetics"),
+ answer("this is a mix of first-order and second-order kinetics"),
+ answer(sprintf("the unit of the rate constant $r$ is $day$")),
+ answer(sprintf("the unit of the rate constant $r$ is $day^{-1}$"), correct=TRUE),
+ answer(sprintf("the unit of the rate constant $r$ is $mol~day^{-1}$")),
+ answer(sprintf("the unit of the rate constant $r$ is $day~mol^{-1}$"))
+)  
+```
+
+```{r diffeq1b, echo=FALSE}
+question(sprintf("The change in time of a quantity M (in moles) is described by the differential equation $$\\frac{dM}{dt} = -r \\times M,$$ where $r > 0$. Which of the following statements is true?"), type = "learnr_checkbox",
+ answer("M decreases linearly with time"),
+ answer("M decreases exponentially with time", correct=TRUE),
+ answer("M increases linearly with time"),
+ answer("M increases exponentially with time"),
+ answer("M has logistic growth")
+)  
+```
+
+## Simple differential equations - II
+
+```{r diffeq2, echo=FALSE}
+question(sprintf("The change in time of a quantity M (in moles) is described by the differential equation $$\\frac{dM}{dt} = -r,$$ where $r > 0$. Which of the following statements is true?"), type = "learnr_checkbox",
+ answer("this describes zero-order kinetics", correct = TRUE),
+ answer("this describes first-order kinetics"),
+ answer("this describes second-order kinetics"),
+ answer("this is a mix of first-order and second-order kinetics"),
+ answer(sprintf("the unit of the rate constant $r$ is $day$")),
+ answer(sprintf("the unit of the rate constant $r$ is $day^{-1}$")),
+ answer(sprintf("the unit of the rate constant $r$ is $mol~day^{-1}$"), correct=TRUE),
+ answer(sprintf("the unit of the rate constant $r$ is $day~mol^{-1}$"))
+)  
+```
+
+```{r diffeq2b, echo=FALSE}
+question(sprintf("The change in time of a quantity M (in moles) is described by the differential equation $$\\frac{dM}{dt} = -r,$$ where $r > 0$. Which of the following statements is true?"), type = "learnr_checkbox",
+ answer("M decreases linearly with time", correct=TRUE),
+ answer("M decreases exponentially with time"),
+ answer("M increases linearly with time"),
+ answer("M increases exponentially with time"),
+ answer("M has logistic growth")
+)  
+```
+
+## Simple differential equations - III
+
+```{r diffeq3, echo=FALSE}
+question(sprintf("The change in time of a quantity M (in moles) is described by the differential equation $$\\frac{dM}{dt} = r \\times M \\times \\left(1-\\frac{M}{K}\\right),$$ where $r > 0$ and $K>0$. Which of the following statements is true?"), type = "learnr_checkbox",
+ answer("this describes zero-order kinetics"),
+ answer("this describes first-order kinetics"),
+ answer("this describes second-order kinetics"),
+ answer("this is a mix of first-order and second-order kinetics", correct = TRUE)
+)
+```
+
+```{r diffeq3b, echo=FALSE}
+question(sprintf("The change in time of a quantity M (in moles) is described by the differential equation $$\\frac{dM}{dt} = r \\times M \\times \\left(1-\\frac{M}{K}\\right),$$ where $r > 0$ and $K>0$. Which of the following statements is true?"), type = "learnr_checkbox",
+ answer(sprintf("the unit of the rate constant $r$ is $day$")),
+ answer(sprintf("the unit of the rate constant $r$ is $day^{-1}$"), correct=TRUE),
+ answer(sprintf("the unit of the rate constant $r$ is $mol~day^{-1}$")),
+ answer(sprintf("the unit of the rate constant $r$ is $day~mol^{-1}$")),
+ answer(sprintf("the unit of the rate constant $r$ is $mol$")),
+ answer(sprintf("the unit of the parameter $K$ is $day$")),
+ answer(sprintf("the unit of the parameter $K$ is $day^{-1}$")),
+ answer(sprintf("the unit of the parameter $K$ is $mol~day^{-1}$")),
+ answer(sprintf("the unit of the parameter $K$ is $day~mol^{-1}$")),
+ answer(sprintf("the unit of the parameter $K$ is $mol$"), correct=TRUE)
+)  
+```
+
+```{r diffeq3c, echo=FALSE}
+question(sprintf("The change in time of a quantity M (in moles) is described by the differential equation $$\\frac{dM}{dt} = r \\times M \\times \\left(1-\\frac{M}{K}\\right),$$ where $r > 0$ and $K>0$. Which of the following statements is true?"), type = "learnr_checkbox",
+ answer("M decreases linearly with time"),
+ answer("M decreases exponentially with time"),
+ answer("M increases linearly with time"),
+ answer("M increases exponentially with time"),
+ answer("M has logistic growth", correct=TRUE)
+)  
+```
+
+## Interactive differential equations
+
+```{r, echo=FALSE}
+radioButtons("type", label = "Differential equation:", choices = list("dM/dt = -r" = "a" , "dM/dt = r" = "b", "dM/dt = -r . M" = "c", "dM/dt = r . M"= "d", "dM/dt = r . M . (1-M/K)"="e"))
+sliderInput("r", "Rate constant:", min = 0, max = 1, value = 0.1)
+sliderInput("Mini", "Initial value of M:", min = 0, max = 1.2e6, value = 1e3, step=1e3)
+plotOutput("eqType")
+```
+
+```{r, context="server"}
+output$eqType <- renderPlot({
+  r  <- 0.5
+  r2 <- input$r 
+  K  <- 1e6
+  M0 <- input$Mini
+  times <- seq(0 , 10, length.out = 100)
+ 
+  Type <- input$type
+  if (Type == "a"){
+    M <- M0 - r*times
+    M2 <- M0 - r2*times
+    Lab <- c("Zero-order kinetics: dM/dt= -r", 
+             "Linear decrease")
+  } else if (Type == "b"){
+    M  <- M0 + r*times
+    M2 <- M0 + r2*times
+    Lab <- c("Zero-order kinetics: dM/dt= r", 
+             "Linear increase")
+  } else if (Type == "c") {
+    M <- M0*exp(- r*times)
+    M2 <- M0*exp(- r2*times)
+    Lab <- c("First-order kinetics: dM/dt= -r . M", 
+             "Exponential decrease")
+  } else if (Type == "d") {
+    M <- M0*exp(r*times)
+    M2 <- M0*exp(r2*times)
+    Lab <- c("First-order kinetics: dM/dt= r . M", 
+             "Exponential increase")
+  } else if (Type == "e")  {
+    times <- seq(0 , 50, length.out = 100)
+    A  <- (K -M0)/M0
+    M  <- K/(1 +A*exp(-r*times))
+    M2 <- K/(1 +A*exp(-r2*times))
+    Lab <- c("Logistic growth: dM/dt = r . M . (1-M/K)",
+    "K = carrying capacity = 1e6")
+  }
+  par(mfrow = c(1,1), las = 1, oma= c(0,0,2,0))
+  matplot(times, cbind(M, M2), type="l", lwd=2, lty=1, main = Lab[2], ylab="M(t)", xlab="t")
+  legend (col = 1:2, lwd = 2, legend = c(r, r2), title = "r", x = "left")
+  mtext(outer = TRUE, line = -1, Lab[1], cex = 2)
+})
+```
+
+## Logistic model
+
+A population is growing according to the logistic model characterised by the carrying capacity of $K=10^6~ind~km^{-2}$.
+
+```{r logistic1, echo=FALSE}
+question(sprintf("How would you best characterize the growth of the population when the population density is about $10^5~ind~km^{-2}$?"), type = "learnr_radio",
+ answer("The population growth is approximately linear", correct=FALSE),
+ answer("The population growth is approximately exponential", correct=TRUE),
+ answer("The population stays relatively constant"), 
+ answer("The population shrinks exponentially towards K")
+)  
+```
+
+```{r logistic2, echo=FALSE}
+question(sprintf("How would you best characterize the growth of the population when the population density is about $5\\times 10^5~ind~km^{-2}$?"), type = "learnr_radio",
+ answer("The population growth is approximately linear", correct=TRUE),
+ answer("The population growth is approximately exponential"),
+ answer("The population stays relatively constant"), 
+ answer("The population shrinks exponentially towards K")
+)  
+```
+
+
+```{r logistic3, echo=FALSE}
+question(sprintf("How would you best characterize the growth of the population when the population density is about $9.8\\times 10^5~ind~km^{-2}$?"), type = "learnr_radio",
+ answer("The population growth is approximately linear"),
+ answer("The population growth is approximately exponential"),
+ answer("The population stays relatively constant", correct=TRUE), 
+ answer("The population shrinks exponentially towards K")
+)  
+```
+
+```{r logistic4, echo=FALSE}
+question(sprintf("How would you best characterize the growth of the population when the population density is  $0~ind~km^{-2}$?"), type = "learnr_radio",
+ answer("The population growth is approximately linear"),
+ answer("The population growth is approximately exponential"),
+ answer("The population stays constant", correct=TRUE), 
+ answer("The population shrinks exponentially towards K")
+)  
+```
+
+## Logistic curve
+
+Select the initial population size, $M_{ini}$, and study how the population changes initially and on long time-scales. (Calculated using $r=1~yr^{-1}$ and $K=1\times 10^6$.)
+
+```{r, echo=FALSE}
+sliderInput("Mini2", "Initial population size:", min = 0, max = 2e6, value = 5e4, step=1e4)
+plotOutput("carcapPlot")
+```
+
+```{r, context="server"}
+output$carcapPlot <- renderPlot({
+  r  <- 1
+  K  <- 1e6
+  P0 <- input$Mini2
+  A  <- (K -P0)/P0
+  times <- seq(0 , 1, length.out = 100)
+  times2 <- seq(0 , 10, length.out = 100)
+  P  <- K/(1 +A*exp(-r*times))
+  P2 <- K/(1 +A*exp(-r*times2))
+  par(mfrow = c(1,2), las = 1, oma= c(0,0,2,0))
+  plot(times, P, type="l", lwd=2, main="initial", xlab="t (yr)", ylab="M(t)")
+  plot(times2, P2, type="l", lwd=2, main="long-term", xlab="t (yr)", ylab="M(t)")
+  mtext(outer = TRUE, line = -1, paste("Logistic model, Mini = ", P0), cex = 2)
+})
+```
+
+## Recognizing rate expressions
+
+```{r RateLim, echo=FALSE}
+msg <- "Algal uptake of ammonia is less energy demanding than uptake of nitrate, and so the uptake of nitrate is inhibited by the presence of ammonia. Nitrate is the rate limiting substrate, so the dependence of the rate on nitrate concentration is described by the Michaelis-Menten kinetics. The work is performed by the algae, therefore the rate is first-order with respect to algae."
+
+question(sprintf("The rate expression that describes the uptake of nitrate (NO3) in the presence of ammonia (NH3) by marine microscopic algae (P) is $$R = r \\times \\frac{[NO3]}{[NO3]+K_N} \\times \\frac{K_A}{[NH3] + K_A} \\times [P].$$ Which of the following statements is true?"), type = "learnr_checkbox",
+ answer("The process is limited by nitrate",  correct = TRUE),
+ answer("The process is inhibited by nitrate"),
+ answer("The process is limited by ammonia"),
+ answer("The process is inhibited by ammonia",  correct = TRUE),
+ answer("The process is first-order with respect to algae",  correct = TRUE),
+ answer("The process is zero-order with respect to algae"),
+ 
+ incorrect=msg, 
+ correct=msg)
+```
+
+## Biochemistry: Bacterial uptake of DOC
+
+The scheme below describes bacterial dynamics in a well-stirred closed system. It describes the exchange of carbon between bacterial biomass (B) and dissolved organic carbon (DOC). Both state variables are in units of $mol~C~m^{-3}$. 
+
+![](images/BactDOC.png)
+
+You are given a table with parameter values:
+
+parameter   |  value      | description                 | unit                        |
+------------|-------------|---------------------------- | --------------------------- |
+$g$         | 0.2         | uptake rate constant        |$hr^{-1}$                    |
+$k_s$       | 10          | half-saturation concentration    |$mol~C~m^{-3}$               |
+$\gamma$    | 0.5         | bacterial growth efficiency  | -                           |
+$r$         | 0.01        | basal respiration parameter |$hr^{-1}$                    |
+$m$         | 0.0005      | mortality rate constant         |$(mol~C~m^{-3})^{-1} hr^{-1}$| 
+
+The initial conditions are:
+$$ B_{ini} = 0.1~mol~C~m^{-3} \qquad DOC_{ini}=100~mol~C~m^{-3}$$
+
+```{r bact1, echo=FALSE}
+question(sprintf("Based on the model scheme and parameter definitions, which is the correct expression for the bacterial growth?"), type = "learnr_radio",
+ answer(sprintf("$g \\times \\frac{B}{B+k_s} \\times DOC$")),
+ answer(sprintf("$g \\times \\frac{DOC}{DOC+k_s} \\times B$")),
+ answer(sprintf("$\\gamma \\times g \\times \\frac{B}{B+k_s} \\times DOC$")),
+ answer(sprintf("$\\gamma \\times g \\times \\frac{DOC}{DOC+k_s} \\times B$"), correct=TRUE),
+ answer(sprintf("$\\gamma \\times g \\times \\frac{DOC}{DOC+k_s}$")),
+ answer(sprintf("$\\gamma \\times g \\times \\frac{DOC_0}{DOC_0+k_s}$"))
+)  
+```
+
+```{r bact2, echo=FALSE}
+msg <- "The units of the mortality parameter indicate that the rate expression for mortality is second-order."
+
+question(sprintf("Based on the model scheme and parameter definitions, which is the correct expression for the bacterial mortality?"), type = "learnr_radio",
+ answer(sprintf("$m \\times DOC$")),
+ answer(sprintf("$m \\times B$")),
+ answer(sprintf("$m \\times \\frac{DOC}{DOC+k_s} \\times B$")),
+ answer(sprintf("$m \\times B^2$"), correct=TRUE),
+ 
+ incorrect=msg, 
+ correct=msg)  
+```
+
+## Implementation in R
+
+By now you should be able to write the mass balance equations and rate expressions for the  model describing bacterial uptake of DOC. We do not give them in a mathematical formalism but implement them directly in R. 
+
+```{r model, message=FALSE, fig.height=3, fig.width=6}
+require(deSolve)
+
+# Bacterial uptake of DOC
+# -----------------------
+
+#         [/hr], [molC/m3],  [-]   , [/hr] , [/(molC/m3)/hr]
+parms <- c(g=0.2, ks=10,  gamma=0.5, r=0.01, m=0.0005)   #  model parameters
+y.ini <- c(B=0.1, DOC=100)                    # [molC/m3] initial conditions
+
+Bactmod <- function(t, y, p){  # model function, calculates time-derivatives
+  with (as.list(c(y,p)),{
+
+  # rate expressions
+    BactUptake   <- g * DOC/(DOC+ks) * B
+    BactGrowth   <- gamma * BactUptake
+    BactDeath    <- m * B^2
+    BasalResp    <- r * B
+    ActivityResp <- (1-gamma) * BactUptake
+  
+  # mass balance equations
+    dB.dt   <-  BactUptake - ActivityResp - BasalResp - BactDeath
+    dDOC.dt <- -BactUptake + BactDeath
+  
+  # return derivative vector and output variable  
+    list(c(dB.dt, dDOC.dt), 
+         TotalC=B+DOC)
+  })
+}
+
+times <- seq(from=0, to=100, by=1)
+out <- ode(y=y.ini, times=times, func=Bactmod, parms=parms)
+plot(out, mfrow=c(1,3))
+```
+
+### TASK
+
+You get as input the above R-code implementing the model of bacterial uptake of DOC. Your task is to add dissolved *inorganic* carbon (DIC) to the model. Assume the initial concentration of DIC to be 0. Hint: Realize that DIC is produced by the bacterial respiration.
+
+```{r model3eq, exercise=TRUE, fig.height=3, fig.width=6}
+require(deSolve)
+
+# Bacterial uptake of DOC
+# -----------------------
+
+#         [/hr], [molC/m3],  [-]   , [/hr] , [/(molC/m3)/hr]
+parms <- c(g=0.2, ks=10,  gamma=0.5, r=0.01, m=0.0005)   #  model parameters
+y.ini <- c(B=0.1, DOC=100)                    # [molC/m3] initial conditions
+
+Bactmod <- function(t, y, p){  # model function, calculates time-derivatives
+  with (as.list(c(y,p)),{
+
+  # rate expressions
+    BactUptake   <- g * DOC/(DOC+ks) * B
+    BactGrowth   <- gamma * BactUptake
+    BactDeath    <- m * B^2
+    BasalResp    <- r * B
+    ActivityResp <- (1-gamma) * BactUptake
+  
+  # mass balance equations
+    dB.dt   <-  BactUptake - ActivityResp - BasalResp - BactDeath
+    dDOC.dt <- -BactUptake + BactDeath
+  
+  # return derivative vector and output variable  
+    list(c(dB.dt, dDOC.dt), 
+         TotalC=B+DOC)
+  })
+}
+
+times <- seq(from=0, to=100, by=1)
+out <- ode(y=y.ini, times=times, func=Bactmod, parms=parms)
+plot(out, mfrow=c(1,4))
+```
+
+
+```{r model3eq-solution, fig.height=3, fig.width=6}
+require(deSolve)
+
+# Bacterial uptake of DOC
+# -----------------------
+
+#         [/hr], [molC/m3],  [-]   , [/hr] , [/(molC/m3)/hr]
+parms <- c(g=0.2, ks=10,  gamma=0.5, r=0.01, m=0.0005)   #  model parameters
+y.ini <- c(B=0.1, DOC=100)                    # [molC/m3] initial conditions
+
+Bactmod <- function(t, y, p){  # model function, calculates time-derivatives
+  with (as.list(c(y,p)),{
+
+  # rate expressions
+    BactUptake   <- g * DOC/(DOC+ks) * B
+    BactGrowth   <- gamma * BactUptake
+    BactDeath    <- m * B^2
+    BasalResp    <- r * B
+    ActivityResp <- (1-gamma) * BactUptake
+  
+  # mass balance equations
+    dB.dt   <-  BactUptake - ActivityResp - BasalResp - BactDeath
+    dDOC.dt <- -BactUptake + BactDeath
+  
+  # return derivative vector and output variable  
+    list(c(dB.dt, dDOC.dt), 
+         TotalC=B+DOC)
+  })
+}
+
+times <- seq(from=0, to=100, by=1)
+out <- ode(y=y.ini, times=times, func=Bactmod, parms=parms)
+plot(out, mfrow=c(1,4))
+```
+
+<div id="model3eq-hint">
+**Tips:** 
+
+- You will need to add a new state variable called DIC in y.ini.
+
+- In the model function you must specify the mass balance for DIC (call it dDIC.dt), and include it in the time-derivative vector.
+
+- You also need to include DIC in the total carbon concentration. Because the model now "captures" all C pools, the total C concentration should remain constant during the simulation.
+</div>
+
+## More exercises
+
+To learn more about modelling of ecological interactions, solve additional exercises available in the R-package RTM. To display these exercises, type one of the following commands in the R-console:
+
+```
+require(RTM)
+RTMexercise("detritus")
+RTMexercise("COVID")
+RTMexercise("npzd")
+RTMexercise("crops_weeds")
+```
+
+## Finally
+
+```{r feedback, echo = FALSE}
+question("give your feedback ", type = "learnr_text", answer(" ", correct=TRUE), correct="thank you", incorrect = "thank you")
+```
+
+## References
+
+R Core Team (2020). R: A language and environment for statistical computing. R
+  Foundation for Statistical Computing, Vienna, Austria. URL
+  https://www.R-project.org/.
+
+Karline Soetaert, Thomas Petzoldt, R. Woodrow Setzer (2010). Solving Differential
+  Equations in R: Package deSolve. Journal of Statistical Software, 33(9), 1--25.
+  DOI: 10.18637/jss.v033.i09. http://www.jstatsoft.org/v33/i09/
+  
+Karline Soetaert, Peter M.J. Herman (2009). A Practical Guide to Ecological Modelling. Springer Netherlands. DOI: 10.1007/978-1-4020-8624-3.

@@ -1,0 +1,27 @@
+---
+title: 'Anoxia in the Scheldt estuary'
+subtitle: "Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
+author: "Karline Soetaert and Lubos Polerecky, Utrecht University"
+date: "March 2021"
+output: 
+  pdf_document:
+    toc: no 
+---
+
+```{r child = 'estuaryAnoxia_Q.Rmd'}
+```
+
+\newpage
+```{r child = 'estuaryAnoxia_A.Rmd'}
+```
+
+# References
+
+R Core Team (2020). R: A language and environment for statistical computing. R Foundation for Statistical
+  Computing, Vienna, Austria. URL https://www.R-project.org/.
+  
+Soetaert Karline (2009).  rootSolve: Nonlinear root finding, equilibrium and steady-state analysis of ordinary
+  differential equations.  R-package version 1.6
+  
+Soetaert, Karline and Meysman, Filip, (2012). Reactive transport in aquatic ecosystems: Rapid model
+  prototyping in the open source software R Environmental Modelling & Software, 32, 49-60.

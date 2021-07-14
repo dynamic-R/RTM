@@ -1,0 +1,81 @@
+---
+title: 'Chemistry: Ozone Dynamics in the Troposphere'
+author: "Karline Soetaert and Lubos Polerecky, Utrecht University"
+subtitle: "Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
+date: "February 2021"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+In class you have seen how to derive rate expressions for elementary chemical reactions. Here you will apply this to an important environmental problem, the ozone dynamics in the lower atmosphere, and how this is impacted by combustion or the burning of fuel. 
+
+# The ozone model --- problem formulation
+
+The Earth's ozone levels are of great interest as at high concentrations ozone is harmful to humans and animals, and because ozone is also a green-house gas. On the other hand, ozone plays an important role in absorbing the UV radiation coming to the Earth from the Sun.
+
+You will make a model that can be used to investigate the behaviour of ozone in the lower atmosphere. Specifically, you will model how the anthropogenic emissions of NO due to combustion or burning of fuels alter the natural ozone dynamics.
+
+## Assumptions
+
+The dynamics of ozone in the lower atmosphere is governed by the following chemical reactions between the molecular oxygen ($O_2$), ozone ($O_3$), atomic oxygen ($O$), nitric oxide ($NO$), and nitrogen dioxide ($NO_2$). These reactions represent the natural processes involved in ozone cycling.
+
+$$ Reaction~1: \qquad NO_2 (+ h\nu) \rightarrow NO+O $$
+$$ Reaction~2: \qquad O+O_2 \rightarrow O_3 $$
+$$ Reaction~3: \qquad NO+O_3 \rightarrow O_2 + NO_2 $$
+
+The first reaction is the photo-dissociation of $NO_2$ to form $NO$ and $O$. This reaction depends on solar radiation ($h\nu$), and therefore its rate, $R_1$, changes drastically at sunrise and sunset. 
+
+The second reaction (rate $R_2$) describes the production of ozone; this is in reality a reversible process, but for our purpose we assume it only occurs in one direction. 
+
+In the third reaction, ozone is scavenged by reacting with $NO$ (rate $R_3$). 
+
+The reaction rates $R_1$, $R_2$ and $R_3$ are controlled by the rate constants $k_1$, $k_2$ and $k_3$. 
+
+In addition to these natural processes, nitric oxide ($NO$) is emitted through combustion or fuel burning processes. Assume that these processes are represented as a constant input of $NO$, at a rate $\sigma = 10^{11}~mol~d^{-1}$.
+
+## Tasks
+
+* Create the model equations. 
+    - Which are the state variables that you will describe? What are their units?
+    - Write the mass balance equations, one per state variable.
+    - Provide a rate expression for every flux or reaction rate.
+
+* Model simplification. 
+    - For the atmosphere, a valid assumption is that the molecular oxygen ($O_2$) is approximately constant (i.e., the $O_2$ concentration is not significantly affected by any of the processes described here). This means that $O_2$ does *not* need to be modeled explicitly. This will affect the rate expression for $R_2$.
+    - Rewrite $R_2$ imposing [$O_2$] as a constant. 
+
+* The values of the model parameters, valid for the light intensity of $100~\mu mol~photons~m^{-2}~s^{-1}$, are:
+
+| Name       | Value      |  Unit              |
+| ---------- | ---------- | ------------------ |
+| $k_1$      | $100$      | $d^{-1}$           |
+| $k_2$      | $10^{10}$  | $d^{-1}$           |
+| $k_3$      | $10^{-11}$ | $mol^{-1}~d^{-1}$  |
+
+* In the next step, generate a more realistic model by assuming that the reaction rate constant $k_1$ depends linearly on the solar radiation according to
+$k_1 = k_{1a}+k_{1b} \cdot I_{h\nu}(t)$, where $I_{h\nu}(t)$ denotes the light intensity (in units of $\mu mol~photons~m^{-2}~s^{-1}$) as a function of time and the new parameters are
+$$k_{1a} = 10^{-30}~d^{-1},$$ 
+$$k_{1b} = 1~(\mu mol~photons~m^{-2}~s^{-1})^{-1}~d^{-1}.$$
+
+* Implement this model in R. You can start with the R-markdown template file *RTM_0D.Rmd* to implement this model.\footnote{You can obtain this file from Rstudio: File $\rightarrow$ new File $\rightarrow$ Rmarkdown $\rightarrow$ from template $\rightarrow$ RTM\_0D. Save this file under a different name. Do not forget to change the heading of this file.} Use the following initial conditions:
+     - $[O] = 0$, $[NO] = 1.3\times 10^8$, $[NO2] = 5\times 10^{11}$, $[O3] = 8\times 10^{11}$
+     - Do these values match the units assumed in your model?
+
+* Impose a variable light intensity using the following R-snippet:
+```{}
+radiation <- max(0, sin(t*2*pi))*maxrad    # radiation at time t (if t is in days)
+```
+Here, *maxrad* is the maximal radiation at midday. Assume a value of $1200~\mu mol~photons~m^{-2}~s^{-1}$. The *max* statement assures that light intensity does *not* become negative, but is 0 during nighttime. Output the radiation as an ordinary variable.
+
+* Run the model for 5 days and interpret the results. 
+    - Compare the results calculated with and without the anthropogenic NO emissions.
+    - Why are the total masses of $O$ and $NO$ so different? 
+    - Which substances increase during the day and which increase during the night? Explain why.
+
+Note: the equations used in this model are what mathematicians call a very "stiff" set of differential equations, meaning that processes occur on widely varying time scales (look at rate constants that range from $10^2$ to $10^{10}$). Because of that, the default solver of the deSolve package may have a hard time finding a solution. You can remedy that by using the solver called "vode" as follows:
+```{}
+out <- ode( , method = "vode")
+```
+
+  

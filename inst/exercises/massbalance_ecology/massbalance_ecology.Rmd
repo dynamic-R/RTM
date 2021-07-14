@@ -1,0 +1,18 @@
+---
+title: "Mass balance equations --- ecology"
+subtitle: "Exercises Accompanying the Course Environmetal Modelling"
+author: "Karline Soetaert and Dries Bonte, Ghent University"
+date: "July 2021"
+output: 
+  pdf_document:
+    toc: no 
+  header-includes: 
+    \usepackage{float} 
+    \floatplacement{figure}{H} 
+---
+
+```{r child = 'massbalance_ecology_Q.Rmd'}
+```
+
+```{r child = 'massbalance_ecology_A.Rmd'}
+```

@@ -1,0 +1,90 @@
+---
+title: "Conceptual Diagram"
+subtitle: "Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
+author: "Karline Soetaert and Lubos Polerecky, Utrecht University"
+date: "June 2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Exercise 1. Lake biomanipulation
+
+Phosphorus is the nutrient that is generally limiting primary production in lakes. Increasing the input of phosphorus increases the concentration of phytoplankton, which may have a radical effect on water quality.
+
+Zooplankton are small organisms that are the main consumers of lake phytoplankton and may reduce phytoplankton biomass. They constitute the main food source for lake fishes.
+
+To overcome the negative impacts of eutrophication, the concept of biomanipulation was introduced in the 1970’s, which consisted of reducing the predation pressure on the zooplankton by removing fishes. When successful, this treatment resulted in a higher zooplankton biomass and a reduced phytoplankton biomass. However, several cases were reported where this manipulation failed to give the desired results. Close examination revealed that failure was most likely in lakes that received a phosphorus input above a certain critical level. 
+
+## Tasks
+
+Make a conceptual model that may serve to investigate the effect of biomanipulation on the lake ecosystem. The lake is not a closed system, but water and nutrients are supplied via sewage, agricultural run-off and rain, and lake water is lost through outflow via a small river.
+
+What is a suitable spatial and temporal scale of your model? 
+
+Review the components that should be included in the model. 
+
+*	Which state variables will be in the model? 
+*	Which forcing functions will be in the model?
+*	Which processes are important (ecological as well as transport processes)?
+* What will be the units used in the model?
+
+Draw the conceptual model as a flowchart. 
+
+How would you investigate the effect of biomanipulation?
+
+# Exercise 2.	Bacterial decay of particulate organic matter in marine sediments
+
+Organic detritus enters marine sediments by sinking of free-floating particulate organic matter from the water column.  Once in the sediment, this detritus is degraded (mineralized) by the action of heterotrophic bacteria. 
+
+This is not a one-step process: bacteria cannot ‘eat’ detritus! You will make a model that is closer to the reality of the process.
+
+The growth of bacteria on detritus proceeds in several steps. 
+In the first step, the particulate detritus is hydrolysed by the action of bacterial exoenzymes to high-molecular-weight dissolved organic carbon (HMW-DOC), such as polysaccharides. 
+These molecules are still too large for bacteria to take up, so in turn they are attacked by bacterial enzymes to yield low-molecular-weight dissolved organic carbon (LMW-DOC). 
+It is this form of DOC that can be taken up by the bacteria for growth.
+
+When bacteria grow by assimilating the LMW-DOC, they also loose carbon by basal respiration (a continuous loss term) and by activity respiration, when they respire a fraction of the uptake (to gain energy required for growth). Moreover, bacteria die or are subject to predation. You can assume that both of these processes add to organic detritus.
+
+## Tasks
+
+Make a conceptual model for the carbon flow described by these processes. It is not necessary to model the exoenzyme concentration explicitly.
+
+* First define your state variables. 
+* Then for each state variable sketch the influxes and effluxes in a flow chart. 
+Try to make the model as simple as possible.
+
+# Exercise 3. Spread of the Corona virus
+
+Despite the substantial efforts in European countries in 2020 and 2021, the Corona virus spread all over the continent and caused casualties. 
+A great deal of the measures taken by the governments in these countries relied on the forecasts of mathematical models that describe the dynamics of infectious diseases (such as measles, rubella, flu, covid). 
+
+Typically, the models used for such diseases are so-called *SIR* models, which describe the number of Susceptible, Infected and Recovered individuals. 
+Here the Susceptible individuals are vulnerable to get the disease but are not (yet) infected. Infected individuals can recover, but some fraction of them will die from the disease. In the first approximation, assume that the recovered individuals are safe, that is, they cannot catch the disease anymore.
+
+## Tasks
+
+Use the above information to create a conceptual diagram of the spread of the COVID disease over a population. 
+
+* Select the state variables, draw arrows to denote the transitions from one state variable to another, and give a suitable name to these "fluxes". 
+* How would you represent vaccination in this conceptual diagram? 
+* Now adapt the conceptual diagram so that recovered individuals do lose their immunity to the disease after some period of time.
+* One of the challenges was the spread of "new variants" of the virus that are more infectious (e.g., the so-called "British", "South-African", "Brazillian", or "Indian" variant). Adapt the conceptual scheme to include the "British variant". Clarify assumptions that you make in this new conceptual model.
+
+# Exercise 4.	Crops and weed
+
+A farmer wants to optimise his harvest of lettuce. He should decide whether to fertilize his land with phosphate once, before planting, or at regular occasions after the lettuce seedlings have been planted, and how much of the fertilizer to add.
+
+The problem he has is that the field of lettuce is invaded by a weed that grows slower than the lettuce, but has a much deeper root system. While roots of lettuce penetrate 7 cm deep into the soil, the roots of the weed penetrate up to a depth of 14 cm.
+
+Once the fertilizer is added to the soil, it percolates, due to the rain, from the upper 7 cm to the deeper soil layer at a rate of 0.5% per day.
+
+## Tasks
+
+Devise a model that could be used to mimic this agriculture, and be used to optimize the fertilization. Try to make this model as simple as possible.
+
+* What are the components in your model? Draw the conceptual scheme.
+* How do you conceptualize the farmer’s two fertilization approaches of 'fertilize once before planting' vs. 'fertilize regularly after planting'? 
+

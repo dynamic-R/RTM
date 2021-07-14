@@ -1,0 +1,269 @@
+---
+title: "One-dimensional multiphase model"
+subtitle: "template markdown file for 1-D models including porosity"
+author: "your name here"
+date: "Date of creation here"
+output:
+  pdf_document:
+    toc: yes
+  word_document:
+    toc: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introduction
+
+This template contains an R implementation of a simple one-dimensional reaction-transport model in a porous medium. You are free to use and expand it based on your needs. Another template (+ text) provides a more detailed explanation of what this file does.
+
+# R implementation
+
+Load the required packages.
+
+```{r, message = FALSE}
+require(marelac)
+require(ReacTran)
+```
+
+## The model grid and associated properties
+
+Define the model grid and model parameters that vary in space.
+
+```{r}
+# spatial domain: total length of 20 cm, 200 boxes
+Length    <- 0.20   # [m]
+N         <- 200
+# grid with equally sized boxes (not used here)
+Grid      <- setup.grid.1D(L = Length, N = N)
+
+# grid with an exponentially increasing grid size, starting from 0.05 cm (5e-4m)
+Grid      <- setup.grid.1D(L = Length, N = N, dx.1 = 0.05/100)
+
+# function describing the variation of porosity (volume fraction of LIQUID) with depth
+porFun.L  <- function(x, por.SWI, por.deep, porcoef)
+  return( por.deep + (por.SWI-por.deep)*exp(-x*porcoef) )
+
+# function describing the SOLID volume fraction (svf = 1-porosity)
+porFun.S  <- function(x, por.SWI, por.deep, porcoef)
+  return( 1-porFun.L(x, por.SWI, por.deep, porcoef) )
+
+# calculate porosity and svf on the grid (mid-points and box interfaces, etc.)
+porLiquid <- setup.prop.1D(func=porFun.L, grid=Grid, por.SWI=0.9, por.deep=0.7, porcoef=100)
+porSolid  <- setup.prop.1D(func=porFun.S, grid=Grid, por.SWI=0.9, por.deep=0.7, porcoef=100)
+
+# Sediment diffusion coefficient for HCO3^- (m2/d), defined at box interfaces!! (N+1 values)
+diff.DIC  <- diffcoeff(S=35, t=20)$HCO3 * 3600*24  # m2/s to m2/d
+porInt    <- porLiquid$int                         # porosity at the box interfaces            
+diffDIC   <- diff.DIC/(1-log(porInt^2))            # corrected for tortuosity
+```
+
+Visualise these settings:
+
+```{r, fig.width=8, fig.height=2.7}
+par(mfrow = c(1,3))
+plot(porLiquid, type="l", grid = Grid, xyswap = TRUE, ylab = "depth (m)", 
+     main = "porosity", xlab = "m3_liquid / m3_bulk")
+plot(porSolid,  type="l", grid = Grid, xyswap = TRUE, ylab = "depth (m)", 
+     main = "svf = 1-porosity", xlab = "m3_solid / m3_bulk")
+plot(diffDIC, y = Grid$x.int, type="l", ylim = c(Length,0), ylab = "depth (m)", 
+     main = "sediment diff. coeff (DIC)", xlab = "m2/d")
+```
+
+## Additional model parameters
+
+Define model parameters that do *not* vary in space.
+
+```{r}
+parms <- c(
+ Dbio     = 5e-4/365,   # [m2/d]      bioturbation mixing coefficient
+ v_adv    = 5e-6,       # [m/d]       sediment advection velocity   
+ rMin     = 0.005,      # [/d]        POC mineralisation rate constant
+ depoPOC  = 1e-3,       # [mol/m2/d]  POC deposition rate (flux at SWI)
+ bwDIC    = 2           # [mol/m3]    DIC concentration at SWI
+)
+```
+
+## Definition and initialisation of state variables
+
+```{r}
+names    <- c("POC", "DIC")
+nspec    <- length(names)
+POC.ini  <- rep(0, length = N)      # initial conditions 
+DIC.ini  <- rep(0, length = N)
+state    <- c(POC.ini, DIC.ini)
+```
+
+## Definition of the model function
+
+Define the model function that calculates the *time-derivatives* for each state variable. This includes the implementation of the transport and reaction terms.
+
+```{r}
+Diamodel <- function (t, state, pars)   # state is a LONG vector
+{
+  with (as.list(pars),{ 
+    
+    # unpack state variables
+    POC <- state[   1 :   N ]    # first N elements: POC
+    DIC <- state[(N+1):(2*N)]    # next N elements:  DIC
+
+    # === transport rates ===
+    # note: zero gradient by default at lower boundaries
+ 
+    # solid substances, VF = solid volume fraction = 1-porosity!    
+    tran.POC <- tran.1D(C = POC, flux.up = depoPOC,  # upper boundary: flux 
+                        dx = Grid, VF = porSolid,    # grid and volume fraction (1-por)
+                        D = Dbio, v = v_adv)         # mixing (bioturbation) and advection
+
+    # dissolved substances, VF = liquid volume fraction = porosity!
+    tran.DIC <- tran.1D(C = DIC, C.up = bwDIC,       # upper boundary: concentration
+                        dx = Grid, VF = porLiquid,   # grid and volume fraction (por)
+                        D = diffDIC, v = v_adv)      # diffusive mixing and advection
+                                                     # (bioturbation mixing negligible)
+ 
+    # === reaction rates ===
+    # POC mineralisation
+    Mineralisation <- rMin * POC   # [mol/m3 SOLID/d] (per volume of solid!)
+
+    # more rate expressions can be added here ...
+    
+    # === mass balances : dC/dt = transport + reactions ===
+    
+    # solid substances
+    dPOC.dt   <- ( tran.POC$dC                       # transport
+                 - Mineralisation )                  # reactions, [mol/m3 SOLID/d] !!
+    
+    # dissolved substances
+    poro      <- porLiquid$mid
+    dDIC.dt   <- ( tran.DIC$dC +                     # transport
+                   Mineralisation * (1-poro)/poro )  # reactions, [mol/m3 LIQUID/d] !!
+
+    # depth-integrated rates: [mol/m2 BULK/d] !!
+    TotalMin  <- sum(Mineralisation*Grid$dx*porSolid$mid)
+  
+    return(list(c(dPOC.dt, dDIC.dt),            # the time-derivatives, as a long vector
+          Mineralisation = Mineralisation,      # Mineralisation rates, as a vector
+             
+          # for creating budgets
+          TotalMin      = TotalMin,             # [mol/m2 BULK/d]
+          DIC.SWI.Flux  = tran.DIC$flux.up,     # [mol/m2 BULK/d]
+          DIC.Deep.Flux = tran.DIC$flux.down,   # [mol/m2 BULK/d]
+          POC.SWI.Flux  = tran.POC$flux.up,     # [mol/m2 BULK/d]
+          POC.Deep.Flux = tran.POC$flux.down))  # [mol/m2 BULK/d]
+ })
+}
+```
+
+## Steady-state solution
+
+Find a steady-state solution with the function *steady.1D* from the package *rootSolve*.
+
+```{r}
+p0 <- p1 <- p2 <- parms      # three runs with different deposition rates
+
+p0["depoPOC"]  <- 0          # mol/m2/day
+std0 <- steady.1D (y=state, func=Diamodel, parms=p0, 
+                   nspec=nspec, dimens=N, names=names,
+                   positive = TRUE)     # to have only positive values! 
+
+p1["depoPOC"]  <- 1e-3       # mol/m2/day
+std1 <- steady.1D (y=state, func=Diamodel, parms=p1, 
+                   nspec=nspec, dimens=N, names=names,
+                   positive = TRUE)     
+
+p2["depoPOC"]  <- 2e-3       # mol/m2/day
+std2 <- steady.1D (y=state, func=Diamodel, parms=p2, 
+                   nspec=nspec, dimens=N, names=names,
+                   positive = TRUE) 
+```
+
+### Plotting
+
+Visualize the steady state solutions, including the depth profile of the process rate.
+
+```{r, fig.width=8, fig.height=3}
+plot(std0, std1, std2, xyswap=TRUE, grid=Grid$x.mid, lty=1, lwd=2,
+     which = c("POC",            "DIC",             "Mineralisation"  ),
+     xlab  = c("molC/m3 Solid", "molC/m3 Liquid", "molC/m3 Solid/d"), 
+     ylab  = "depth (m)", mfrow=c(1,3))
+
+legend("bottomright", legend=c("0", "1e-3", "2e-3"), title="mol/m2/d", 
+       lwd=2, lty=1, col=1:3)
+```
+
+### Budget
+
+Check the fluxes at the domain boundaries (only done for the steady-state solution *std1*).
+
+```{r}
+toselect <- c("TotalMin", "DIC.SWI.Flux", "DIC.Deep.Flux", "POC.SWI.Flux", "POC.Deep.Flux")
+BUDGET   <- std1[toselect]
+unlist(BUDGET)    # show result
+```
+
+Construct the total C budget in the modeled spatial domain to verify that the mass balances are correct.
+
+```{r}
+# should be the same:
+# net POC rate is negative => POC is net removed within the domain
+c(BUDGET$POC.Deep.Flux - BUDGET$POC.SWI.Flux, -BUDGET$TotalMin)
+# net DIC rate is positive => DIC is net produced within the domain
+c(BUDGET$DIC.Deep.Flux - BUDGET$DIC.SWI.Flux,  BUDGET$TotalMin)
+```
+
+## Dynamic solution
+
+Find the dynamic solution using the function *ode.1D* from the package *deSolve*. The steady-state solution *std1* is used as the initial condition. 
+
+```{r}
+times          <- seq(from = 0, to = 2*365, by = 10)
+p2             <- parms
+p2["depoPOC"]  <- parms["depoPOC"]*10         # mol/m2/day
+out            <- ode.1D(y=std1$y, func=Diamodel, parms=p2, times = times,
+                         nspec=nspec, dimens=N, names=names )
+```
+
+### Plotting
+
+Visualise the dynamic solution as an image.
+
+```{r, fig.width=8, fig.height=4}
+par(mar = c(4,4,4,4))
+image(out, legend = TRUE, grid = Grid$x.mid, ylim = c(Length,0), 
+      las = 1, ylab = "depth (m)", xlab="time (d)")
+```
+
+Output as lines showing the depth distribution for all time points.
+
+```{r, fig.width=8, fig.height=4}
+matplot.1D(out, type = "l", grid = Grid$x.mid, 
+      col = grey(seq(0.2,0.8,len=length(times))), # This will use a sequence of greyish colors
+                                                  # grey(1) = white, grey(0) = black
+      las = 1, xyswap = TRUE, lty = 1, ylab="depth (m)",
+      xlab = c("mol/m3 SOLID", "mol/m3 LIQUID"))
+```
+
+Visualise the fluxes at the SWI and in the deep sediment as a function of time.
+
+```{r, fig.width=10, fig.height=3}
+plot(out, which = c("DIC.SWI.Flux", "DIC.Deep.Flux", "POC.SWI.Flux", "POC.Deep.Flux"), 
+     mfrow=c(1,4), xlab="time (d)", ylab="mol/m2/d")
+```
+
+# References
+
+R Core Team (2020). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria. URL https://www.R-project.org/.
+  
+Soetaert Karline (2009).  rootSolve: Nonlinear root finding, equilibrium and steady-state analysis of ordinary differential equations.  R-package version 1.6
+  
+Soetaert Karline, Thomas Petzoldt, R. Woodrow Setzer (2010). Solving Differential
+  Equations in R: Package deSolve. Journal of Statistical Software, 33(9), 1--25. URL
+  http://www.jstatsoft.org/v33/i09/ DOI 10.18637/jss.v033.i09
+  
+Soetaert, Karline and Meysman, Filip (2012). Reactive transport in aquatic ecosystems: Rapid model
+  prototyping in the open source software R Environmental Modelling & Software, 32, 49-60.
+
+Soetaert Karline and Thomas Petzoldt (2020). marelac: Tools for Aquatic Sciences. R package
+  version 2.1.10. https://CRAN.R-project.org/package=marelac
+  

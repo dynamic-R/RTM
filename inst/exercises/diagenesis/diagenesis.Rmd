@@ -1,0 +1,37 @@
+---
+title: "The Coupled Cycles of Carbon, Oxygen, Nitrogen and Sulfur in Marine Sediments"
+subtitle: "Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
+author: "Karline Soetaert and Lubos Polerecky, Utrecht University"
+date: "July 2021"
+output: 
+  pdf_document:
+    toc: no 
+  header-includes: 
+    \usepackage{float} 
+    \floatplacement{figure}{ht} 
+linestretch: 1.1
+---
+
+```{r child = 'diagenesis_Q.Rmd'}
+```
+
+\newpage
+```{r child = 'diagenesis_A.Rmd'}
+```
+
+# References
+
+R Core Team (2020). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria. URL https://www.R-project.org/.
+  
+Soetaert Karline (2009).  rootSolve: Nonlinear root finding, equilibrium and steady-state analysis of ordinary differential equations.  R-package version 1.6
+  
+Soetaert Karline, Thomas Petzoldt, R. Woodrow Setzer (2010). Solving Differential
+  Equations in R: Package deSolve. Journal of Statistical Software, 33(9), 1--25. URL
+  http://www.jstatsoft.org/v33/i09/ DOI 10.18637/jss.v033.i09
+  
+Soetaert, Karline and Meysman, Filip (2012). Reactive transport in aquatic ecosystems: Rapid model
+  prototyping in the open source software R Environmental Modelling & Software, 32, 49-60.
+
+Soetaert Karline and Thomas Petzoldt (2020). marelac: Tools for Aquatic Sciences. R package
+  version 2.1.10. https://CRAN.R-project.org/package=marelac
+  

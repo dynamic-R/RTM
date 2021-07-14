@@ -1,0 +1,161 @@
+---
+title: "RTM course - Conceptual Diagrams"
+author: "Karline Soetaert and Lubos Polerecky"
+description: "video and exercises on making conceptual model diagrams"
+date: "June 2021"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(learnr)
+```
+
+## Tutorial
+
+You are advised to watch the following video first.
+
+### Video timeline
+* 0:00 Introduction
+* 0:31 Model components 
+* 3:51 Model currency and units
+* 5:24 Example of a fully developed conceptual model
+
+![](https://www.youtube.com/watch?v=AwG9fYz3das&list=PLx8PHcDdmF-uD1Pr07TU9SzlhlGpfrxqn&index=3)
+
+You can also read the following section(s) of the textbook:
+
+* Chapter 2.1. Conceptual model
+
+(You can download each chapter of the textbook via the e-book University library for free!)
+
+## Conceptual model diagrams
+
+```{r State_variables, echo=FALSE}
+question("When drawing a conceptual diagram, we use the following shape to depict STATE VARIABLES", type = "learnr_radio",
+ answer("rectangles", correct=TRUE),
+ answer("ovals"),
+ answer("arrows"),
+ answer("dashed arrows"),
+ 
+ incorrect="Rectangles is the correct answer." 
+)
+```
+
+```{r processes, echo=FALSE}
+question("When drawing a conceptual diagram, we use the following shape to depict PROCESSES", type = "learnr_radio",
+ answer("rectangles"),
+ answer("ovals"),
+ answer("arrows", correct=TRUE),
+ answer("dashed arrows"),
+
+ incorrect="Arrows is the correct answer." 
+)
+```
+
+```{r forcing_functions, echo=FALSE}
+question("When drawing a conceptual diagram, we use the following shape to depict FORCING FUNCTIONS", type = "learnr_radio",
+ answer("rectangles"),
+ answer("ovals"),
+ answer("arrows"),
+ answer("dashed arrows", correct=TRUE),
+ 
+ incorrect="Dashed arrows is the correct answer." 
+)
+```
+
+```{r derived_variables, echo=FALSE}
+question("When drawing a conceptual diagram, we use the following shape to depict DERIVED VARIABLES", type = "learnr_radio",
+ answer("rectangles"),
+ answer("ovals", correct=TRUE),
+ answer("arrows"),
+ answer("dashed arrows"),
+ 
+ incorrect="Ovals is the correct answer." 
+)
+```
+
+## Ingredients of a conceptual model
+
+```{r ingredients, echo=FALSE}
+msg <- "For the conceptual model, we only need to specify the state variables and the spatial and temporal domain, including the domain boundaries. The values of the model parameters, initial conditions and boundary conditions are specified when we *apply* the model."
+
+question("When creating a conceptual model, we additionally need to specify", type = "learnr_checkbox",
+ answer("The spatial domain", correct=TRUE),
+ answer("Model parameters", correct=FALSE),
+ answer("Temperature at which the processes occur", correct=FALSE),
+ answer("The temporal domain", correct=TRUE),
+ answer("Boundaries of the domain", correct=TRUE),
+ answer("Concentrations of the reactants", correct=FALSE),
+ answer("Boundary conditions for each state variable", correct=FALSE),
+ answer("Initial conditions for each state variable", correct=FALSE),
+ 
+ incorrect=msg,
+ correct=msg)
+```
+
+## True/False statements
+
+```{r statements, echo=FALSE}
+question("Check boxes with a TRUE statement.", type = "learnr_checkbox",
+ answer("Transport is a process that transfers mass or energy.", correct=TRUE),
+ answer("All modelled state variables MUST have the same units.", correct=FALSE),
+ answer("If possible, it is better to use a common currency for all state variables.", correct=TRUE),
+ answer("For chemical species it is equally simple to use grams or moles.", correct=FALSE),
+ answer("The natural unit of a chemical species A is *moles* of A per kilogram (e.g., of water) or *moles* of A per m3 (e.g. of water).", correct=TRUE)
+)
+```
+
+## Growth of a mussel
+
+Assume you make a model that describes the growth of an individual organism (e.g., a mussel), where you take into account the biomass increase of the organism, but also its energy reserves.
+
+```{r Organism_Currency, echo=FALSE}
+msg <- "Carbon is used both for biomass and energy production, so this is the best model currency."
+
+question("What would be a good model currency for such a model?", type = "learnr_radio",
+ answer("C (carbon)", correct=TRUE),
+ answer("N (nitrogen)"),
+ answer("A mix of N and C"),
+ 
+ incorrect=msg,
+ correct=msg)
+```
+
+## Algal growth
+
+Microscopic algae convert dissolved inorganic carbon (DIC), nitrogen (DIN), and phosphorus (DIP) into their biomass.  
+
+```{r Algae_Currency, echo=FALSE}
+question("What would be a good currency for a model that describes the dependency of algae on DIC, DIN and DIP?", type = "learnr_radio",
+ answer("C (carbon)", correct=FALSE),
+ answer("N (nitrogen)", correct=FALSE),
+ answer("P (phoshorus)", correct=FALSE),
+ answer("a mix of C, N, P", correct=TRUE),
+ 
+ incorrect="It makes no sense to describe DIP in another currency than P, and similarly DIN and DIC should be represented in N and C, respectively.",
+ correct="Indeed, DIC, DIN and DIP can only be represented in C, N and P currencies, respectively.")
+```
+
+## More exercises
+
+More exercises on creating conceptual models can be found in the R-package RTM. Type the following commands in the R console to see these exercises:
+
+```
+require(RTM)
+RTMexercise("conceptual")
+```
+
+## Finally
+
+```{r feedback, echo = FALSE}
+question("give your feedback ", type = "learnr_text", answer(" ", correct=TRUE), correct="thank you", incorrect = "thank you")
+```
+
+## Textbook
+
+Karline Soetaert, Peter M.J. Herman (2009). A Practical Guide to Ecological Modelling. Springer Netherlands. DOI: 10.1007/978-1-4020-8624-3.

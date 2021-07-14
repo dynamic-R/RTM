@@ -1,0 +1,104 @@
+---
+title: "Local Equilibrium Chemistry in R --- One Equilibrium Reaction"
+subtitle: "template markdown file for a model assuming local chemical equilibrium"
+author: "your name here"
+date: "Date of creation here"
+output:
+  pdf_document:
+    toc: yes
+  word_document:
+    toc: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introduction
+
+This template file contains a simple model that assumes local equilibrium determined by. 
+
+$$AB \leftrightarrow A + B$$
+and that includes a loss term for species A.
+
+The model is rewritten in terms of sumB = [AB] + [B] and sumA = [AB] + [A]. For more information on the model, see the reader "Local Equilibrium Chemistry in R --- part I: One Equilibrium Reaction". (open this in R by: "vignette('equilibriumNH3_Q')")
+
+# Model definition
+
+```{r, eval = TRUE, cache = FALSE, echo = TRUE, warning=FALSE, message=FALSE}
+library(deSolve)  # package with solution methods
+
+# Initial conditions of the state variables
+Atot.ini <- 0.070  # [mol/m3] Initial concentration of total A
+Btot.ini <- 0.060  # [mol/m3] Initial concentration of total B
+
+yini <- c(Atot = Atot.ini, Btot = Btot.ini)
+
+# model parameters
+parms <- c (kf      = 1000,    # [/s]             forward rate ct 
+            kb      = 2e6,     # [/mol m3 /s]     backward rate ct
+            lambda  = 0.1      # [/s]             first-order loss ct for A
+)
+```
+
+A function to numerically solve for species B
+
+```{r}
+solveB <- function(Keq, Atot, Btot){
+  
+  # function whose root has to be sought (eq. 10)
+  rootFun <- function(B) {
+    return( B + B/(Keq+B)*Atot - Btot )
+  }
+  
+  # uniroot will find the root; it returns a list with $root being the solution
+  r <- uniroot(f = rootFun, lower = 0, upper = Btot, tol = 1e-20)
+  return( r$root )
+}
+```
+
+The differential equation model
+
+```{r}
+EqModel_num <- function(t, state, parms) {
+  with (as.list(c(state,parms)), {
+    
+    Keq  <- kf/kb
+    
+    # calculate B from Atot and Btot numerically, using solveB
+    B    <- solveB(Keq = Keq, Atot = Atot, Btot = Btot) 
+    # calculate A from Atot and B 
+    A    <- Keq /(Keq+B)*Atot
+    
+    # mass balance equations for Atot and Btot 
+    dAtot <- -lambda * A
+    dBtot <- 0
+    
+    return(list(c(dAtot, dBtot), 
+                B = B, A = A, AB = Atot-A,
+                Q = A*B/(Atot-A) ))
+  })
+}
+```
+
+The model is run for 10 seconds.
+
+```{r}
+times <- seq(from=0, to=10, length.out=1000)
+out   <- ode(y=yini, times=times, func=EqModel_num, parms=parms)
+```
+
+```{r}
+plot(out, ylab="mol/m3")
+```
+
+# References
+
+R Core Team (2020). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria. URL https://www.R-project.org/.
+  
+Soetaert Karline (2009).  rootSolve: Nonlinear root finding, equilibrium and steady-state analysis of ordinary differential equations.  R-package version 1.6
+  
+Soetaert Karline, Thomas Petzoldt, R. Woodrow Setzer (2010). Solving Differential
+  Equations in R: Package deSolve. Journal of Statistical Software, 33(9), 1--25. URL
+  http://www.jstatsoft.org/v33/i09/ DOI 10.18637/jss.v033.i09
+  

@@ -1,0 +1,103 @@
+---
+title: 'Plant Coexistence and Herbivory'
+subtitle: "Exercises Accompanying the Course Environmental Modelling"
+author: "Dries Bonte and Karline Soetaert, Ghent University"
+date: "July 2021"
+output: 
+  pdf_document:
+    default
+---
+
+# Answers
+
+It is most efficient to create a model that can answer all questions at once. We do this by adding a number of extra parameters:
+
+* rEmigration, the herbivore emigration rate constant, set to 0 if there is no emigration (default).
+* rInfect, the nematode infection rate constant, set to 0 if there is no infection (default).
+
+## R implementation
+
+```{r, message=FALSE}
+
+require(deSolve)  # package with solution methods
+
+# state variables, Units: g/m2
+state <- c(GRASS = 50, IRIS = 2, HERB = 0.2)
+
+# parameters
+parms <- c(
+  ktot        = 200,   # [g/m2] carrying capacity of grass and unpalatable Iris
+  assEff      = 0.35,  # [-] efficiency at which cattle incorporate biomass into body mass
+  ks          = 50,    # [g/m2] half-saturation constant for functional response of grazing on grass
+  rGraz       = 0.17,  # [/d] grazing rate constant of herbivores
+  rGrowG      = 0.05,  # [/d] growth rate constant grass
+  rGrowI      = 0.04,  # [/d] growth rate constant Iris
+  rResp       = 0.018, # [/d] basal metabolic rate constant 
+  rEmigration = 0,     # [/d] emigration rate constant
+  rInfect     = 0,     # [/(g/m2)/d] nematode infection rate constant
+  inhibct     = 0      # [/(g/m2)] strength of inhibition by Iris 
+)
+
+# Model function
+GrassLand <- function(t, state, params) {
+  with (as.list(c(state, params)), {
+
+   # Rate expressions [g/m2/d]
+    TotBiom     <- GRASS+IRIS
+  
+   # plants
+    GrassGrowth <- rGrowG * GRASS * (1-(TotBiom/ktot))
+    IrisGrowth  <- rGrowI * IRIS  * (1-(IRIS   /ktot))
+    Infection   <- rInfect *IRIS*IRIS
+    
+   # herbivores  
+    Grazing     <- rGraz * HERB * GRASS/(GRASS+ks) *exp(-inhibct*IRIS)
+    Emigration  <- rEmigration * HERB*HERB  #(density dependence)
+    BasalResp   <- rResp * HERB
+
+   # Mass balances [g/m2/d]
+    dGRASS     <- GrassGrowth - Grazing
+    dIRIS      <- IrisGrowth  - Infection
+    dHERB      <- assEff*Grazing - Emigration - BasalResp
+
+    list( c(dGRASS, dIRIS, dHERB), 
+            total = TotBiom)
+  })
+
+}
+``` 
+
+Now we solve the model for various conditions: first the default run, then a run with IRIS-dependent grazing, with nematode infection, and finally two runs with emigration. We plot all results in one figure. 
+
+```{r, fig.height = 8, fig.width = 8}
+# output time
+outtimes <- seq(from = 0, to = 3650, length.out = 1000)  
+
+# solve this model, using the ode function from deSolve
+out <- ode(y = state, parms = parms, func = GrassLand, times = outtimes)
+
+# iris-dependen grazing
+parms2 <- parms
+parms2["inhibct"] <- 1
+out2 <- ode(y = state, parms = parms2, func = GrassLand, times = outtimes)
+
+# Nematode infection
+parms3 <- parms2
+parms3["rInfect"] <- 0.001
+out3 <- ode(y = state, parms = parms3, func = GrassLand, times = outtimes)
+
+# Emigration
+parms4 <- parms3
+parms4["rEmigration"] <- 0.0001
+out4 <- ode(y = state, parms = parms4, func = GrassLand, times = outtimes)
+
+# Emigration + infection, but no inhibition of grazing by Iris
+parms5 <- parms4
+parms5["inhibct"] <- 0
+out5 <- ode(y = state, parms = parms5, func = GrassLand, times = outtimes)
+
+# plot all at once
+plot(out, out2, out3, out4, out5, type = "l", lwd = 2, lty = 1, xlab="time (d)")
+legend ("bottomright", legend = 1:5, title = "run", 
+        col = 1:5, lwd = 2, lty =1)
+```

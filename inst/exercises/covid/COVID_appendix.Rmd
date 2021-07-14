@@ -1,0 +1,41 @@
+# Appendix --- Residence time for a first-order removal process
+
+Here we show how to calculate the *residence time* ($\tau$) for a first-order removal process. We consider a process that transfers individuals from the category "infected" to the category "recovered" ($I\rightarrow R$). We assume that the rate of this process is described by the first-order kinetics, i.e., the removal rate is $k\cdot I$, where $k$ is the rate constant and *I* is the number of infected individuals. The mass balance equation describing the time evolution of $I$ is then given as
+$$\frac{dI}{dt}= -k \cdot I.$$
+The solution to this differential equation is an exponentially decreasing function
+$$I(t) = I_{ini}\cdot e^{-kt},$$
+where $I_{ini}$ is the initial value of $I$. 
+
+Suppose that we have initially 1000 individuals ($I_{ini}=1000$) and the rate constant is $k=0.1~d^{-1}$. Using the equation above, the number of infected individuals on day zero will be $I(0)=1000\cdot e^{-0}=1000$, on day one it will be $I(1)=1000\cdot e^{-0.1\cdot 1}=905$, on day two it will be $I(2)=1000\cdot e^{-0.1\cdot 2}=819$, etc. 
+
+If we now select a *random* individual from the population of 1000 individuals, it is clear that the *probability* that the individual is in the category "infected" decreases exponentially with time in the *same way* as the total number of infected individuals. For a given time point, $t$, we denote by $p(t)$ the probability that the individual who started initially as infected *remains* infected until the time point $t$. Thus, we have
+$$p(t) = A\cdot e^{-kt},$$
+where $A$ is the normalization constant such that 
+$$\int_0^\infty p(t)\,dt = 1.$$
+
+Using the above function for $p(t)$, this integral can rather easily be calculated. We obtain:
+$$1=\int_0^\infty p(t)\,dt = \int_0^\infty A\, e^{-kt}\,dt = \frac{A}{k} \quad \rightarrow \quad A=k.$$
+
+Now we apply some knowledge about probabilities. Specifically, if we have a *discrete random* variable that takes the value of $t_i$ with a probability of $p_i$, then the *mean value* (often denoted as $\langle t\rangle$) of this random variable is calculated as
+$$\langle t\rangle = \sum_{i=1}^\infty t_i \cdot p_i .$$
+If the random variable is *continuous*, the mean value is calculated from the integral
+$$\langle t\rangle = \int_0^\infty t\cdot p(t) \, dt .$$
+
+Combining the results above, we can calculate the *average time during which a randomly selected individual is in the category "infected"*, which we denote as $\tau$. This parameter is often called the *residence time*, as it describes the average time a substance "resides" in the source compartment before it is removed. We obtain\footnote{Note that in the second last step, we looked up the value of the integral in a table of integrals: $\int_0^\infty t\,e^{-kt}\,dt = 1/k^2$.}
+$$\tau = \int_0^\infty t\cdot p(t)\,dt = k\int_0^\infty t\cdot e^{-kt}\, dt = k \, \frac{1}{k^2} = \frac{1}{k}.$$
+This shows that for a first-order removal process, the *residence time* is the *reciprocal* of the rate constant: $\tau = 1/k$.
+
+
+To demonstrate that $\tau = 1/(g+m)$, we use the simple SIR model and calculate $\tau$ by approximating the integrals numerically by sums, where we follow an initial population of 1000 infected individuals, assuming that there are no further infections ($b=0$).
+
+```{r}
+parms2      <- parms.SIR
+parms2["b"] <- 0
+out2 <- ode(y = state.SIR, times = time.seq, func = SIR, parms = parms2)
+# probability of being categorized as "infected" at time point t:
+Prob <- out2[,"I"]/sum(out2[,"I"])
+# average time to be categorized as "infected":
+tau  <- sum(Prob*time.seq)
+```
+
+The average duration of infection calculated numerically from the probability is $\tau = `r formatC(tau,width=3)`$ days. The value calculated from parameters $g$ and $m$ is $\tau=1/(g+m) = `r formatC(1/(parms.SIR["g"]+parms.SIR["m"]),width=3)`$ days.

@@ -1,0 +1,30 @@
+---
+title: "Farmer's dilemma---optimisation of crop cultures in the presence of weeds and in response to eutrophication"
+subtitle: "Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
+author: "Karline Soetaert and Lubos Polerecky, Utrecht University"
+date: "March 2021"
+output:
+  pdf_document:
+    toc: no
+---
+
+```{r child = 'crops_weed_Q.Rmd'}
+```
+
+\newpage
+```{r child = 'crops_weed_A.Rmd'}
+```
+
+\newpage
+```{r child = 'crops_weed_A_econ.Rmd'}
+```
+
+
+# References
+
+R Core Team (2020). R: A language and environment for statistical computing. R Foundation for
+  Statistical Computing, Vienna, Austria. URL https://www.R-project.org/.
+  
+Karline Soetaert, Thomas Petzoldt, R. Woodrow Setzer (2010). Solving Differential Equations in R:
+  Package deSolve. Journal of Statistical Software, 33(9), 1--25. URL
+  http://www.jstatsoft.org/v33/i09/ DOI 10.18637/jss.v033.i09

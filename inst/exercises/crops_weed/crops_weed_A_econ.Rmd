@@ -1,0 +1,147 @@
+---
+title: "Farmer's dilemma---optimisation of crop cultures in the presence of weeds and in response to eutrophication"
+subtitle: "Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
+author: "Karline Soetaert and Lubos Polerecky, Utrecht University"
+date: "March 2021"
+output:
+  pdf_document:
+    toc: no
+---
+
+# Crop and weed model including economics --- Answers
+
+To estimate the net financial gain for the farmer, we need to take into account all costs and profits associated with the cultivation and sale of the plants.
+
+We do this by adding an extra state variable: the integrated cost. Its dynamics are quite simple:
+
+The *Cost* increases with the daily expenditures of culturing (labor), which is either 1 euro per $m^2$ and per week ($1~EUR~m^{-2}~wk^{-1}$) if there is no continuous fertilization, or $1.025~EUR~m^{-2}~wk^{-1}$ if continuous fertilization *is* performed. Additionally, the costs are augmented with the cost of the fertiliser. 
+
+We write for the balance equations:
+$$\frac{dCost}{dt} = laborCost + costP\times Padded$$
+Here Cost is in $EUR~m^{-2}$, and the rates are in $EUR~m^{-2}~d^{-1}$.
+
+The initial cost of planting is $Cost_{ini}=0.5~EUR~m^{-2}$. 
+
+In case the fertilisation is done before planting, we need to also include the labor cost and depreciation of material used ($5~EUR~m^{-2}$) in addition to the cost of the fertiliser. 
+
+## R-implementation --- economic part
+
+```{r, eval = TRUE, cache = FALSE, echo = TRUE, warning=FALSE, message=FALSE}
+require(deSolve)  # package with solution methods
+
+# state variables, units = [molP/m2] - except for COST: [Euro/m2]
+state <- c(WEED = 0.001, CROP = 0.005, P1 = 0.1, P2 = 0.1, COST = 0.5, Plost = 0)
+
+# parameters
+parms <- c(
+  Paddition   = 0.9/90,    # [molP/m2/d]  Rate of P supply
+  percolation = 0.05,      # [/d]         Rain rate
+  ksCrop      = 2e-3,      # [molP/m2]    Monod coefficient for P uptake
+  ksWeed      = 0.5e-3,    # [molP/m2]    Monod coefficient 
+  ktot        = 0.300,     # [molP/m2]    Carrying capacity - space limitation
+  rGcrop      = 1*0.125,   # [/d]         Growth rate, 
+  rGweed      = 1*0.1,
+  rMcrop      = 0.0,       # [/d]         Loss rate (e.g. mortality), 
+  rMweed      = 0.0,
+  N           = 25,        # [ind/m2]     Density of crop plants
+  P2WW        = 62000,     # [gWW/molP]   31/0.25/0.002
+  laborCost   = 1.025/7,   # [euro/m2/d]  daily cost of maintenance
+  PCost       = 3/1000*31, # [euro/molP]  cost of the fertiliser, 3 eur/kg
+  priceCROP   = 1/1000     # [euro per g] price for plants > 300g, 1 eur/kg of wet weight
+)
+
+# Model function
+Crops <- function(t, state, params) {
+  with (as.list(c(state, params)), {
+
+	# variables needed for rate expressions
+    TotBiom    <- WEED + CROP       # total plant biomass
+    NutWeed    <- P1 + P2           # nutrients accessible to weed
+    NutCrop    <- P1                # nutrients accessible to crops
+  	partP1     <- P1/NutWeed        # part of P for weed from first layer
+    
+    # Rate expressions - all rates in units of [molP/m2/day]
+    WeedGrowth <- rGweed * WEED*(1-TotBiom/ktot) *NutWeed/(NutWeed+ksWeed)
+    CropGrowth <- rGcrop * CROP*(1-TotBiom/ktot) *NutCrop/(NutCrop+ksCrop) 
+    
+    WeedLoss   <- rMweed * WEED     # death and other loss terms
+    CropLoss   <- rMcrop * CROP
+
+    Percolate  <- P1 * percolation  # transfer of P from layer 1 to layer 2
+    Ploss      <- P2 * percolation  # transfer of P from layer 2 to deep soil
+
+    # Mass balances [molP/m2/day]
+    dWEED      <- WeedGrowth - WeedLoss
+    dCROP      <- CropGrowth - CropLoss
+    dP1        <- Paddition - Percolate - CropGrowth - WeedGrowth * partP1
+    dP2        <- Percolate - Ploss - WeedGrowth * (1 - partP1)
+	  dPlost     <- Ploss + WeedLoss + CropLoss
+
+	# Individual weight of a crop plant
+    Weight     <- CROP/N*P2WW         # gram wet weight per plant
+
+    # Economic part
+    dailyCost  <- laborCost + PCost*Paddition
+
+    
+    Price      <- CROP*P2WW * (Weight > 300)*priceCROP  # total price per m2 of plants
+    Profit     <- Price - COST
+    
+    dCOST      <- dailyCost
+   
+    list(c(dWEED, dCROP, dP1, dP2, dCOST, dPlost), 
+      TotBiom = TotBiom, Weight = Weight,
+	  TotP = WEED + CROP + P1 + P2 + Plost,
+      SpaceLimFact = (1-TotBiom/ktot),
+      NutLimFactCrop = NutCrop/(NutCrop+ksCrop),
+      NutLimFactWeed = NutWeed/(NutWeed+ksWeed), 
+	    Price = Price, Profit = Profit)
+  })
+
+}
+```
+
+The model is solved thrice over 90 days. 
+
+* Run 1 implements continuous P addition.
+* Run 2 implements one-time P fertilization.
+* Run 3 implements continuous P addition at a *quarter* of the fertilization rate compared to run 1.
+
+The 3rd run is used to assess the environmental and economic impact of reduced fertilization rate.
+
+```{r, fig.height = 10.5, fig.width = 10}
+# output time
+outtimes <- seq(from = 0, to = 90, length.out = 100)  # run for 3 months
+
+# Continuous P-addition
+state["COST"] <- 0.5             # price of planting & fertilizer cost
+out <- ode(y = state, parms = parms, func = Crops, times = outtimes)
+
+# Initial P ferilisation
+# Change the parameter values and initial conditions
+parms2 <- parms
+parms2["Paddition"] <- 0.0       # no continuous fertilization
+parms2["laborCost"] <- 1./7      # slightly cheaper if no continuous fertilization
+
+state2 <- state
+state2["P1"] <- 1                # higher value for P1
+state2["COST"] <- 0.5 + 5 + 0.9 * parms["PCost"] # price of planting, initial 
+                                                 # fertilisation (labor) & fertilizer cost 
+                                                 # (0.9 mol P m-2 is added)
+out2 <- ode(y = state2, parms = parms2, func = Crops, times = outtimes)
+
+# Continuous P-addition at a quarter of the original rate
+state3 <- state
+parms3 <- parms
+parms3["Paddition"] <- parms3["Paddition"]*0.25
+out3 <- ode(y = state, parms = parms3, func = Crops, times = outtimes)
+
+# visualise results
+plot(out, out2, out3, lty = 1, lwd = 2, mfrow=c(4,4))
+abline(h = 0)   # above the line: true profit; below the line: loss.
+plot.new()
+legend("topleft", c("continuous",  "initial", "continuous-quarter"), 
+       col = 1:3, lty = 1, lwd = 2)
+```
+
+Based on the discussion of the previous results, one can discuss independently the economic and environmental implications of these model results --- the graphs speak for themselves.

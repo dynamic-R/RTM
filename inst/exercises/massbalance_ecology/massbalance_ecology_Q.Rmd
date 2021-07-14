@@ -1,0 +1,107 @@
+---
+title: "Mass balance equations --- ecology"
+subtitle: "Exercises Accompanying the Course Environmetal Modelling"
+author: "Karline Soetaert and Dries Bonte, Ghent University"
+date: "July 2021"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Exercise 1. Carbon cycling in a Canadian National Park
+
+Salmon are born in rivers, but then swim to the sea to live their adult lives. 
+When mature, they return to the river to spawn. After spawning, the salmon die, and the salmon life cycle starts over again. 
+
+The annual migration up the river is a major event for grizzly bears that feed on the salmon. When grizzly bears capture salmon they carry them on land. They eat only about half of the salmon, the rest is left to rot or serves as food for scavengers. The main cause of death of the grizzly bear is by hunting.
+
+## Tasks
+
+Make a carbon cycle model that represents the ecosystem comprising the river and its surroundings.
+
+* What is a suitable spatial scale of your model, what are the boundaries?
+* What will be the units in your model?
+* Which state variables will be in your model? 
+* Draw the conceptual model as a flowchart.
+
+* Based on your flow chart, create the mass balance equations, one for every state variable.
+
+For more information on this ecosystem, see: \url{http://en.wikipedia.org/wiki/Salmon_run}
+
+# Exercise 2. Lake biomanipulation
+
+Phosphorus is the nutrient that is generally limiting primary production in lakes. Increasing the input of phosphorus increases the concentration of phytoplankton, which may have a radical effect on water quality.
+
+Zooplankton are small organisms that are the main consumers of lake phytoplankton and may reduce phytoplankton biomass. They constitute the main food source for lake fishes.
+
+To overcome the negative impacts of eutrophication, the concept of biomanipulation was introduced in the 1970’s, which consisted of reducing the predation pressure on the zooplankton by removing fishes. When successful, this treatment resulted in a higher zooplankton biomass and a reduced phytoplankton biomass. However, several cases were reported where this manipulation failed to give the desired results. Close examination revealed that failure was most likely in lakes that received a phosphorus input above a certain critical level. 
+
+## Tasks
+
+Make a conceptual model that may serve to investigate the effect of biomanipulation on the lake ecosystem. The lake is not a closed system, but water and nutrients are supplied via sewage, agricultural run-off and rain, and lake water is lost through outflow via a small river.
+
+What is a suitable spatial and temporal scale of your model? 
+
+Review the components that should be included in the model. 
+
+*	Which state variables will be in the model? 
+*	Which forcing functions will be in the model?
+*	Which processes are important (ecological as well as transport processes)?
+* What will be the units used in the model?
+
+* Draw the conceptual model as a flowchart.
+
+* Create the mass balance equations, one for every state variable.
+
+* How would you investigate the effect of biomanipulation?
+
+# Exercise 3. Population dynamics in the Serengeti National Park
+
+The following describes the carbon transfer through a (simple) food web of the short grassland savannah of the Serengeti National Park, Tanzania. 
+Wildebeest are migrating in and out of the park. While passing through the park the Wildebeest themselves do not eat. However, they are preyed upon by lions that remain within the park. Another important cause of death is rinder pest (a disease). 
+
+## Tasks
+
+Write down the mass balance statements that control the population dynamics of lions and wildebeest.
+
+* Determine the basic ingredients of the model.
+
+  -	What is the system and its boundaries? 
+  -	What are the state variables? 
+
+* Make a flow scheme of the ecosystem model.
+  - What are the transport and reaction processes?
+
+* Translate the model scheme into a set of mass balance statements.
+
+# Exercise 4.	Competition between Oysters in the Oosterschelde
+
+The Oosterschelde is a marine bay in the southern part of the Netherlands that is connected to the North Sea. 
+It is well-known for its cultures of mussels and oysters and for its lobster fisheries. 
+One of the invading species in the bay is the Pacific oyster (also called the “creuse”). Although they are very tasty and also cultured for consumption, they are considered a nuisance as one can easily cut oneself on their razor-sharp shells, and because they take up the space of the native (“flat”) oyster that is considered a delicatesse. 
+Also, many birds that are able to feed on the native oyster have difficulties opening up the shells of the Pacific oyster. 
+
+You will devise a conceptual model to represent the competition between the two oyster species. 
+
+Both bivalves feed on the phytoplankton (algae) within the marine bay. This phytoplankton grows within the bay by uptake of nitrate, but a large part is also imported from the North Sea. 
+
+Oysters feed by drawing water in over their gills through the beating of cilia. Suspended algae are trapped in the mucus of these gills, and from there they are transported to the mouth, where they are ingested. However, a significant fraction of the algae that is filtered from the water column is rejected by the animal before it enters the gut; this “pseudofaeces” is expelled and deposits on the sediment floor. 
+
+Of the part that is effectively ingested, about 80% is turned into biomass by the bivalves, the remainder expelled as “faeces”. 
+
+In addition to the pseudofaeces and faeces produced during oyster feeding, natural mortality of both oyster species also adds to detritus in the sediment. Within the sediment, the detritus is mineralized to release nutrients. 
+
+## Tasks
+
+Make a nitrogen-based model that focuses on the interactions described above. 
+
+* Determine the basic ingredients and make a flow scheme of the ecosystem model.
+  - What are the state variables, and suitable units?
+  - What are the processes, and their units?
+* Translate the model scheme into a set of mass balance statements.
+* Will your model be able to represent the competition between the two oyster species?

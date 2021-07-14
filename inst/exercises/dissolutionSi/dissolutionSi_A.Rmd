@@ -1,0 +1,200 @@
+---
+title: "Dissolution of spherical silica particles"
+subtitle: "Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
+author: "Lubos Polerecky & Karline Soetaert, Utrecht University"
+date: "February 2021"
+output: pdf_document
+---
+
+# Answer
+
+## Task 1. Model equations
+
+From a mass-balance perspective it is logical to use the silicic acid concentration, $C$, and the solid phase silica concentration, $C_s$, as the model state variables, with units of [$mol~Si~m^{-3}$].
+
+The dissolution rate is expressed in terms of the surface of the spherical particles, so at each time step we need to estimate the surface area of the particles based on the solid silica concentration. 
+
+We first use Eq. 2 and calculate $r$ as a function of $C_s$. We obtain
+
+$$
+r = \left( C_{s} \times \frac{V}{N} \times \frac{MW}{\frac{4\pi\rho}{3}}\right)^{1/3}.\qquad (3)
+$$
+
+By substituting this expression into Eq. 1  we obtain
+
+$$
+\frac{dC}{dt} = -k_2 C_s^{2/3} \times (C-C_{eq}), \qquad (4)
+$$
+
+$$
+\frac{dC_s}{dt} = k_2 C_s^{2/3} \times (C-C_{eq}), \qquad (5)
+$$
+
+where the modified rate constant $k_2$ is calculated from the original rate constant $k_p$ according to
+
+$$
+k_2 = 4\pi k_p \times \left( \frac{N}{V}\right)^{1/3} \times \left( \frac{MW}{\frac{4}{3}\pi\rho} \right)^{2/3}. \qquad (6)
+$$
+Note that the dissolution/precipitation rate does not linearly depend on the solid silica concentration, but on this quantity raised to the power of 2/3.
+
+## Task 2. Implementation in R
+
+First, we define model parameters and initial conditions:
+
+```{r}
+# parameters
+parms <- c(
+ NV   = 8e6      , # [number/m3], density of spherical silica particles (N/V)
+ kp   = 1        , # [m/yr],      precipitation rate constant (assumed)
+ MW   = 60.08e-3 , # [kg/mol],    silica molar weight
+ rho  = 2196     , # [kg/m3],     silica density
+ Ceq  = 1          # [mol/m3],    equilibrium concentration of silicic acid
+)
+```
+
+The initial concentration of the solid phase silica can be estimated from the density of particles and their initial size (Eq. 2). As we will need to estimate the initial condition of solid silica several times from the parameters, we define a function (*Cs.ini.fun*):
+
+```{r}
+Cs.ini.fun <- function(parms, r = 0.0001)
+  with (as.list(parms), {
+    Cs.ini <-  NV* 4/3*pi*r^3 * rho/MW
+    return(Cs.ini)  # [mol/m3])
+  }) 
+```
+
+In the first run, the dissolved Si concentration is 0, while the radius of the spheres is 0.1 mm.
+
+```{r}
+C.ini  <- 0       # [mol/m3], initial concentration of silicic acid
+r.ini  <- 0.1e-3  # [m],      initial radius of the spherical silica particles
+
+# initial concentration of silica (assuming all spheres have the same radius)
+Cs.ini    <- Cs.ini.fun(parms, r=r.ini)        # [mol/m3]
+
+state.ini <- c(C=C.ini, Cs=Cs.ini)
+```
+
+In the model function, we return the total silica concentration, and the radius of the spheres, as output variables; the latter is calculated from Eq. 3.
+
+```{r}
+DissolveSilica <- function(t, state, parms) {
+  with (as.list(c(state, parms)), {
+    
+    k2  <- 4*pi*kp * NV^(1/3) * (MW/(4/3*pi*rho))^(2/3)    # modified rate constant
+    Cs  <- max(0, Cs)   # to avoid that the power of a tiny negative number gives NaN
+    
+    # mass balance equations
+    dC  <- -k2 * Cs^(2/3) * (C-Ceq)
+    dCs <-  k2 * Cs^(2/3) * (C-Ceq)
+    
+    return(list(c(dC, dCs), 
+           r = ( Cs/NV * MW/(4/3*pi*rho) )^(1/3),  # Particle radius
+           Ctot = C+Cs))                           # Total Si
+  })
+}
+```
+
+## Task 3. Model solutions
+
+### Scenario 1
+
+Now we run the model using the above parameters and plot the results.
+
+```{r, fig.height=3, fig.width=10}
+library(deSolve)
+library(rootSolve)
+
+times <- seq(from=0, to=30, by=0.1)  # time in years
+out1  <- ode(y=state.ini, times=times, func=DissolveSilica, parms=parms)
+
+plot(out1, mfrow=c(1,4))  # set mfrow to put all figures in one row (and 4 columns)
+```
+
+The last values are:
+
+```{r}
+tail(out1, n = 1)
+```
+
+The steady-state solution:
+
+```{r}
+std1  <- runsteady(y=state.ini, func=DissolveSilica, parms=parms)
+std1$y
+std1$r
+```
+
+In this particular example the initial concentration of *total* silica in the water is high (i.e., above the silica solubility). Thus, as the particles dissolve, the concentration of silicic acid increases until it reaches solubility. At this point, the *dissolution stops because an equilibrium is reached*. In this scenario the particle radius decreased from $100~\mu m$ to about $57~\mu m$. At steady-state, the particle radius is `r formatC(std1$r * 1e6,digits=5)` $\mu m$.
+
+### Scenario 2
+
+Now we decrease the particle density from $8\times 10^6$ to $5\times 10^6$ and run the model again.
+
+```{r, fig.height=3, fig.width=10}
+parms2 <- parms
+parms2["NV"] <- 5e6                              # [number/m3]
+Cs.ini       <- Cs.ini.fun(parms2, r=r.ini)      # [mol/m3]
+state2       <- c(C=C.ini, Cs=Cs.ini)
+
+out2   <- ode(y=state2, times=times, func=DissolveSilica, parms=parms2, 
+              atol=1e-10, rtol=1e-10)   # atol and rtol to increase the precision
+plot(out2, mfrow = c(1,4))
+
+std2  <- runsteady(y=state2, func=DissolveSilica, parms=parms2)
+std2$y
+std2$r
+```
+
+In this scenario the initial concentration of total silica in the water is low (below the silica solubility). Thus, the particles dissolve completely before the concentration of silicic acid reaches silica solubility. At this point, the *dissolution stops because there is no silica left to dissolve*. In this scenario the particle radius decreased from $100~\mu m$ to `r formatC(std2$r * 1e6,digits=5)` $\mu m$. 
+
+### Scenario 3
+
+In the last scenario, we keep the same particle density but increase the initial silicic acid concentration above solubility. We expect that silica will precipitate.
+
+```{r, fig.height=3, fig.width=10}
+C.ini  <- 2                        # mol/m3
+state3 <- c(C=C.ini, Cs=Cs.ini)
+
+out3   <- ode(y=state3, times=times, func=DissolveSilica, parms=parms, 
+              atol=1e-10, rtol=1e-10)
+plot(out3, mfrow = c(1,4))
+
+std3  <- runsteady(y=state3, func=DissolveSilica, parms=parms)
+std3$y
+std3$r
+```
+
+As expected, the size of the particles increases due to precipitation of silica from $100~\mu m$ to about `r formatC(std3$r * 1e6,digits=3)` $\mu m$. This happens until an equilibrium is reached.  
+
+## Task 4. Model sensitivity
+
+We create a sequence of particle densities (*NV.seq*) for which we will estimate the equilibrium particle size and dissolved Si concentration at equilibrium. 
+
+Then, for each of the elements in this sequence, the proper initial conditions are calculated (*state*), and the steady-state solution is estimated, using *runsteady*. 
+From this, the equilibrium particle radius and dissolved Si concentration is extracted and stored in a vector. 
+It is simplest to start with an empty ($NULL$) vector (r.out <- NULL), and then for each run concatenate the resulting radius to this vector.
+
+```{r, fig.height=5, fig.width=10}
+# a sequence of particle densities
+NV.seq <- seq(from=1e6, to=10e6, length.out=100)
+
+r.out  <- NULL # will add steady-state "r" for each run
+C.out  <- NULL # will add steady-state "C" for each run
+
+for (nv in NV.seq) {
+  parms2       <- parms         # a copy of default parameters
+  parms2["NV"] <- nv            # new NV
+  state <- c(C=0, Cs=Cs.ini.fun(parms2, r=r.ini))   
+  STD   <- runsteady(y=state, func=DissolveSilica, parms=parms2, 
+                     atol=1e-10, rtol=1e-10)
+  r.out <- c(r.out, STD$r)
+  C.out <- c(C.out, STD$y["C"])
+}
+
+par(mfrow = c(1,2))
+plot(NV.seq, r.out*1e6, type="l", xlab="Particle density", ylab="um", 
+     main="Particle radius at equilibrium")
+plot(NV.seq, C.out, type="l", xlab="Particle density", ylab="mol/m3", 
+     main="Dissolved Si at equilibrium")
+```
+

@@ -1,0 +1,63 @@
+---
+title: 'Competition between Algae and Water Hyacinth in a Well-mixed Lake'
+subtitle: "Exercises Accompanying the Course Environmental Modelling"
+author: "Karline Soetaert and Dries Bonte, Ghent University"
+date: "July 2021"
+output: 
+  pdf_document:
+    default
+---
+
+
+# Questions
+
+
+## Problem formulation
+One of the paradigms of lake ecology is the shift between phytoplankton and free-floating plant communities. 
+Plants that float on the water surface cause low phytoplankton (algae) biomass as they darken the water, making it more difficult for the phytoplankton that live in the water to grow. 
+On the other hand, algae may outcompete floating plants because of their higher growth rates at sufficient light, so that they store a significant amount of nutrients in their biomass. This causes low nutrient concentrations, which limits the growth of the floating plants. 
+
+You will make a minimal model of such a lake ecosystem. Call the free-floating plant "HYACINTH" (although the parameters we use are not those of the water hyacinth).
+
+## Assumptions
+
+The following assumptions are made: 
+
+* The lake is completely mixed.
+* The maximal growth rate constant of the algae is twice the growth rate constant of the water hyacinth.
+* The growth rate constant of algae is $0.5~d^{-1}$. 
+* Algae are limited by light availability. 
+   - The more Hyacinths cover the surface, the less light available for the algae. 
+   - Assume that the light in the water column is attenuated according to the Lambert-Beer law, which states that:
+ $$I_{D/2} = I_0\cdot e^{(-0.05\cdot D/2)},$$ 
+where $0.05~m^{-1}$ is the extinction coefficient, $D/2$ is half the depth of the lake; this depth is representative for the mean light available for the algae. 
+
+  - The Hyacinth biomass where all light is blocked is $0.2~mol~N~m^{-2}$.  
+  - $I_0$, the light penetrating the water surface, depends on the Hyacinth biomass according to: 
+$$I_0 = I\cdot max(0,~1 - HYACINTH/0.2).$$ 
+  - The incident irradiance I in this particular lake is 100 $\mu Einst~m^{-2}~s^{-1}$.
+
+* Use Monod (type II) kinetics to express the light dependency for both species. The Monod half-saturation coefficient for algae and for hyacinths equals to $30~\mu Einst~m^{-2}~s^{-1}$.
+* As the Hyacinths can lift their leaves up into the air, the maximal biomass that they can attain is 0.3 mol $N~m^{-2}$, i.e., greater than the biomass at which they completely block the surface. Use a carrying capacity formulation to represent the Hyacinths growth dependency on this maximal biomass.
+* Both species are nutrient limited, according to a type II functional response, and with a half saturation coefficient equal to $0.1\times 10^{-3}~mol~N~m^{-3}$.
+* Excretion rate constants of both Hyacinths and algae equal $0.005~d^{-1}$.
+
+## Tasks
+
+* Draw the flow diagram and specify the mass balance equations. What are the state variables, what are their units?
+* Create the rate expressions for each flow.
+* Implement this model in *R*. You can start with the R-markdown template model file *RTM_0D.Rmd*.\footnote{You can obtain this file from Rstudio: File $\rightarrow$ new File $\rightarrow$ Rmarkdown $\rightarrow$ from template $\rightarrow$ RTM\_0D. Save this file under a different name, and do not forget to change the heading of this file.}
+* Also calculate the total nitrogen in the system.
+
+* Run the model for 10 years, using two sets of different initial conditions ($mol~m^{-2}$ and $mol~m^{-3}$).
+
+  - The former is: c(HYACINTH = 0.050, ALGAE = 0.0001, DIN = 0.020)
+  - The second is: c(HYACINTH = 0.001*depth, ALGAE = 0.050/depth, DIN = 0.020) 
+
+* Run the model with these two sets of initial conditions, for 10 years, and for depths of 1, 5, and $10~m$.
+
+  - Does the steady-state solution depend on the initial conditions? How?
+
+## If you have time
+
+Create a script to investigate at which lake depth the transition to potential Hyacinth dominance occurs. Is there a depth where algae are excluded?

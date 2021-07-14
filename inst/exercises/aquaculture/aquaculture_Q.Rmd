@@ -1,0 +1,44 @@
+---
+title: "A Bioeconomic model of Scallop Cultures"
+subtitle: "Exercises Accompanying the Course Environmental Modelling"
+author: "Karline Soetaert and Dries Bonte, Ghent University"
+date: "2021"
+output: 
+  pdf_document:
+    toc: no 
+  header-includes: 
+    \usepackage{float} 
+    \floatplacement{figure}{H} 
+---
+
+# Problem formulation
+
+In an aquaculture farm in the Baja California, scallops (Pecten) are grown in 100 big trays that lie on the bottom. The manager of the firm wants to optimize the time of harvesting, so as to have maximal profit. You will make a bioeconomic model to help her reach this decision.
+
+## Assumptions
+
+* Growth of these animals is described in terms of density (*N*) and length (*L*). 
+* After seeding the trays with $5\times 10^4$ individuals, the population density declines at a first-order rate described by the mortality rate constant $z = 0.5~yr^{-1}$. 
+* Individual growth for scallops is represented using the von Bertalanffy formulation, which describes the change in length using the following differential equation: 
+$$\frac{dL}{dt}=k\cdot (L_\infty-L),$$
+where $k$ is the growth rate constant ($k = 0.8~yr^{-1}$) and $L_\infty$ is the asymptotic length ($L_\infty = 100~mm$).
+* The length of the 'seedlings' is 20 $mm$.
+* It is straightforward to estimate individual weight, *W* ($g$), from the length using an allometric relation:
+$$W = aL^b$$
+For the particular scallop, the coefficients are: a = $8\times 10^{-6}$, $b=3.4$.
+* The cost to maintain a scallop batch (or tray) is 150 dollar per year. This is money for labor, and you can assume that this money is set aside continuously. Scallops can only be sold if they weigh more than 30 grams; they are sold at a price of 1.4 dollar per kg.
+
+## Tasks
+
+Implement this model and use it to answer the following questions:
+
+* What is the recommendation to the manager: when should the scallops be sold, and how much profit will be made? 
+* Would it be worthwhile to move the firm to another area, where the scallops grow much better, at a rate of 1.0 $yr^{-1}$, but where the maintenance cost is twice as high?
+
+Tip: The ecological and biogeochemical problems that we solved thus far were defined in terms of the increase in biomass or concentrations as a function of the sources and sinks. In economics, problems can be defined similarly, but here one is interested in the changes in costs and/or profits. 
+
+## If you have time:
+*	It is not realistic to assume that small-sized scallops are sold at the same price as big ones. Assume that 1.4 dollar per kg is the price you get for a small individual (30 g), and an extra 0.1 dollar per kg adds on top of that for every gram that the individual is heavier. How do your conclusions change?
+
+* The firm now owns 100 trays. What is the maximal profit the firm can make? The manager also considers to double the number of trays, but this increases the cost to maintain the scallops with 20% per tray. The investment costs (e.g., for buying the trays) are 25000 dollars. What would be your advice to her? 
+

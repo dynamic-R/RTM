@@ -1,0 +1,18 @@
+---
+title: "A Bioeconomic model of Scallop Cultures"
+subtitle: "Exercises Accompanying the Course Environmental Modelling"
+author: "Karline Soetaert and Dries Bonte, Ghent University"
+date: "2021"
+output: 
+  pdf_document:
+    toc: no 
+  header-includes: 
+    \usepackage{float} 
+    \floatplacement{figure}{H} 
+---
+
+```{r child = 'aquaculture_Q.Rmd'}
+```
+
+```{r child = 'aquaculture_A.Rmd'}
+```

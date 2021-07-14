@@ -1,0 +1,137 @@
+---
+title: "The BOD-O2 model"
+subtitle: "template markdown file for simple models"
+author: "your name here"
+date: "Date of creation here"
+output:
+  pdf_document:
+    toc: yes
+  word_document:
+    toc: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introduction
+
+This template file contains a simple dynamic model describing the dynamics of oxygen (O2) and biochemical oxygen demand (BOD), both expressed in units of mol/m3. 
+
+# Model definition
+
+```{r, eval = TRUE, cache = FALSE, echo = TRUE, warning=FALSE, message=FALSE}
+# Initial conditions of the state variables
+yini <- c(O2 = 0.25, BOD = 0.5) # [molO2/m3]
+
+# model parameters
+pars <- c(      
+  rDecay   = 0.05 , # [/d]        first-order decay constant of BOD
+  satO2    = 0.3  , # [mol/m3]    saturation concentration of Oxygen
+  k        = 0.1  , # [/d]        reaeration coefficient
+  kO2      = 0.001, # [mol/m3]    half-saturation O2 concentration for decay
+  inputBOD = 0.001  # [mol/m3/d]  BOD input rate
+)
+
+# Model function: calculates derivatives and output variables
+BODmodel <-function(t, state, pars) { # t: time, state: state variables, pars: parameters
+  with (as.list(c(state,pars)),{
+ 
+  # rate expressions [mol/m3/d]
+    Decay      <- rDecay * BOD * O2/(O2+kO2)   # BOD decay
+    Reaeration <- k * (satO2-O2)               # air-water exchange of O2
+
+  # Time-derivatives: dC/dt = production-consumption [mol/m3/d]
+    dO2dt   <- Reaeration - Decay   
+    dBODdt  <- inputBOD - Decay   
+
+  # return time-derivatives and ordinary variables as a list     
+    list(c(dO2dt, dBODdt),    # vector with derivatives (same order as state variable definition)
+      Decay      = Decay,     # the ordinary variables
+      Reaeration = Reaeration)    
+  })
+}
+
+```
+
+# Model solution
+
+## Dynamic solution
+
+Runs the model twice dynamically for 100 days, using different parameter value for the reaeration coefficient. 
+
+```{r}
+require(deSolve)  # package with integration methods
+
+outtimes <- seq(from = 1, to = 100, length.out = 100)   # output times
+
+# ode integrates the model 
+out <- ode(y = yini, parms = pars, func = BODmodel, times = outtimes)                
+
+p      <- pars    # a copy of the parameter vector
+p["k"] <- 0.01    # the reaeration coefficient
+out2 <- ode(y=yini, parms=p, func=BODmodel, times=outtimes)                
+```
+
+```{r, eval=FALSE}
+# print summary of the solution
+summary(out)
+```
+
+Output the solution versus time (black = default parameters, red = lower reaeration).
+
+```{r, fig.height = 6, fig.width = 6}
+plot(out, out2, xlab="day", las=1, ylab=list("mol/m3","mol/m3","mol/m3/d","mol/m3/d"))
+
+```
+
+## Steady-state solution
+
+Finds the steady-state solution
+
+```{r, fig.height = 4, fig.width = 8}
+require(rootSolve)   # package with solution methods
+
+std <- steady(y=yini, parms=pars, func=BODmodel, 
+              positive=TRUE)           # to ensure that the solution is positive
+std$y
+```
+
+## Sensitivity analysis
+
+The steady-state is found for a sequence of reaeration constants
+
+```{r}
+k.seq   <- seq(from=0.01, to=0.1, length.out=100)
+BOD.seq <- vector()  # will contain the results
+O2.seq  <- vector()
+
+for (i in 1:length(k.seq)){
+ # parameter values for this run
+  p <- pars
+  p["k"] <- k.seq[i]  # input of BOD based on sequence
+  
+  # steady-state with new parameter values
+  std <- steady(y=yini, parms=p, func=BODmodel, positive=TRUE)  
+  BOD.seq[i] <- std$y["BOD"]
+  O2.seq[i]  <- std$y["O2"]
+}
+```
+
+```{r, fig.width=8, fig.height=4}
+par(mfrow=c(1,2))
+plot(k.seq, O2.seq,  xlab="reaeration ct, [/d]", main="O2", ylab="[mmol/m3]")
+plot(k.seq, BOD.seq, xlab="reaeration ct, [/d]", main="BOD", ylab="[mmol/m3]")
+```
+
+
+# References
+
+R Core Team (2020). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria. URL https://www.R-project.org/.
+  
+Soetaert Karline (2009).  rootSolve: Nonlinear root finding, equilibrium and steady-state analysis of ordinary differential equations.  R-package version 1.6
+  
+Soetaert Karline, Thomas Petzoldt, R. Woodrow Setzer (2010). Solving Differential
+  Equations in R: Package deSolve. Journal of Statistical Software, 33(9), 1--25. URL
+  http://www.jstatsoft.org/v33/i09/ DOI 10.18637/jss.v033.i09
+  

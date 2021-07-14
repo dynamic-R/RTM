@@ -1,0 +1,117 @@
+---
+title: "Farmer's dilemma---optimisation of crop cultures in the presence of weeds and in response to eutrophication"
+subtitle: "Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
+author: "Karline Soetaert and Lubos Polerecky, Utrecht University"
+date: "March 2021"
+output:
+  pdf_document:
+    toc: no
+---
+
+# Crops and weeds model --- Answers
+
+## R-implementation --- biological part
+
+In addition to the amounts of P in the soil compartments, crops and weeds, we also introduce a state variable *Plost* to be able to trace the amount of P lost to the bottom soil due to percolation. Furthermore, we export the factors *(1-TotBiom/ktot)*, *NutCrop/(NutCrop+ksCrop)* and *NutWeed/(NutWeed+ksWeed)* to be able to trace what limits the plant growth. These two pieces of information are relevant when assessing the environmental impact of the agriculture and interpreting the P dynamics predicted by the model.
+
+```{r, eval = TRUE, cache = FALSE, echo = TRUE, warning=FALSE, message=FALSE}
+require(deSolve)  # package with solution methods
+
+# state variables, units = molP/m2
+state <- c(WEED = 0.001, CROP = 0.005, P1 = 0.1, P2 = 0.1, Plost = 0)
+
+# parameters
+parms <- c(
+  Paddition   = 0.9/90,  # [molP/m2/d]  Rate of P supply
+  percolation = 0.05,    # [/d]         Rain rate dilution parameter
+  ksCrop      = 2e-3,    # [molP/m2]    Monod coefficient for P uptake
+  ksWeed      = 0.5e-3,  # [molP/m2]    Monod coefficient 
+  ktot        = 0.300,   # [molP/m2]    Carrying capacity - space limitation
+  rGcrop      = 0.125,   # [/d]         Growth rate, 
+  rGweed      = 0.1,
+  rMcrop      = 0.0,     # [/d]         Loss rate (e.g. mortality), 
+  rMweed      = 0.0,
+  N           = 25,      # [ind/m2]     Density of crop plants
+  P2WW        = 62000    # [gWW/molP]   31/0.25/0.002
+)
+
+# Model function
+Crops <- function(t, state, params) {
+  with (as.list(c(state, params)), {
+
+	# variables needed for rate expressions
+    TotBiom    <- WEED + CROP       # total plant biomass
+    NutWeed    <- P1 + P2           # nutrients accessible to weed
+    NutCrop    <- P1                # nutrients accessible to crops
+    partP1     <- P1/NutWeed        # part of P for weed from first layer
+
+    # Rate expressions - all rates in units of [molP/m2/day]
+    WeedGrowth <- rGweed * WEED*(1-TotBiom/ktot) *NutWeed/(NutWeed+ksWeed)
+    CropGrowth <- rGcrop * CROP*(1-TotBiom/ktot) *NutCrop/(NutCrop+ksCrop) 
+    
+    WeedLoss   <- rMweed * WEED     # death and other loss terms
+    CropLoss   <- rMcrop * CROP
+
+    Percolate  <- P1 * percolation  # transfer of P from layer 1 to layer 2
+    Ploss      <- P2 * percolation  # transfer of P from layer 2 to deep soil
+
+    # Mass balances [molP/m2/day]
+    dWEED      <- WeedGrowth - WeedLoss
+    dCROP      <- CropGrowth - CropLoss
+    dP1        <- Paddition - Percolate - CropGrowth - WeedGrowth * partP1
+    dP2        <- Percolate - Ploss - WeedGrowth * (1 - partP1)
+    dPlost     <- Ploss + WeedLoss + CropLoss
+   
+    # Individual weight of a crop plant
+    Weight     <- CROP/N*P2WW         # wet weight, gram per plant
+    
+    list(c(dWEED, dCROP, dP1, dP2, dPlost), 
+      TotBiom = TotBiom, Weight = Weight,
+      TotP = WEED + CROP + P1 + P2 + Plost,       # output the total P, mass balance check
+      SpaceLimFact = (1-TotBiom/ktot),            # output the "space-limitation" factor
+      NutLimFactCrop = NutCrop/(NutCrop+ksCrop),  # output the nutrient limitation factor
+      NutLimFactWeed = NutWeed/(NutWeed+ksWeed))  # for both crop and weed
+  })
+
+}
+```
+
+The model is solved thrice over 90 days. 
+
+* Run 1 implements continuous P addition (with weeds).
+* Run 2 implements one-time P fertilization (with weeds).
+* Run 3 implements continuous P addition (without weeds).
+
+To compare the models in a fair way, we assume that the one-time and continuos addition of P are done in such a way that the *total* amount of P *added* to the soil is the *same* after 90 days.
+
+```{r, fig.height = 8.5, fig.width = 10}
+# output time
+outtimes <- seq(from = 0, to = 90, length.out = 100)  # run for 3 months
+
+# Continuous P-addition, with weeds
+out <- ode(y = state, parms = parms, func = Crops, times = outtimes)
+
+# One-time P ferilisation, with weeds
+parms2 <- parms
+parms2["Paddition"] <- 0.0       # No P-addition
+state2 <- state
+state2["P1"] <- 1                # Higher value for P1 at start
+out2 <- ode(y = state2, parms = parms2, func = Crops, times = outtimes)
+
+# Continuous P-addition, without weeds
+state3 <- state
+state3["WEED"] <- 0
+out3 <- ode(y = state3, parms = parms, func = Crops, times = outtimes)
+
+# visualise it 
+plot(out, out2, out3, lty = 1, lwd = 2, mfrow=c(3,4))
+
+legend("bottomleft", c("continuous+weed",  "one-time", "continuous, no weed"), 
+       col = 1:3, lty = 1, lwd = 2)
+```
+
+We see that during the initial 42 days, crops and weeds grow practically at the same rate. This is because P in the soil is *not* limiting their growth. Rather, their growth is limited by space, as the space limitation factor $(1-TotBiom/ktot)$ gradually decreases from 1 to about 0.2. 
+
+The situation changes rather abruptly after about 42 days. In the 2nd scenario, the crop becomes limited by P due to removal by percolation, whereas the continuous fertilization ensures that this does not happen in the 1st scenario. As a result, the crop continues to grow, reaching about 25% higher stock per $m^2$ after 90 days in the first compared to the second scenario. This is, however, *not* the case for the *weed*, which continues to grow rapidly even after 42 days in the 2nd scenario. This is, clearly, due to the fact that its roots reach deeper into the soil and thus have more access to P. Although the continuous growth of weeds has a negative impact on the growth of crops due to space limitation, it is only marginal. Without weeds, the crop weight after 90 days would be $743~g/plant$ without weeds in comparison to $680~g/plant$ with weeds (i.e., about 10% higher yield), as indicated by the results of the scenario 3 (green line).
+
+Another notable result of this simulation is that *most* of the fertilizer is *lost* in this agriculture. Only about 0.27 out of 1.1 $mol~P~m^{-2}$ (about 25% yield on fertilizer) is converted into profitable biomass (crop) in the continuous fertilization scenario. This fraction decreases to about 0.22 out of 1.1 $mol~P~m^{-2}$ (20% yield) in the one-time fertilization scenario. These results illustrate the potential evironmental impact of this agriculture.
