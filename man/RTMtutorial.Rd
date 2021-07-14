@@ -9,24 +9,16 @@ RTMtutorial (x = c("introduction", "why", "conceptual", "massbalance",
      "partitioning", "ecology", "transportProcesses", "transportFluxes", 
      "transportPorous", "transportBoundaries", "transportR"))
     
-<<<<<<< HEAD
-RTMexercise(x = c("modelersR", "conceptual", "massbalance", "carbonCycle",
-      "ozone", "dissolutionSi", "equilibriumNH3", "equilibriumHCO3",
-      "equilibriumOMD", "detritus", "COVID", "npzd", "crops_weed",
-      "estuaryAnoxia", "Pdiagenesis", "diagenesis"),
-      type = c("HTML", "PDF", "RMD", "WORD"))  
-=======
 RTMexercise(x = c("modelersR", "conceptual", "massbalance", "massbalance_ecology", 
      "carbonCycle", "ozone", "dissolutionSi", "equilibriumNH3",                   
      "equilibriumHCO3", "equilibriumOMD", "detritus", "COVID",                    
      "virus", "npzd", "plant_coexistence", "crops_weed", "hyacinth_algae",        
      "riverAnoxia", "Pdiagenesis", "diagenesis"), 
      type = c("HTML", "PDF", "RMD", "WORD"))  
->>>>>>> GhentExamples
-      
+
 RTMreader (x = c("events", "forcings", "observations", 
-      "fitting", "multidimensional_visualisation", 
-      "pHprofiles", "perturbation_theory_I", "perturbation_theory_II", 
+      "fitting", "visualisation", "pHprofiles", 
+      "perturbation_I", "perturbation_II", 
       "interactive", "numericalR", "git_sharing_code"),
       type = c("HTML", "PDF", "RMD", "WORD"))      
 }

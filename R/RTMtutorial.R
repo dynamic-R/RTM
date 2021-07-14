@@ -52,14 +52,9 @@ openRmdFile <- function(file, type) {
 
 RTMexercise <- function(x = c("modelersR", "conceptual", "massbalance", "massbalance_ecology",
     "carbonCycle", "ozone", "dissolutionSi", "equilibriumNH3", "equilibriumHCO3",
-<<<<<<< HEAD
-    "equilibriumOMD", "detritus", "COVID", "npzd", "crops_weed", 
-    "estuaryAnoxia", "Pdiagenesis", "diagenesis"), 
-=======
     "equilibriumOMD", "detritus", "COVID", "virus", "npzd",  "plant_coexistence", 
     "crops_weed", "hyacinth_algae",
     "riverAnoxia", "Pdiagenesis", "diagenesis"), 
->>>>>>> GhentExamples
     type = c("HTML", "PDF", "RMD", "WORD")) {
 
   LL <- as.character(formals(RTMexercise)$x[-1])
@@ -80,19 +75,12 @@ RTMexercise <- function(x = c("modelersR", "conceptual", "massbalance", "massbal
       "The COVID pandemic (population dynamics)", 
       "Virus dynamics in the ocean",
       "NPZD model (marine ecosystem model)",
-<<<<<<< HEAD
-      "Crops and weed competition (agricultural model) including economics",
-      "Anoxia in an estuary (1-D reaction transport model)",    
-      "Simple phosphorus diagenesis in a marine sediment (porous medium)",
-      "Complex diagenesis in a marine sediment (C, N, O2, S)"
-=======
       "Competition and coexistence of plants in grasslands",
       "Crops and weed competition (agriculture-economics)",
       "Competition between floating plants and algae in a lake",
       "Anoxia in an estuary (1-D reaction transport model)",    
       "Simple phosphorus diagenesis in marine sediments",
       "Complex diagenesis in marine sediments (C, N, O2, S)"
->>>>>>> GhentExamples
       ))
     return(exercise)
   } else {
