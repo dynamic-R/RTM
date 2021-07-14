@@ -1,8 +1,8 @@
 ---
-title: "Introduction to R and Rmarkdown for reactive transport modellers"
-subtitle: "Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
-author: "Karline Soetaert and Lubos Polerecky"
-date: "February 2021"
+title: "Introduction to R and Rmarkdown for Reaction-Transport Modellers"
+subtitle: "Teaching material accompanying the course Reaction Transport Modelling in the Hydrosphere"
+author: "Karline Soetaert and Lubos Polerecky, Utrecht University"
+date: "July 2021"
 output:
   pdf_document: default
   word_document: default

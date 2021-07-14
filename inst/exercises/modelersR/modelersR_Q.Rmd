@@ -1,31 +1,21 @@
 ---
-title: "Introduction to R and Rmarkdown for reactive transport modellers"
-subtitle: "Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
-author: "Karline Soetaert and Lubos Polerecky"
-date: "Januari 2021"
+title: |
+  | Introduction to R and R Markdown 
+  | for Reaction-Transport Modellers
+subtitle: |
+  | Teaching material accompanying the course 
+  | Reaction Transport Modelling in the Hydrosphere
+author: "Karline Soetaert and Lubos Polerecky, Utrecht University"
+date: "July 2021"
 output:
   pdf_document: default
+  header-includes: 
+    \usepackage{float} 
+    \floatplacement{figure}{ht}
   word_document: default
   html_document: default
+abstract: \noindent This short reader introduces you to the programming tools that we will use in the *Reaction-Transport Modelling* class. It will show you how to merge text, programming code, and the results of this code in one document. The programming language we use is *R*, the text is written in *R Markdown*, and the creation of the documents is done by *knitr*. We recommend that you recreate the examples provided in this document and then solve the exercises. In this way you will start gradually building your knowledge of *R* and *R Markdown*, which will help you understand more efficiently the material covered in the course.
 ---
-
-```{echo = FALSE, include = FALSE}
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{Short introduction to R and Rmarkdown for modelers + exercises}
-  %\VignetteEngine{knitr::rmarkdown}
-  \usepackage[utf8]{inputenc}
-```
-
-This short lecture is an introduction to the programming tools that will
-  be used in the *reactive transport modeling* class. In this class, we will merge text, programming
-  code, and the results of this code in one document. The programming language we
-  use is *R*, the text is written in *markdown*, and the creation of the documents
-  is done by *knitr*. In this document, we show how to work with R and with Rmarkdown,
-  and we introduce the basic features that you will be using in the modelling class. 
-  We suggest that you look at the examples given in this document, and recreate some of them. 
-  Then proceed to making the exercises. 
-
 
 ```{r , include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -36,40 +26,115 @@ library(ReacTran)
 library(marelac)
 ```
 
-# Introduction: the R-language
+# If you are a total beginner
+
+You will need to install couple of programs on your computer to be able to do all the learning, modelling and reporting work in the course. The software we will use is free of charge and used by thousands --- if not millions -- of people all around the world. In this section we will explain step by step how to get started with the installation to make sure that everything works on your computer as it should.
+
+We assume here that you use Microsoft Windows. The sequence of steps for Linux or Mac-OS users is the same, although the actual execution of the steps may be different. 
+
 ## Core R software
 
-  R can be downloaded from the web site \url{http://www.r-project.org/}.
-  Choose the precompiled binary distribution.
-  On this website, you will also find useful documentation.
+R is the programming language that we will use in the course. It can be downloaded from \url{http://www.r-project.org/}. Click on the *download R* link, choose a mirror, and download the precompiled binary distribution for your system. On this website, you will also find useful documentation.
+
+First, install the *base* R (e.g., installation file ``R-4.1.0-win.exe``). Subsequently, install *Rtools* (e.g., installation file ``rtools40v2-x86_64.exe``). This will allow you to compile R-packages on your computer, which will be quite important later on. Ensure that you complete the instructions described in the section *Putting Rtools on the PATH* after you have installed *Rtools*.
   
-## Other useful software
-  We will run *R* from within *Rstudio*, which provides an integrated development environment for *R*.
-  It includes R-sensitive syntax and help. 
-  *Rstudio* can be downloaded from URL \url{http://rstudio.org}. 
+## Rstudio
+
+To execute R code in a nice and comprehensive environment, we will use *Rstudio*.  Go to \url{http://rstudio.org}, choose *Download*, choose *Rstudio Desktop Free*, download the installation package for your system (e.g., ``RStudio-1.4.1717.exe``), and install it.
+
+Open *Rstudio* and test whether you can compile an R-package from source, as described in the instructions for installing *Rtools*.
 
 ## R packages
 
-  Many of the useful functions are not part of the *R* base program, but made available
-  by means of *packages*.   
-  
-  A package in *R* is a collection of files containing many functions that perform 
-  related tasks. They are not necessarily made by the *R* core-development team
-  but by experts in other fields, e.g., in the field of modelling.  
-  
-  To use *R* for the examples in this course, two packages need to be
-  downloaded.
+Many of the useful functions are not part of the *R* base program, but are available as *R packages*. They are not necessarily made by the *R* core-development team, but are developed and shared with the R community by experts in other fields, e.g., in the field of modelling.
 
-* *ReacTran* (Soetaert and Meysman, 2012). This package contains functions for reactive 
-      transport modelling. 
-      When installing *ReacTran*, the following packages will also be installed:
-     -	*deSolve* (Soetaert et al., 2010). Performs numerical integration. 
-     -	*rootSolve* (Soetaert, 2009). Finds the root of equations.
-* *marelac* (Soetaert and Petzoldt, 2018): Contains functions and constants from the aquatic sciences.
+To install an R-package in Rstudio, click on the *Packages* tab (lower-right window), click on *install*, type the package name, make sure you have checked *install dependencies*, and click *install*. When asked about compilation for packages that need to be installed from sources, click *yes*. Be patient, the package compilation step may take a while.
+  
+In this course, we will use number of packages. We recommend that you install them in this order:
 
-Downloading specific packages can be done within *Rstudio*.
-Select menu item *packages/install packages*,  choose a nearby site (e.g., France Paris) and select the package you need. 
- 
+* ``learnr`` --- This package will allow you to view *tutorials*, which are an essential part of the course. Read more about tutorials below.
+
+* ``deSolve`` (Soetaert et al., 2010) --- This package allows you to perform numerical numerical integration. Thus, it allows you to solve 0-dimensional differential equations, which will be dealt with in the first part of the course.
+
+* ``ReacTran`` (Soetaert and Meysman, 2012) --- This package allows you to solve differential equations describing reaction-transport models in 1D and 2D. This is the core R-package that we will use in the second part of the course. 
+  
+  - When installing ``ReacTran``, the package ``rootSolve`` (Soetaert, 2009) will also be installed. It is a package that allows you to find the root of functions.
+  
+* ``marelac`` (Soetaert and Petzoldt, 2018) --- This package contains functions and constants from the aquatic sciences.
+
+* ``devtools`` --- This package allows you to develop R packages. We will use it to install the R package ``RTM`` from the github repository. This package contains much of the teaching material for the course (see below). 
+
+## LaTeX distribution
+
+We will use the typesetting program \LaTeX\ to produce beautifully typeset documents. This program is extremely powerful and versatile, and it is widely used especially by people who want to write equations in their documents. In this course we will use it to convert documents written in R Markdown into aesthetically pleasing PDF documents.
+To install \LaTeX, go to \url{https://miktex.org/}, choose *Download*, download the installation file (e.g., ``basic-miktex-21.6-x64.exe``), and install it. During the installation process, select *yes* when asked *Install missing packages on-the-fly*. It is handy to check for updates just after the installation has finished, to be sure that all \LaTeX\ packages are up-to-date.
+
+Restart *Rstudio* if it was running before \LaTeX\ installation.
+
+## Check whether everything is working 
+
+To check whether everything is working at this point, open *Rstudio*, and create a new R Markdown file. This is done from the menu by selecting File $\rightarrow$ New file $\rightarrow$ R Markdown $\rightarrow$ Document. Type the title, your name in the author box, check the ``PDF`` checkbox, and click *Ok*. If everything goes as expected, your *Rstudio* session should look similar as shown in Figure 1.
+
+![Left: screenshot of Rstudio with the default Rmd file. Right: PDF file compiled from the default Rmd file, viewed in SumatraPDF.](Rstudio.png)
+
+First, save the file under a different name (e.g., ``test1.Rmd``), and click on the *Knit* button in the top part of the editor pane (useful short-cut: press ``Ctrl+Shift+K``). This will start a compilation process, which should ultimately create the file ``test1.pdf``. 
+
+Note that when you do this for the very first time, the compilation may take a while. This is because *MikTeX* is installing extra \LaTeX\ packages, which are likely missing on your computer as they have not been installed by default during the installation process.\footnote{This assumes that you have selected \emph{yes} when asked \emph{Install missing packages on-the-fly} during \emph{MikTeX} installation. If you forgot to do that, you need to stop the \emph{knitting} process by clicking the red stop button, and go to the folder of your \texttt{test1.Rmd} file. There should be a file called \texttt{test1.tex}. Open it in the native \TeX\ editor that comes with the MikTeX distribution (most likely \texttt{TeXworks}), and compile it with pdf\LaTeX\ from there. In this process, you should be prompted to install missing \LaTeX\ packages.} Be patient and wait until the compilation process is finished.\footnote{At the time of writing this reader, it took about two minutes until the first-time \emph{knitting} and \LaTeX\ compilation were complete. The subsequent compilations, however, take only a few seconds.}
+
+If everything goes well, you should find a file ``test1.pdf`` in the same folder as the ``test1.Rmd``. You can open it in any PDF reader. Note, however, that *Acrobat reader*, which is a commonly used PDF reader, may not be the best choice. This is because the PDF file is *locked* for writing when open by *Acrobat reader*. This means that if you want to re-knit your Rmd file to a PDF file, you may end up with a writing error rather than an updated PDF file. To avoid this, you will need to close the PDF file in *Acrobat reader* before clicking the *knit* button in *Rstudio*. We recommend a better solution: use a PDF viewer that does *not* lock the viewed PDF file. One such program is called ``SumatraPDF``, which can be downloaded from \url{http://www.sumatrapdfreader.org}.
+
+## RTM package
+
+Much of the teaching material that you will study during the course is present in the R-package called ``RTM`` (short for Reaction-Transport Modelling). This package is currently available from a Github repository ``dynamic-R/RTM`` (\url{https://github.com/dynamic-R/RTM}). You can install it by typing the following command in the R-console:
+
+```devtools::install_github("dynamic-R/RTM", depend=TRUE)```
+
+### RTM tutorials
+
+First of all, the package contains *tutorials*. You will study these to gain basic knowledge about modelling in general as well as about modelling in R. We recommend that you watch the video first. Then solve the tasks and exercises, which will prepare you for the exam.
+
+Select the *tutorial* tab in Rstudio, and then click on the *Start Tutorial* button to view any of the RTM tutorials (Figure 2).
+
+![Left: Rstudio with the Tutorial tab selected. Right: RTM tutorial *conceptual* run as a web-based app, created using the *learnr* package.](Rstudio_tutorial.png)
+
+Alternatively, type in the R-console
+```
+require(RTM)
+RTMtutorial("?")
+```
+to see a list of available tutorials, as shown here:
+```
+                     x                                      description
+1         introduction                      About the course at Utrecht
+2                  why                          Why modelling is useful
+3           conceptual                         Making conceptual models
+4          massbalance                  Creating mass balance equations
+5              Rmodels              Dynamic modelling in the R language
+6           largescale        Large-scale models (e.g. earth's C-cycle)
+7             chemical                    Elementary chemical reactions
+8          equilibrium      Equilibrium (reversible) chemical reactions
+9            enzymatic                              Enzymatic reactions
+10        partitioning   Chemical reactions partitioning between phases
+11             ecology                             Ecological reactions
+12  transportProcesses                   The general transport equation
+13     transportFluxes               Advection and diffusion/dispersion
+14     transportPorous               Reaction transport in porous media
+15 transportBoundaries          Boundary conditions in transport models
+16          transportR Modelling Reaction tranport in porous media in R
+```
+Select the one you want to view (e.g., ``conceptual``) and then start it by typing in the R-console
+```
+RTMtutorial("conceptual")
+```
+or
+```
+RTMtutorial(3)
+```
+
+### RTM exercises
+
+### RTM readers
+
 
 # Scientific programming practice---Rmarkdown
 
