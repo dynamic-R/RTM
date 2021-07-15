@@ -30,7 +30,7 @@ library(marelac)
 
 # If you are a total beginner and need to get started from scratch
 
-You will need to install couple of programs on your computer to be able to do all the learning, modelling and reporting work in the course. The software we will use is free of charge and used by thousands --- if not millions -- of people all around the world. In this section we will explain step by step how to get started with the installation to make sure that everything works on your computer as it should.
+You will need to install couple of programs on your computer to be able to do all the learning, modelling and reporting work in the course. The software we will use is free of charge and used by millions of people all around the world. In this section we will explain step by step how to get started with the installation to make sure that everything works on your computer as it should.
 
 We assume here that you use Microsoft Windows. The sequence of steps for Linux or Mac-OS users is the same, although the actual execution of the steps may be different. 
 
@@ -38,7 +38,7 @@ We assume here that you use Microsoft Windows. The sequence of steps for Linux o
 
 R is the programming language that we will use in the course. It can be downloaded from \url{http://www.r-project.org/}. Click on the *download R* link, choose a mirror, and download the precompiled binary distribution for your system. On this website, you will also find useful documentation.
 
-First, install the *base* R (e.g., installation file ``R-4.1.0-win.exe``). Subsequently, install *Rtools* (e.g., installation file ``rtools40v2-x86_64.exe``). The later step will allow you to compile R-packages on your computer, which will be quite important later on. Ensure that you complete the instructions described in the section *Putting Rtools on the PATH* after you have installed *Rtools*.
+First, install the *base* R (e.g., installation file ``R-4.1.0-win.exe`` or some later version). Subsequently, install *Rtools* (e.g., installation file ``rtools40v2-x86_64.exe``). The later step will allow you to compile R-packages on your computer, which will be quite important later on. Ensure that you complete the instructions described in the section *Putting Rtools on the PATH* after you have installed *Rtools*.
   
 ## Rstudio
 
@@ -56,7 +56,7 @@ In this course, we will use several packages. We recommend that you install them
 
 * ``learnr`` --- This package will allow you to view *tutorials*, which are an essential part of the course. More information about tutorials is provided later in this document (section RTM package).
 
-* ``deSolve`` (Soetaert et al., 2010) --- This package allows you to perform numerical numerical integration. Thus, it allows you to solve 0-dimensional differential equations, which will be dealt with in the first part of the course.
+* ``deSolve`` (Soetaert et al., 2010) --- This package contains methods to perform numerical integration. Thus, it allows you to solve 0-, 1- and 2-dimensional differential equations, which will be dealt with in the first part of the course.
 
 * ``ReacTran`` (Soetaert and Meysman, 2012) --- This package allows you to solve differential equations describing reaction-transport models in 1D and 2D. This is the core R-package that we will use in the second part of the course. 
   
@@ -70,7 +70,7 @@ In this course, we will use several packages. We recommend that you install them
 
   ```devtools::install_github("dynamic-R/RTM", depend=TRUE)```
 
-  More information about the RTM package is provided at the end of in this document (section *Learning reaction-transport modelling using the package RTM*).
+  More information about the RTM package is provided at the end of this document (section *Learning reaction-transport modelling using the package RTM*).
 
 ## LaTeX distribution
 
@@ -229,8 +229,7 @@ Typically you will use the Rmarkdown document to include everything that you wan
 
 ## Getting help, examples, demonstrations
 
-R has an extensive help facility. Apart from the Help window launched
-  from the Help menu, it is also available from   the command line prompt.
+R has an extensive help facility. Apart from the Help window launched from the Help menu, it is also available from the command line prompt.
 
 For instance, typing
 
@@ -242,8 +241,7 @@ For instance, typing
  ?Special
 ```
   
-will explain about logarithms and exponential functions, trigonometric
-functions, and other functions.
+will explain about logarithms and exponential functions, trigonometric functions, and other functions.
 
 ```{R, eval = FALSE }
  ?Arithmetic
@@ -258,12 +256,9 @@ lists the arithmetic operations in R.
 will list occurrences of the word "steady" in R-commands.
 
 Sometimes the best help is provided by the very active mailing list.
-If you have a specific problem, just type *R: your problem*
-on your search engine. Chances are that someone encountered the problem
-and it was already solved.
+If you have a specific problem, just type *R: your problem* on your search engine. Chances are that someone encountered the problem and it was already solved.
 
-Most of the help files also include examples. You can run all of them by
-using R-statement *example*.
+Most of the help files also include examples. You can run all of them by using R-statement *example*.
 
 For instance, typing into the console window:
 
@@ -272,13 +267,10 @@ For instance, typing into the console window:
 ```
 
 will run all the examples from the pairs help file.
-(Try this, *pairs* is a very powerful way of visualizing
-pair-wise relationships.)
+(Try this, *pairs* is a very powerful way of visualizing pair-wise relationships.)
 
-Alternatively, you may select one example from the help file, copy it to the clipboard
-(ctrl-C for  windows users) and then paste it (ctrl-V) in the console window.
-In addition, the R main software and many R-packages come with
-demonstration material. Typing
+Alternatively, you may select one example from the help file, copy it to the clipboard (ctrl-C for  windows users) and then paste it (ctrl-V) in the console window. 
+In addition, the R main software and many R-packages come with demonstration material. Typing 
   
 ```{R, eval = FALSE }
  demo()
@@ -290,8 +282,7 @@ will give a list of available demonstrations in the main software.
  demo(transport1D)
 ```
   
-will demonstrate some modelling output generated with package 
-  *ReacTran*.
+will demonstrate some modelling output generated with package  *ReacTran*.
   
 ## Small things to remember
 
@@ -334,8 +325,7 @@ These errors are very difficult to trace, so it is best to avoid this practice.
 
 ## Exercises --- Using R as a calculator
 
-It is very convenient to use R as a powerful calculator. This can best
-be done from within the R-console.
+It is very convenient to use R as a powerful calculator. This can best be done from within the R-console.
 
 Use the console to calculate the value of:
    
@@ -357,11 +347,9 @@ will display help for the common arithmetic operators and about the built-in R-f
 
 R calculates as easily with *vectors*, *matrices* and *arrays* as with *single numbers*.
 
-R also includes more complex structures such as *data frames* and *lists*,
-which allow to combine several types of data.
+R also includes more complex structures such as *data frames* and *lists*, which allow to combine several types of data.
 
-Learning how to create these variables, how to address them and modify
-them is essential if you want the make good use of the R software.
+Learning how to create these variables, how to address them and modify them is essential if you want the make good use of the R software.
   
 ## Numbers, vectors, matrices and arrays
 
@@ -375,9 +363,7 @@ B <- 2
 A + B
 ```
 
-R can take as arguments for its functions single numbers, vectors,
-  matrices, or arrays.
-
+R can take as arguments for its functions single numbers, vectors, matrices, or arrays.
 
 ```{r}
 V <- exp(-0.1)
@@ -399,15 +385,13 @@ To display V we simply write in the console:
 V
 ```
 
-Alternatively, we may assign the result of calculations to a variable AND
-view the results, by embracing the statement between parentheses:
+Alternatively, we may assign the result of calculations to a variable AND view the results, by embracing the statement between parentheses:
 
 ```{r}
 ( X <- sin(3/2*pi) )
 ```
 
-Apart from integers, real and complex numbers, R also recognizes infinity
-(*Inf*) and Not a Number (*NaN*). Try:
+Apart from integers, real and complex numbers, R also recognizes infinity (*Inf*) and Not a Number (*NaN*). Try:
 
 ```{R, eval = FALSE }
 1/0
@@ -463,8 +447,7 @@ This will be a very useful feature in our models.
 
 ### Matrices
 
-  Matrices can also be created in several ways; most often we will use the 
-  R-function *matrix*:
+Matrices can also be created in several ways; most often we will use the  R-function *matrix*:
 
 The statement:
 
@@ -472,20 +455,19 @@ The statement:
 A <- matrix(nrow = 3, data = c(1, 2, 3, 4, 6, 8, 10, 12, 14))
 ```
   
-  creates a *matrix* A, with three rows, and, as there are nine elements, three columns.
-  Note that the *data* are input as a vector (using the ``c()`` function), and these values are sorted into the matrix column after column (by default).
+creates a *matrix* A, with three rows, and, as there are nine elements, three columns.
+Note that the *data* are input as a vector (using the ``c()`` function), and these values are sorted into the matrix column after column (by default).
 
 ```{r}
 A
 sqrt(A)
 ```
 
-  The above statements display the matrix followed by the square root
-  of its elements.
+The above statements display the matrix followed by the square root of its elements.
 
 ## Selecting and extracting elements
 
-  To select subsets of vectors or matrices, we can either
+To select subsets of vectors or matrices, we can either
 
 *	specify the numbers of the elements that we want,
 *	specify the names of the elements that we want ,
@@ -526,9 +508,7 @@ V[seq(from = 1, to = 5, by = 2)]
 
 ### Logical expressions
 
-Logical expressions are often used to select elements from vectors and
-matrices that obey certain criteria. R distinguishes logical variables *TRUE* and *FALSE*, represented by the
-integers $1$ and $0$.\footnote{Note that variables \textit{T} and \textit{F} are reserved in \textit{R} to represent the logical \textit{TRUE} and \textit{FALSE}, respectively. Therefore, if you want to avoid unexpected consequences, you should \textit{not} use \textit{T} and \textit{F} as variables to which you assign values. For example, it might be tempting to use \textit{T} to denote temperature, or \textit{F} to denote flux. It is recommended that you do \textit{not} do this, but use instead more intuitive names such as \textit{Temp} and \textit{Flux}.}
+Logical expressions are often used to select elements from vectors and matrices that obey certain criteria. R distinguishes logical variables *TRUE* and *FALSE*, represented by the integers $1$ and $0$.\footnote{Note that variables \textit{T} and \textit{F} are reserved in \textit{R} to represent the logical \textit{TRUE} and \textit{FALSE}, respectively. Therefore, if you want to avoid unexpected consequences, you should \textit{not} use \textit{T} and \textit{F} as variables to which you assign values. For example, it might be tempting to use \textit{T} to denote temperature, or \textit{F} to denote flux. It is recommended that you do \textit{not} do this, but use instead more intuitive names such as \textit{Temp} and \textit{Flux}.}
 
 The following will return *TRUE* for values of sequence V that are greater than 1:
 
@@ -570,14 +550,11 @@ will only show the positive elements of *V*.
 
 ## More complex data structures
 
-Frequently used data structures that are more complex than vectors or 
-  matrices are *data.frames* and *lists*.
+Frequently used data structures that are more complex than vectors or matrices are *data.frames* and *lists*.
 
 ### Data.frames
 
-A *data.frame* superficially looks like a *matrix*, but its columns 
-may contain different types of elements, e.g., one column may contain strings,
-another integers, etc.
+A *data.frame* superficially looks like a *matrix*, but its columns may contain different types of elements, e.g., one column may contain strings, another integers, etc.
 
 For instance, the data set *iris* is of class *data.frame*:
 
@@ -585,8 +562,7 @@ For instance, the data set *iris* is of class *data.frame*:
 head(iris)
 ```
 
-The data set contains strings and numbers. Each column has a name, and can be 
-accessed by its name using the dollar-sign (``$``):
+The data set contains strings and numbers. Each column has a name, and can be  accessed by its name using the dollar-sign (``$``):
 
 ```{r}
 mean(iris$Petal.Width)
@@ -594,8 +570,7 @@ mean(iris$Petal.Width)
 
 ### Lists
 
-A list is a combination of several objects; each object can be of
-  different length. For instance:
+A list is a combination of several objects; each object can be of different length. For instance:
 
 ```{r}
 LL <- list(Vector = V, Matrix = A)
@@ -612,10 +587,7 @@ LL
 
 Lists and data frames can be accessed by their names (using ``$``), or by the square bracket (``[ ]``) or double square bracket (``[[ ]]``) operators.
 
-Note: The object resulting from a selection using single brackets ``[ ]``,
-  will be a *data.frame* respectively a *list* itself;
-  with double brackets ``[[ ]]``, one obtains a *vector* (data.frames)
-  or a variable data-type (lists).
+Note: The object resulting from a selection using single brackets ``[ ]``, will be a *data.frame* respectively a *list* itself; with double brackets ``[[ ]]``, one obtains a *vector* (data.frames) or a variable data-type (lists).
 
 For instance:
 
@@ -638,23 +610,15 @@ will calculate the mean of element *Vector*.
 *	Use the R-function *mean* to estimate the mean of two numbers, 9 and 17. (You may notice that this is not as simple as you might think! Tip: use the ``c()`` function.)
 
 ### Sediment depth profiles 
-*	For a sediment model, we divide 10 cm of sediment into thin layers, 
-        each 1mm thick. These are thin slices, because it is assumed that 
-        porosities, concentrations, etc., remain constant within 
-        each layer. We need to know the depth in the centre of each sediment layer. 
-        To do so, we need to create a sequence of depth values, 
-        extending from 0.05 cm to 9.95 cm, at 1 mm intervals.
+*	For a sediment model, we divide 10 cm of sediment into thin layers, each 1mm thick. These are thin slices, because it is assumed that porosities, concentrations, etc., remain constant within each layer. We need to know the depth in the centre of each sediment layer. 
+To do so, we need to create a sequence of depth values, extending from 0.05 cm to 9.95 cm, at 1 mm intervals.
     - Create this sequence, put it in a vector called *depth*. Use the R-function  *seq*. 
     - Display this vector.
-* Porosity, the volumetric water content of the sediment is 
-        often described as an exponentially decreasing function; for instance, 
-        following formula generates a typical porosity profile for a deep-sea sediment:
+* Porosity, the volumetric water content of the sediment is often described as an exponentially decreasing function; for instance, following formula generates a typical porosity profile for a deep-sea sediment:
 $$porosity = 0.7+(1-0.7)\times e^{-depth}$$
          
-   - Calculate the porosity for every value in *depth*. Save the results in 
-        a vector called "porosity". 
-   - What is the porosity near the surface (0.05 cm); what is the porosity at 9.95 cm?
-        Put these two values in a vector, called *V*.
+   - Calculate the porosity for every value in *depth*. Save the results in a vector called "porosity". 
+   - What is the porosity near the surface (0.05 cm); what is the porosity at 9.95 cm? Put these two values in a vector, called *V*.
    - What is the mean porosity in the entire 10 cm? 
    - What is the mean porosity in the upper cm? 
    - Now plot porosity versus depth as follows:
@@ -665,22 +629,15 @@ $$porosity = 0.7+(1-0.7)\times e^{-depth}$$
 
 ### Estuarine morphology
 
-*	The Westerschelde estuary has a trumpet-shaped morphology, i.e.,
-        its cross-sectional area increases in a sigmoidal fashion from 
-        Rupelmonde near the river towards Vlissingen near the sea. 
+*	The Westerschelde estuary has a trumpet-shaped morphology, i.e., its cross-sectional area increases in a sigmoidal fashion from Rupelmonde near the river towards Vlissingen near the sea. 
         
 * The estuary is 100 km long, and the cross-sectional surface, $A$ (in $m^2$), as a function of the distance, $x$ (in $m$), can be approximated with the following expression: $$A(x) = A_r + dA \times  \frac{x^p}{x^p + {k_s}^p}$$ where $dA = A_s - A_r$, p = $5$, ks = $50000~m$, $A_r = 4000~m^2$, $A_s = 76000~m^2$. Here $A_r$ and  $A_s$ are the cross-sectional surfaces at the boundary with the river and the 
 sea, respectively. 
         
-* The estuary is divided in 200 boxes. Create a sequence of $x$-values 
-    that contain the position in the middle of each box, from the river 
-    to the sea.
-    -	For each box calculate the cross-sectional surface area; put it in a 
-        vector called *Area*.
-    -	For modelling purposes, we need the *volume* of each box, 
-    rather than the cross-sectional area. Create a vector, 
-    called *Volume*, that contains the volumes of each box.
-    -  What is the total estuarine volume? (And what are the units?)
+* The estuary is divided in 200 boxes. Create a sequence of $x$-values that contain the position in the middle of each box, from the river to the sea.
+    -	For each box calculate the cross-sectional surface area; put it in a vector called *Area*.
+    -	For modelling purposes, we need the *volume* of each box, rather than the cross-sectional area. Create a vector, called *Volume*, that contains the volumes of each box.
+    - What is the total estuarine volume? (And what are the units?)
     - Plot the cross-sectional surface area versus distance from the river.
     - Plot the estuarine volume per box, as a function of the box number.
 
@@ -692,14 +649,11 @@ sea, respectively.
      (210, 250, 260, 289, 280, 260, 270, 260).
 ```
 
-* Make a plot that displays these data. First create a vector containing the 
-hours at which measurements were performed. Then make a vector with the oxygen
-concentrations.
+* Make a plot that displays these data. First create a vector containing the hours at which measurements were performed. Then make a vector with the oxygen concentrations.
 
 # R-functions 
 
-One of the strengths of R is that one can make user-defined functions
-  that add to R's built-in functions.
+One of the strengths of R is that one can make user-defined functions that add to R's built-in functions.
 
 ## Function definition
 
@@ -714,9 +668,7 @@ Circlesurface <- function (radius)
     return(pi*radius^2)
 ```
 
-defines a function (called *Circlesurface*), which takes as an input
-  argument a variable called *radius*  and returns the value
-  $\pi*radius^2$, which is the surface of a circle.
+defines a function (called *Circlesurface*), which takes as an input argument a variable called *radius*  and returns the value $\pi*radius^2$, which is the surface of a circle.
 
 After submitting this function to R, we can use it to calculate the surfaces of circles with a given radius:
   
@@ -741,10 +693,9 @@ Here, we recognize
 
 *	the function heading ($1^{st}$ line), specifying the name of the function (*Sphere*) and the input parameter (*radius*)
 *	the function specification. As the function comprises multiple statements, the function specification is embraced by curly braces $\{ \ldots \}$.
-*	The return values (last line). Function *Sphere* will return the
-      volume and surface of a sphere, as a *list*.
+*	The return values (last line). Function *Sphere* will return the volume and surface of a sphere, as a *list*.
  
-  The Earth has an approximate radius of $6371~km$, so its volume ($km^3$) and surface ($km^2$) are:
+The Earth has an approximate radius of $6371~km$, so its volume ($km^3$) and surface ($km^2$) are:
   
 ```{r}
 Sphere(6371)
@@ -758,8 +709,7 @@ Sphere(1:5)$volume
   
 Sometimes it is convenient to provide default values for the input parameters.
 
-For instance, the next function estimates the density of "standard mean
-  ocean water" (in $kg~m^{-3}$) as a function of temperature in $^{\circ}$C, TC, and for salinity=0 and pressure = $1~atm$ (Millero, 1981).
+For instance, the next function estimates the density of "standard mean ocean water" (in $kg~m^{-3}$) as a function of temperature in $^{\circ}$C, TC, and for salinity=0 and pressure = $1~atm$ (Millero, 1981).
   
 The input parameter TC is by default equal to 20 $^{\circ}$C:
   
@@ -771,8 +721,7 @@ Rho_W <- function(TC = 20) {
 }
 ```
 
-Note that, within the function body, we ended the first line with a ``+`` in order to make clear that the statement is not finished and continues on the next line. It would have
-  been wrong to put the ``+`` on the next line (and very difficult to trace this error).
+Note that, within the function body, we ended the first line with a ``+`` in order to make clear that the statement is not finished and continues on the next line. It would have been wrong to put the ``+`` on the next line (and very difficult to trace this error).
 
 Calling the function without specifying the temperature (input argument *TC*) uses the default value ($TC=20$):
 
@@ -799,9 +748,7 @@ Try:
 
 to see what it contains.
 
-For instance, its function *sw_dens* estimates the density of seawater 
-as a function of salinity (*S*), temperature(*t*) and pressure 
-(*p*), and using three different functions (*method*).
+For instance, its function *sw_dens* estimates the density of seawater as a function of salinity (*S*), temperature(*t*) and pressure (*p*), and using three different functions (*method*).
 
 To see how it is used, type:
 
@@ -822,11 +769,8 @@ The *ReacTran* package has been written specifically for solving reaction-transp
 
 For reaction-transport modelling in sediments, for instance, one not only needs a value for the porosity in the *centre* of the boxes, but also at the box *interface*. As this requires quite a complicated book-keeping, the  R-package *ReacTran* contains two functions that do that for you.
   
-*	Function *setup.grid.1D* specifies a 1-Dimensional *grid*, 
-  i.e., it divides a sediment column into thin layers, an estuary into $1~km$ 
-  thick boxes, a ciliate organism into $1~\mu m$ thick concentric spheres, etc.
-*	Function *setup.prop.1D* calculates a certain *property* 
-  on this 1-D grid.
+*	Function *setup.grid.1D* specifies a 1-Dimensional *grid*, i.e., it divides a sediment column into thin layers, an estuary into $1~km$ thick boxes, a ciliate organism into $1~\mu m$ thick concentric spheres, etc.
+*	Function *setup.prop.1D* calculates a certain *property* on this 1-D grid.
 
 For instance, to subdivide a $5~cm$ thick sediment column into 10 layers, we write:
   
@@ -840,8 +784,7 @@ This function returns a list that contains many elements that  are needed in rea
 sed
 ```     
 
-It is now simple to define the porosity on this grid. First, we 
-define a function that estimates, for a certain sediment depth, $x$, the corresponding porosity. Then, we use the *ReacTran* function *setup.prop.1D* to calculate the porosity on this grid:
+It is now simple to define the porosity on this grid. First, we define a function that estimates, for a certain sediment depth, $x$, the corresponding porosity. Then, we use the *ReacTran* function *setup.prop.1D* to calculate the porosity on this grid:
 
 ```{r}
 porfunc <- function (x) return(0.7 + 0.3*exp(-x))
@@ -860,8 +803,8 @@ porosity
 
 The saturated oxygen concentration in water ($\mu mol~kg^{-1}$), also called oxygen solubility, can be calculated based on an empirical formula $SatOx = e^A$, where
   
-  $$A = -173.9894 + 25559.07/T + 146.4813 \times log_e(T/100) -22.204 \times T/100 + $$
-  $$ S \times (-0.037362+0.016504 \times T/100-0.0020564 \times T/100 \times T/100)$$
+$$A = -173.9894 + 25559.07/T + 146.4813 \times log_e(T/100) -22.204 \times T/100 + $$
+$$ S \times (-0.037362+0.016504 \times T/100-0.0020564 \times T/100 \times T/100)$$
   
 T is temperature in Kelvin (Tkelvin = Tcelsius + 273.15), and S is salinity (reported as unitless, but meaning a value in g/kg).
 
@@ -872,48 +815,36 @@ T is temperature in Kelvin (Tkelvin = Tcelsius + 273.15), and S is salinity (rep
 
 ### Molecular diffusion coefficient
 
-Package *marelac* contains a function to calculate molecular diffusion 
-coefficients. 
+Package *marelac* contains a function to calculate molecular diffusion coefficients. 
 
-  * Estimate the molecular diffusion coefficient for $O_2$ and $CO_2$, for 
-  salinity = 20 and temperature = $10~^{\circ}$C. What are the units?
-  Convert to $cm^2~d^{-1}$. 
+* Estimate the molecular diffusion coefficient for $O_2$ and $CO_2$, for salinity = 20 and temperature = $10~^{\circ}$C. What are the units? Convert to $cm^2~d^{-1}$. 
   
-  Note: the *diffcoeff* function from the *marelac* package returns a *data.frame* or a *list*.
-  For plotting, it is easiest to subset this so as to have a vector. Thus, 
+Note: the *diffcoeff* function from the *marelac* package returns a *data.frame* or a *list*. For plotting, it is easiest to subset this so as to have a vector. Thus, 
+
 ```{r, eval = FALSE}  
 diffcoeff()$O2
 ```
 will provide the output in a format that is easy to work with.
 
-* Estimate the molecular diffusion coefficient for $O_2$ and $CO_2$ 
-  for a temperature ranging from 1 to $30~^{\circ}$C. 
-  Make a temperature vs. diffusion coefficient plot for $O_2$ (in units of $cm^2~d^{-1}$).
-* Add to this plot the temperature vs. diffusion coefficient relationship 
-  for $O_2$ at salinity = 0. Use the R function *lines* or *points* 
-  to add these data.
+* Estimate the molecular diffusion coefficient for $O_2$ and $CO_2$ for a temperature ranging from 1 to $30~^{\circ}$C. Make a temperature vs. diffusion coefficient plot for $O_2$ (in units of $cm^2~d^{-1}$).
+* Add to this plot the temperature vs. diffusion coefficient relationship for $O_2$ at salinity = 0. Use the R function *lines* or *points* to add these data.
 
 
 ### R-function sphere
 
 Organisms can have many shapes, from spherical to rod-like to amorphous.
   
-In order to create reaction-transport models that describe for instance 
- the oxygen concentration in the body of these organisms, we need to estimate the surface area at 
- certain distances from the centre of their body.
+In order to create reaction-transport models that describe for instance the oxygen concentration in the body of these organisms, we need to estimate the surface area at certain distances from the centre of their body.
   
-Assume a spherical ciliate with a diameter of 100 $\mu m$. For modelling purposes, assume
- that this ciliate consists of concentric spheres, each 1 $\mu m$ thick. 
+Assume a spherical ciliate with a diameter of 100 $\mu m$. For modelling purposes, assume that this ciliate consists of concentric spheres, each 1 $\mu m$ thick. 
 
 * What is the area (in mm$^2$) of each of these concentric spheres? Implement as an R-function.
 
 ### Porosity profile and estuarine morphology as a function
 
-* Implement the porosity profile from the previous exercise as an R-function that
-  takes as input the sediment depth. 
+* Implement the porosity profile from the previous exercise as an R-function that  takes as input the sediment depth. 
   
-* Implement the estuarine morphology from the previous exercise as an R-function. 
-  Return both the cross-section area and volume for each box.
+* Implement the estuarine morphology from the previous exercise as an R-function.   Return both the cross-section area and volume for each box.
 
 
 ### Estuarine morphology using ReacTran
@@ -1051,13 +982,13 @@ STD$y; STD$sum
 The Lotka-Volterra model is a famous model that describes predator-prey interactions or competitive interactions between two species. A. J. Lotka and V. Volterra formulated the model almost simultaneously in the 1920's.
 
 *	Write an R-script that solves the Lotka-Volterra model
-$$ \frac{{dx}}{{dt}} = a \cdot x \cdot (1 - \frac{x}{K}) - b \cdot x \cdot y$$
-$$     \frac{{dy}}{{dt}} = g \cdot b \cdot x \cdot y - e \cdot y$$
-for the initial values of $x = 670$ and $y = 610$, and for the parameter values of $a = 0.04$, $K = 1000$, $b = 5\times 10^{-5}$, $g = 0.8$, and $e = 0.008$.
+$$ \frac{{dX}}{{dt}} = a \cdot X \cdot (1 - \frac{X}{K}) - b \cdot X \cdot Y$$
+$$     \frac{{dY}}{{dt}} = g \cdot b \cdot X \cdot Y - e \cdot Y$$
+for the initial values of $X = 670$ and $Y = 610$, and for the parameter values of $a = 0.04$, $K = 1000$, $b = 5\times 10^{-5}$, $g = 0.8$, and $e = 0.008$.
 
 *	Run the model for 100 days, and store the output in a variable *out*.
 * Plot the outcome.
-*	Now run the model with other initial values ($x = 100$, $y = 540$); store the output in the variable *out2*. Plot the two model runs simultaneously.
+*	Now run the model with other initial values ($X = 100$, $Y = 540$); store the output in the variable *out2*. Plot the two model runs simultaneously.
 * Experiment by running the model for longer intervals (e.g., 1500 days) and by changing the model parameter *b* in a range between $1\times 10^{-5}$ and $10\times 10^{-5}$. What do these model predictions tell you about the system?
   
 ```{r}
@@ -1066,14 +997,13 @@ for the initial values of $x = 670$ and $y = 610$, and for the parameter values 
 ### The Lorenz Butterfly
   The Lorenz equations represents the first set of differential equations in which chaotic behaviour was discovered. These three differential equations represent an idealized model for the circulation of air within the atmosphere of the Earth.
 
-$$     \frac{{dx}}{{dt}} =  - \frac{8}{3} \cdot x + y \cdot z$$
-     $$\frac{{dy}}{{dt}} =  - 10 \cdot (y - z) $$
-     $$\frac{{dz}}{{dt}} =  - x \cdot y + 28\cdot y - z $$
+$$     \frac{{dX}}{{dt}} =  - \frac{8}{3} \cdot X + Y \cdot Z$$
+     $$\frac{{dY}}{{dt}} =  - 10 \cdot (Y - Z) $$
+     $$\frac{{dZ}}{{dt}} =  - X \cdot Y + 28\cdot Y - Z $$
 
 * It takes about 10 lines of an R-code to generate the solutions and plot them. Try it out.
-* Use the initial conditions $x = y = z = 1$.
+* Use the initial conditions $X = Y = Z = 1$.
 * Create output for a time sequence ranging from 0 to 100, and with a time step of 0.005.
-
 
 
 # Learning reaction-transport modelling using the package RTM
@@ -1162,17 +1092,12 @@ RTMreader(5, type="PDF")
 
 # References
 
-R Core Team (2018). R: A language and environment for statistical computing. R Foundation for
-  Statistical Computing, Vienna, Austria. \url{https://www.R-project.org/}.
+R Core Team (2018). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria. \url{https://www.R-project.org/}.
 
-Soetaert, Karline and Meysman, Filip, 2012. Reactive transport in aquatic ecosystems: Rapid model
-  prototyping in the open source software R Environmental Modelling & Software, 32, 49--60.
+Soetaert, Karline and Meysman, Filip, 2012. Reactive transport in aquatic ecosystems: Rapid model prototyping in the open source software R Environmental Modelling & Software, 32, 49--60.
 
-Soetaert K. (2009).  rootSolve: Nonlinear root finding, equilibrium and steady-state analysis of ordinary
-  differential equations.  R-package version 1.6
+Soetaert K. (2009).  rootSolve: Nonlinear root finding, equilibrium and steady-state analysis of ordinary differential equations.  R-package version 1.6
 
-Karline Soetaert, Thomas Petzoldt, R. Woodrow Setzer (2010). Solving Differential Equations in R: Package
-  deSolve. Journal of Statistical Software, 33(9), 1--25. \url{http://www.jstatsoft.org/v33/i09/} DOI
-  10.18637/jss.v033.i09
+Karline Soetaert, Thomas Petzoldt, R. Woodrow Setzer (2010). Solving Differential Equations in R: Package deSolve. Journal of Statistical Software, 33(9), 1--25. \url{http://www.jstatsoft.org/v33/i09/} DOI 10.18637/jss.v033.i09
 
 Karline Soetaert and Thomas Petzoldt (2018). marelac: Tools for Aquatic Sciences. R package version 2.1.7.
