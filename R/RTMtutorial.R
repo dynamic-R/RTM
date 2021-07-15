@@ -1,8 +1,11 @@
 
 openRmdFile <- function(file, type) {
   
-  if (type == "RMD")
-    browseURL(file)
+  if (type == "RMD"){
+    output_file <- tempfile(fileext = ".Rmd")
+    file.copy(file, output_file)
+    browseURL(output_file)
+  }
   else if (type == "PDF")
     browseURL(rmarkdown::render(input = file, output_format = "pdf_document",
                                 output_file=tempfile(fileext = ".pdf")))
@@ -22,7 +25,8 @@ RTMtutorial <- function(x = c("introduction", "why", "conceptual", "massbalance"
     "transportBoundaries", "transportR"), type = c("tutorial", "RMD")) {
 
   LL <- as.character(formals(RTMtutorial)$x[-1])
-
+  type <- match.arg(toupper(type), choices=toupper(c("tutorial", "RMD")))
+  
   if (x == "?") {
     tutorial <- data.frame(x=LL, description = c("About the course at Utrecht",
       "Why modelling is useful", "Making conceptual models",
@@ -57,7 +61,7 @@ RTMtutorial <- function(x = c("introduction", "why", "conceptual", "massbalance"
     if (length(Which) > 1) stop("Can open only one Rmd file at a time")
     dir <- paste(x, Which, sep="")
     file <- paste0(system.file('tutorials', package = 'RTM'),"/",dir, "/", Which, ".Rmd", sep="")
-    browseURL(file)
+    openRmdFile(file, "Rmd")
   }
   }
 }
