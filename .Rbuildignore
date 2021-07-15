@@ -1,2 +1,8 @@
+^Rplots.pdf$
+work
+LICENSE
+README.md
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^\.git
+^.gitignore$
