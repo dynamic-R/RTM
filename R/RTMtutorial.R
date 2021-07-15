@@ -1,9 +1,25 @@
 
+openRmdFile <- function(file, type) {
+  
+  if (type == "RMD")
+    browseURL(file)
+  else if (type == "PDF")
+    browseURL(rmarkdown::render(input = file, output_format = "pdf_document",
+                                output_file=tempfile(fileext = ".pdf")))
+  else if (type == "HTML")
+    browseURL(rmarkdown::render(input = file, output_format = "html_document",
+                                output_file=tempfile(fileext = ".html")))
+  else if (type == "WORD")
+    browseURL(rmarkdown::render(input = file, output_format = "word_document",
+                                output_file=tempfile(fileext = ".doc")))
+}
+
+
 
 RTMtutorial <- function(x = c("introduction", "why", "conceptual", "massbalance", "Rmodels",
     "largescale","chemical", "equilibrium", "enzymatic", "partitioning", "ecology",
     "transportProcesses","transportFluxes", "transportPorous",
-    "transportBoundaries", "transportR")) {
+    "transportBoundaries", "transportR"), type = c("tutorial", "RMD")) {
 
   LL <- as.character(formals(RTMtutorial)$x[-1])
 
@@ -29,29 +45,21 @@ RTMtutorial <- function(x = c("introduction", "why", "conceptual", "massbalance"
      num <-x
      Which <- LL[x]
    }
-    x <- ifelse(num<10, paste("0",as.character(num),sep=""), as.character(num))
+  x <- ifelse(num<10, paste("0",as.character(num),sep=""), as.character(num))
+  if (type == "tutorial"){
     Which <- paste(x, Which, sep="")
     if (length(Which) > 1)
-     for (w in Which)
+     for (w in Which) 
       run_tutorial(w, package = "RTM")
-   else
-      run_tutorial(Which, package = "RTM")
+    else
+    run_tutorial(Which, package = "RTM")
+  } else { # open the Rmd File
+    if (length(Which) > 1) stop("Can open only one Rmd file at a time")
+    dir <- paste(x, Which, sep="")
+    file <- paste0(system.file('tutorials', package = 'RTM'),"/",dir, "/", Which, ".Rmd", sep="")
+    browseURL(file)
   }
-}
-
-openRmdFile <- function(file, type) {
-  
-  if (type == "RMD")
-     browseURL(file)
-  else if (type == "PDF")
-     browseURL(rmarkdown::render(input = file, output_format = "pdf_document",
-                       output_file=tempfile(fileext = ".pdf")))
-  else if (type == "HTML")
-     browseURL(rmarkdown::render(input = file, output_format = "html_document",
-                       output_file=tempfile(fileext = ".html")))
-  else if (type == "WORD")
-     browseURL(rmarkdown::render(input = file, output_format = "word_document",
-                       output_file=tempfile(fileext = ".doc")))
+  }
 }
 
 

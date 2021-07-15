@@ -7,7 +7,8 @@
 RTMtutorial (x = c("introduction", "why", "conceptual", "massbalance",     
      "Rmodels", "largescale", "chemical", "equilibrium", "enzymatic",    
      "partitioning", "ecology", "transportProcesses", "transportFluxes", 
-     "transportPorous", "transportBoundaries", "transportR"))
+     "transportPorous", "transportBoundaries", "transportR"), 
+     type = c("tutorial", "RMD"))
     
 RTMexercise(x = c("modelersR", "conceptual", "massbalance", "massbalance_ecology", 
      "carbonCycle", "ozone", "dissolutionSi", "equilibriumNH3",                   
@@ -25,7 +26,7 @@ RTMreader (x = c("events", "forcings", "observations",
 \arguments{
   \item{x }{the name or the number of the tutorial, exercise or reader. When x = "?", a list of tutorials, exercises or readers will be displayed, including a short description.
   }
-  \item{type }{ how the exercise or reader should be displayed. When selecting PDF, you need to have LaTeX installed.
+  \item{type }{ how the exercise or reader should be displayed. When selecting PDF, you need to have LaTeX installed. See note for RTMtutorial.
   }
 }
 
@@ -36,8 +37,21 @@ The exercises are short tasks to be completed in 2 to 4 hours. Before making the
 
 The readers contain accessory material. They is not mandatory, but provide an extension to the tutorials, and may help to prepare for the exam.
 }
-
 \note{
+RTMtutorial should best be run with type = "tutorial" (the default). 
+
+However, for some versions of Rstudio/R/operating systems this does not work properly. The solution is to open the tutorial as an Rmd file, and then to press the button <Run Document>.
+
+For instance, if this does not work:
+
+RTMtutorial(1)
+
+then try:
+
+RTMtutorial(1, type="Rmd")
+
+}
+\details{
 The tutorials, readers and exercises are created on the fly, i.e. they are stored in the package as R markdown files (extension .Rmd), and still need to be converted, so you may need to have some patience!
 
 DO NOT try to create the reader "fitting", unless you have plenty of time!
