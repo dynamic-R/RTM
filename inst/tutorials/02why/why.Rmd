@@ -1,0 +1,119 @@
+---
+title: "RTM course - Why Modelling"
+author: "Karline Soetaert and Lubos Polerecky"
+description: "video and introduction why models are useful"
+date: "June 2021"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(learnr)
+```
+
+## Tutorial
+
+You are advised to watch the following video first.
+
+### Video timeline 
+* 0:00 What is a model?
+* 1:36 Scientific models
+* 2:27 Scientific models as analytical tools
+* 3:03 Scientific models as budgeting and quantification tools
+* 4:05 Scientific models as management tools
+* 4:26 Statistical vs. mechanistic models
+* 6:27 Systematic approach to modelling
+
+![](https://www.youtube.com/watch?v=uJTbH2XoQN0&list=PLx8PHcDdmF-uD1Pr07TU9SzlhlGpfrxqn&index=2)
+
+You can also read the following section(s) of the textbook:
+
+* Chapter 1. Introduction
+
+(You can download each chapter of the textbook via the e-book University library for free!)
+
+## Programming language
+
+```{r programming_platform, echo=FALSE}
+msg <- "In this list, only R, matlab and python are programming languages, and R is the one that we will use in this course. Rmarkdown is a platform to merge an R-code with text;  Rstudio provides an integrated development environment (IDE), or an interface, that facilitates using R; ReacTran is one of the many R-packages that we will use."
+
+question("Which programming language are we going to use in this course to solve our models?", type = "learnr_radio",
+ answer("Rstudio"),
+ answer("Rmarkdown"),
+ answer("R", correct=TRUE),
+ answer("Matlab"),
+ answer("Python"),
+ answer("ReacTran"),
+
+ incorrect=msg,
+ correct=msg)
+```
+
+## Why modelling
+
+```{r why_modelling, echo=FALSE}
+msg <- "Modelling IS a lot of fun, but this is not our primary goal. We use models in addition to data gathering because they give a different perspective of reality. They increase our understanding, allow us to extrapolate, may guide our research, and may be used to generate hypotheses."
+
+question("Why do we develop scientific models?", type = "learnr_checkbox",
+ answer("they allow us to test our understanding of real systems", correct=TRUE),
+ answer("they can guide empirical research", correct=TRUE),
+ answer("they allow us to invalidate empirical research", correct=FALSE),
+ answer("they allow us to extrapolate to larger spatial and temporal scales", correct=TRUE),
+ answer("they allow us to test hypotheses", correct=FALSE),
+ answer("they allow us to generate hypotheses", correct=TRUE),
+ answer("because it is a lot of fun", correct=FALSE),
+ 
+ incorrect=msg,
+ correct=msg)
+```
+
+## Model focus
+
+```{r Model_focus, echo=FALSE}
+msg <- "Although we can do all the things listed above with mechanistic models, in this course we restrict ourselves to exchanges of mass and energy and on biogeochemistry and ecology relating to the environment."
+
+question("What is the focus of the models that we will develop in this course?", type = "learnr_checkbox",
+ answer("Exchange of mass", correct=TRUE),
+ answer("Exchange of energy", correct=TRUE),
+ answer("Biogeochemical processes in cells", correct=FALSE),
+ answer("Impact of biogeochemical processes on the environment", correct=TRUE),
+ answer("Predicting of human impacts on the environment", correct=TRUE),
+ answer("Predicting the weather", correct=FALSE),
+ answer("Predicting stock markets", correct=FALSE),
+ 
+ incorrect =msg,
+ correct=msg)
+```
+
+## What will we do
+
+```{r Course_do, echo=FALSE}
+msg <- "This course is all about learning how to create a model, implement it, interprete it and communicate the results."
+
+question("In this course we will ...", type = "learnr_checkbox",
+ answer("Use existing models to generate predictions", correct=FALSE),
+ answer("Create models to generate predictions", correct=TRUE),
+ answer("Learn and practice how to write a computer code", correct=TRUE),
+ answer("Practice communication of model results", correct=TRUE),
+ answer("Practice interpretation of model results", correct=TRUE),
+ answer("Learn how to choose an appropriate existing model and let the computer do the work", correct=FALSE),
+ answer("Solve differential equations with a pen and paper", correct=FALSE),
+ answer("Learn how to formulate differential equations", correct=TRUE),
+ 
+ incorrect=msg,
+ correct=msg)
+```
+
+## Finally
+
+```{r feedback, echo = FALSE}
+question("give your feedback ", type = "learnr_text", answer(" ", correct=TRUE), correct="thank you", incorrect = "thank you")
+```
+
+## Textbook
+
+Karline Soetaert, Peter M.J. Herman (2009). A Practical Guide to Ecological Modelling. Springer Netherlands. DOI: 10.1007/978-1-4020-8624-3.

@@ -1,0 +1,119 @@
+---
+title: "RTM course - Enzymatic Rate Laws"
+author: "Karline Soetaert and Lubos Polerecky"
+description: "video and exercises on enzymatic reactions (mainly Michaelis-Menten)"
+date: "June 2021"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(learnr)
+```
+
+## Tutorial
+
+You are advised to watch the following video first.
+
+### Video timeline
+* 0:00 Michaelis-Menten kinetics
+* 5:50 Application to organic matter mineralization
+
+![](https://www.youtube.com/watch?v=z2p_qPvRuTg&list=PLx8PHcDdmF-uD1Pr07TU9SzlhlGpfrxqn&index=6)
+
+You can also read the following section(s) of the textbook:
+
+* Chapter 2.4. Enzymatic reactions
+* Chapter 2.5.3. One Rate-Limiting Resource, 3 Types of Functional Responses
+* Chapter 2.5.4. More than One Limiting Resource
+
+(You can download each chapter of the textbook via the e-book University library for free!)
+
+## Enzymatic rate
+
+```{r enz_rate, echo=FALSE}
+question("Which of the following expressions describes the regulation of an enzymatic process by the concentration of the rate-limiting substrate A?", type = "learnr_radio",
+ answer(sprintf("$\\frac{[A]}{[A]-K_A}$"), correct=FALSE),
+ answer(sprintf("$\\frac{[A]}{[A]+K_A}$"), correct=TRUE),
+ answer(sprintf("$\\frac{K_A}{[A]-K_A}$"), correct=FALSE),
+ answer(sprintf("$\\frac{K_A}{[A]+K_A}$"), correct=FALSE)
+)
+```
+
+## Type of reactions
+
+```{r enz_truefalse, echo=FALSE}
+question("Reactions whose rate is described by Michaelis-Menten kinetics are", type = "learnr_radio",
+ answer("reversible", correct=FALSE),
+ answer("irreversible", correct=TRUE)
+)
+```
+
+## Enzymatic parameter
+
+```{r enzPar, echo=FALSE}
+
+question(sprintf("What is the name of the parameter $K_A$ in the Michaelis-Menten rate expression $\\frac{[A]}{[A]+K_A}$?"), type = "learnr_checkbox",
+ answer("Enzyme affinity to the rate-limiting substrate A", correct = TRUE),
+ answer("Equilibrium concentration", correct = FALSE),
+ answer("Half-saturation concentration", correct = TRUE),
+ answer("Rate constant", correct = FALSE),
+ answer("Solubility concentration"),
+ answer("Affinity concentration",  correct = TRUE)
+)
+```
+
+## Michaelis-Menten shape
+
+```{r enzShape, echo=FALSE}
+question(sprintf("What is the shape of the curve in the Michaelis-Menten rate expression $\\frac{[A]}{[A]+K_A}$?"), type = "learnr_radio",
+ answer("Hyperbola",  correct = TRUE),
+ answer("Parabola"),
+ answer("Exponential")
+)
+```
+
+## Michaelis-Menten use
+
+```{r enzUse, echo=FALSE}
+question("Michaelis-Menten kinetics is approximated by first-order kinetics when the substrate concentration is", type = "learnr_radio",
+ answer("around the affinity concentration"),
+ answer("much lower than the affinity concentration", correct = TRUE),
+ answer("much greater than the affinity concentration")
+)
+```
+
+```{r enzUse2, echo=FALSE}
+question("Michaelis-Menten kinetics is approximated by zero-order kinetics when the substrate concentration is", type = "learnr_radio",
+ answer("around the affinity concentration"),
+ answer("much lower than the affinity concentration"),
+ answer("much greater than the affinity concentration", correct = TRUE)
+)
+```
+
+## Recognizing rate-limitation
+
+```{r enzRateLim, echo=FALSE}
+question(sprintf("How would you characterize a process whose rate is described by the following rate expression (where $r$, $K_A$ and $K_B$ are constants): $R = r \\times \\frac{[A]}{[A]+K_A} \\times \\frac{K_B}{[B] + K_B} \\times [C]$?"), type = "learnr_checkbox",
+ answer("The process is stimulated by substrate A",  correct = TRUE),
+ answer("The process is inhibited by substrate A"),
+ answer("The process is stimulated by substrate B"),
+ answer("The process is inhibited by substrate B",  correct = TRUE),
+ answer("The process is first-order with respect to substrate C",  correct = TRUE),
+ answer("The process is zero-order with respect to substrate C")
+)
+```
+
+## Finally
+
+```{r feedback, echo = FALSE}
+question("give your feedback ", type = "learnr_text", answer(" ", correct=TRUE), correct="thank you", incorrect = "thank you")
+```
+
+## References
+
+Karline Soetaert, Peter M.J. Herman (2009). A Practical Guide to Ecological Modelling. Springer Netherlands. DOI: 10.1007/978-1-4020-8624-3.

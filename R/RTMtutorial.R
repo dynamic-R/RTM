@@ -22,11 +22,16 @@ RTMtutorial <- function(x = c("introduction", "why", "conceptual", "massbalance"
       "Modelling Reaction tranport in porous media in R"))
     return(tutorial)
   } else {
-   if (is.character(x))
-     Which <- LL[pmatch(tolower(x), tolower(LL))]
-   else
+   if (is.character(x)){
+     num <- pmatch(tolower(x), tolower(LL))
+     Which <- LL[num]
+   } else{
+     num <-x
      Which <- LL[x]
-   if (length(Which) > 1)
+   }
+    x <- ifelse(num<10, paste("0",as.character(num),sep=""), as.character(num))
+    Which <- paste(x, Which, sep="")
+    if (length(Which) > 1)
      for (w in Which)
       run_tutorial(w, package = "RTM")
    else
