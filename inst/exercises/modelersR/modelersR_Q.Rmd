@@ -83,13 +83,13 @@ Restart *Rstudio* if it was running before \LaTeX\ installation.
 
 To check whether everything is working at this point, open *Rstudio*, and create a new R Markdown file. This is done from the menu by selecting File $\rightarrow$ New file $\rightarrow$ R Markdown $\rightarrow$ Document. Type the title, your name in the author box, check the ``PDF`` checkbox, and click *Ok*. If everything goes as expected, your *Rstudio* session should look similar as shown in Figure 1.
 
-![Screenshot of Rstudio with the default Rmd file.](Rstudio.png){width=80%}
+![Screenshot of Rstudio with the default Rmd file.](images/Rstudio.png){width=80%}
 
 The top-left panel contains the editor, where you will write your text and R-code. In the top-right panel, you can view several things, including the "Environment" (which shows values of your R-variables) and "Tutorials". The bottom-left panel contains the R-console, where you can type R-commands, and the R Markdown console, where you can see the progress of your Rmd file compilation (see next). Finally, the bottom-right panel allows you to manage your R-packages, view help files, or see plots.
 
 Once you create a new Rmd file, it is best to first save it under a name of your choice (e.g., ``test1.Rmd``). Then, after you are satisfied with its content, click on the *Knit* button in the top part of the editor panel (useful short-cut: press ``Ctrl+Shift+K``). This will start a compilation process, which will convert the Rmd file into a nicely typeset document in one of three possible formats: PDF, DOC, or HTML (Figure 2).
 
-![Nicely formatted output produced from the Rmd file. Left: PDF, viewed in SumatraPDF. Middle: DOC, viewed in Microsoft Word. Right: HTML, viewed in Firefox.](Rmd_pdf_html_doc.png)
+![Nicely formatted output produced from the Rmd file. Left: PDF, viewed in SumatraPDF. Middle: DOC, viewed in Microsoft Word. Right: HTML, viewed in Firefox.](images/Rmd_pdf_html_doc.png)
 
 Note that if you are converting the Rmd file into PDF for the very first time, the compilation may take a while. This is because *MikTeX* is installing extra \LaTeX\ packages, which are likely missing on your computer as they have not been installed by default during the installation process.\footnote{This assumes that you have selected \emph{yes} when asked \emph{Install missing packages on-the-fly} during \emph{MikTeX} installation. If you forgot to do that, you need to stop the \emph{knitting} process by clicking the red stop button, and go to the folder of your \texttt{test1.Rmd} file. There should be a file called \texttt{test1.tex}. Open it in the native \TeX\ editor that comes with the \emph{MikTeX} distribution (most likely \texttt{TeXworks}), and compile it with pdf\LaTeX\ from there. In this process, you should be prompted to install missing \LaTeX\ packages.} Be patient and wait until the compilation process is finished.\footnote{At the time of writing this reader, it took about two minutes until the first-time \emph{knitting} and \LaTeX\ compilation were complete.} If everything goes well, you should find a file ``test1.pdf`` in the same folder as the ``test1.Rmd``. You can open it in any PDF reader.\footnote{Note that \emph{Acrobat reader}, which is a commonly used PDF reader, may not be the best choice. This is because the PDF file is \emph{locked} for writing when open by \emph{Acrobat reader}. This means that if you want to re-knit your Rmd file to a PDF file, you may end up with a writing error rather than an updated PDF file. To avoid this, you will need to close the PDF file in \emph{Acrobat reader} before clicking the \emph{knit} button in \emph{Rstudio}. We recommend a better solution: use a PDF viewer that does \emph{not} lock the viewed PDF file. One such program is called \emph{SumatraPDF}, which can be downloaded from \url{http://www.sumatrapdfreader.org}.} After the lengthy first-time compilation, the subsequent compilations will only take a few seconds.
 
@@ -138,7 +138,7 @@ plot(airquality$Wind,    type = "l", xlab = "time", ylab = "Wind"   )
 
 Even better is to have the text, the code and the output in one document. This is what *R Markdown* does. When the final document is "created", the R-code is executed and the results are merged in the document. Figure 4 illustrates how this works in *Rstudio*.
 
-![Screenshot of *Rstudio* showing an R Markdown code (left) and the resulting document produced via *knit* (right).](Rmarkdown_ex1.png)
+![Screenshot of *Rstudio* showing an R Markdown code (left) and the resulting document produced via *knit* (right).](images/Rmarkdown_ex1.png)
 
 There are several parts in the *R Markdown* document:
 
@@ -1022,7 +1022,7 @@ We recommend that you study the tutorials in advance, i.e., *before the class*. 
 
 If you installed the *RTM* package, you will find the tutorials in the *Tutorial* tab of the *Rstudio* program (Figure 5). Run the *tutorial* by clicking the *Start Tutorial* button.
 
-![Left: Rstudio with the Tutorial tab selected. Right: RTM tutorial *conceptual* run as a web-based app, created using the *learnr* package.](Rstudio_tutorial.png)
+![Left: Rstudio with the Tutorial tab selected. Right: RTM tutorial *conceptual* run as a web-based app, created using the *learnr* package.](images/Rstudio_tutorial.png)
 
 Alternatively, type in the R-console
 ```
@@ -1048,7 +1048,7 @@ Each tutorial comes with a set of *exercises*, which contain more complicated pr
 
 The exercises recommended for a given tutorial are listed at the end of the tutorial (section *More exercises*). For example, the tutorial on *Reversible reactions and equilibrium chemistry* recommends three additional exercises (*equilibriumNH3*, *equilibriumHCO3*, *equilibriumOMD*) (Figure 6).
 
-![Screenshot of an RTM tutorial *Reversible reactions and equilibrium chemistry*, showing the suggestions for extra exercises to solidify the knowledge gained in the tutorial.](RTMexercises.png)
+![Screenshot of an RTM tutorial *Reversible reactions and equilibrium chemistry*, showing the suggestions for extra exercises to solidify the knowledge gained in the tutorial.](images/RTMexercises.png)
 
 Type in the R-console
 ```
