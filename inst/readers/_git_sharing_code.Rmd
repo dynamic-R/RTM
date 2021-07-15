@@ -1,206 +1,156 @@
 ---
-title: "Git, GitLab/Github and RStudio - Sharing Code with the World"
+title: "Rstudio and Github --- Sharing your R-Code with the World"
 subtitle: "Reader Accompanying the Course Reaction Transport Modeling in the Hydrosphere"
-author: "Karline Soetaert and Lubos Polerecky"
-date: 'May 2021'
-vignette: >
-  %\VignetteIndexEntry{Git, GitLab/Github and RStudio - Sharing Code with the World: accessory material}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{utf8}
+author: "Lubos Polerecky and Karline Soetaert, Utrecht University"
+date: 'July 2021'
 output:
-  pdf_document: default
+  pdf_document:
+    number_sections: true
+    toc: true
+abstract: \noindent Once you start working on a code or program with several people, it becomes worthwhile to invest some time into learning about the tools that are available for sharing, editing and tracking changes in such codes. Here, we briefly illustrate how to work with Gitlab/Github in Rstudio.
 ---
-
-Once you start working on one code or program with several people, it becomes worthwhile to invest some time into the tools that are available for sharing, editing and tracking changes in such codes. Here we illustrate -briefly- how to work with Git, Gitlab and how this can be done from within Rstudio.
-
-With any version control system such as git (or sourceforge, Rforge), open source code can be edited by different people, a history of the changes is kept, and changes can be accepted or rejected. 
-
-It is often also possible to create team pages where the code of different projects can be put, webpages can be made that get a DOI and can be shared with published papers, and so on.
 
 # Getting started with Git
 
-Git is a free and open source distributed version control system.  To start sharing code, you need to install git on your computer, and choose a version control system manager such as e.g. GitLab or GitHub.
+*Git* is a free and open source distributed version control system.  To start sharing a code via *git*, you need to install *git* on your computer, and choose a version control system manager, e.g., GitLab or GitHub.
 
-After you have created a test project, you can import it (checkout) from within Rstudio.
+## Install git on your computer
 
-# 1. Create a gitlab account and install git on your computer 
+Download *git* from \url{https://git-scm.com/downloads} for your operating system (e.g., ``Git-2.32.0.2-64-bit.exe``, or some newer version, if you are a Microsoft Windows user), and install it. 
 
-***1.1 Install git *** 
+During the installation process, select the default option for most questions (unless you know what you are doing), except:
 
-https://git-scm.com/book/en/v2/Getting-Started-Installing-Git 
-
-**In MS Windows** Don't forget to untick the ‘Git Credential Manager’ checkbox during the Git for Windows installer (otherwise, see below).
-
-See: https://stackoverflow.com/questions/37182847/how-to-disable-git-credential-manager-for-windows
-
-***1.2 GitLab account *** 
-
-Follow the steps on https://gitlab.com/
-
-You will need to create an ssh key. How to do this is well explained in:
-
-https://dev.to/sndrx/how-to-set-up-an-ssh-key-and-use-it-in-gitlab--42p1
-
-# 2. Make a project (if you are the project master) - or link to the project (developer).
-
-One of you (the *project master*) now should make a new project, and add all colleagues working on the same project as *developers*. 
-
-The others (developers) then have to link to the project created by the project master.
-
-If you ar the project master, within gitlab, you click "New Project" and give a name to the project. 
-
-You are now the project master and can add new developers to the project.
-
-    Goto settings (bottom left column)
-    Click "Members"
-
-Add the colleagues with whom you are working on the project.
-
-Note that, before you can actually work on this project, you will need to add the project on your computer.
-
-# 3. Check out your repository from within RStudio
-
-##  You have developer access
-
-To start working on an existing remote project on which you are granted to work as developer:
+  - select *main* when asked about the name for the initial branch of a new repository;
+  - choose *none* when asked to *Choose a credential helper*.\footnote{If you forget to do this, see \url{https://stackoverflow.com/questions/37182847/how-to-disable-git-credential-manager-for-windows}.}
   
-  In RStudio
-    
-    File / New Project / Version Control / Git
-    
-  Repository URL: https://gitlab.com/[user]/[Project]
-    
-  Working directory: Do not choose a directory where you already have files you are working on. Move these first to a temporary location.
+## Create a GitLab account and a project
+
+Follow the steps on \url{https://gitlab.com/} to create an account.
+
+You will need to create an ssh key. How to do this is well explained here (see alse below, section *Useful tips*):
+
+\url{https://dev.to/sndrx/how-to-set-up-an-ssh-key-and-use-it-in-gitlab--42p1}
+
+One of you will be the *project master*, your colleagues working on the same project will be *developers*. 
+
+If you are the project master, click "New Project" within gitlab and give your new project a name. Then add the colleagues with whom you are working on the project as developers:
   
-You now have a local copy of the remote repository. 
+  - Go to *settings* (bottom left column)
+  - Click *Members*
 
-### You do not have developer access
+If you are a developer, you have to link to the project created by the project master.
 
-If you want to make a personal copy of an existing project on which you don't have developer access, you have to *fork* it first to your own account, and start working from there. 
+Note the URL of the project. In most cases it will be in the form:
 
-Within gitlab, you go to the repository, and click *fork*.
+\url{https://gitlab.com/YOUR_USERNAME/YOUR_PROJECT}.
 
-You can now go back to your own account, find the URL of this project and proceed like above.
+## Create a GitHub account and a project
 
-## 4. Normal workflow in RStudio
+Follow the steps on \url{https://github.com/} to create an account.
 
-Once you've set up an project to use git (see 2.) you will find a number of new buttons 'commit', 'push' and 'pull' in the "git" tab at the topright in RStudio. 
+Create a new repository. Then, choose *Settings* $\rightarrow$ *Manage access* $\rightarrow$ *Invite teams or people* to add developers to the project. 
 
-In RStudio, the normal git workflow goes like this
+Note the URL of the repository. In most cases it will be in the form:
 
-- work on your local files in RStudio as you would normally do without git
-- regularly 'commit' the changes, so that git 'locally' starts to track changes
-- 'push' the changes as much as you want (after committing). Now your changes are also on-line, and viewable by other developers
-- 'pull' the changes from the remote if other developers have changed some things.
+\url{https://github.com/YOUR_USERNAME/YOUR_PROJECT}.
 
-If you made changes you believe should be kept, create a merge request: https://docs.gitlab.com/ee/workflow/forking_workflow.html
+# Using Git within Rstudio
 
-This is the basics. Check  https://about.gitlab.com/2014/09/29/gitlab-flow/ for more advanced workflows.
+Before you can actually work on the project, you need to add the project locally on your computer.
 
-## 5. Some common git commands ##
+## GitLab/GitHub and Rstudio
 
-    git clone https://gitlab.com/[user]/[project]
-Copies all information from the remote repository to your local machine
+To start working on an existing remote project on which you are granted to work as a developer:
+  
+* In Rstudio, choose File $\rightarrow$ New Project $\rightarrow$ Version Control $\rightarrow$ Git $\rightarrow$ Repository URL.
 
-    git branch 
-Shows all branches in the local repository
+* Paste the URL of your project, e.g., 
 
-    git branch -a 
-Shows all local and remote branches
+  \url{https://gitlab.com/YOUR_USERNAME/YOUR_PROJECT} 
 
-    git checkout -b [branchname]
+  or 
+  
+  \url{https://github.com/YOUR_USERNAME/YOUR_PROJECT}
 
-creates lokal branch tracking remote branch with same name name
-all commits will be done to this branch, all pushes will be done to remote branch with the same name
+* When choosing a working directory, do not choose a directory where you already have files you are working on. Move these first to a temporary location.
 
-    git status
-Check which files in the local folder are tracked by git (locally)
+* You now have a local copy of the remote repository. 
 
+If you want to make a personal copy of an existing project on which you don't have a developer access, you have to *fork* it first to your own account, and start working from there. 
 
+* Within gitlab/github, you go to the repository, and click *fork*.
 
-# References.
+* You can now go back to your own account, find the URL of this project and proceed as above.
 
-This reader has been adapted for use in the class from  https://gitlab.com/tcox/git_howto
+## Normal workflow in Rstudio
 
-Tom Cox, 2018. Git, GitLab & RStudio.
+Once you have set up a project in *Rstudio* to be developed with *git*, you will find a *Git* tab in the top-right panel of *Rstudio*. In this tab, you will see a number of buttons, including *commit*, *pull*, *push*, and *New Branch*. Additionally, you will see there a pull-down menu with the different development branches of the project. 
 
-# A short summary of steps
+In *RStudio*, the normal *git* workflow goes like this:
 
-## Project development in Rstudio using a repository on GITHUB
+- At the beginning, select the *main* branch of the project from the pull-down menu with the (possibly several) branches of the project, and *pull* the code from the remote repository.
 
-The following steps are explained for Rstudio.
+- It is assumed that the version of the project you just pulled is correct and working, and you want to develop it further. However, you do not want to potentially "mess up" the working project by your changes. Therefore, it is recommended that you first create a *new branch*. This is done by clicking the *New Branch* button in the *Git* tab, giving the new branch a name (we assume here the name *branch1*), and clicking *Create*.
 
-### Link a remote repository on Github.com to a local project
+- From this moment, be sure that you only modify your code in this newly created branch. That is, work on your local files in *Rstudio* as you would normally do without *git*, but be sure that the *branch1* is selected in the *Git* tab. Specifically, do not change branches and edit files there, unless you know what you are doing. You will avoid headaches later.
 
-* File -> New project -> Version Control -> Git 
-* type in Repository URL and project directory name
-* specify the project folder
+- During the development, regularly *commit* the changes you have made, so that your changes are locally tracked by *git.*
 
-These step should enable a Git tab in the top-right corner of Rstudio.
+- Every now and then, *push* your changes on-line (after committing). When you do so, your local changes will be uploaded to the github/gitlab server and will thus be visible by other developers. They will see them locally on their computer if they *pull* from the server and choose *branch1* in their *Git* tab.
 
-* With the blue down-arrow, PULL the files from Github to the local computer.
+- Similarly, you will see changes in their branch if you *pull* the project from the remote server.
 
-### Create a new branch
+- If you made changes you believe should be kept, it is time to *merge* the development branch *branch1* with the *main* branch. This is done by selecting the *main* branch in the *Git* tab, and then by typing 
 
-Best way to start the development from an existing code is to create a new branch of the 'main' (or 'master') branch:
+  ``git merge branch1``
 
-* SELECT the 'main' branch using the pull-down menu in the Git tab
-* CREATE a new BRANCH by clicking the icon next to it (2 connected rectangles)
-* once the branch is created, SELECT it in the Git tab and work from there.
+  in the *terminal* within *Rstudio*, which you can find in the lower-left tab of *Rstudio* (note: do not confuse the terminal with the R-console). 
 
-Ensure that you only modify files in the newly created branch. Specifically, do not change branches and edit files there. You will avoid headaches later.
+- After this step, you need to *push* the *main* branch to the remote server, so that others can *pull* it and work from there.
 
-### Push files from your local branch to the remote branch
+- Finally, it is a good idea to *delete* the *branch1* after it has been *merged* with the *main* branch. This will keep your development less confusing. To do this, type in the terminal
 
-* click COMMIT in the Git tab
-* spicify a commit message
-* check a checkbox to specify which file should be changed
-* click commit
-* review the popup window to see that everything went smoothly, and close it
+  ``git branch -d branch1``
 
-* click PUSH (green up-arrow)
-* review the message to see that everything went smoothly
+  or 
 
-### Merge a branch to the main branch
+  ``git branch -D branch1``
 
-Once you are satisfied with the code in the new branch, MERGE it with the main.
+- Occasionally, you will need to *prune* to keep things tidy on your computer and on the github repository. This is done by typing in the terminal:
 
-* select the main branch in the Git tab
-* open terminal in Rstudio and type there the following command (we assume here that new_branch is the name of the new branch that you want to merge):
-```
-git merge new_branch
-```
-* PUSH changes to Github
+  ``git remote prune -n origin``
+  
+  to see what will be *pruned*, and then
+  
+  ``git remote prune origin``
 
-### Delete a branch
-After merging, you don't want to work on the new branch anymore. So you can just as well DELETE it.
+  to actually do the *pruning*.
 
-* open terminal in Rstudio and type there the following command (we assume here that new_branch is the name of the new branch that you want to delete):
+These are the basics. Check 
 
-```
-git branch -d new_branch
-```
-or
-```
-git branch -D new_branch
-```
-Then clean it up on the github repository:
+- \url{https://about.gitlab.com/2014/09/29/gitlab-flow/}
 
-```
-git remote prune -n origin
-git remote prune origin
-```
+  or
 
-## Other stuff
+- \url{https://r-bio.github.io/intro-git-rstudio/}
 
-### Install the RTM package from the edited source developed via Github
-In terminal, type
-```
-R CMD INSTALL RTM
-```
+for more information.
 
-### Configure authentication for Github
-In terminal, type
+# Useful tips
+
+When pushing your local changes to the GitHub repository, you will be asked for your password every time. If you want to modify this behaviour, check the instructions here: 
+
+\url{https://docs.github.com/en/get-started/getting-started-with-git/caching-your-github-credentials-in-git}
+
+For example, to cache the credentials for 2 hours (7200 s), type in the terminal:
+
+``git config --global credential.helper 'cache --timeout=7200'``
+
+Check this website for updates in the authentication protocols:
+
+\url{https://github.blog/2020-12-15-token-authentication-requirements-for-git-operations/}
+
+To configure ssh authentication for Github, type in the Rstudio terminal:
 ```
 git config --global user.name "your_user_name"
 git config --global user.email "your_email_address"
@@ -208,11 +158,7 @@ ssh-keygen -t rsa -C "your_email_address"
 ssh -T git@github.com
 ```
 
-To cache your Github authentication, so that you don't need to enter a password every time you want to push updates to the Github, type in the terminal:
+# References
 
-```
-git config --global credential.helper cache
-git config --global credential.helper 'cache --timeout=7200'
-```
-
-In this particular case, the password will need to be entered once at the beginning, and will "last" for 2 hrs (7200 s).
+Parts of this reader were adapted for use in the class from https://gitlab.com/tcox/git_howto
+by Tom Cox, 2018. Git, GitLab & RStudio.
