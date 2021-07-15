@@ -10,4 +10,3 @@ Description: Tutorials, exercises and readers for use in environmental modelling
 License: GPL (>=3.0)
 VignetteBuilder: knitr
 Encoding: UTF-8
-
