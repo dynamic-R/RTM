@@ -157,7 +157,7 @@ Two useful information sources are accessible from the Rstudio menu: *help/cheat
 
 Short help on the text format that can be used in Markdown documents can be found in *help/Markdown quick reference*.
 
-## Exercises --- creating and exporting an Rmd document
+## Exercises --- Creating and exporting an Rmd document
 
 Open the *R Markdown* file called ``Rmarkdown_small.Rmd`` in *Rstudio*. The file is available via Blackboard and was used to generate Figure 4.
 
@@ -603,7 +603,7 @@ mean(LL[[1]])
 
 will calculate the mean of element *Vector*.
 
-## Exercises --- vectors and sequences
+## Exercises --- Vectors and sequences
 
 ### Mean of a vector
 
