@@ -69,8 +69,8 @@ RTMtutorial <- function(x = c("introduction", "why", "conceptual", "massbalance"
 
 RTMexercise <- function(x = c("introductionR", "conceptual", "massbalance", "massbalance_ecology",
     "carbonCycle", "ozone", "dissolutionSi", "equilibriumNH3", "equilibriumHCO3",
-    "equilibriumOMD", "detritus", "COVID", "virus", "npzd",  "plant_coexistence", 
-    "crops_weed", "hyacinth_algae",
+    "equilibriumOMD", "detritus", "bears_salmon", "COVID", "virus", "npzd",  "plant_coexistence", 
+    "crops_weed", "hyacinth_algae", "aquaculture", 
     "riverAnoxia", "Pdiagenesis", "diagenesis"), 
     type = c("HTML", "PDF", "RMD", "WORD")) {
 
@@ -89,12 +89,14 @@ RTMexercise <- function(x = c("introductionR", "conceptual", "massbalance", "mas
       "Equilibrium chemistry - the carbonate system", 
       "Equilibrium chemistry - impact of mineralisation on pH", 
       "Bacterial decay of detritus (biogeochemistry)",
+      "Foodweb model comprising bears, salmon and scavengers",
       "The COVID pandemic (population dynamics)", 
       "Virus dynamics in the ocean",
       "NPZD model (marine ecosystem model)",
       "Competition and coexistence of plants in grasslands",
       "Crops and weed competition (agriculture-economics)",
       "Competition between floating plants and algae in a lake",
+      "Model of scallop aquaculture, including economics",
       "Anoxia in an estuary (1-D reaction transport model)",    
       "Simple phosphorus diagenesis in marine sediments",
       "Complex diagenesis in marine sediments (C, N, O2, S)"

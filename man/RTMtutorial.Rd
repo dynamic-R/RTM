@@ -11,11 +11,12 @@ RTMtutorial (x = c("introduction", "why", "conceptual", "massbalance",
      "transportPorous", "transportBoundaries", "transportR"), 
      type = c("tutorial", "RMD"))
     
-RTMexercise(x = c("introductionR", "conceptual", "massbalance", "massbalance_ecology", 
-     "carbonCycle", "ozone", "dissolutionSi", "equilibriumNH3",                   
-     "equilibriumHCO3", "equilibriumOMD", "detritus", "COVID",                    
-     "virus", "npzd", "plant_coexistence", "crops_weed", "hyacinth_algae",        
-     "riverAnoxia", "Pdiagenesis", "diagenesis"), 
+RTMexercise(x = c("introductionR", "conceptual", "massbalance", 
+    "massbalance_ecology", "carbonCycle", "ozone", "dissolutionSi", 
+    "equilibriumNH3", "equilibriumHCO3", "equilibriumOMD", "detritus", 
+    "bears_salmon", "COVID", "virus", "npzd",  "plant_coexistence", 
+    "crops_weed", "hyacinth_algae", "aquaculture", 
+    "riverAnoxia", "Pdiagenesis", "diagenesis"), 
      type = c("HTML", "PDF", "RMD", "WORD"))  
 
 RTMreader (x = c("events", "forcings", "observations", 
