@@ -198,20 +198,20 @@ plot(Area2, grid = Grid, ylab = "Area (m2)")
 LVmodel <- function(t, state, parameters) {
   with (as.list(c(state, parameters)), {
 
-    dx.dt <- a*x*(1-x/K) - b*x*y
-    dy.dt <- g*b*x*y - e*y
+    dX.dt <- a*X*(1-X/k) - b*X*Y
+    dY.dt <- g*b*X*Y - e*Y
 
-    return (list(c(dx.dt, dy.dt), 
-                 sum = x+y))
+    return (list(c(dX.dt, dY.dt), 
+                 sum = X+Y))
   })
 }
 
-y.ini <- c(x = 670, y = 610)
-parms <- c(a = 0.04, K = 1000, b = 5e-5, g = 0.8, e = 0.008)
+y.ini <- c(X = 670, Y = 610)
+parms <- c(a = 0.04, k = 1000, b = 5e-5, g = 0.8, e = 0.008)
 times <- 1:100
 out   <- ode(y = y.ini, func = LVmodel, times = times, parms = parms)
 # change initial conditions
-y.ini2 <- c(x = 100, y = 540) 
+y.ini2 <- c(X = 100, Y = 540) 
 out2   <- ode(y = y.ini2, func = LVmodel, times = times, parms = parms)
 # plot results in one graph
 plot(out, out2, mfrow=c(1,3), col=c("black","red"), lty=c(1,1))
@@ -234,7 +234,7 @@ parms4 <- parms
 parms4["b"] <- 10e-5
 out4  <- ode(y = y.ini, func = LVmodel, times = times, parms = parms4)
 plot(out1,out2,out3,out4, mfrow=c(1,3), col=c(1,2,3,4), lty=1)
-legend("right",legend=c("b=1e-5","b=1.3e-5","b=5e-5","b=10e-5"), col=c(1,2,3,4), lty=1)
+legend("right",legend=c("b=1e-5","b=1.3e-5","b=5e-5","b=10e-5"), col=1:4, lty=1)
 ```
 
 ### Lorenz model
@@ -243,15 +243,15 @@ legend("right",legend=c("b=1e-5","b=1.3e-5","b=5e-5","b=10e-5"), col=c(1,2,3,4),
 
 Lorenz <- function(t, state, parameters) {
   with (as.list(c(state, parameters)), {
-    dx.dt <- -8/3*x + y*z
-    dy.dt <- -10*(y-z)
-    dz.dt <- -x*y + 28*y - z
-    return (list(c(dx.dt, dy.dt, dz.dt), 
-                 sum = x+y+z))
+    dX.dt <- -8/3*X + Y*Z
+    dY.dt <- -10*(Y-Z)
+    dZ.dt <- -X*Y + 28*Y - Z
+    return (list(c(dX.dt, dY.dt, dZ.dt), 
+                 sum = X+Y+Z))
   })
 }
 parameters <-  NULL
-state      <- c(x = 1, y = 1, z = 1)
+state      <- c(X = 1, Y = 1, Z = 1)
 time.seq   <- seq(from = 0, to = 100, by = 0.005)
 # solve it
 out <- ode(y = state, times = time.seq, func = Lorenz, parms=parameters )
