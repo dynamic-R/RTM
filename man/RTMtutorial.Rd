@@ -2,7 +2,8 @@
 \alias{RTMtutorial}
 \alias{RTMexercise}
 \alias{RTMreader}
-\title{Reaction Transport Modelling Course: tutorials, exercises and readers with accessory material}
+\alias{RTMtemplate}
+\title{Reaction Transport Modelling Course: tutorials, exercises, templates and readers with accessory material}
 \usage{
 RTMtutorial (x = c("introduction", "why", "conceptual", "massbalance",     
      "Rmodels", "largescale", "chemical", "equilibrium", "enzymatic",    
@@ -22,6 +23,9 @@ RTMreader (x = c("events", "forcings", "observations",
       "perturbation_I", "perturbation_II", 
       "interactive", "numericalR", "git_sharing_code"),
       type = c("HTML", "PDF", "RMD", "WORD"))      
+
+RTMtemplate(x = c("rtm0D", "rtm1D", "porous1D", "porous1D_extensive", 
+      "rtmEquilibrium", "npzd"))
 }
 \arguments{
   \item{x }{the name or the number of the tutorial, exercise or reader. When x = "?", a list of tutorials, exercises or readers will be displayed, including a short description.
@@ -63,9 +67,11 @@ The answers to the exercises are also stored in the package, but we did not incl
  RTMtutorial("largescale")
  RTMtutorial(2)
  RTMexercise("COVID")
+ RTMtemplate(1)
 }
 
 RTMtutorial ("?")
 RTMexercise ("?")
 RTMreader ("?")
+RTMtemplate ("?")
 }

@@ -183,3 +183,30 @@ RTMreader <- function(x = c("events", "forcings", "observations",
    } else openRmdFile(RMD, type)
   }   
 }
+
+RTMtemplate <- function(x = c("rtm0D", "rtm1D", "porous1D", "porous1D_extensive", 
+                              "rtmEquilibrium", "npzd")) {
+  
+  LL <- as.character(formals(RTMtemplate)$x[-1])
+  if (length(x) > 1) 
+     stop("only one template can be opened at a time - select one (number inbetween 1,", length(LL), ")")
+  if (x == "?") {
+    template <- data.frame(x=LL, description = 
+                             c("Template for dynamic model in 0D",
+                               "Template for dynamic reaction-transport model in 1D",
+                               "Template for dynamic reaction-transport model in 1D in porous media", 
+                               "Template for dynamic reaction-transport model in 1D in porous media (with text)",
+                               "Template for equilibrium chemical model",
+                               "Template to be used for the NPZD exercise"))
+    return(template)
+  } else {
+    if (is.character(x))
+      Which <- LL[pmatch(tolower(x), tolower(LL))]
+    else
+      Which <- LL[x]
+    
+    file <- paste0(system.file('rmarkdown', package = 'RTM'),"/templates/",Which, "/skeleton/skeleton.Rmd", sep="")
+    openRmdFile (file, type = "RMD")
+      
+  }
+}
