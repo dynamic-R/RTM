@@ -1,0 +1,183 @@
+---
+title: 'The RTM package'
+subtitle: "a Learning Environment for Reaction Transport Modelling"
+author: "Lubos Polerecky, Dries Bonte and Karline Soetaert"
+date: "July 2021"
+output: pdf_document
+abstract: \noindent Since many years we have been teaching courses on environmental and reaction-transport modelling to master students at Ghent and Utrecht University. Our aim is to teach students how to create models from scratch and apply them to advance their understanding of natural systems, including those perturbed by anthropogenic activities. Typically, students attending our classes have different backgrounds and highly variable levels of skills in quantitative and computational methods, which makes it difficult to find a teaching style that suits everyone. To overcome this issue, we revised our didactic approach and now teach in the form of a "flipped class", where students prepare themselves ahead of the class using material available on-line, and then, during the class, put the learned concepts into practice by solving problems and exercises with a direct feedback from us. To facilitate this teaching approach, we created educational videos, tutorials, and exercises that guide the students in learning and exploring the topics covered in the courses. Here, we present the R-package RTM, which merges this teaching material together with our modelling and teaching experiences under the common platform of the programming language R.
+vignette: >
+  %\VignetteIndexEntry{RTM: learning environment for reaction transport modelling}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{echo = FALSE, include = FALSE}
+output: rmarkdown::html_vignette
+  \usepackage[T1]{fontenc}
+```
+
+```{r, include = FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introduction
+
+The courses Environmental Modelling and Reactive Transport Modelling in the Hydrosphere have been taught at Ghent and Utrecht University, respectively, since many years. Students attending these courses learn how to make mechanistic models that start from first principles of physics, chemistry, biology, and ecology, are mathematically formulated as differential equations, and are solved numerically by a computer. The models aim to advance their understanding of natural systems by allowing prediction of the systems' behaviour under various scenarios (e.g., response of the global carbon cycle to fossil fuel burning).
+
+The aim of the courses is to teach students how to make models from scratch. This differs from many modelling courses where students merely learn how to apply existing tools. More specifically, students learn to
+
+  - create conceptual models that describe environmental scenarios or problems,
+  - translate conceptual models into mechanistic models and, ultimately, mathematical equations that describe the variation of the state variables characterising the system in time and space,
+  - implement these mathematical equations in a computer program and solve them,
+  - interpret the results in terms of the original environmental scenario or problem, and
+  - apply the models to realistic scenarios.
+
+We use R (R core team 2020) as the programming language for implementing and solving these models. This is mainly because there is an "ecosystem" of R-packages that provide methods for solving the type of differential equations that we deal with in the courses, including *rootSolve*, *deSolve*, *ReacTran* (Soetaert, 2009; Soetaert et al., 2010; Soetaert and Meysman, 2012). These packages have been implemented so that they hide much of the mathematical details behind the methods, allowing students to focus on the original problem rather than being concerned with finding a numerical approach to solve it. Additionally, they provide auxiliary functions that facilitate tabulation and visualisation of model results, fitting of models to data, etc.
+
+Our students typically follow a master program in Earth or Life Sciences, and are interested in disciplines such as oceanography, biology, biogeochemistry, hydrology, or physics. Some have a good understanding of the processes occurring in the natural environment, but have never written a computer program before; others have ample experience in programming, mathematics or computer science, but little knowledge about the processes in nature. Due to this variation in background, knowledge and skills, a big challenge is to find a teaching style that can stimulate efficient and effective learning for all students. 
+
+# Our way of teaching: "flipped class"
+
+In the "traditional" learning environment, the instructor explains the context, theory and examples during lectures, and encourages students to practice the taught material by themselves at home (e.g., by solving problems and exercises given as homework assignments). In our "flipped class" approach, this process is reversed. Students obtain the theoretical lectures in advance and prepare themselves before the class. Then, during the class, they practice the learned concepts by solving problems and exercises with a direct feedback from the instructor.
+
+One of the advantages of the flipped class is that students can work more focused and obtain a more thorough understanding of the material. Typically, the level of understanding of students in the modelling class is highly diverse. Thus, in the traditional way of teaching, the brighter students often get bored as they feel that the material is being taught too slowly, while less bright students become demotivated or frustrated as they cannot follow. In the flipped class approach, students can take the time they need to prepare themselves for the lessons individually. Subsequently, while in the classroom, they can directly interact with tutors and therefore explore the topics to the depth determined by their own ability, motivation and ambition. This provides more room for tutoring "a la tete du client".
+
+The modelling course taught by Karline Soetaert and Dries Bonte at Ghent University has been in the form of a flipped class since the academic year 2019--2020, while the course taught by Lubos Polerecky and Karline Soetaert at Utrecht University first implemented this approach in the academic year 2020--2021. This way of teaching proved to be a positive experience:
+while in previous years students would complain that they do not get enough practice in class, there is now ample time for practical exercises. Also the class is much more dynamic, with dramatically improved students participation and involvement.
+
+# Implementation of the flipped classroom
+
+To prepare for each lesson, students are offered the choice to either read one or more chapters from the textbook (Soetaert and Herman, 2009), or watch a short video that explains the theory. Then they are encouraged to test the understanding of the theory by answering a number of short (often multiple-choice) questions. After this "priming", students go to the classroom, where they submerge themselves, under the supervision of tutors, in solving more substantial exercises.
+
+## Video's that elaborate on the theory
+
+One way of “flipping” the classroom is by means of video lessons that elaborate on the theory. There is a series of videos for all the material taught in the modelling class. 
+
+The videos typically take around 15 minutes or less, and are created as follows:
+
+   - (1) first didactically sound slide presentations are created, 
+   - (2) the narrative of the material on the slides is written down, and 
+   - (3) the spoken text is recorded while playing the slides. 
+   
+Steps (1) and (2) need substantial input from the tutors. Step (3) can be outsourced.
+
+Apart from the direct benefits, this teaching approach also offers a number of longer-term advantages. The video material has been put on the internet (i.c., youtube) to serve as an online course. 
+
+Also, it can be used by students at any time to refresh their knowledge on a subject. 
+Students can move through these videos at their own pace - some complain that they go too slow - multi-tasking or the fast-forward knob is then an option. 
+
+## Quizzes and questions
+
+Each of the video lessons is accompanied by a set of quizzes (questions), and small exercises, so that the student can test her/his knowledge on the subject. 
+
+Before we introduced thes quizzes, we often noted that some students overestimate their grasp of a subject, and are overly confident. Other students are baffled by the complexity of the material and may loose confidence that they eventually will manage the topic. As one student said (in his/her evaluation): "I loved this course, but the pressure was immense".
+
+The questions and small exercises help them assess how far they have understood the lessons, and also prepares them more thoroughly for the exercises in class, and -ultimately- for the exam. 
+Another aim is to improve students’ quantitative problem-solving skills, by giving them hints and guidance as to how they can tackle a certain question. 
+
+The implementation of the questions has been done in the form of 'tutorials' as provided from the *learnr* package (Schloerke et al., 2020). They consist of multiple-choice questions, with here and there a more substantial exercise that the students have to solve using R code.
+
+There is no grading of these tutorials, so the students may use them for their own benefit. However, as they also serve to prepare for some of the exam questions, this hopefully gives extra impetus to actually conduct the quizzes and make the exercises.
+
+## Exercises
+
+During class the students have to work in small groups on practical modelling applications. The models deal with a variety of environmental issues. Care has also been taken to make the approaches in the exercises versatile. 
+
+At the time of writing this vignette, the exercises dealt, a.o. with the following environmental issues:
+
+* *The CO2 problem*. The atmospheric CO2 concentrations are described with an *earth-system box model* of carbon fluxes amongst the large earth compartments. The impact of anthropogenic activities on the atmospheric CO2 concentration is estimated. Effects of some mitigation strategies is calculated.
+* *The ozone problem*. The ozone concentration in the lower atmosphere is modeled. Ozone is a green-house gas and at high concentrations ozone is harmful to humans and animals. It also plays an important role in absorbing UV radiation. The model is a good example of a typical *chemistry model*, and is used to test how anthropogenic emissions of NO (nitric oxide) due to combustion or burning of fuels alter the natural ozone dynamics.
+* *Ocean acidification*. This is a very complex problem as it deals with *equilibrium chemistry*. The topic is introduced by three exercises of increasing complexity. A more extensive model of ocean acidification is not part of the mandatory material, but is dealt with in the accessory material (see below) that students may consult if they are interested in the topic.  
+* *The COVID pandemic*.  A set of *population, epidemiological* (so-called SIR) models are implemented to describe the spread of the SARS-CoV2 (corona) virus, including the hospitalisations and mortality rates. The students practice how to use information from epidemiologists (that are not modelers) in their models.
+* *Agricultural eutrophication*. This model application, that describes how fertilization with nutrients affects the *competition* between crops and weeds, also contains a (rather simplistic) *economic component* that accounts for the profits farming can bring.
+* *Low oxygen in a river*. This is a 1-dimensional *reaction transport model* that describes the evolution of the oxygen concentration in a river, that is subjected to excessive nutrient input (ammonia). The model is used to estimate the level in nutrient inputs that keep the minimal oxygen concentration above a certain critical level.
+
+Other material is:
+
+* Introduction to R for modellers
+* Making conceptual schemes and creating mass balance equations
+* The dissolution kinetics of Silica particles
+* Bacterial decay of detritus
+* Early diagenesis in marine sediments (the coupled cycles of C, N, O, S).
+* Competition between plants in grasslands.
+* Competition between floating plants and algae in shallow lakes
+* Virus dynamics in the ocean
+* Bioeconomic modelling of a Scallop aquaculture
+
+New material may be added in the future, thus creating a repository from which modules can be selected based on students interests that vary from year to year.
+
+## Accessory material
+
+This consists of a number of small documents that go into somewhat more detail for various topics. It is not compulsory material, so the students get to see this after the exam, and before they start the projects (see below).
+
+These "readers" are meant to satisfy the curiosity of some students that have a desire to go more into depth for certain topic. 
+
+They comprise documents dealing with:
+
+* How to implement *events* in dynamic models developed in R
+* How to use *forcing functions* based on data in models developed in R
+* How to easily showing *observed data* alongside model results in R 
+* How to *fit* a 1D reaction-transport model to data in R 
+* How to *visualise* dynamic outputs from a 1D reaction-transport model in R
+* How to include *pH dynamics* in a 1D reaction-transport model in R
+* How to mathematically investigate the response of systems to a *perturbation from equilibrium*
+* How to make *interactive applications* in R
+* The basics of the *numerical methods* used for reaction-transport modelling in R
+
+## Longer projects
+
+After having done the written exam, the students work on a specific environmental topic in small groups of 3-4 people. In contrast to the exercises made in class, they do this with less guidance from the teachers. In addition, they also need to provide a report, where they outline the scientific rationale of their work, describe their model, and document the results, much like they would do while writing a scientific paper. 
+
+Note that the topics of these projects are NOT part of the RTM package.
+
+# About this package
+
+This R-package contains the tutorials, exercises and extra material that the students have to work through during their courses at Utrecht University. 
+
+Anyone that want to self-teach modelling can consult the tutorials and make the exercises. The answers are also provided, in a subdirectory under the inst package directory
+
+## tutorials
+
+The function *RTMtutorial* runs the tutorials. To list all possible tutorials:
+
+```{r}
+RTM:::RTMtutorial("?")
+```
+
+At the start of each tutorial is a link to the youtube video that deals with the theory.
+
+## Exercises
+
+R-function *RTMexercise* opens the PDF with the questions for each exercise. To list all possible exercises:
+
+```{r}
+RTM:::RTMexercise("?")
+```
+
+A number of model templates is available and can be downloaded from the Rstudio menu: "File->new File->Rmarkdown..->from template->name_of_the_template". 
+
+## Accessory material
+
+R-function *RTMreader* opens the PDF with the accessory (non-mandatory) material. To list all possible documents:
+\scriptsize
+```{r}
+RTM:::RTMreader("?")
+```
+\normalsize
+# References
+
+R Core Team (2020). R: A language and environment for statistical computing. R Foundation for
+  Statistical Computing, Vienna, Austria. URL https://www.R-project.org/.
+  
+Barret Schloerke, JJ Allaire and Barbara Borges (2020). learnr: Interactive Tutorials for R.
+  R package version 0.10.1. https://CRAN.R-project.org/package=learnr
+  
+Soetaert Karline (2009).  rootSolve: Nonlinear root finding, equilibrium and steady-state analysis of ordinary differential equations.  R-package version 1.6
+  
+Soetaert Karline, Thomas Petzoldt, R. Woodrow Setzer (2010). Solving Differential
+  Equations in R: Package deSolve. Journal of Statistical Software, 33(9), 1--25. URL
+  http://www.jstatsoft.org/v33/i09/ DOI 10.18637/jss.v033.i09
+  
+Soetaert, Karline and Meysman, Filip (2012). Reactive transport in aquatic ecosystems: Rapid model
+  prototyping in the open source software R Environmental Modelling & Software, 32, 49-60.
+  
