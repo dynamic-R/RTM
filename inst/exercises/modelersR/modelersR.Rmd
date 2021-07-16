@@ -1,12 +1,22 @@
 ---
-title: "Introduction to R and Rmarkdown for reactive transport modellers"
-subtitle: "Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
-author: "Karline Soetaert and Lubos Polerecky"
-date: "Januari 2021"
+title: |
+  | Introduction to R and R Markdown 
+  | for Reaction-Transport Modellers
+subtitle: |
+  | Teaching material accompanying the course 
+  | Reaction Transport Modelling in the Hydrosphere
+author: "Karline Soetaert and Lubos Polerecky, Utrecht University"
+date: "July 2021"
 output:
-  pdf_document: default
+  pdf_document: 
+    number_sections: true
+    toc: true
+  header-includes: 
+    \usepackage{float} 
+    \floatplacement{figure}{ht}
   word_document: default
   html_document: default
+abstract: \noindent This short reader introduces you to the programming tools that we will use in the *Reaction-Transport Modelling* class. It will show you how to merge text, programming code, and the results of this code in one document. The programming language we use is R, the text is written in *R Markdown*, and the creation of the documents is done by *knitr*. We recommend that you recreate the examples provided in this document and then solve the exercises. In this way you will start gradually building your knowledge of R and *R Markdown*, which will help you understand more efficiently the material covered in the course.
 ---
 
 ```{r child = 'modelersR_Q.Rmd'}
