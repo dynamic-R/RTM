@@ -67,7 +67,7 @@ RTMtutorial <- function(x = c("introduction", "why", "conceptual", "massbalance"
 }
 
 
-RTMexercise <- function(x = c("modelersR", "conceptual", "massbalance", "massbalance_ecology",
+RTMexercise <- function(x = c("introductionR", "conceptual", "massbalance", "massbalance_ecology",
     "carbonCycle", "ozone", "dissolutionSi", "equilibriumNH3", "equilibriumHCO3",
     "equilibriumOMD", "detritus", "COVID", "virus", "npzd",  "plant_coexistence", 
     "crops_weed", "hyacinth_algae",
@@ -117,7 +117,7 @@ RTMexercise <- function(x = c("modelersR", "conceptual", "massbalance", "massbal
 }
 
 # A private function - to be used as RTM:::RTManswer
-RTManswer <- function(x = c("modelersR", "conceptual", "massbalance",
+RTManswer <- function(x = c("introductionR", "conceptual", "massbalance",
     "carbonCycle", "ozone", "dissolutionSi", "equilibriumNH3", "equilibriumHCO3",
     "equilibriumOMD", "detritus", "COVID", "npzd", "crops_weed", 
     "estuaryAnoxia", "Pdiagenesis", "diagenesis"), 

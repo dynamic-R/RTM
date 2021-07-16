@@ -11,7 +11,7 @@ RTMtutorial (x = c("introduction", "why", "conceptual", "massbalance",
      "transportPorous", "transportBoundaries", "transportR"), 
      type = c("tutorial", "RMD"))
     
-RTMexercise(x = c("modelersR", "conceptual", "massbalance", "massbalance_ecology", 
+RTMexercise(x = c("introductionR", "conceptual", "massbalance", "massbalance_ecology", 
      "carbonCycle", "ozone", "dissolutionSi", "equilibriumNH3",                   
      "equilibriumHCO3", "equilibriumOMD", "detritus", "COVID",                    
      "virus", "npzd", "plant_coexistence", "crops_weed", "hyacinth_algae",        
