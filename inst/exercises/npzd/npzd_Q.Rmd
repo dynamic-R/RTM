@@ -49,12 +49,12 @@ The following assumptions are made:
 | -------------- | --------- | -------------------------------- | --------------------------- |                  
 | depth	         | 10        | water depth                      | $m$                         |
 | rUptake	       | 1.0	     | Nitrogen uptake rate constant    | $d^{-1}$                    |
-| ksPAR	         | 140	     | Monod ct for light limitation    | $\mu Einst~m^{-2}s^{-1}$    |
+| ksPAR	         | 140	     | Monod ct for light limitation    | $\mu Einst~m^{-2}~s^{-1}$    |
 | ksDIN	         | $1\times 10^{-3}$ | Monod ct for nutrient limitation | $mol~N~m^{-3}$              |
 | rGrazing	     | 1.0	     | Grazing rate constant            | $d^{-1}$                    |
 | ksGrazing	     | $1\times 10^{-3}$ | Monod ct for grazing             | $mol~N~m^{-3}$              |
 | pFaeces	       | 0.3	     | Part of ingestion to faeces      | $-$                         |
-| rMortality     | 400    	 | Mortality rate constant          | $(mol~N~m^{-3})^{-1}d^{-1}$ |
+| rMortality     | 400    	 | Mortality rate constant          | $(mol~N~m^{-3})^{-1}~d^{-1}$ |
 | rExcretion     | 0.1	     | Excretion rate constant (to DIN) | $d^{-1}$                    |
 | rMineralisation| 0.05      | Mineralisation rate constant     | $d^{-1}$                    |
 		

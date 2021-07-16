@@ -14,15 +14,15 @@ output:
     \floatplacement{figure}{ht}
 ---
 
-```{r child = 'NPZD_Q.Rmd'}
+```{r child = 'npzd_Q.Rmd'}
 ```
 
 \newpage
-```{r child = 'NPZD_A.Rmd'}
+```{r child = 'npzd_A.Rmd'}
 ```
 
 \newpage
-```{r child = 'NPZD2_A.Rmd'}
+```{r child = 'npzd2_A.Rmd'}
 ```
 
 # References
