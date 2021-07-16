@@ -4,5 +4,13 @@ LICENSE
 README.md
 ^.*\.Rproj$
 ^\.Rproj\.user$
+<<<<<<< HEAD
 ^\.git
 ^.gitignore$
+=======
+^.*\.pdf
+^inst/exercises/.*\\.(html|pdf)$
+^inst/readers/.*\\.(html|pdf)$
+^inst/rmarkdown/.*\\.(html|pdf)$
+^inst/tutorials/.*\\.(html|pdf)$
+>>>>>>> RTM_karline

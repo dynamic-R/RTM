@@ -173,7 +173,7 @@ RTMreader <- function(x = c("events", "forcings", "observations",
      Which <- LL[pmatch(tolower(x), tolower(LL))]
    else
      Which <- LL[x]
-   Which <- paste("_", Which, sep="")
+#   Which <- paste("_", Which, sep="")
    
   # The files are stored in RMD format 
    RMD <- paste0(system.file('readers', package = 'RTM'),"/",Which, ".Rmd", sep="")
