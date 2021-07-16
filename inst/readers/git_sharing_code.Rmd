@@ -108,13 +108,17 @@ In *RStudio*, the normal *git* workflow goes like this:
 
 - After this step, you need to *push* the *main* branch to the remote server, so that others can *pull* it and work from there.
 
-- Finally, it is a good idea to *delete* the *branch1* after it has been *merged* with the *main* branch. This will keep your development less confusing. To do this, type in the terminal
+- Finally, it is a good idea to *delete* the *branch1* after it has been *merged* with the *main* branch. This will keep your development less confusing. To do this locally, type in the terminal
 
   ``git branch -d branch1``
 
   or 
 
   ``git branch -D branch1``
+  
+  To do this remotely, type in the terminal
+  
+  ``git push origin --delete branch1``
 
 - Occasionally, you will need to *prune* to keep things tidy on your computer and on the github repository. This is done by typing in the terminal:
 

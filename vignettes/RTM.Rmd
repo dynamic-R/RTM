@@ -1,10 +1,6 @@
 ---
 title: 'The RTM package'
-<<<<<<< HEAD
 subtitle: "a Learning Environment for Reaction Transport Modelling"
-=======
-subtitle: "a Learning Environment for the course Reaction Transport Modelling in the Hydrosphere"
->>>>>>> GhentExamples
 author: "Karline Soetaert, Lubos Polerecky and Dries Bonte"
 date: "June 2021"
 output: pdf_document
@@ -40,19 +36,9 @@ More specifically, in this course the students learn to:
 
 Students that follow this course are submerged in the fields of physics, chemistry, biology, but also need to be knowledgeable in mathematics and computer science. 
 
-<<<<<<< HEAD
 We use R (R core team 2020) as the language for implementing and solving these models, mainly because the R-packages we use offer an "ecosystem" of methods to work with differential equations. They are the packages rootSolve, deSolve, ReacTran (Soetaert, 2009; Soetaert et al., 2010; Soetaert and Meysman, 2012). The mathematical methods in these packages have been written so that they hide much of the details, allowing students to focus on the original problem rather than being concerned with how to tweak or even implement the numerical solutions. Accessory functions facilitate plotting solutions, calculating summaries, fitting models to data, etc.
 
 Our students typically follow a master in oceanography, biology,  biogeochemistry, hydrology or physics. Some have a good understanding of the processes occurring in the natural environment, but have never written a computer program before; others have little process knowledge but ample experience in programming. 
-=======
-We use R (R core team 2020) as the language for implementing and solving these models, simply because the R-packages we use offer an "ecosystem" of methods to work with differential equations (Soetaert, 2009; Soetaert, Petzoldt and Setzer, 2010). These methods have been written so that they hide much of the details and tricks that are necessary to solve the model. Thus, students can focus on the original problem, rather than being concerned with how to tweak or even how to implement the numerical solutions. 
-
-Our students typically follow a master in oceanography, in biology, in biogeochemistry, hydrology or physics. Some have a good understanding of the processes occurring in the natural environment, but have (almost) never written computer code before; others have little process knowledge but ample experience in programming. 
-
-Due to this variation in skills of our students, needless to say that it is difficult to find a teaching style that is suitable for all of them. 
-
-The aim of the course is to prepare students so that they are able to make models from scratch if needed. This differs from many modelling courses where students merely learn how to apply existing tools.
->>>>>>> GhentExamples
 
 Due to this variation in skills, needless to say that it is difficult to find a teaching style that is suitable for all of the students. 
 
@@ -78,11 +64,7 @@ In class then, more substantial exercises are given under supervision of the tut
 
 ## Video's that elaborate on the theory
 
-<<<<<<< HEAD
 One way of “flipping” the classroom is by means of video lessons that elaborate on the theory. There is a series of videos for all the material taught in the modelling class. 
-=======
-There is a series of videos for all the material taught in the modelling class. 
->>>>>>> GhentExamples
 
 The videos typically take around 15 minutes or less, and are created as follows:
 
@@ -92,13 +74,8 @@ The videos typically take around 15 minutes or less, and are created as follows:
    
 Steps (1) and (2) need substantial input from the tutors. Step (3) can be outsourced.
 
-<<<<<<< HEAD
 Apart from the direct benefits, this teaching approach also offers a number of longer-term advantages. The video material has been put on the internet (i.c., youtube) to serve as an online course. 
-=======
-Apart from the direct benefits, this teaching approach also offers a number of longer-term advantages. 
 
-The video material has been put on the internet (i.c., youtube) to serve as an online course. 
->>>>>>> GhentExamples
 Also, it can be used by students at any time to refresh their knowledge on a subject. 
 Students can move through these videos at their own pace - some complain that they go too slow - multi-tasking or the fast-forward knob is then an option. 
 
@@ -128,11 +105,7 @@ At the time of writing this vignette, the exercises dealt, a.o. with the followi
 * *Agricultural eutrophication*. This model application, that describes how fertilization with nutrients affects the *competition* between crops and weeds, also contains a (rather simplistic) *economic component* that accounts for the profits farming can bring.
 * *Low oxygen in a river*. This is a 1-dimensional *reaction transport model* that describes the evolution of the oxygen concentration in a river, that is subjected to excessive nutrient input (ammonia). The model is used to estimate the level in nutrient inputs that keep the minimal oxygen concentration above a certain critical level.
 
-<<<<<<< HEAD
 Other material is:
-=======
-Other material dealt with in the exercises is:
->>>>>>> GhentExamples
 
 * Introduction to R for modellers
 * Making conceptual schemes and creating mass balance equations
