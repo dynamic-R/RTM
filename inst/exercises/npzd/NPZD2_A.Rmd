@@ -10,11 +10,7 @@ output:
 
 # The NPZD2 model
 
-<<<<<<< HEAD
-![Concentual diagram of the NPZD2 model (includes bottom detritus).](NPZD2.png){width=10cm}
-=======
-![Concentual diagram of the NPZD2 model (includes bottom detritus)](npzd2.jpg){width=60%}
->>>>>>> GhentExamples
+![Conceptual diagram of the NPZD2 model (includes bottom detritus).](NPZD2.png){width=10cm}
 
 Figure 2 shows the conceptual diagram that includes both the free-floating and bottom detritus fractions.
 

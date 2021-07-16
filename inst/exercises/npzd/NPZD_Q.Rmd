@@ -20,12 +20,7 @@ In this exercise, you start by making an NPZD model, which you will then extend 
 
 The conceptual scheme of the NPZD model is given in Figure 1.
 
-<<<<<<< HEAD
 ![Conceptual diagram of an NPZD model.](NPZD.png){width=8cm}
-=======
-![Conceptual diagram of an NPZD model.](npzd.jpg){width=60%}
->>>>>>> GhentExamples
-
 
 # Assumptions of the NPZD model
 
