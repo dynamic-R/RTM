@@ -64,13 +64,15 @@ In this course, we will use several packages. We recommend that you install them
   
 * ``marelac`` (Soetaert and Petzoldt, 2018) --- This package contains functions and constants from the aquatic sciences.
 
+* ``AquaEnv`` (Hofmann et al. 2010) --- This package contains functions and constants for creating acid-base models.
+
 * ``devtools`` --- This package allows you to develop R packages. We will use it to install the R package ``RTM`` from the github repository. 
 
 * ``RTM`` --- This package contains much of the teaching material for the course. This package is currently available from a Github repository ``dynamic-R/RTM`` (\url{https://github.com/dynamic-R/RTM}). You can install it by typing the following command in the R-console:
 
   ```devtools::install_github("dynamic-R/RTM", depend=TRUE)```
 
-More information about the RTM package is provided at the end of this document (section *Learning reaction-transport modelling using the package RTM*).
+  More information about the RTM package is provided at the end of this document (section *Learning reaction-transport modelling using the package RTM*).
 
 ## LaTeX distribution
 
@@ -1101,3 +1103,5 @@ Soetaert K. (2009).  rootSolve: Nonlinear root finding, equilibrium and steady-s
 Karline Soetaert, Thomas Petzoldt, R. Woodrow Setzer (2010). Solving Differential Equations in R: Package deSolve. Journal of Statistical Software, 33(9), 1--25. \url{http://www.jstatsoft.org/v33/i09/} DOI 10.18637/jss.v033.i09
 
 Karline Soetaert and Thomas Petzoldt (2018). marelac: Tools for Aquatic Sciences. R package version 2.1.7.
+
+Andreas F. Hofmann, Karline Soetaert, Jack J. Middelburg and Filip J. R. Meysman, 2010. AquaEnv - an Aquatic acid-base modelling Environment in R. Aquatic Geochemistry. DOI: 10.1007/s10498-009-9084-1.
