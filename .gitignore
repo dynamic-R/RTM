@@ -7,7 +7,6 @@
 
 # User-specific files
 .Ruserdata
-<<<<<<< HEAD
 
 # Example code in package build process
 *-Ex.R
@@ -39,7 +38,3 @@ vignettes/*.pdf
 # R Environment Variables
 .Renviron
 /work
-=======
-.html
-.pdf
->>>>>>> RTM_Lubos
