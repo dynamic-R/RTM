@@ -58,9 +58,9 @@ In this course, we will use several packages. We recommend that you install them
 
 * ``deSolve`` (Soetaert et al., 2010) --- This package contains methods to perform numerical integration. Thus, it allows you to solve 0-, 1- and 2-dimensional differential equations, which will be dealt with in the first part of the course.
 
-* ``ReacTran`` (Soetaert and Meysman, 2012) --- This package allows you to solve differential equations describing reaction-transport models in 1D and 2D. This is the core R-package that we will use in the second part of the course. 
+* ``rootSolve`` (Soetaert, 2009). This package allows you to find the root of functions (steady-state).
   
-  - When installing ``ReacTran``, the package ``rootSolve`` (Soetaert, 2009) will also be installed. It is a package that allows you to find the root of functions.
+* ``ReacTran`` (Soetaert and Meysman, 2012) --- This package allows you to solve differential equations describing reaction-transport models in 1D and 2D. This R-package will be used in the second part of the course. 
   
 * ``marelac`` (Soetaert and Petzoldt, 2018) --- This package contains functions and constants from the aquatic sciences.
 
@@ -70,7 +70,7 @@ In this course, we will use several packages. We recommend that you install them
 
   ```devtools::install_github("dynamic-R/RTM", depend=TRUE)```
 
-  More information about the RTM package is provided at the end of this document (section *Learning reaction-transport modelling using the package RTM*).
+More information about the RTM package is provided at the end of this document (section *Learning reaction-transport modelling using the package RTM*).
 
 ## LaTeX distribution
 
@@ -161,10 +161,10 @@ Short help on the text format that can be used in Markdown documents can be foun
 
 Open the *R Markdown* file called ``Rmarkdown_small.Rmd`` in *Rstudio*. The file is available via Blackboard and was used to generate Figure 4.
 
-  * Try the different buttons featuring on the top right of the R-code.
-  * Change the title of the document and make yourself the author. 
-  * Generate a WORD, HTML and PDF document.
-  * If you know a bit of R, create a second plot that depicts the temperature and the ozone concentration using the same dataset.
+* Try the different buttons featuring on the top right of the R-code.
+* Change the title of the document and make yourself the author. 
+* Generate a WORD, HTML and PDF document.
+* If you know a bit of R, create a second plot that depicts the temperature and the ozone concentration using the same dataset.
 
 # A quick overview of R and Rstudio
 
@@ -172,7 +172,7 @@ An R-code is legible once you realise that:
 
 * ``<-`` is the assignment operator (e.g., ``A <- 1`` assigns the value of 1 to the variable A).\footnote{Note that within an R-code edited in *Rstudio*, you can quickly type this operator by pressing a shortcut \textbf{Alt+minus}. This will also include spaces around the operator for increased legibility of the command. This works well for Windows and Linux users. Mac-OS users may need to search the internet for a suitable shortcut.}
 * everything starting with a hash-sign (``#``) is considered a comment.
-* R is case-sensitive: *a* and *A* are two different objects.
+* R is case-sensitive: ``a`` and ``A`` are two different objects.
 
 ## Console versus R-scripts versus R Markdown
 
@@ -186,7 +186,7 @@ We can type commands into the R console window at the command prompt (``>``) and
  pi*0.795^2 ; 25*6/sqrt(67) ; log(25) ; log10(25)
 ```
 
-Here *sqrt*, *log* and *log10* are built-in functions in R, *pi*  is a built-in constant, and the semi-colon (;) is used to separate R-commands entered on one line.
+Here ``sqrt``, ``log`` and ``log10`` are built-in functions in R, ``pi``  is a built-in constant, and the semi-colon (``;``) is used to separate R-commands entered on one line.
 
 In the console window, the "UP" and "DOWN" arrow keys can be used to navigate through previously typed commands (command history). Note that typing commands in the console is not the most efficient way of using R, especially if you want to debug and save your work for later use (see next).
 
@@ -212,14 +212,14 @@ R-scripts are sequences of R-commands and expressions. These scripts
 should be submitted to R before they are executed.
 This can be done in several ways:
 
-  * by typing in the R-console:
+* by typing in the R-console:
      
 ```{R, eval = FALSE }
      source ("MyModel1.R") 
 ```
   
-  *	by opening the file in a text editor, copying the R-script to the clipboard (ctrl+C) and pasting it (ctrl+V) into the R-console;
-  * if you use *Rstudio*, which we recommend, you can either execute the current line (Ctrl+Enter), a section, or the entire file (Ctrl+S).
+*	by opening the file in a text editor, copying the R-script to the clipboard (ctrl+C) and pasting it (ctrl+V) into the R-console;
+* if you use *Rstudio*, which we recommend, you can either execute the current line (Ctrl+Enter), a section, or the entire file (Ctrl+S).
 
 ### R Markdown
 
@@ -267,7 +267,7 @@ For instance, typing into the console window:
 ```
 
 will run all the examples from the pairs help file.
-(Try this, *pairs* is a very powerful way of visualizing pair-wise relationships.)
+(Try this, ``pairs`` is a very powerful way of visualizing pair-wise relationships.)
 
 Alternatively, you may select one example from the help file, copy it to the clipboard (ctrl-C for  windows users) and then paste it (ctrl-V) in the console window. 
 In addition, the R main software and many R-packages come with demonstration material. Typing 
@@ -318,7 +318,7 @@ A <- 3 + cos(pi) -
 A
 ```
 
-R will assign to *A* the value of $3+cos(\pi)-\sqrt 5$, as the command on the first line was not syntactically finished. In this case, R has (correctly) assumed that the command continued on the next line.
+R will assign to ``A`` the value of $3+cos(\pi)-\sqrt 5$, as the command on the first line was not syntactically finished. In this case, R has (correctly) assumed that the command continued on the next line.
 
 Be careful if you want to split a complex statement over several lines!
 These errors are very difficult to trace, so it is best to avoid this practice.
@@ -340,7 +340,7 @@ Hint: you may need to look up some help for some of these functions. Typing
 ?"+"
 ?log
 ```
-will display help for the common arithmetic operators and about the built-in R-function *log*.
+will display help for the common arithmetic operators and about the built-in R-function ``log``.
 
 
 # R-variables
@@ -391,7 +391,7 @@ Alternatively, we may assign the result of calculations to a variable AND view t
 ( X <- sin(3/2*pi) )
 ```
 
-Apart from integers, real and complex numbers, R also recognizes infinity (*Inf*) and Not a Number (*NaN*). Try:
+Apart from integers, real and complex numbers, R also recognizes infinity (``Inf``) and Not a Number (``NaN``). Try:
 
 ```{R, eval = FALSE }
 1/0
@@ -399,7 +399,7 @@ Apart from integers, real and complex numbers, R also recognizes infinity (*Inf*
 2.3e-8 * 1000
 ```
 
-Note that *e-8* denotes $10^{-8}$.
+Note that ``e-8`` denotes $10^{-8}$.
 
 ### Vectors
 
@@ -420,7 +420,7 @@ seq(to = 2*pi, from = 0, by = pi/2)
 
 will all create a vector, consisting of: 0, $\pi/2, \pi, \ldots, 2\pi$.
 
-Note that R-function *seq* takes as input (amongst others) parameters *from*, *to* and *by* (second line). If the order of these arguments is kept, they do *not* need to be specified by name (third line). But we recommend that you *always* use the names of the input argument if you want to specify their value. In this case, you can change the order of the input arguments as you like (fourth line).
+Note that R-function ``seq`` takes as input (amongst others) parameters ``from``, ``to`` and ``by`` (second line). If the order of these arguments is kept, they do *not* need to be specified by name (third line). But we recommend that you *always* use the names of the input argument if you want to specify their value. In this case, you can change the order of the input arguments as you like (fourth line).
 
 The next command calculates the sine of this vector and outputs the result:
 
@@ -447,7 +447,7 @@ This will be a very useful feature in our models.
 
 ### Matrices
 
-Matrices can also be created in several ways; most often we will use the  R-function *matrix*:
+Matrices can also be created in several ways; most often we will use the  R-function ``matrix``:
 
 The statement:
 
@@ -456,7 +456,7 @@ A <- matrix(nrow = 3, data = c(1, 2, 3, 4, 6, 8, 10, 12, 14))
 ```
   
 creates a *matrix* A, with three rows, and, as there are nine elements, three columns.
-Note that the *data* are input as a vector (using the ``c()`` function), and these values are sorted into the matrix column after column (by default).
+Note that the ``data`` are input as a vector (using the ``c()`` function), and these values are sorted into the matrix column after column (by default).
 
 ```{r}
 A
@@ -478,12 +478,12 @@ To select subsets of vectors or matrices, we can either
 
 The elements of vectors, matrices and arrays are indexed using the ``[]`` operator:
 
-To show only the volume of our vector *Ocean*:
+To show only the volume of our vector ``Ocean``:
 ```{r}
 Ocean["volume"]
 ```
 
-The following statement takes the elements on the $1^{st}$ and $3^{rd}$ row and on the first two columns of matrix *A*.
+The following statement takes the elements on the $1^{st}$ and $3^{rd}$ row and on the first two columns of matrix ``A``.
 
 ```{r}
 A[c(1, 3), 1:2]
@@ -508,7 +508,7 @@ V[seq(from = 1, to = 5, by = 2)]
 
 ### Logical expressions
 
-Logical expressions are often used to select elements from vectors and matrices that obey certain criteria. R distinguishes logical variables *TRUE* and *FALSE*, represented by the integers $1$ and $0$.\footnote{Note that variables \textit{T} and \textit{F} are reserved in \textit{R} to represent the logical \textit{TRUE} and \textit{FALSE}, respectively. Therefore, if you want to avoid unexpected consequences, you should \textit{not} use \textit{T} and \textit{F} as variables to which you assign values. For example, it might be tempting to use \textit{T} to denote temperature, or \textit{F} to denote flux. It is recommended that you do \textit{not} do this, but use instead more intuitive names such as \textit{Temp} and \textit{Flux}.}
+Logical expressions are often used to select elements from vectors and matrices that obey certain criteria. R distinguishes logical variables ``TRUE`` and ``FALSE``, represented by the integers $1$ and $0$.\footnote{Note that variables \textit{T} and \textit{F} are reserved in \textit{R} to represent the logical \textit{TRUE} and \textit{FALSE}, respectively. Therefore, if you want to avoid unexpected consequences, you should \textit{not} use \textit{T} and \textit{F} as variables to which you assign values. For example, it might be tempting to use \textit{T} to denote temperature, or \textit{F} to denote flux. It is recommended that you do \textit{not} do this, but use instead more intuitive names such as \textit{Temp} and \textit{Flux}.}
 
 The following will return *TRUE* for values of sequence V that are greater than 1:
 
@@ -539,13 +539,13 @@ When the index is preceded by a ``-``, the element is removed. For example,
  A[ ,-1]
 ```
 
-will show the contents of matrix *A*, except the first column, while the command
+will show the contents of matrix ``A``, except the first column, while the command
 
 ```{r}
 V[- V < 0]
 ```
 
-will only show the positive elements of *V*.
+will only show the positive elements of ``V``.
   
 
 ## More complex data structures
@@ -554,9 +554,9 @@ Frequently used data structures that are more complex than vectors or matrices a
 
 ### Data.frames
 
-A *data.frame* superficially looks like a *matrix*, but its columns may contain different types of elements, e.g., one column may contain strings, another integers, etc.
+A ``data.frame`` superficially looks like a ``matrix``, but its columns may contain different types of elements, e.g., one column may contain strings, another integers, etc.
 
-For instance, the data set *iris* is of class *data.frame*:
+For instance, the data set ``iris`` is of class ``data.frame``:
 
 ```{r}
 head(iris)
@@ -576,7 +576,7 @@ A list is a combination of several objects; each object can be of different leng
 LL <- list(Vector = V, Matrix = A)
 ```
 
-will combine the previously defined vector V and matrix A in a list called  *LL*. 
+will combine the previously defined vector V and matrix A in a list called  ``LL``. 
 
 ```{r}
 names(LL)
@@ -587,7 +587,7 @@ LL
 
 Lists and data frames can be accessed by their names (using ``$``), or by the square bracket (``[ ]``) or double square bracket (``[[ ]]``) operators.
 
-Note: The object resulting from a selection using single brackets ``[ ]``, will be a *data.frame* respectively a *list* itself; with double brackets ``[[ ]]``, one obtains a *vector* (data.frames) or a variable data-type (lists).
+Note: The object resulting from a selection using single brackets ``[ ]``, will be a ``data.frame`` respectively a ``list`` itself; with double brackets ``[[ ]]``, one obtains a ``vector`` (data.frames) or a variable data-type (lists).
 
 For instance:
 
@@ -595,30 +595,30 @@ For instance:
 LL$Vector * 2
 ```
 
-will multiply all values of element *Vector* with 2.
+will multiply all values of element ``Vector`` with 2.
 
 ```{r}
 mean(LL[[1]])
 ```
 
-will calculate the mean of element *Vector*.
+will calculate the mean of element ``Vector``.
 
 ## Exercises --- Vectors and sequences
 
 ### Mean of a vector
 
-*	Use the R-function *mean* to estimate the mean of two numbers, 9 and 17. (You may notice that this is not as simple as you might think! Tip: use the ``c()`` function.)
+*	Use the R-function ``mean`` to estimate the mean of two numbers, 9 and 17. (You may notice that this is not as simple as you might think! Tip: use the ``c()`` function.)
 
 ### Sediment depth profiles 
 *	For a sediment model, we divide 10 cm of sediment into thin layers, each 1mm thick. These are thin slices, because it is assumed that porosities, concentrations, etc., remain constant within each layer. We need to know the depth in the centre of each sediment layer. 
 To do so, we need to create a sequence of depth values, extending from 0.05 cm to 9.95 cm, at 1 mm intervals.
-    - Create this sequence, put it in a vector called *depth*. Use the R-function  *seq*. 
+    - Create this sequence, put it in a vector called ``depth``. Use the R-function  ``seq``. 
     - Display this vector.
 * Porosity, the volumetric water content of the sediment is often described as an exponentially decreasing function; for instance, following formula generates a typical porosity profile for a deep-sea sediment:
 $$porosity = 0.7+(1-0.7)\times e^{-depth}$$
          
-   - Calculate the porosity for every value in *depth*. Save the results in a vector called "porosity". 
-   - What is the porosity near the surface (0.05 cm); what is the porosity at 9.95 cm? Put these two values in a vector, called *V*.
+   - Calculate the porosity for every value in ``depth``. Save the results in a vector called "porosity". 
+   - What is the porosity near the surface (0.05 cm); what is the porosity at 9.95 cm? Put these two values in a vector, called ``V``.
    - What is the mean porosity in the entire 10 cm? 
    - What is the mean porosity in the upper cm? 
    - Now plot porosity versus depth as follows:
@@ -635,8 +635,8 @@ $$porosity = 0.7+(1-0.7)\times e^{-depth}$$
 sea, respectively. 
         
 * The estuary is divided in 200 boxes. Create a sequence of $x$-values that contain the position in the middle of each box, from the river to the sea.
-    -	For each box calculate the cross-sectional surface area; put it in a vector called *Area*.
-    -	For modelling purposes, we need the *volume* of each box, rather than the cross-sectional area. Create a vector, called *Volume*, that contains the volumes of each box.
+    -	For each box calculate the cross-sectional surface area; put it in a vector called ``Area``.
+    -	For modelling purposes, we need the *volume* of each box, rather than the cross-sectional area. Create a vector, called ``Volume``, that contains the volumes of each box.
     - What is the total estuarine volume? (And what are the units?)
     - Plot the cross-sectional surface area versus distance from the river.
     - Plot the estuarine volume per box, as a function of the box number.
@@ -668,7 +668,7 @@ Circlesurface <- function (radius)
     return(pi*radius^2)
 ```
 
-defines a function (called *Circlesurface*), which takes as an input argument a variable called *radius*  and returns the value $\pi*radius^2$, which is the surface of a circle.
+defines a function (called ``Circlesurface``), which takes as an input argument a variable called ``radius``  and returns the value $\pi*radius^2$, which is the surface of a circle.
 
 After submitting this function to R, we can use it to calculate the surfaces of circles with a given radius:
   
@@ -691,9 +691,9 @@ Sphere <- function(radius) {
 
 Here, we recognize
 
-*	the function heading ($1^{st}$ line), specifying the name of the function (*Sphere*) and the input parameter (*radius*)
+*	the function heading ($1^{st}$ line), specifying the name of the function (``Sphere``) and the input parameter (``radius``)
 *	the function specification. As the function comprises multiple statements, the function specification is embraced by curly braces $\{ \ldots \}$.
-*	The return values (last line). Function *Sphere* will return the volume and surface of a sphere, as a *list*.
+*	The return values (last line). Function ``Sphere`` will return the volume and surface of a sphere, as a ``list``.
  
 The Earth has an approximate radius of $6371~km$, so its volume ($km^3$) and surface ($km^2$) are:
   
@@ -723,7 +723,7 @@ Rho_W <- function(TC = 20) {
 
 Note that, within the function body, we ended the first line with a ``+`` in order to make clear that the statement is not finished and continues on the next line. It would have been wrong to put the ``+`` on the next line (and very difficult to trace this error).
 
-Calling the function without specifying the temperature (input argument *TC*) uses the default value ($TC=20$):
+Calling the function without specifying the temperature (input argument ``TC``) uses the default value ($TC=20$):
 
 ```{r}
 Rho_W()
@@ -748,7 +748,7 @@ Try:
 
 to see what it contains.
 
-For instance, its function *sw_dens* estimates the density of seawater as a function of salinity (*S*), temperature(*t*) and pressure (*p*), and using three different functions (*method*).
+For instance, its function ``sw_dens`` estimates the density of seawater as a function of salinity (``S``), temperature(``t``) and pressure (``p``), and using three different functions (``method``).
 
 To see how it is used, type:
 
@@ -769,8 +769,8 @@ The *ReacTran* package has been written specifically for solving reaction-transp
 
 For reaction-transport modelling in sediments, for instance, one not only needs a value for the porosity in the *centre* of the boxes, but also at the box *interface*. As this requires quite a complicated book-keeping, the  R-package *ReacTran* contains two functions that do that for you.
   
-*	Function *setup.grid.1D* specifies a 1-Dimensional *grid*, i.e., it divides a sediment column into thin layers, an estuary into $1~km$ thick boxes, a ciliate organism into $1~\mu m$ thick concentric spheres, etc.
-*	Function *setup.prop.1D* calculates a certain *property* on this 1-D grid.
+*	Function ``setup.grid.1D`` specifies a 1-Dimensional *grid*, i.e., it divides a sediment column into thin layers, an estuary into $1~km$ thick boxes, a ciliate organism into $1~\mu m$ thick concentric spheres, etc.
+*	Function ``setup.prop.1D`` calculates a certain *property* on this 1-D grid.
 
 For instance, to subdivide a $5~cm$ thick sediment column into 10 layers, we write:
   
@@ -784,7 +784,7 @@ This function returns a list that contains many elements that  are needed in rea
 sed
 ```     
 
-It is now simple to define the porosity on this grid. First, we define a function that estimates, for a certain sediment depth, $x$, the corresponding porosity. Then, we use the *ReacTran* function *setup.prop.1D* to calculate the porosity on this grid:
+It is now simple to define the porosity on this grid. First, we define a function that estimates, for a certain sediment depth, $x$, the corresponding porosity. Then, we use the *ReacTran* function ``setup.prop.1D`` to calculate the porosity on this grid:
 
 ```{r}
 porfunc <- function (x) return(0.7 + 0.3*exp(-x))
@@ -808,10 +808,10 @@ $$ S \times (-0.037362+0.016504 \times T/100-0.0020564 \times T/100 \times T/100
   
 T is temperature in Kelvin (Tkelvin = Tcelsius + 273.15), and S is salinity (reported as unitless, but meaning a value in g/kg).
 
-  *	Make a function that implements this formula; the default values for temperature and salinity are $20~^{\circ}$C and 35, respectively.
-  * What is the saturated oxygen concentration at the default conditions? (A: 225.2346)
-  *	Estimate the saturated oxygen concentration for a range of temperatures from 0 to $30~^{\circ}$C, and salinity 35. 
-  * Tip: $e^A$ is implemented in R as ``exp(A)``.
+*	Make a function that implements this formula; the default values for temperature and salinity are $20~^{\circ}$C and 35, respectively.
+* What is the saturated oxygen concentration at the default conditions? (A: 225.2346)
+*	Estimate the saturated oxygen concentration for a range of temperatures from 0 to $30~^{\circ}$C, and salinity 35. 
+* Tip: $e^A$ is implemented in R as ``exp(A)``.
 
 ### Molecular diffusion coefficient
 
@@ -819,7 +819,7 @@ Package *marelac* contains a function to calculate molecular diffusion coefficie
 
 * Estimate the molecular diffusion coefficient for $O_2$ and $CO_2$, for salinity = 20 and temperature = $10~^{\circ}$C. What are the units? Convert to $cm^2~d^{-1}$. 
   
-Note: the *diffcoeff* function from the *marelac* package returns a *data.frame* or a *list*. For plotting, it is easiest to subset this so as to have a vector. Thus, 
+Note: the ``diffcoeff`` function from the *marelac* package returns a ``data.frame`` or a ``list``. For plotting, it is easiest to subset this so as to have a vector. Thus, 
 
 ```{r, eval = FALSE}  
 diffcoeff()$O2
@@ -827,7 +827,7 @@ diffcoeff()$O2
 will provide the output in a format that is easy to work with.
 
 * Estimate the molecular diffusion coefficient for $O_2$ and $CO_2$ for a temperature ranging from 1 to $30~^{\circ}$C. Make a temperature vs. diffusion coefficient plot for $O_2$ (in units of $cm^2~d^{-1}$).
-* Add to this plot the temperature vs. diffusion coefficient relationship for $O_2$ at salinity = 0. Use the R function *lines* or *points* to add these data.
+* Add to this plot the temperature vs. diffusion coefficient relationship for $O_2$ at salinity = 0. Use the R function ``lines`` or ``points`` to add these data.
 
 
 ### R-function sphere
@@ -849,8 +849,8 @@ Assume a spherical ciliate with a diameter of 100 $\mu m$. For modelling purpose
 
 ### Estuarine morphology using ReacTran
 
-* Use function *setup.grid.1D* to subdivide the estuary in 200 compartments.
-* Use function *setup.prop.1D* to calculate the estuarine cross sectional surface on this grid.
+* Use function ``setup.grid.1D`` to subdivide the estuary in 200 compartments.
+* Use function ``setup.prop.1D`` to calculate the estuarine cross sectional surface on this grid.
 
 
 # Solving ordinary differential equations in R
@@ -860,13 +860,13 @@ Throughout the modelling course, you will specify many models in the form of dif
 Consider the following set of two ordinary differential equations:
 $$   \frac{{dA}}{{dt}} = r \cdot (x - A) - k \cdot A \cdot B $$
 $$\frac{{dB}}{{dt}} = r \cdot (y - B) + k \cdot A \cdot B $$
-Here, *A* and *B* are called the *state variables*, $\frac{dA}{dt}$ and $\frac{dB}{dt}$ are the *time derivatives* (also called the *rates of change*), while *r*, *x*, *y* and *k* are constant parameters.
+Here, $A$ and $B$ are called the *state variables*, $\frac{dA}{dt}$ and $\frac{dB}{dt}$ are the *time derivatives* (also called the *rates of change*), while $r$, $x$, $y$ and $k$ are constant parameters.
 
 ## Specifying the differential equation model
 
 The first step to solving this set of differential equations in R is to define the *model function*, which specifies the right-hand side of the differential equations.\footnote{Note that in R we use "*" for multiplication, and not $\cdot$ or $\times$ as in the mathematical formalism.}
 
-This function has three different arguments as input: the actual time (*t*), the values of the state variables (*state*) and the values of the parameters (*parameters*). 
+This function has three different arguments as input: the actual time (``t``), the values of the state variables (``state``) and the values of the parameters (``parameters``). 
   
 ```{r}
 model <- function(t, state, parameters) {
@@ -889,9 +889,9 @@ The R-statement ``with( as.list(c(state,parameters)), {`` ensures that the state
 
 Before we can actually solve this model, we need to:
 
-* give values to the parameters (*parameters*);
-*	assign initial conditions to the state variables (*state*);
-*	generate a sequence of time values at which we want the output  (*time.seq*).
+* give values to the parameters (``parameters``);
+*	assign initial conditions to the state variables (``state``);
+*	generate a sequence of time values at which we want the output  (``time.seq``).
 
 ```{r}
 parameters <- c(x = 1, y = 0.1, k = 0.05, r = 0.05)
@@ -900,13 +900,13 @@ time.seq   <- seq(from = 0, to = 300, by = 1)
 ```
  
 
-The model can now be solved. To do so, we use the integration routine *ode*, which can be found in the R-package *deSolve* (Soetaert et al., 2010). This package is loaded first (using function *require*).
+The model can now be solved. To do so, we use the integration routine ``ode``, which can be found in the R-package *deSolve* (Soetaert et al., 2010). This package is loaded first (using function ``require``).
 
 ```{r}
 require(deSolve)
 ```
 
-The routine *ode* will calculate a value for the state variables *A* and *B* at each time value specified in the vector *time.seq*. It does so by numerical integration. The name (*ode*) hints at the type of differential equations that this function solves, which are Ordinary Differential Equations. 
+The routine ``ode`` will calculate a value for the state variables ``A`` and ``B`` at each time value specified in the vector ``time.seq``. It does so by numerical integration. The name (``ode``) hints at the type of differential equations that this function solves, which are Ordinary Differential Equations. 
 
 The actual numerical solution of our ODE model is obtained by the following single R-statement:
 
@@ -914,13 +914,13 @@ The actual numerical solution of our ODE model is obtained by the following sing
 out <- ode(y = state, times = time.seq, func = model, parms = parameters)
 ```
 
-The output is stored in a matrix, called *out*. All we need to do now is to plot this model output. Before we do so, we can have a look at the top few rows of the output matrix:
+The output is stored in a matrix, called ``out``. All we need to do now is to plot this model output. Before we do so, we can have a look at the top few rows of the output matrix:
 
 ```{r}
 head(out)
 ```
 
-The data are arranged in three columns: first the time, then values of the state variables *A* and *B* at each time point, followed by the output variable called *sum*. 
+The data are arranged in three columns: first the time, then values of the state variables ``A`` and ``B`` at each time point, followed by the output variable called ``sum``. 
 
 We can plot the output in several ways. The easiest is to plot the entire object at once, either plotting each variable in a separate graph,
 
@@ -934,7 +934,7 @@ or all variables in one graph.
 matplot.0D(out, lty = 1, lwd = 2, main=NA)
 ```
 
-We can run the model with different values of the parameter *k*, store the output in a matrix *out2*, and plot the first and second run at the same time. In the code below, we first take a copy of the parameter vector (*parms2*), and then change the parameter named ("k"); we then solve the model, passing the updated parameter vector (*parms = parms2*). We can plot the outcome of the two runs at once. Note that by the argument *mfrow = c(1,3)*, we force the output to be in one row and 3 columns (*mfrow* stands for multiple figures in a row).
+We can run the model with different values of the parameter ``k``, store the output in a matrix ``out2``, and plot the first and second run at the same time. In the code below, we first take a copy of the parameter vector (``parms2``), and then change the parameter named ("k"); we then solve the model, passing the updated parameter vector (``parms = parms2``). We can plot the outcome of the two runs at once. Note that by the argument ``mfrow = c(1,3)``, we force the output to be in one row and 3 columns (``mfrow`` stands for multiple figures in a row).
 
 ```{r, fig.width=8, fig.height = 3}
 parms2      <- parameters
@@ -967,7 +967,7 @@ plot(out, xlab = "time", ylab = "concentration", lwd = 2, type = "l")
 
 ## Steady-state conditions of differential equations
 
-Sometimes we are interested in the conditions of a differential equation where the state variables do not change anymore. One way to obtain this is to use the function *steady* from the R-package *rootSolve* (Soetaert, 2009):
+Sometimes we are interested in the conditions of a differential equation where the state variables do not change anymore. One way to obtain this is to use the function ``steady`` from the R-package ``rootSolve`` (Soetaert, 2009):
 
 ```{r}
 require(rootSolve)
@@ -982,14 +982,14 @@ STD$y; STD$sum
 The Lotka-Volterra model is a famous model that describes predator-prey interactions or competitive interactions between two species. A. J. Lotka and V. Volterra formulated the model almost simultaneously in the 1920's.
 
 *	Write an R-script that solves the Lotka-Volterra model
-$$ \frac{{dX}}{{dt}} = a \cdot X \cdot (1 - \frac{X}{K}) - b \cdot X \cdot Y$$
+$$ \frac{{dX}}{{dt}} = a \cdot X \cdot (1 - \frac{X}{k}) - b \cdot X \cdot Y$$
 $$     \frac{{dY}}{{dt}} = g \cdot b \cdot X \cdot Y - e \cdot Y$$
-for the initial values of $X = 670$ and $Y = 610$, and for the parameter values of $a = 0.04$, $K = 1000$, $b = 5\times 10^{-5}$, $g = 0.8$, and $e = 0.008$.
+for the initial values of $X = 670$ and $Y = 610$, and for the parameter values of $a = 0.04$, $k = 1000$, $b = 5\times 10^{-5}$, $g = 0.8$, and $e = 0.008$.
 
-*	Run the model for 100 days, and store the output in a variable *out*.
+*	Run the model for 100 days, and store the output in a variable ``out``.
 * Plot the outcome.
-*	Now run the model with other initial values ($X = 100$, $Y = 540$); store the output in the variable *out2*. Plot the two model runs simultaneously.
-* Experiment by running the model for longer intervals (e.g., 1500 days) and by changing the model parameter *b* in a range between $1\times 10^{-5}$ and $10\times 10^{-5}$. What do these model predictions tell you about the system?
+*	Now run the model with other initial values ($X = 100$, $Y = 540$); store the output in the variable ``out2``. Plot the two model runs simultaneously.
+* Experiment by running the model for longer intervals (e.g., 1500 days) and by changing the model parameter ``b`` in a range between $1\times 10^{-5}$ and $10\times 10^{-5}$. What do these model predictions tell you about the system?
   
 ```{r}
 ```
@@ -1066,7 +1066,7 @@ or
 ```
 RTMexercise(20, type="PDF")
 ```
-If you want to export the exercise in a HTML or DOC format, change the value of the parameter *type* to ``HTML`` or ``DOC``, respectively.
+If you want to export the exercise in a HTML or DOC format, change the value of the parameter ``type`` to ``HTML`` or ``DOC``, respectively.
 
 ### RTM readers
 
