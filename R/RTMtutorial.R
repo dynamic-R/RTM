@@ -19,27 +19,45 @@ openRmdFile <- function(file, type) {
 
 
 
-RTMtutorial <- function(x = c("introduction", "why", "conceptual", "massbalance", "Rmodels",
-    "largescale","chemical", "equilibrium", "enzymatic", "partitioning", "ecology",
-    "transportProcesses","transportFluxes", "transportPorous",
-    "transportBoundaries", "transportR"), type = c("tutorial", "RMD")) {
+RTMtutorial <- function(x = c("introduction", 
+                              "why", 
+                              "conceptual", 
+                              "massbalance", 
+                              "Rmodels",
+                              "largescale", 
+                              "chemical", 
+                              "equilibrium", 
+                              "enzymatic", 
+                              "partitioning", 
+                              "ecology",
+                              "transportProcesses", 
+                              "transportFluxes", 
+                              "transportPorous",
+                              "transportBoundaries", 
+                              "transportR"), 
+                        type = c("tutorial", "RMD")) {
 
   LL <- as.character(formals(RTMtutorial)$x[-1])
   type <- match.arg(toupper(type), choices=toupper(c("tutorial", "RMD")))
   
   if (x == "?") {
-    tutorial <- data.frame(x=LL, description = c("About the course at Utrecht",
-      "Why modelling is useful", "Making conceptual models",
+    tutorial <- data.frame(x=LL, description = 
+    c("About the modelling course at Utrecht University",
+      "Why is modelling useful?", 
+      "Making conceptual models",
       "Creating mass balance equations", 
       "Dynamic modelling in the R language",
-      "Large-scale models (e.g. earth's C-cycle)",
+      "Large-scale models (e.g. System-Earth's carbon cycle)",
       "Elementary chemical reactions", 
       "Equilibrium (reversible) chemical reactions", 
       "Enzymatic reactions",
-      "Chemical reactions partitioning between phases", "Ecological reactions",
-      "The general transport equation", "Advection and diffusion/dispersion",
-      "Reaction transport in porous media", "Boundary conditions in transport models",
-      "Modelling Reaction tranport in porous media in R"))
+      "Partitioning between phases", 
+      "Ecological interactions",
+      "The general reaction-transport equation", 
+      "Transport fluxes due to advection and diffusion/dispersion",
+      "Reaction-transport in porous media", 
+      "Boundary conditions in teaction-transport models",
+      "Implementation of reaction-tranport models in R"))
     return(tutorial)
   } else {
    if (is.character(x)){
@@ -49,7 +67,7 @@ RTMtutorial <- function(x = c("introduction", "why", "conceptual", "massbalance"
      num <-x
      Which <- LL[x]
    }
-  x <- ifelse(num<10, paste("0",as.character(num),sep=""), as.character(num))
+  x <- ifelse(num<10, paste("0", as.character(num), sep=""), as.character(num))
   if (type == "tutorial"){
     Which <- paste(x, Which, sep="")
     if (length(Which) > 1)
@@ -60,29 +78,47 @@ RTMtutorial <- function(x = c("introduction", "why", "conceptual", "massbalance"
   } else { # open the Rmd File
     if (length(Which) > 1) stop("Can open only one Rmd file at a time")
     dir <- paste(x, Which, sep="")
-    file <- paste0(system.file('tutorials', package = 'RTM'),"/",dir, "/", Which, ".Rmd", sep="")
+    file <- paste0(system.file('tutorials', package = 'RTM'), "/", dir, "/", 
+                   Which, ".Rmd", sep="")
     openRmdFile(file, "Rmd")
   }
   }
 }
 
 
-RTMexercise <- function(x = c("introductionR", "conceptual", "massbalance", "massbalance_ecology",
-    "carbonCycle", "ozone", "dissolutionSi", "equilibriumNH3", "equilibriumHCO3",
-    "equilibriumOMD", "detritus", "COVID", "virus", "npzd",  "plant_coexistence", 
-    "crops_weed", "hyacinth_algae",
-    "riverAnoxia", "Pdiagenesis", "diagenesis"), 
-    type = c("HTML", "PDF", "RMD", "WORD")) {
+
+RTMexercise <- function(x = c("introductionR", 
+                              "conceptual", 
+                              "massbalance", 
+                              "massbalance_ecology",
+                              "carbonCycle", 
+                              "ozone", 
+                              "dissolutionSi", 
+                              "equilibriumNH3", 
+                              "equilibriumHCO3",
+                              "equilibriumOMD", 
+                              "detritus", 
+                              "COVID", 
+                              "virus", 
+                              "npzd", 
+                              "plant_coexistence", 
+                              "crops_weed", 
+                              "hyacinth_algae",
+                              "riverAnoxia", 
+                              "Pdiagenesis", 
+                              "diagenesis"), 
+                        type = c("HTML", "PDF", "RMD", "WORD")) {
 
   LL <- as.character(formals(RTMexercise)$x[-1])
   type <- match.arg(toupper(type), choices=c("HTML", "PDF", "RMD", "WORD"))
 
   if (x == "?") {
-    exercise <- data.frame(x=LL, description = c("Learning R for modellers",
-      "Translating problems into a conceptual scheme", 
+    exercise <- data.frame(x=LL, description = 
+    c("Introduction to R for modellers",
+      "Translating problems into a conceptual diagram", 
       "Creating mass balance equations", 
       "Creating mass balance equations in ecology", 
-      "An earth-system box model of the C-cycle",
+      "An Earth-system box model of the carbon cycle",
       "Ozone dynamics in the troposphere", 
       "Dissolution kinetics of Si particles",
       "Equilibrium chemistry - ammonium/ammonia", 
@@ -95,7 +131,7 @@ RTMexercise <- function(x = c("introductionR", "conceptual", "massbalance", "mas
       "Competition and coexistence of plants in grasslands",
       "Crops and weed competition (agriculture-economics)",
       "Competition between floating plants and algae in a lake",
-      "Anoxia in an estuary (1-D reaction transport model)",    
+      "Anoxia in an estuary (1-D reaction transport model)",
       "Simple phosphorus diagenesis in marine sediments",
       "Complex diagenesis in marine sediments (C, N, O2, S)"
       ))
@@ -105,10 +141,10 @@ RTMexercise <- function(x = c("introductionR", "conceptual", "massbalance", "mas
      Which <- LL[pmatch(tolower(x), tolower(LL))]
    else
      Which <- LL[x]
-   Which <- paste(Which, "/", Which,"_Q", sep="")
+   Which <- paste(Which, "/", Which, "_Q", sep="")
 
   # The files are stored in RMD format 
-   RMD <- paste0(system.file('exercises', package = 'RTM'),"/",Which, ".Rmd", sep="")
+   RMD <- paste0(system.file('exercises', package = 'RTM'), "/", Which, ".Rmd", sep="")
    
    if (length(RMD) > 1) {
      for (file in RMD) openRmdFile(file, type)
@@ -116,11 +152,25 @@ RTMexercise <- function(x = c("introductionR", "conceptual", "massbalance", "mas
   }   
 }
 
+
+
 # A private function - to be used as RTM:::RTManswer
-RTManswer <- function(x = c("introductionR", "conceptual", "massbalance",
-    "carbonCycle", "ozone", "dissolutionSi", "equilibriumNH3", "equilibriumHCO3",
-    "equilibriumOMD", "detritus", "COVID", "npzd", "crops_weed", 
-    "estuaryAnoxia", "Pdiagenesis", "diagenesis"), 
+RTManswer <- function(x = c("introductionR", 
+                            "conceptual", 
+                            "massbalance",
+                            "carbonCycle",
+                            "ozone",
+                            "dissolutionSi",
+                            "equilibriumNH3",
+                            "equilibriumHCO3",
+                            "equilibriumOMD",
+                            "detritus",
+                            "COVID",
+                            "npzd",
+                            "crops_weed", 
+                            "estuaryAnoxia",
+                            "Pdiagenesis",
+                            "diagenesis"), 
     type = c("HTML", "PDF", "RMD", "WORD")) {
 
   LL <- as.character(formals(RTMexercise)$x[-1])
@@ -136,7 +186,7 @@ RTManswer <- function(x = c("introductionR", "conceptual", "massbalance",
    Which <- paste(Which, "/", Which, sep="")  # THIS DIFFERS FROM RTMexercise
 
   # The files are stored in RMD format 
-   RMD <- paste0(system.file('exercises', package = 'RTM'),"/",Which, ".Rmd", sep="")
+   RMD <- paste0(system.file('exercises', package = 'RTM') ,"/", Which, ".Rmd", sep="")
    
    if (length(RMD) > 1) {
      for (file in RMD) openRmdFile(file, type)
@@ -144,11 +194,20 @@ RTManswer <- function(x = c("introductionR", "conceptual", "massbalance",
   }   
 }
 
-RTMreader <- function(x = c("events", "forcings", "observations",
-    "fitting", "visualisation", "pHprofiles", 
-    "perturbation_I", "perturbation_II",
-    "interactive", "numericalR", "git_sharing_code"), 
-    type = c("HTML", "PDF", "RMD", "WORD")) {
+
+
+RTMreader <- function(x = c("events", 
+                            "forcings", 
+                            "observations",
+                            "fitting", 
+                            "visualisation", 
+                            "pHprofiles", 
+                            "perturbation_I",
+                            "perturbation_II",
+                            "interactive", 
+                            "numericalR", 
+                            "git_sharing_code"), 
+                      type = c("HTML", "PDF", "RMD", "WORD")) {
 
   LL <- as.character(formals(RTMreader)$x[-1])
   type <- match.arg(toupper(type), choices=c("HTML", "PDF", "RMD", "WORD"))
@@ -163,9 +222,9 @@ RTMreader <- function(x = c("events", "forcings", "observations",
       "Estimating pH in a 1D reaction-transport model in R",
       "Response of systems to a perturbation from equilibrium - Part I", 
       "Response of systems to a perturbation from equilibrium - Part II", 
-      "Interactive applications in R", 
+      "Developing interactive applications in R", 
       "Numerical methods used for reaction-transport modelling in R", 
-      "Git, GitLab/Github and RStudio - sharing code with the world"
+      "Sharing code with the world via Git in RStudio"
       ))
     return(goodies)
   } else {
@@ -176,7 +235,7 @@ RTMreader <- function(x = c("events", "forcings", "observations",
 #   Which <- paste("_", Which, sep="")
    
   # The files are stored in RMD format 
-   RMD <- paste0(system.file('readers', package = 'RTM'),"/",Which, ".Rmd", sep="")
+   RMD <- paste0(system.file('readers', package = 'RTM'), "/", Which, ".Rmd", sep="")
    
    if (length(RMD) > 1) {
      for (file in RMD) openRmdFile(file, type)
@@ -184,19 +243,21 @@ RTMreader <- function(x = c("events", "forcings", "observations",
   }   
 }
 
+
+
 RTMtemplate <- function(x = c("rtm0D", "rtm1D", "porous1D", "porous1D_extensive", 
                               "rtmEquilibrium", "npzd")) {
   
   LL <- as.character(formals(RTMtemplate)$x[-1])
   if (length(x) > 1) 
-     stop("only one template can be opened at a time - select one (number inbetween 1,", length(LL), ")")
+     stop("only one template can be opened at a time - select one (number between 1,", length(LL), ")")
   if (x == "?") {
     template <- data.frame(x=LL, description = 
-                             c("Template for dynamic model in 0D",
-                               "Template for dynamic reaction-transport model in 1D",
-                               "Template for dynamic reaction-transport model in 1D in porous media", 
-                               "Template for dynamic reaction-transport model in 1D in porous media (with text)",
-                               "Template for equilibrium chemical model",
+                             c("Template for dynamic models in 0D",
+                               "Template for dynamic reaction-transport models in 1D",
+                               "Template for dynamic reaction-transport models in porous media in 1D",
+                               "Template for dynamic reaction-transport models in porous media in 1D (with text)",
+                               "Template for local equilibrium chemistry model",
                                "Template to be used for the NPZD exercise"))
     return(template)
   } else {
@@ -205,7 +266,8 @@ RTMtemplate <- function(x = c("rtm0D", "rtm1D", "porous1D", "porous1D_extensive"
     else
       Which <- LL[x]
     
-    file <- paste0(system.file('rmarkdown', package = 'RTM'),"/templates/",Which, "/skeleton/skeleton.Rmd", sep="")
+    file <- paste0(system.file('rmarkdown', package = 'RTM'), "/templates/",
+                   Which, "/skeleton/skeleton.Rmd", sep="")
     openRmdFile (file, type = "RMD")
       
   }
