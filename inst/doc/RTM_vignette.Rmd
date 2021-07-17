@@ -65,11 +65,11 @@ Creation of the educational videos offers several longer-term advantages. For ex
 
 Each video is accompanied by a set of quiz-like questions and small exercises. These were implemented in the form of *tutorials* provided by the R-package *learnr* (Schloerke et al., 2020). They mostly consist of multiple-choice questions, sprinkled here and there with a more substantial exercise that needs an R-code for it to be solved.
 
-The quizzes were designed to allow the students to test their basic understanding of the subject explained in the video. Before we introduced these quizzes, we often noted that some students overestimate their grasp of the material and are overly confident, while others are baffled by the complexity of the material and may loose confidence that they will eventually manage to understand it. The quizzes allow students to make this assessment by, and for, themselves. They are not graded, but the students are encouraged to use them for their own benefit, as they facilitate better preparation for the more substantial exercises in the classroom and --- ultimately --- for the exam. The quizzes also improve students’ quantitative and problem-solving skills by giving them hints and guidance as to how to tackle specific questions.
+The quizzes were designed to allow the students to test their basic understanding of the subject explained in the video. Before we introduced these quizzes, we often noted that some students overestimate their grasp of the material and are overly confident, while others are baffled by the complexity of the material and may loose confidence that they will eventually manage to understand it. The quizzes allow students to make this assessment by, and for, themselves. They are not graded, but students are encouraged to use them for their own benefit, as they facilitate better preparation for the more substantial exercises in the classroom and ultimately for the exam. The quizzes also improve students’ quantitative and problem-solving skills by giving them hints and guidance as to how to tackle specific questions.
 
 ## Classroom exercises
 
-While in the classroom, students work in small groups (2--4 students per group) on practical modelling exercises and applications. The focus is that the exercises address current environmental issues, the approaches required to solve the exercises are versatile, and that students design, develop and fully implement their own models from scratch (e.g., starting from a conceptual diagram and ending with an R-code that generates quantitative predictions).
+While in the classroom, students work in small groups (2--4 students per group) on practical modelling *exercises*. The focus is that the exercises address current environmental issues, the approaches required to solve the exercises are versatile, and that students design, develop and fully implement their own models from scratch (e.g., they start from a conceptual diagram and progress until they develop an R-code that generates quantitative predictions).
 
 At the time of writing this vignette, the exercises address, among others, the following environmental issues:
 
@@ -97,78 +97,88 @@ New material can be added in the future, thus creating a repository from which m
 
 ## Auxiliary material
 
-CONTINUE EDITING HERE
+In addition to tutorials and exercises, the RTM package provides a number of smaller readers that explain various topics in somewhat greater detail. Their aim is to satisfy the curiosity of students with the greatest motivation to learn modelling in R. The topics covered in these readers are not compulsory for the course, so the students get to see them after the mid-term exam, but before they start to work on their final projects. They include
 
-This consists of a number of small documents that go into somewhat more detail for various topics. It is not compulsory material, so the students get to see this after the exam, and before they start the projects (see below).
+* implementation of *events* in dynamic models developed in R,
+* use of *forcing functions* based on data in models developed in R,
+* display of *observed data* alongside model results in R,
+* *fitting* of a 1D reaction-transport model to data in R,
+* *visualisation* of multi-dimensional outputs from a 1D reaction-transport model in R,
+* modelling of *pH dynamics* in a 1D reaction-transport model in R,
+* mathematical analysis of the response of a system to a *perturbation from an equilibrium*,
+* development of *interactive applications* in R,
+* the basics about the *numerical methods* used for reaction-transport modelling in R,
+* the basics about collaborative model development via *git*.
 
-These "readers" are meant to satisfy the curiosity of some students that have a desire to go more into depth for certain topic. 
+## Model templates
 
-They comprise documents dealing with:
+Although students develop their models from scratch, they do not necessarily start from an empty sheet when implementing them in R. Instead, they start from a number of R Markdown templates that are provided by the RTM package. Thus, rather then becoming easily confused or frustrated by the need to generate a syntactically correct R-code, students can focus on the implementation of the modelled processes and generation and visualisation of outputs using R-code chunks provided by the templates. The templates included in the package facilitate the development of
 
-* How to implement *events* in dynamic models developed in R
-* How to use *forcing functions* based on data in models developed in R
-* How to easily showing *observed data* alongside model results in R 
-* How to *fit* a 1D reaction-transport model to data in R 
-* How to *visualise* dynamic outputs from a 1D reaction-transport model in R
-* How to include *pH dynamics* in a 1D reaction-transport model in R
-* How to mathematically investigate the response of systems to a *perturbation from equilibrium*
-* How to make *interactive applications* in R
-* The basics of the *numerical methods* used for reaction-transport modelling in R
+* dynamic models without the spatial component (*RTM_0D*),
+* dynamic one-dimensional reaction-transport models (*RTM_1D*),
+* dynamic one-dimensional reaction-transport models in porous media (*RTM_porous1D*).
 
-## Longer projects
+Additionally, they include templates used in some of the exercises, including models that deal with
 
-After having done the written exam, the students work on a specific environmental topic in small groups of 3-4 people. In contrast to the exercises made in class, they do this with less guidance from the teachers. In addition, they also need to provide a report, where they outline the scientific rationale of their work, describe their model, and document the results, much like they would do while writing a scientific paper. 
+* local equilibrium chemistry (*RTM_equilibrium*),
+* a basic food-web and element cycling in an aquatic ecosystem (*RTM_npzd*).
 
-Note that the topics of these projects are NOT part of the RTM package.
+## Final projects
+
+After completing the tutorials, exercises, and the written mid-term exam, students proceed with a work on a larger project of their choice. This involves the development of a model about a specific environmental topic and is done in small groups of 2--4 people. In contrast to the exercises made in the classroom, they do this with less guidance from the tutors. They also need to document their work in a written report, where they outline the scientific rationale, describe their model (including assumptions and implementation), and present and interpret the results, much like they would do when writing a scientific paper. Note that the topics of these final projects are *not* part of the RTM package.
 
 # About this package
 
-This R-package contains the tutorials, exercises and extra material that the students have to work through during their courses at Utrecht University. 
+The RTM package contains tutorials, exercises and extra material (readers) that students study and work through during the course *Reactive transport modeling in the Hydrosphere* (taught at Utrecht University, The Netherlands) or *Environmental modelling* (taught at Ghent University, Belgium). Anyone who wants to learn environmental or reaction-transport modelling can consult the tutorials and make the exercises. The answers are also provided, in a sub-directory under the *inst* package directory.
 
-Anyone that want to self-teach modelling can consult the tutorials and make the exercises. The answers are also provided, in a subdirectory under the inst package directory
+## Tutorials
 
-## tutorials
+The function *RTMtutorial* runs a specific tutorial. To list all possible tutorials, use the command
 
-The function *RTMtutorial* runs the tutorials. To list all possible tutorials:
-
-```{r}
-RTM:::RTMtutorial("?")
+```
+RTMtutorial("?")
 ```
 
-At the start of each tutorial is a link to the youtube video that deals with the theory.
+```{r, echo=FALSE}
+knitr::kable(RTM:::RTMtutorial("?"))
+```
 
 ## Exercises
 
-R-function *RTMexercise* opens the PDF with the questions for each exercise. To list all possible exercises:
+The function *RTMexercise* opens the questions for each exercise. Note that to display the exercise in a PDF format, you need to have \LaTeX\ installed on your computer. To list all possible exercises, use the command
 
-```{r}
-RTM:::RTMexercise("?")
+```
+RTMexercise("?")
 ```
 
-A number of model templates is available and can be downloaded from the Rstudio menu: "File->new File->Rmarkdown..->from template->name_of_the_template". 
-
-## Accessory material
-
-R-function *RTMreader* opens the PDF with the accessory (non-mandatory) material. To list all possible documents:
-\scriptsize
-```{r}
-RTM:::RTMreader("?")
+```{r, echo=FALSE}
+knitr::kable(RTM:::RTMexercise("?"))
 ```
-\normalsize
+
+## Auxiliary material
+
+The function *RTMreader* opens the auxiliary material. Note that to display these readers in a PDF format, you need to have \LaTeX\ installed on your computer. To list all possible documents, use the command
+
+```
+RTMreader("?")
+```
+
+```{r, echo=FALSE}
+knitr::kable(RTM:::RTMreader("?"))
+```
+
+## RTM templates
+
+To open a model template in Rstudio, choose one of the files from the menu File $\rightarrow$ New File $\rightarrow$ R Markdown $\rightarrow$ From Template. Save the file under a different name after opening the template. 
+
 # References
 
-R Core Team (2020). R: A language and environment for statistical computing. R Foundation for
-  Statistical Computing, Vienna, Austria. URL https://www.R-project.org/.
+R Core Team (2020). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria. \url{https://www.R-project.org/}
   
-Barret Schloerke, JJ Allaire and Barbara Borges (2020). learnr: Interactive Tutorials for R.
-  R package version 0.10.1. https://CRAN.R-project.org/package=learnr
+B. Schloerke, J.J. Allaire and B. Borges (2020). learnr: Interactive Tutorials for R. R package version 0.10.1. \url{https://CRAN.R-project.org/package=learnr}
   
-Soetaert Karline (2009).  rootSolve: Nonlinear root finding, equilibrium and steady-state analysis of ordinary differential equations.  R-package version 1.6
+K. Soetaert (2009).  rootSolve: Nonlinear root finding, equilibrium and steady-state analysis of ordinary differential equations.  R-package version 1.6
   
-Soetaert Karline, Thomas Petzoldt, R. Woodrow Setzer (2010). Solving Differential
-  Equations in R: Package deSolve. Journal of Statistical Software, 33(9), 1--25. URL
-  http://www.jstatsoft.org/v33/i09/ DOI 10.18637/jss.v033.i09
+K. Soetaert, T. Petzoldt, R. W. Setzer (2010). Solving Differential Equations in R: Package deSolve. Journal of Statistical Software, 33(9), 1--25. \url{http://www.jstatsoft.org/v33/i09/ DOI 10.18637/jss.v033.i09}
   
-Soetaert, Karline and Meysman, Filip (2012). Reactive transport in aquatic ecosystems: Rapid model
-  prototyping in the open source software R Environmental Modelling & Software, 32, 49-60.
-  
+K. Soetaert and F. Meysman (2012). Reactive transport in aquatic ecosystems: Rapid model prototyping in the open source software R. Environmental Modelling & Software, 32, 49--60.
