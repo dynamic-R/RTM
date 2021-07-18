@@ -255,12 +255,6 @@ plot(std, grid=Grid$x.mid, xyswap=TRUE, lty=1, las=1,
      ylab="depth (m)", xlab=c("molC/m3 SOLID", "molC/m3 LIQUID"))
 ```
 
-## Finally
-
-```{r feedback, echo = FALSE}
-question("give your feedback ", type = "learnr_text", answer(" ", correct=TRUE), correct="thank you", incorrect = "thank you")
-```
-
 ## References
 
 R Core Team (2020). R: A language and environment for statistical computing. R
@@ -270,3 +264,5 @@ R Core Team (2020). R: A language and environment for statistical computing. R
 Soetaert, Karline and Meysman, Filip (2012). Reactive transport in aquatic ecosystems: Rapid model prototyping in the open source software R. Environmental Modelling & Software, 32, 49-60.
   
 Karline Soetaert, Peter M.J. Herman (2009). A Practical Guide to Ecological Modelling. Springer Netherlands. DOI: 10.1007/978-1-4020-8624-3.
+
+Slides available at <a href="https://drive.google.com/drive/folders/1Bys0-xzXLCpFpWhD-HrH6jDKOyl8iJMd" target="_blank">google-drive</a>

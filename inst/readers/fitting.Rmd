@@ -1,7 +1,7 @@
 ---
 title: "Fitting a 1D Reaction Transport Model to Data in R"
 subtitle: "Reader Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
-author: "Karline Soetaert and Lubos Polerecky, Utrecht University"
+author: "Lubos Polerecky and Karline Soetaert, Utrecht University"
 date: "April 2021"
 output:
   pdf_document: default

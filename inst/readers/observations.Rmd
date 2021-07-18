@@ -4,8 +4,8 @@ subtitle: "Reader Accompanying the Course Reaction Transport Modelling in the Hy
 author: "Karline Soetaert and Lubos Polerecky, Utrecht University"
 date: "March 2021"
 output:
-  html_document: default
   pdf_document: default
+  html_document: default
 vignette: >
   %\VignetteEncoding{utf8}
   %\VignetteIndexEntry{Observed Data in a Reaction Transport Model in R: accessory material}

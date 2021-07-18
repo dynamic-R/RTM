@@ -1,7 +1,7 @@
 ---
 title: "The Coupled Cycles of Carbon, Oxygen, Nitrogen and Sulfur in Marine Sediments"
 subtitle: "Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
-author: "Karline Soetaert and Lubos Polerecky, Utrecht University"
+author: "Lubos Polerecky and Karline Soetaert, Utrecht University"
 date: 'July 2021'
 output:
   pdf_document: default

@@ -214,12 +214,8 @@ question(sprintf("Which is the correct expression for the rate of $SO_4^{2-}$ re
  correct=msg)
 ```
 
-## Finally
-
-```{r feedback, echo = FALSE}
-question("give your feedback ", type = "learnr_text", answer(" ", correct=TRUE), correct="thank you", incorrect = "thank you")
-```
-
-## References
+## Textbook and Slides
 
 Karline Soetaert, Peter M.J. Herman (2009). A Practical Guide to Ecological Modelling. Springer Netherlands. DOI: 10.1007/978-1-4020-8624-3.
+
+Slides available at <a href="https://drive.google.com/drive/folders/1Bys0-xzXLCpFpWhD-HrH6jDKOyl8iJMd" target="_blank">google-drive</a>

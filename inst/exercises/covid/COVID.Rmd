@@ -1,6 +1,6 @@
 ---
 title: "Modelling the COVID-19 pandemic"
-author: "Karline Soetaert and Lubos Polerecky, Utrecht University"
+author: "Lubos Polerecky and Karline Soetaert, Utrecht University"
 date: "March 2021"
 output:
   pdf_document:

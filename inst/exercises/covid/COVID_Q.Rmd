@@ -1,15 +1,15 @@
 ---
 title: "Modelling the COVID-19 pandemic"
-author: "Karline Soetaert and Lubos Polerecky, Utrecht University"
+author: "Lubos Polerecky and Karline Soetaert, Utrecht University"
 date: "March 2021"
 output:
+  pdf_document:
+    toc: no
+  word_document:
+    toc: yes
   html_document:
     toc: yes
     df_print: paged
-  word_document:
-    toc: yes
-  pdf_document:
-    toc: no
 subtitle: Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere
 ---
 

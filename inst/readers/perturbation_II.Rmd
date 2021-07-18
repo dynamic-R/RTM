@@ -1,7 +1,7 @@
 ---
 title: "Response of Systems to a Perturbation from an Equilibrium --- Part II"
 subtitle: "Reader Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
-author: "Lubos Polerecky and Karline Soetaert, Utrecht University"
+author: "Karline Soetaert and Lubos Polerecky, Utrecht University"
 date: "April 2021"
 output:
   pdf_document: default
