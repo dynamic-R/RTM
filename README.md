@@ -21,35 +21,43 @@ To install the *RTM* package, type in the R-console:
 ```
 devtools::install_github("dynamic-R/RTM", depend=TRUE)
 ```
-Then, type ``require(RTM)`` to load the package in R.
+Then, type ``require(RTM)`` in the R-console to load the package in R.
 
 ## What can you do with the RTM package?
 
 ### Start a Tutorial
 
-It is assumed that you use *Rstudio* to work in R. If you have installed the *RTM* package while running *Rstudio*, **restart** *Rstudio* and the tutorial will show up in the tab "Tutorial" (top-right panel of *Rstudio*). Select a tutorial and start
+It is assumed that you use *Rstudio* to work in R. If you have installed the *RTM* package while running *Rstudio*, **restart** *Rstudio* and the tutorial will show up in the tab "Tutorial" (top-right panel of *Rstudio*). Select a tutorial and start it.
 
 ![](inst/exercises/introductionR/images/Rstudio_tutorial.png)
 
 To see the list of all tutorials, type in the R-console
 
-```RTMtutorial("?")```
+```
+RTMtutorial("?")
+```
 
 To run a specific tutorial (e.g., "introduction"), type in the R-console
 
-```RTMtutorial("introduction")```
+```
+RTMtutorial("introduction")
+```
 
 or
 
-```RTMtutorial(1)```
+```
+RTMtutorial(1)
+```
 
-Every tutorial contains a short knowledge-clip (hosted on YouTube). The corresponding slides can be downloaded from the **tutorial_slides** folder (see list of files above).
+Every tutorial contains a short knowledge-clip (hosted on YouTube). The corresponding slides can be downloaded from the <a src="https://github.com/dynamic-R/RTM/tree/main/tutorial_slides" target="_new">tutorial_slides</a> folder (see the list of files above).
 
 ### Start an Exercise
 
 To see the list of all exercises, type in the R-console
 
-```RTMexercise("?")```
+```
+RTMexercise("?")
+```
 
 To view a specific exercise (e.g., "conceptual"), type in the R-console
 
@@ -60,29 +68,41 @@ RTMexercise("conceptual", type="PDF") # to display it in a PDF format (nicer)
 
 or
 
-```RTMexercise(2)```
+```
+RTMexercise(2)
+```
 
 If you are new to R, it is recommended to first read the "introductionR" exercise. This is done by typing in R-console
 
-```RTMexercise("introductionR", type="PDF")```
+```
+RTMexercise("introductionR", type="PDF")
+```
 
 or
 
-```RTMexercise(1, type="PDF")```
+```
+RTMexercise(1, type="PDF")
+```
 
 ### View extra readers
 
 To see the list of extra readers, type in the R-console
 
-```RTMreader("?")```
+```
+RTMreader("?")
+```
 
 To view a specific exercise (e.g., "fitting"), type in the R-console
 
-```RTMreader("fitting", type="PDF")```
+```
+RTMreader("fitting", type="PDF")
+```
 
 or
 
-```RTMreader(4, type="PDF")```
+```
+RTMreader(4, type="PDF")
+```
 
 ## Uninstall
 
@@ -90,8 +110,14 @@ To uninstall *RTM*, locate the *RTM* package in the "Packages" tab in *Rstudio*,
 
 To uninstall manually, type in the R-console (the version of the library may differ, here we assume 4.1):
 
-* Windows users: ``remove.packages("RTM", lib="~/R/win-library/4.1")``
-* Linux users: ``remove.packages("RTM", lib="~/R/x86_64-pc-linux-gnu-library/4.1")``
+* Windows users: 
+  ```
+  remove.packages("RTM", lib="~/R/win-library/4.1")
+  ```
+* Linux users: 
+  ```
+  remove.packages("RTM", lib="~/R/x86_64-pc-linux-gnu-library/4.1")
+  ```
 
 ---
 2021-07-19
