@@ -4,7 +4,8 @@ openRmdFile <- function(file, output) {
   if (toupper(output) == "RMD"){
     output_file <- tempfile(fileext = ".Rmd")
     file.copy(file, output_file)
-    browseURL(output_file)
+#    browseURL(output_file)
+    file.edit(output_file)
   }
   else if (toupper(output) == "PDF")
     browseURL(rmarkdown::render(input = file, output_format = "pdf_document",
@@ -69,7 +70,7 @@ RTMtutorial <- function(x = c("?",
       Which <- LL[x]
     }
     x <- ifelse(num<10, paste("0", as.character(num), sep=""), as.character(num))
-    if (output == "tutorial"){
+    if (tolower(output) == "TUTORIAL"){
      Which <- paste(x, Which, sep="")
      if (length(Which) > 1)
       for (w in Which) 
