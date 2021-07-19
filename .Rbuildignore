@@ -10,4 +10,4 @@ README.md
 ^inst/readers/.*\\.(html|pdf)$
 ^inst/rmarkdown/.*\\.(html|pdf)$
 ^inst/tutorials/.*\\.(html|pdf)$
-^tutorial_slides/.*\\.(html|pdf)$
+^tutorialSlides$
