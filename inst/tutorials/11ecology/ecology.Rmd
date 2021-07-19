@@ -34,18 +34,23 @@ You can also read the following section(s) of the textbook:
 
 (You can download each chapter of the textbook via the e-book University library for free!)
 
-## Ecological interactions: algal N-uptake
+## Ecological interactions: virus infection
 
-```{r Nuptake, echo=FALSE}
-question("Algal N-uptake is stimulated by nitrate (NO3) and inhibited by ammonia (NH3) concentrations. What would be a suitable expression for the rate of algal growth?", type = "learnr_checkbox",
- answer(sprintf("$r \\times \\frac{[NO3]}{[NO3]+K_{NO3}} \\times [ALGAE] + \\frac{K_{NH3}}{[NH3]+K_{NH3}} \\times [ALGAE]$")),
- answer(sprintf("$r \\times \\frac{[NO3]}{[NO3]+K_{NO3}} \\times \\frac{K_{NH3}}{[NH3]+K_{NH3}} \\times [ALGAE]$"), correct=TRUE),
- answer(sprintf("$r \\times \\frac{[NO3]}{[NO3]+K_{NO3}} \\times \\frac{K_{NH3}}{[NH3]+K_{NH3}}$")),
- answer(sprintf("$r \\times \\frac{[NO3]}{[NO3]+K_{NO3}} \\times [NH3]$")),
- answer(sprintf("$r \\times \\frac{[NO3]}{[NO3]+K_{NO3}} \\times \\left(1 - \\frac{[NH3]}{[NH3]+K_{NH3}}\\right) \\times [ALGAE]$"), correct=TRUE),
- answer(sprintf("$\\frac{[NO3]}{[NO3]+K_{NO3}} \\times \\frac{K_{NH3}}{[NH3]+K_{NH3}} \\times [ALGAE]$")),
- answer(sprintf("$r \\times \\frac{K_{NO3}}{[NO3]+K_{NO3}} \\times [ALGAE]$"))
-)
+In a population comprising individuals that are *susceptible* to a virus and *infected* by a virus, infection can be modelled as a process similar to an elementary chemical reaction: a susceptible person can become infected if he/she "collides" with an infected person. Suppose that the *probability* that a susceptible person meets an infected person, whereby this encounter leads to the susceptible person becoming infected, is described by a parameter $b$ (in units of $ind^{-1}~d^{-1}$).  The amounts of susceptible and infected individuals in the population are denoted by $S$ and $I$, respectively.
+
+```{r infection_rate, echo=FALSE}
+msg <- "To become infected, a susceptible person needs to 'collide' with *one* infected person. Therefore, the infection rate is *first-order* with respect to the infected and susceptible persons, i.e., $InfectionRate = b\\times S\\times I$. The proportionality constant, $b$, describes the probability (expressed per individual per day) that a susceptible person meets an infected person and their encounter results in the susceptible person becoming infected."
+
+question(sprintf("What is a suitable expression for the infection rate?"), type = "learnr_checkbox",
+ answer(sprintf("$InfectionRate = b \\times (S+I)$"), correct=FALSE),
+ answer(sprintf("$InfectionRate = b \\times S$"), correct=FALSE),
+ answer(sprintf("$InfectionRate = b \\times I$"), correct=FALSE),
+ answer(sprintf("$InfectionRate = b \\times S \\times I$"), correct=TRUE),
+ answer(sprintf("$InfectionRate = S \\times \\frac{I}{I+b}$"), correct=FALSE),
+ answer(sprintf("$InfectionRate = b \\times I^2 \\times S$"), correct=FALSE),
+ 
+ incorrect=sprintf(msg),
+ correct=sprintf(msg))
 ```
 
 ## Ecological interactions: predation
@@ -63,6 +68,20 @@ question("Foxes (F) predate on rabbits (R). What is a suitable expression for th
  
  incorrect=msg,  
  correct=msg)
+```
+
+## Ecological interactions: algal N-uptake
+
+```{r Nuptake, echo=FALSE}
+question("Algal N-uptake is stimulated by nitrate (NO3) and inhibited by ammonia (NH3) concentrations. What would be a suitable expression for the rate of algal growth?", type = "learnr_checkbox",
+ answer(sprintf("$r \\times \\frac{[NO3]}{[NO3]+K_{NO3}} \\times [ALGAE] + \\frac{K_{NH3}}{[NH3]+K_{NH3}} \\times [ALGAE]$")),
+ answer(sprintf("$r \\times \\frac{[NO3]}{[NO3]+K_{NO3}} \\times \\frac{K_{NH3}}{[NH3]+K_{NH3}} \\times [ALGAE]$"), correct=TRUE),
+ answer(sprintf("$r \\times \\frac{[NO3]}{[NO3]+K_{NO3}} \\times \\frac{K_{NH3}}{[NH3]+K_{NH3}}$")),
+ answer(sprintf("$r \\times \\frac{[NO3]}{[NO3]+K_{NO3}} \\times [NH3]$")),
+ answer(sprintf("$r \\times \\frac{[NO3]}{[NO3]+K_{NO3}} \\times \\left(1 - \\frac{[NH3]}{[NH3]+K_{NH3}}\\right) \\times [ALGAE]$"), correct=TRUE),
+ answer(sprintf("$\\frac{[NO3]}{[NO3]+K_{NO3}} \\times \\frac{K_{NH3}}{[NH3]+K_{NH3}} \\times [ALGAE]$")),
+ answer(sprintf("$r \\times \\frac{K_{NO3}}{[NO3]+K_{NO3}} \\times [ALGAE]$"))
+)
 ```
 
 ## Simple differential equations - I
