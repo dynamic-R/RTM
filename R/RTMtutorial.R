@@ -70,11 +70,7 @@ RTMtutorial <- function(x = c("?",
       Which <- LL[x]
     }
     x <- ifelse(num<10, paste("0", as.character(num), sep=""), as.character(num))
-<<<<<<< HEAD
     if (output == "TUTORIAL"){
-=======
-    if (tolower(output) == "TUTORIAL"){
->>>>>>> 7775d7894d8611b91d0ad733306c2cccac2b4941
      Which <- paste(x, Which, sep="")
      if (length(Which) > 1)
       for (w in Which) 
