@@ -283,12 +283,6 @@ out      <- ode(y=state.ini, times=time.seq, func=SIRmodel, parms=parms)
 plot(out, las=1, col=1:2, lty=1)
 ```
 
-## Finally
-
-```{r feedback, echo = FALSE}
-question("give your feedback ", type = "learnr_text", answer(" ", correct=TRUE), correct="thank you", incorrect = "thank you")
-```
-
 ## References
 
 R Core Team (2020). R: A language and environment for statistical computing. R
@@ -299,3 +293,5 @@ Karline Soetaert, Thomas Petzoldt, R. Woodrow Setzer (2010). Solving Differentia
   DOI: 10.18637/jss.v033.i09. http://www.jstatsoft.org/v33/i09/
 
 Karline Soetaert, Peter M.J. Herman (2009). A Practical Guide to Ecological Modelling. Springer Netherlands. DOI: 10.1007/978-1-4020-8624-3.
+
+Slides available at <a href="https://drive.google.com/drive/folders/1Bys0-xzXLCpFpWhD-HrH6jDKOyl8iJMd" target="_blank">google-drive</a>

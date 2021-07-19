@@ -1,6 +1,6 @@
 ---
 title: 'Chemistry: Ozone in the troposphere'
-author: "Karline Soetaert and Lubos Polerecky, Utrecht University"
+author: "Lubos Polerecky and Karline Soetaert, Utrecht University"
 subtitle: "Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
 date: "February 2021"
 output:

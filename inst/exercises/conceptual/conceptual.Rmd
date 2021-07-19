@@ -1,20 +1,15 @@
 ---
-<<<<<<< HEAD
 title: "Conceptual Diagram"
-=======
-title: "Conceptual models"
 subtitle: "Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
->>>>>>> GhentExamples
-author: "Karline Soetaert and Lubos Polerecky, Utrecht University"
+author: "Lubos Polerecky and Karline Soetaert, Utrecht University"
 date: "June 2021"
 output:
+  pdf_document:
+    toc: no
+  header-includes: \usepackage{float} \floatplacement{figure}{th}
   html_document:
     toc: no
     df_print: paged
-  header-includes: \usepackage{float} \floatplacement{figure}{th}
-  pdf_document:
-    toc: no
-subtitle: Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere
 fontsize: 11pt
 linestretch: 1.15
 ---
