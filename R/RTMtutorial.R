@@ -1,5 +1,5 @@
 
-openRmdFile <- function(file, type) {
+ openRmdFile <- function(file, type) {
   
   if (type == "RMD"){
     output_file <- tempfile(fileext = ".Rmd")
