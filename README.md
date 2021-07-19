@@ -50,9 +50,7 @@ RTMtutorial(1)
 ```
 
 Every tutorial contains a short knowledge-clip (hosted on YouTube). The corresponding slides can be downloaded from the folder
-[tutorial_slides]: https://github.com/dynamic-R/RTM/tree/main/tutorial_slides folder (see the list of files above). 
-
-[link text itself]: http://www.reddit.com
+[tutorial_slides](https://github.com/dynamic-R/RTM/tree/main/tutorial_slides folder) (see the list of files above). 
 
 ### Start an Exercise
 
