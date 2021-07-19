@@ -171,7 +171,7 @@ RTMexerciseFULL <- function(x = c("?",
       return(exercise[exercise$type %in% type,])
   } else {
    if (is.character(x)){
-     num   <- pmatch(tolower(x), tolower(LL))
+     num   <- pmatch(tolower(x), tolower(LL))[1]
      Which <- LL[num]
      Dir <- subdirectory[num]
    }else { # a number
@@ -222,7 +222,7 @@ RTMreader <- function(x = c("?", "events",
     return(goodies)
   } else {
    if (is.character(x))
-     Which <- LL[pmatch(tolower(x), tolower(LL))]
+     Which <- LL[pmatch(tolower(x), tolower(LL))[1]]
    else
      Which <- LL[x]
 #   Which <- paste("_", Which, sep="")
@@ -256,7 +256,7 @@ RTMtemplate <- function(x = c("?", "rtm0D", "rtm1D", "porous1D", "porous1D_exten
     return(template)
   } else {
     if (is.character(x))
-      Which <- LL[pmatch(tolower(x), tolower(LL))]
+      Which <- LL[pmatch(tolower(x), tolower(LL))[1]]
     else
       Which <- LL[x]
     

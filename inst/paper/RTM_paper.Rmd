@@ -171,6 +171,7 @@ knitr::kable(RTM:::RTMreader("?"))
 
 To open a model template in Rstudio, choose one of the files from the menu File $\rightarrow$ New File $\rightarrow$ R Markdown $\rightarrow$ From Template. Save the file under a different name after opening the template. 
 
+
 # References
 
 R Core Team (2020). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria. \url{https://www.R-project.org/}
