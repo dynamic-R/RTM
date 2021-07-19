@@ -5,33 +5,41 @@
 \alias{RTMtemplate}
 \title{Reaction Transport Modelling Course: tutorials, exercises, templates and readers with accessory material}
 \usage{
-RTMtutorial (x = c("introduction", "why", "conceptual", "massbalance",     
-     "Rmodels", "largescale", "chemical", "equilibrium", "enzymatic",    
-     "partitioning", "ecology", "transportProcesses", "transportFluxes", 
-     "transportPorous", "transportBoundaries", "transportR"), 
-     type = c("tutorial", "RMD"))
+RTMtutorial(x = c("?", "introduction", "why", "conceptual", "massbalance",     
+               "Rmodels", "largescale", "chemical", "equilibrium", "enzymatic", 
+               "partitioning", "ecology", "transportProcesses", "transportFluxes", 
+               "transportPorous", "transportBoundaries", "transportR"), 
+            output = c("tutorial", "RMD"))
     
-RTMexercise(x = c("introductionR", "conceptual", "massbalance", 
-    "massbalance_ecology", "carbonCycle", "ozone", "dissolutionSi", 
-    "equilibriumNH3", "equilibriumHCO3", "equilibriumOMD", "detritus", 
-    "bears_salmon", "COVID", "virus", "npzd",  "plant_coexistence", 
-    "crops_weed", "hyacinth_algae", "aquaculture", 
-    "riverAnoxia", "Pdiagenesis", "diagenesis"), 
-     type = c("HTML", "PDF", "RMD", "WORD"))  
+RTMexercise(x = c("?", "introductionR", "conceptual", "massbalance_chemistry",     
+               "massbalance_ecology", "carbonCycle", "ozone", "dissolutionSi",              
+               "equilibriumNH3", "equilibriumHCO3", "equilibriumOMD", "detritus",           
+               "npzd", "crops_weed", "COVID", "virus", "bears_salmon",  
+               "plant_coexistence", "hyacinth_algae", "aquaculture", 
+               "riverAnoxia", "Pdiagenesis", "diagenesis"),               
+            type = c("massbalance", "linearmodels", "chemistry", 
+               "biogeochemistry", "epidemiology", "ecology", 
+               "individualbased", "reaction_transport"),            
+            output = c("HTML", "PDF", "RMD", "WORD"))
 
-RTMreader (x = c("events", "forcings", "observations", 
-      "fitting", "visualisation", "pHprofiles", 
-      "perturbation_I", "perturbation_II", 
-      "interactive", "numericalR", "git_sharing_code"),
-      type = c("HTML", "PDF", "RMD", "WORD"))      
+RTMreader  (x = c("?", "events", "forcings", "observations", 
+               "fitting", "visualisation", "pHprofiles", 
+               "perturbation_I", "perturbation_II", 
+               "interactive", "numericalR", "git_sharing_code"),
+            output = c("HTML", "PDF", "RMD", "WORD"))      
 
-RTMtemplate(x = c("rtm0D", "rtm1D", "porous1D", "porous1D_extensive", 
-      "rtmEquilibrium", "npzd"))
+RTMtemplate(x = c("rtm0D", "rtm1D", "porous1D", 
+               "porous1D_extensive", "rtmEquilibrium", "npzd"))
+
 }
 \arguments{
-  \item{x }{the name or the number of the tutorial, exercise or reader. When x = "?", a list of tutorials, exercises or readers will be displayed, including a short description.
+  \item{x }{the name or the number of the tutorial, exercise or reader. When x = "?" (the default), 
+    a list of tutorials, exercises or readers will be displayed, including a short description.
   }
-  \item{type }{ how the exercise or reader should be displayed. When selecting PDF, you need to have LaTeX installed. See note for RTMtutorial.
+  \item{output }{ how the exercise or reader should be displayed. When selecting PDF, you need to have 
+    LaTeX installed. See note for RTMtutorial.
+  }
+  \item{type }{ the type of the exercise; only used when \code{x="?"}.
   }
 }
 
@@ -73,6 +81,8 @@ The answers to the exercises are also stored in the package, but we did not incl
 
 RTMtutorial ("?")
 RTMexercise ("?")
-RTMreader ("?")
+RTMexercise ("?", type="ecology")
+RTMexercise ("?", type=c("biogeochemistry","reaction_transport"))
+RTMreader   ("?")
 RTMtemplate ("?")
 }
