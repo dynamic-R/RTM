@@ -1,5 +1,5 @@
 
-openRmdFile <- function(file, type) {
+ openRmdFile <- function(file, type) {
   
   if (type == "RMD"){
     output_file <- tempfile(fileext = ".Rmd")
@@ -78,9 +78,8 @@ RTMtutorial <- function(x = c("introduction",
   } else { # open the Rmd File
     if (length(Which) > 1) stop("Can open only one Rmd file at a time")
     dir <- paste(x, Which, sep="")
-    file <- paste0(system.file('tutorials', package = 'RTM'), "/", dir, "/", 
-                   Which, ".Rmd", sep="")
-    openRmdFile(file, "Rmd")
+    file <- paste0(system.file('tutorials', package = 'RTM'),"/",dir, "/", Which, ".Rmd", sep="")
+    openRmdFile(file, "RMD")
   }
   }
 }
