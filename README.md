@@ -49,7 +49,7 @@ or
 RTMtutorial(1)
 ```
 
-Every tutorial contains a short knowledge-clip (hosted on YouTube). The corresponding slides can be downloaded from the <a src="https://github.com/dynamic-R/RTM/tree/main/tutorial_slides" target="_new">tutorial_slides</a> folder (see the list of files above).
+Every tutorial contains a short knowledge-clip (hosted on YouTube). The corresponding slides can be downloaded from the <a src="https://github.com/dynamic-R/RTM/tree/main/tutorial_slides">tutorial_slides</a> folder (see the list of files above).
 
 ### Start an Exercise
 
