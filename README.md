@@ -49,7 +49,7 @@ or
 RTMtutorial(1)
 ```
 
-Every tutorial contains a short knowledge-clip (hosted on YouTube). The corresponding slides can be downloaded from the folder [tutorial_slides](./tree/main/tutorial_slides folder). 
+Every tutorial contains a short knowledge-clip (hosted on YouTube). The corresponding slides can be downloaded from the folder [tutorial_slides](tree/main/tutorial_slides). 
 
 ### Start an Exercise
 
