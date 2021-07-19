@@ -61,7 +61,7 @@ RTMtutorial <- function(x = c("introduction", "why", "conceptual", "massbalance"
     if (length(Which) > 1) stop("Can open only one Rmd file at a time")
     dir <- paste(x, Which, sep="")
     file <- paste0(system.file('tutorials', package = 'RTM'),"/",dir, "/", Which, ".Rmd", sep="")
-    openRmdFile(file, "Rmd")
+    openRmdFile(file, "RMD")
   }
   }
 }
