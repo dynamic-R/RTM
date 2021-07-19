@@ -237,20 +237,21 @@ RTMreader <- function(x = c("?", "events",
 
 
 
-RTMtemplate <- function(x = c("rtm0D", "rtm1D", "porous1D", "porous1D_extensive", 
-                              "rtmEquilibrium", "npzd")) {
+RTMtemplate <- function(x = c("?", "rtm0D", "rtm1D", "porous1D", "porous1D_extensive", 
+                              "rtmEquilibrium", "npzd", "rmarkdown_small")) {
   
-  LL <- as.character(formals(RTMtemplate)$x[-1])
+  LL <- as.character(formals(RTMtemplate)$x[-(1:2)])
   if (length(x) > 1) 
      stop("only one template can be opened at a time - select one (number between 1,", length(LL), ")")
   if (x == "?") {
     template <- data.frame(x=LL, description = 
-                             c("Template for dynamic models in 0D",
-                               "Template for dynamic reaction-transport models in 1D",
-                               "Template for dynamic reaction-transport models in porous media in 1D",
-                               "Template for dynamic reaction-transport models in porous media in 1D (with text)",
+                             c("Template for models in 0D",
+                               "Template for reaction-transport models in 1D",
+                               "Template for reaction-transport models in porous media in 1D",
+                               "Template for reaction-transport models in porous media in 1D (with text)",
                                "Template for local equilibrium chemistry model",
-                               "Template to be used for the NPZD exercise"))
+                               "Template to be used for the NPZD exercise",
+                               "Template to be used for the introductionR exercise"))
     return(template)
   } else {
     if (is.character(x))

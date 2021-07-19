@@ -28,8 +28,8 @@ RTMreader  (x = c("?", "events", "forcings", "observations",
                "interactive", "numericalR", "git_sharing_code"),
             output = c("HTML", "PDF", "RMD", "WORD"))      
 
-RTMtemplate(x = c("rtm0D", "rtm1D", "porous1D", 
-               "porous1D_extensive", "rtmEquilibrium", "npzd"))
+RTMtemplate(x = c("?", "rtm0D", "rtm1D", "porous1D", "porous1D_extensive", 
+                  "rtmEquilibrium", "npzd", "rmarkdown_small"))
 
 }
 \arguments{

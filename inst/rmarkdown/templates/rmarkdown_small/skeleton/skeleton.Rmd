@@ -1,0 +1,22 @@
+---
+title: "Looking at airquality data using R with Markdown"
+author: "Karline Soetaert"
+date: "29 augustus 2017"
+output: pdf_document
+---
+
+## The airquality data set
+
+The R dataset "airquality" contains daily air quality measurements in New York, from May to September 1973. In the code below, we first look at the first two rows of this dataset
+and then plot the solar radiation and wind data, in two figures next to one another
+
+```{r}
+head(airquality, n = 2)  # show first two lines
+```
+
+```{r, fig.width=10, fig.height = 4}
+par(mfrow = c(1, 2))     # figures aligned in one row, two columns
+plot(airquality$Solar.R, type = "l", xlab = "time", ylab = "Solar.R")
+plot(airquality$Wind,    type = "l", xlab = "time", ylab = "Wind"   )
+```
+
