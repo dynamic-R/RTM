@@ -16,49 +16,48 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Introduction
 
-This document describes a SIR model.
-
-* O$_2$ and BOD are removed due to BOD decay (O$_2$:BOD stoichiometry of 1:1),
-* BOD decay is a first-order process with respect to BOD ($r = 0.05~d^{-1}$) and depends on O$_2$ according to the Michaelis-Menten kinetics ($kO_2=0.001~mol~m^{-3}$),
-* O$_2$ is added by air-water exchange ($k=0.1~d^{-1}$, O$_{2,sat} = 0.3~mol~m^{-3}$),
-* DOB is added at a constant rate ($0.001~mol~m^{-3}~d^{-1}$),
-* initial concentrations are O$_{2,ini}=0.25~mol~m^{-3}$ and BOD$_{ini} = 0.5~mol~m^{-3}$.
+This document describes a simple SIR model, as specified in the COVID exercise:
+```
+require(RTM)
+RTMexercise("COVID")
+```
 
 \newpage 
 
 # Model definition
 
 ```{r, eval = TRUE, cache = FALSE, echo = TRUE, warning=FALSE, message=FALSE}
-# Initial conditions of the state variables
-yini <- c(O2 = 0.25, BOD = 0.5) # both in [mol/m3]
+# Initial conditions of the state variables (D=deceased)
+yini <- c(S = 17.5e6, I = 1e3, R = 0, D = 0) # number of people
 
 # Model parameters
 pars <- c(
-  rDecay   = 0.05 , # [/d]       first-order rate constant
-  kO2      = 0.001, # [mol/m3]   half-saturation O2 concentration
-  satO2    = 0.3  , # [mol/m3]   O2 solubility
-  k        = 0.1  , # [/d]       reaeration rate constant
-  inputBOD = 0.001  # [mol/m3/d] constant BOD input rate
+  b   = 0.00000002, # [/ind/d]  infection rate constant
+  g   = 0.07,       # [/d]      recovery  rate constant
+  m   = 0.007       # [/d]      mortality rate constant
 )
 
 # Model function: calculates time-derivatives and other output
-BODmodel <-function(t, state, pars) { 
+SIRmodel <-function(t, state, pars) { 
   # t: time, state: state variables, pars: model parameters
   with (as.list(c(state, pars)),{
  
-  # rate expressions [mol/m3/d]
-    Decay      <- rDecay * BOD * O2/(O2+kO2) # BOD decay
-    Reaeration <- k * (satO2-O2)             # air-water exchange
-
-  # Time-derivatives: dC/dt = production - consumption [mol/m3/d]
-    dO2dt      <- Reaeration - Decay
-    dBODdt     <- inputBOD   - Decay
+  # rate expressions [ind/d]
+    Infection <- b * I * S # infection rate
+    Recovery  <- g * I     # recovery rate
+    Mortality <- m * I     # mortality rate
+    
+  # Time-derivatives: dC/dt = production - consumption [ind/d]
+    dSdt      <- -Infection
+    dIdt      <-  Infection - Recovery - Mortality
+    dRdt      <-  Recovery
+    dDdt      <-  Mortality
 
   # return time-derivatives and ordinary variables as a list     
-    list(c(dO2dt, dBODdt), # vector with derivatives 
+    list(c(dSdt, dIdt, dRdt, dDdt), # vector with derivatives 
                            # (the same order as state variables!)
-      Decay      = Decay,  # other output
-      Reaeration = Reaeration)    
+      Infection  = Infection,  # other output
+      Mortality  = Mortality)    
   })
 }
 ```
@@ -71,18 +70,20 @@ We run the model dynamically over 100 days, using two different values of the re
 
 ```{r, message=FALSE}
 require(deSolve)  # package with integration methods
-
-outtimes <- seq(from = 1, to = 100, length.out = 100) # vector of output times
-
+# vector of output times
+outtimes <- seq(from = 1, to = 100, length.out = 100) 
 # ode integrates the model
-out <- ode(y = yini, parms = pars, func = BODmodel, times = outtimes)                
+out <- ode(y=yini, parms=pars, func=SIRmodel, times=outtimes)                
+# plot the model output
+plot(out)
 
-# change the value of the reaeration rate constant
-pars2      <- pars         # copy the original parameter vector
-pars2["k"] <- pars["k"]/10 # 10-fold lower k
+# change the value of the infection rate constant
+pars2      <- pars           # copy the original parameter vector
+pars2["b"] <- pars["b"]*0.6  # 60% of original
 
 # integrate the model with the new parameters
-out2 <- ode(y = yini, parms = pars2, func = BODmodel, times = outtimes)                
+out2 <- ode(y = yini, parms = pars2, func = SIRmodel, 
+            times = outtimes)                
 ```
 
 ```{r, eval=FALSE}
@@ -94,9 +95,9 @@ We plot both solutions in one graph:
 
 ```{r, fig.height = 6, fig.width = 6, fig.align='center'}
 plot(out, out2, xlab="time (days)", las=1, lwd=2,
-     ylab=list("mol/m3","mol/m3","mol/m3/d","mol/m3/d"))
-legend("topright", legend = c("original", "10-fold lower"),
-       title="aeration rate constant:", 
+     ylab=list("ind","ind","ind", "ind", "ind/d","ind/d"))
+legend("topright", legend = c("original", "60% reduced"),
+       title="infection rate constant:", 
        col=1:2, lwd=2, lty=1:2, bty="n")
 ```
 
@@ -106,38 +107,95 @@ We find the steady-state solution:
 
 ```{r, message=FALSE}
 require(rootSolve) # package with solution methods
-std <- steady(y = yini, parms = pars, func = BODmodel, 
+std <- steady(y = yini, parms = pars, func = SIRmodel, 
               positive = TRUE) # to ensure that the solution is positive
 std$y
 ```
 
-## Sensitivity analysis
 
-We perform a sensitivity analysis to find how the steady-state depends on the reaeration rate constant:
 
-```{r}
-k.seq   <- seq(from = 0.01, to = 0.1, length.out = 100)
-BOD.seq <- vector()  # will contain the results
-O2.seq  <- vector()
+\clearpage
 
-for (i in 1:length(k.seq)){
-  # parameter values for this run
-  p <- pars
-  p["k"] <- k.seq[i]  # reaeration rate constant based on the sequence
-  # steady-state with new parameter values
-  std <- steady(y = yini, parms = p, func = BODmodel, positive = TRUE)  
-  BOD.seq[i] <- std$y["BOD"]
-  O2.seq[i]  <- std$y["O2"]
+# Model definition with a forcing function
+
+```{r, eval = TRUE, cache = FALSE, echo = TRUE, warning=FALSE, message=FALSE}
+# Initial conditions of the state variables (D=deceased)
+yini <- c(S = 17.5e6, I = 1e3, R = 0, D = 0) # number of people
+
+# Model parameters
+pars <- c(
+  b   = 0.00000002, # [/ind/d]  infection rate constant
+  g   = 0.07,       # [/d]      recovery  rate constant
+  m   = 0.007       # [/d]      mortality rate constant
+)
+
+# Model function: calculates time-derivatives and other output
+SIRmodel2 <-function(t, state, pars, bDyn) { 
+  # t: time, state: state variables, pars: model parameters
+  with (as.list(c(state, pars)),{
+ 
+  # parameter b is determined by an external forcing function
+    b <- bDyn(t)
+    
+  # rate expressions [ind/d]
+    Infection <- b * I * S # infection rate
+    Recovery  <- g * I     # recovery rate
+    Mortality <- m * I     # mortality rate
+    
+  # Time-derivatives: dC/dt = production - consumption [ind/d]
+    dSdt      <- -Infection
+    dIdt      <-  Infection - Recovery - Mortality
+    dRdt      <-  Recovery
+    dDdt      <-  Mortality
+
+  # return time-derivatives and ordinary variables as a list     
+    list(c(dSdt, dIdt, dRdt, dDdt), # vector with derivatives 
+                           # (the same order as state variables!)
+      Infection  = Infection,  # other output
+      Mortality  = Mortality)    
+  })
 }
 ```
 
-Finally, we plot the results of the sensitivity analysis:
-
-```{r, fig.width=7, fig.height=3.5}
-par(mfrow=c(1,2)) # figures in 1 row, 2 columns
-plot(k.seq, O2.seq,  type="l", xlab="k [/d]", main="O2",  ylab="mol/m3")
-plot(k.seq, BOD.seq, type="l", xlab="k [/d]", main="BOD", ylab="mol/m3")
+Now we define the forcing function:
+```{r}
+# define forcing function based on data
+bDATA <- data.frame(time = c(0, 29,  30,  69, 70, 100),
+                    b    = c(2,  2, 0.2, 0.2,  2,   2)*1e-8)
+fbDATA <- approxfun(x=bDATA)
 ```
+
+Plot the forcing function:
+
+```{r, fig.align='center', fig.height=5, fig.width=5}
+plot(outtimes, fbDATA(outtimes), main="Forcing b by external data",
+     type = "l", col=2, xlab="time (d)", ylab="b", ylim=c(0, 2e-8))
+points(bDATA, col=1, pch=5)
+```
+
+# Model solution with a forcing function
+
+```{r, message=FALSE}
+require(deSolve)
+# ode integrates the model
+out2 <- ode(y=yini, parms=pars, func=SIRmodel2, times=outtimes, 
+            bDyn=fbDATA) # forcing function included
+# plot the model output
+plot(out, out2)
+```
+
+We plot both solutions in one graph:
+
+```{r, fig.height = 6, fig.width = 6, fig.align='center'}
+plot(out, out2, xlab="time (days)", las=1, lwd=2,
+     ylab=list("ind","ind","ind", "ind", "ind/d","ind/d"))
+legend("topright", legend = c("original", "forced"),
+       title="infection rate constant:", 
+       col=1:2, lwd=2, lty=1:2, bty="n")
+```
+
+
+
 
 # References
 

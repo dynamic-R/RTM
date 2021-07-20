@@ -71,11 +71,12 @@ We run the model dynamically over 100 days, using two different values of the re
 
 ```{r, message=FALSE}
 require(deSolve)  # package with integration methods
-
-outtimes <- seq(from = 1, to = 100, length.out = 100) # vector of output times
-
+# vector of output times
+outtimes <- seq(from = 1, to = 100, length.out = 100)
 # ode integrates the model
-out <- ode(y = yini, parms = pars, func = BODmodel, times = outtimes)                
+out <- ode(y=yini, parms=pars, func=BODmodel, times=outtimes)                
+# plot the model output
+plot(out)             
 
 # change the value of the reaeration rate constant
 pars2      <- pars         # copy the original parameter vector
