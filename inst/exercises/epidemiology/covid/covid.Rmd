@@ -15,11 +15,11 @@ output:
 subtitle: Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere
 ---
 
-```{r child = 'COVID_Q.Rmd'}
+```{r child = 'covid_Q.Rmd'}
 ```
 \newpage
 
-```{r child = 'COVID_A.Rmd'}
+```{r child = 'covid_A.Rmd'}
 ```
 
 # References
@@ -31,6 +31,6 @@ Karline Soetaert, Thomas Petzoldt, R. Woodrow Setzer (2010). Solving Differentia
   Package deSolve. Journal of Statistical Software, 33(9), 1--25. URL
   http://www.jstatsoft.org/v33/i09/ DOI 10.18637/jss.v033.i09
 
-```{r child = 'COVID_appendix.Rmd'}
+```{r child = 'covid_appendix.Rmd'}
 ```
 

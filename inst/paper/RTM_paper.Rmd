@@ -47,7 +47,7 @@ while in previous years students would complain that they do not get enough prac
 
 # Implementation of the flipped classroom
 
-To prepare for each lesson, students are offered the choice to either read one or more chapters from the textbook (Soetaert and Herman, 2009), or watch a short video that explains the theory. Then they are encouraged to test the understanding of the theory by answering a number of short (often multiple-choice) questions. After this "priming", students go to the classroom, where they submerge themselves, under the supervision of tutors, in solving more substantial exercises.
+To prepare for each lesson, students are offered the choice to either read one or more chapters from a modelling textbook (Soetaert and Herman, 2009), or watch a short video that explains the theory. Then they are encouraged to test their understanding of the theory by answering a number of short (often multiple-choice) questions. After this "priming", students go to the classroom, where they submerge themselves, under the supervision of tutors, in solving more substantial exercises.
 
 ## Videos that elaborate on the theory
 
@@ -69,14 +69,14 @@ The quizzes were designed to allow the students to test their basic understandin
 
 ## Classroom exercises
 
-While in the classroom, students work in small groups (2--4 students per group) on practical modelling *exercises*. The focus is that the exercises address current environmental issues, the approaches required to solve the exercises are versatile, and that students design, develop and fully implement their own models from scratch (e.g., they start from a conceptual diagram and progress until they develop an R-code that generates quantitative predictions).
+While in the classroom, students work in small groups (2--4 students per group) on practical modelling *exercises* that address current environmental issues. It is required that students design, develop and implement their own models from scratch (e.g., they start from a conceptual diagram and progress until they develop an R-code that generates quantitative predictions).
 
 At the time of writing this vignette, the exercises address, among others, the following environmental issues:
 
-* *The CO$_2$ problem*. Atmospheric CO$_2$ concentrations are described by an Earth-system box model that comprises carbon fluxes among the major Earth's carbon reservoirs. The model is used to estimate the impact of anthropogenic activities (e.g., burning of fossil fuels, deforestation) on the atmospheric CO$_2$ concentrations and to explore the effects of certain mitigation strategies (e.g., ocean fertilisation).
+* *The CO$_2$ problem*. Atmospheric CO$_2$ concentrations are described by an Earth-system box model that comprises carbon fluxes among the major Earth's carbon reservoirs. The model is used to estimate the impact of anthropogenic activities (e.g., burning of fossil fuels, deforestation) on the atmospheric CO$_2$ concentrations and to explore the effects of certain mitigation strategies (e.g., ocean fertilisation). This is an example of a linear model.
 * *The ozone problem*. Ozone is a green-house gas and, at high concentrations, harmful to humans and animals. It also plays an important protective role by absorbing harmful UV radiation. The ozone model is used to test how anthropogenic emissions of NO (nitric oxide) due to combustion or burning of fuels alter the natural ozone dynamics in the lower atmosphere. It is a good example of a "typical" chemistry model.
 * *Ocean acidification*. This is a very complex problem as it deals with equilibrium chemistry. The topic is introduced by three exercises of increasing complexity. A more extensive model dealing with ocean acidification is not part of the mandatory course material, but is provided as auxiliary material that students may consult if they are interested in the topic (see below).
-* *The COVID pandemic*.  An epidemiological model (so-called SIR model) is developed to describe the spread of the SARS-CoV2 (corona) virus within a population. In addition to infection and recovery, the model includes hospitalisations, mortality, vaccination, and virus mutations. The students practice how to use information from epidemiologists (who are not modelers) to develop and apply models.
+* *The COVID pandemic*.  An epidemiological model (so-called SIR model) is developed to describe the spread of the SARS-CoV2 (corona) virus within a population. In addition to infection and recovery, the model includes hospitalisations, mortality, vaccination, and virus mutations. The students practice how to use information from epidemiologists (who are not modelers) to develop and apply such models.
 * *Agricultural eutrophication*. This model describes how fertilization with nutrients affects the competition between crops and weeds, and explores the impact of different fertilization strategies on agricultural run-off. In addition to ecological interactions, the model also contains a (simplistic) economic component that lets students explore the monetary aspects of farming.
 * *Dead zones in a river*. This one-dimensional reaction-transport model describes the distribution of dissolved oxygen concentrations in a river subjected to excessive nutrient input (ammonia). The model is used to estimate the maximal nutrient inputs that can be allowed to keep the minimal oxygen concentration above a certain critical level.
 
@@ -170,6 +170,7 @@ knitr::kable(RTM:::RTMreader("?"))
 ## RTM templates
 
 To open a model template in Rstudio, choose one of the files from the menu File $\rightarrow$ New File $\rightarrow$ R Markdown $\rightarrow$ From Template. Save the file under a different name after opening the template. 
+
 
 # References
 
