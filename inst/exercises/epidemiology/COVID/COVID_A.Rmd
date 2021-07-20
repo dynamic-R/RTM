@@ -92,7 +92,7 @@ The easiest way to track the number of people in hospitals is
 
 The conceptual diagram describing the full COVID-19 model and the corresponding set of differential equations are therefore:
 
-![Conceptual scheme of the Covid-19 model](Covid.png){width=80%}
+![Conceptual scheme of the Covid-19 model](COVID.png){width=80%}
 
 $$\frac{dS}{dt} = ImmunityLoss - Infection - Vaccination$$
 $$\frac{dI}{dt} = Infection - Mortality - Recovery - Hospitalisation$$
