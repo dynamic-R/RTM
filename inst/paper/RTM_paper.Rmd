@@ -1,6 +1,6 @@
 ---
 title: 'The RTM package'
-subtitle: "a Learning Environment for Reaction Transport Modelling"
+subtitle: "a Learning Environment for Reaction Transport Modelling in R"
 author: "Lubos Polerecky, Dries Bonte and Karline Soetaert"
 date: "July 2021"
 output: pdf_document
@@ -8,7 +8,7 @@ header-includes:
   \usepackage{float} 
   \floatplacement{figure}{th}
 fontsize: 10pt
-abstract: \noindent Since many years we have been teaching courses on environmental and reaction-transport modelling to master students at Ghent and Utrecht University. Our aim is to teach students how to create models "from scratch" and apply them to advance their understanding of natural systems, including those perturbed by anthropogenic activities. Typically, students attending our classes have different backgrounds and highly variable levels of skills in quantitative and computational methods, which makes it difficult to find a teaching style that suits everyone. To overcome this issue, we revised our didactic approach and now teach in the form of a "flipped class", where students prepare themselves ahead of the class using material available on-line, and then, during the class, put the learned concepts into practice by solving problems and exercises with a direct feedback from us. To facilitate this teaching approach, we created educational videos, tutorials, exercises, and extra readers to guide the students in learning and exploring the topics covered in the courses. Here, we present the R-package RTM, which merges this teaching material into a common platform and thus simplifies its delivery to students.
+abstract: \noindent Since many years we have been teaching courses on environmental and reaction-transport modelling to master students at Ghent and Utrecht University. Our aim is to teach students how to create models "from scratch" and apply them to advance their understanding of natural systems, including those perturbed by anthropogenic activities. Typically, students attending our classes have different backgrounds and highly variable levels of skills in quantitative and computational methods, which makes it difficult to find a teaching style that suits everyone. To overcome this issue, we revised our didactic approach and now teach in the form of a "flipped class", where students prepare themselves ahead of the class using material available on-line, and then, during the class, put the learned concepts into practice by solving problems and exercises with a direct feedback from us. To facilitate this teaching approach, we created short educational videos, quizzes, exercises, and extra readers to guide the students in learning and exploring the topics covered in the courses. Here, we present the R-package RTM, which merges this teaching material into a common platform and thus simplifies their delivery to students.
 vignette: >
   %\VignetteIndexEntry{RTM: learning environment for reaction transport modelling}
   %\VignetteEngine{knitr::rmarkdown}
@@ -60,7 +60,7 @@ Creation of the knowledge clips offers several longer-term advantages. For examp
 
 ## Quiz-like questions
 
-Each video is accompanied by a set of quiz-like questions and short exercises (Figure 2). These were implemented in the form of *tutorials* provided by the R-package *learnr* (Schloerke et al., 2020). They mostly consist of multiple-choice questions, sprinkled here and there with a more substantial exercise that needs to be solved by completing an R-code embedded within the text.
+Each knowledge clip is accompanied by a set of quiz-like questions and short exercises (Figure 2). These were implemented in the form of *tutorials* provided by the R-package *learnr* (Schloerke et al., 2020). They mostly consist of multiple-choice questions, sprinkled here and there with a more substantial exercise that needs to be solved by completing an R-code embedded within the text.
 
 The quizzes were designed to allow the students to test their basic understanding of the subject explained in the knowledge clip. Before we introduced these quizzes, we often noted that some students overestimate their grasp of the theory and are overly confident, while others are baffled by the complexity of the material and may loose confidence that they will eventually manage to understand it. The quizzes allow students to make this assessment by, and for, themselves. They are *not* graded, but students are encouraged to use them for their own benefit, as they facilitate better preparation for the more substantial exercises in the classroom and, ultimately, for the exam.
 
@@ -150,7 +150,7 @@ RTMtutorial("ecology")
 RTMtutorial(11)
 RTMtutorial("ecology", output = "RMD")
 ```
-The first two commands open the tutorial in a web-browser. In case this fails, the third command can be used to open the tutorial's R Markdown file in the *Rstudio* editor. Subsequently, the tutorial is started by clicking the "Run Document" button at the top of the editor window.
+The first two commands open the tutorial in a web browser. In case this fails, the third command can be used to open the tutorial's R Markdown file in the *Rstudio* editor. Subsequently, the tutorial is started by clicking the "Run Document" button at the top of the editor window.
 
 The first item in the tutorial provides a link to a short knowledge clip and a reference to chapters in the course textbook (Figure 1). These two resources are used to explain the theory behind the topics covered in the class.
 
@@ -205,7 +205,7 @@ RTMtemplate(1)
 ```
 The core part of the template file is shown in Figure 3 (left panel). Using this template and the differential equations that the students formulated in the first part of the exercise, it should not be too difficult for them to implement the model in R. All they need to do is to modify the R-chunks where the initial values of the state variables, model parameters, rate expressions, mass balance equations (i.e., time-derivatives of the state variables), and extra output of the model function (e.g., process rates) are defined and the model is solved (Figure 3, right panel).
 
-![Core part of an R Markdown template file for solving dynamic models in 0D. The different R-chunks are used to define the initial values of the state variables (a), model parameters (b), rate expressions (c), mass balance equations (d), and extra output of the model function (e). The R-chunk on the bottom solves the model depending on the model function (f) and plots the solution. ](images/template_solution.pdf)
+![Core part of R Markdown files for solving dynamic models in 0D. Left panel shows the template, right panel shows the modified code implementing a simple SIR model. The different R-chunks are used to define the initial values of the state variables (a), model parameters (b), rate expressions (c), mass balance equations (d), and extra output of the model function (e). The R-chunk on the bottom solves the model depending on the model function (f) and plots the solution. ](images/template_solution.pdf)
 
 
 ## Auxiliary material
@@ -228,7 +228,7 @@ RTMreader("forcing", output="PDF")
 ```
 By studying this reader, students will learn that all they need to do to implement such temporary measures in their model is to implement a forcing function based on data, add a forcing function as one of the input arguments of the model function, and include the forcing function when solving the model (Figure 4).
 
-![Core parts of the simplest and enhanced COVID model. The simplest model is reproduced from the right panel in Figure 3. The enhanced model is implemented by implementing the forcing function based on data (a), adding a forcing function as input of the model function (b), and including the forcing function when solving the model (c).](images/template_solution2.pdf)
+![Core parts of the simplest and enhanced COVID model. The simplest model is reproduced from the right panel in Figure 3. The enhanced model is developed by implementing the forcing function based on data (a), adding a forcing function as input of the model function (b), and including the forcing function when solving the model (c).](images/template_solution2.pdf)
 
 
 # Conclusion
