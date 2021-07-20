@@ -205,7 +205,7 @@ RTMreader <- function(x = c("?", "events",
   LL <- as.character(formals(RTMreader)$x[-(1:2)])
   output <- match.arg(toupper(output), choices=c("HTML", "PDF", "RMD", "WORD"))
   
-  if (x == "?") {
+  if (x[1] == "?") {
     goodies <- data.frame(x=LL, description = c(
       "Events in dynamic models developed in R",
       "Forcing functions based on data in models developed in R", 
@@ -244,7 +244,7 @@ RTMtemplate <- function(x = c("?", "rtm0D", "rtm1D", "porous1D", "porous1D_exten
   LL <- as.character(formals(RTMtemplate)$x[-(1:2)])
   if (length(x) > 1) 
      stop("only one template can be opened at a time - select one (number between 1,", length(LL), ")")
-  if (x == "?") {
+  if (x[1] == "?") {
     template <- data.frame(x=LL, description = 
                              c("Template for models in 0D",
                                "Template for reaction-transport models in 1D",
