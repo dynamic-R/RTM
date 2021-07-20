@@ -1,13 +1,19 @@
 ---
 title: "Rstudio and Github --- Sharing your R-code with the World"
-subtitle: "Reader Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
 author: "Lubos Polerecky and Karline Soetaert, Utrecht University"
-date: 'July 2021'
+date: "July 2021"
 output:
+  html_document:
+    toc: no
+    df_print: paged
   pdf_document:
-    number_sections: true
-    toc: false
-abstract: \noindent Once you start working on a code or program with several people, it becomes worthwhile to invest some time into learning about the tools that are available for sharing, editing and tracking changes in such codes. Here, we briefly illustrate how to work with Github in Rstudio.
+    number_sections: yes
+    toc: no
+subtitle: Reader Accompanying the Course Reaction Transport Modelling in the Hydrosphere
+abstract: \noindent Once you start working on a code or program with several people,
+  it becomes worthwhile to invest some time into learning about the tools that are
+  available for sharing, editing and tracking changes in such codes. Here, we briefly
+  illustrate how to work with Github in Rstudio.
 ---
 
 # Getting started with git
@@ -25,7 +31,7 @@ During the installation process, select the default option for most questions (u
   
 If you forget to disable the credential helper, proceed as described here:
 
-\url{https://stackoverflow.com/questions/37182847/how-to-disable-git-credential-manager-for-windows}
+[credential manager for windows](https://stackoverflow.com/questions/37182847/how-to-disable-git-credential-manager-for-windows)
   
 ## Create a GitHub account and project
 
@@ -35,7 +41,7 @@ Create a new repository. Make sure that you set up your repository as *private*,
 
 Note the URL of the repository. In most cases it will be in the form:
 
-\url{https://github.com/YOUR_USERNAME/YOUR_PROJECT}.
+**https://github.com/YOUR_USERNAME/YOUR_PROJECT**.
 
 # Using git within Rstudio
 
@@ -43,7 +49,7 @@ Before you can actually work on the project, you need to add the project locally
 
 * choose from the menu File $\rightarrow$ New Project $\rightarrow$ Version Control $\rightarrow$ Git $\rightarrow$ Repository URL, and
 
-* paste the URL of your project, e.g., \url{https://github.com/YOUR_USERNAME/YOUR_PROJECT}.
+* paste the URL of your project, e.g., **https://github.com/YOUR_USERNAME/YOUR_PROJECT**.
 
 * When choosing a working directory, do not choose a directory where you already have files you are working on. Move these files first to a temporary location.
 
@@ -105,13 +111,15 @@ In *Rstudio*, the "normal" *git* workflow goes like this:
 
   to actually do the *pruning*. Effectively, this will remove traces of your now-removed branches from the pull-down menu in the *Git* tab in *Rstudio*.
 
-These are the basics. Check \url{https://r-bio.github.io/intro-git-rstudio/} or search the internet for more information.
+These are the basics. Check 
+[intro git rstudio](https://r-bio.github.io/intro-git-rstudio/) 
+or search the internet for more information.
 
 # Useful tips
 
 * When pushing your local changes to the GitHub repository, you will be asked for your password every time. If you want to modify this behaviour, check the instructions here: 
 
-  \small\url{https://docs.github.com/en/get-started/getting-started-with-git/caching-your-github-credentials-in-git}\normalsize
+[caching github credentials in git] (https://docs.github.com/en/get-started/getting-started-with-git/caching-your-github-credentials-in-git)
 
   For example, to cache the credentials for 2 hours (7200 s), type in the terminal:
 
@@ -119,7 +127,7 @@ These are the basics. Check \url{https://r-bio.github.io/intro-git-rstudio/} or 
 
 * Check this website for updates in the authentication protocols:
 
-  \url{https://github.blog/2020-12-15-token-authentication-requirements-for-git-operations/}
+[authentication for git](https://github.blog/2020-12-15-token-authentication-requirements-for-git-operations/)
 
   To configure ssh authentication for Github, type in the Rstudio terminal:
 ```
