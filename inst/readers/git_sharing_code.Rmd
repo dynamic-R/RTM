@@ -101,9 +101,13 @@ In *Rstudio*, the "normal" *git* workflow goes like this:
 
 - Occasionally, you will need to *prune* to keep things tidy on your computer and on the github repository. This is done by typing in the terminal:
 
+  ``git prune -n origin``
+  
   ``git remote prune -n origin``
   
   to see what will be *pruned*, and then
+  
+  ``git prune origin``
   
   ``git remote prune origin``
 
