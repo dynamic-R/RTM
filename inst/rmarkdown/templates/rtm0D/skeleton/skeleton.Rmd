@@ -24,8 +24,6 @@ This template file contains a simple box model describing the dynamics of molecu
 * DOB is added at a constant rate ($0.001~mol~m^{-3}~d^{-1}$),
 * initial concentrations are O$_{2,ini}=0.25~mol~m^{-3}$ and BOD$_{ini} = 0.5~mol~m^{-3}$.
 
-\newpage 
-
 # Model definition
 
 ```{r, eval = TRUE, cache = FALSE, echo = TRUE, warning=FALSE, message=FALSE}
