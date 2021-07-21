@@ -126,7 +126,7 @@ After completing the tutorials, exercises, and the written mid-term exam, studen
 
 # Workflow example
 
-We recommend that students use *Rstudio* to learn and develop their models in R. At the beginning of the course, students install the RTM package. At present, this is done using the R-command
+We recommend that students use *RStudio* to learn and develop their models in R. At the beginning of the course, students install the RTM package. At present, this is done using the R-command
 ```
 devtools::install_github("dynamic-R/RTM", depend=TRUE)
 ```
@@ -150,7 +150,7 @@ RTMtutorial("ecology")
 RTMtutorial(11)
 RTMtutorial("ecology", output = "RMD")
 ```
-The first two commands open the tutorial in a web browser. In case this fails, the third command can be used to open the tutorial's R Markdown file in the *Rstudio* editor. Subsequently, the tutorial is started by clicking the "Run Document" button at the top of the editor window.
+The first two commands open the tutorial in a web browser. In case this fails, the third command can be used to open the tutorial's R Markdown file in the *RStudio* editor. Subsequently, the tutorial is started by clicking the "Run Document" button at the top of the editor window.
 
 The first item in the tutorial provides a link to a short knowledge clip and a reference to chapters in the course textbook (Figure 1). These two resources are used to explain the theory behind the topics covered in the class.
 
@@ -196,7 +196,7 @@ knitr::kable(RTM:::RTMtemplate(x = "?"), row.names = TRUE,
              caption="List of available templates provided by the RTM package.")
 ```
 
-A specific template file is opened by including the name, or the corresponding index, of the template as the input argument to ``RTMtemplate()``. Alternatively, one can access it via the *Rstudio* menu File $\rightarrow$ New File $\rightarrow$ R Markdown $\rightarrow$ From Template.
+A specific template file is opened by including the name, or the corresponding index, of the template as the input argument to ``RTMtemplate()``. Alternatively, one can access it via the *RStudio* menu File $\rightarrow$ New File $\rightarrow$ R Markdown $\rightarrow$ From Template.
 
 For the "COVID" exercise, the template ``RTM_0D.Rmd`` is recommended. This template is opened using one of the R-commands
 ```
