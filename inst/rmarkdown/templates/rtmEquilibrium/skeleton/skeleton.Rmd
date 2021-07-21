@@ -1,6 +1,6 @@
 ---
 title: "Local Equilibrium Chemistry in R --- One Equilibrium Reaction"
-subtitle: "template markdown file for a model assuming local chemical equilibrium"
+subtitle: "A template R Markdown file for models assuming a local chemical equilibrium"
 author: "your name here"
 date: "Date of creation here"
 output:
@@ -16,12 +16,12 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Introduction
 
-This template file contains a simple model that assumes local equilibrium determined by. 
+This template file contains a simple model that assumes a local chemical equilibrium. Specifically, species A, B and AB are assumed to react according to the following fast reversible reaction
 
-$$AB \leftrightarrow A + B$$
-and that includes a loss term for species A.
+$$AB \leftrightarrow A + B.$$
+Additionally, species A is assumed to be removed from the system by a slow irreversible process.
 
-The model is rewritten in terms of sumB = [AB] + [B] and sumA = [AB] + [A]. For more information on the model, see the reader "Local Equilibrium Chemistry in R --- part I: One Equilibrium Reaction". (open this in R by: "vignette('equilibriumNH3_Q')")
+The model is rewritten in terms of lump sum species $Btot = [AB] + [B]$ and $Atot = [AB] + [A]$. For more information on the model, see the reader "Local Equilibrium Chemistry in R --- part I: One Equilibrium Reaction". This reader can be viewed using the R-command ``RTMexercise("equilibriumNH3")``.
 
 # Model definition
 
@@ -29,24 +29,26 @@ The model is rewritten in terms of sumB = [AB] + [B] and sumA = [AB] + [A]. For 
 library(deSolve)  # package with solution methods
 
 # Initial conditions of the state variables
-Atot.ini <- 0.070  # [mol/m3] Initial concentration of total A
-Btot.ini <- 0.060  # [mol/m3] Initial concentration of total B
+Atot.ini <- 0.070  # [mol/m3] Initial concentration of total A (i.e., A+AB)
+Btot.ini <- 0.060  # [mol/m3] Initial concentration of total B (i.e., B+AB)
 
 yini <- c(Atot = Atot.ini, Btot = Btot.ini)
 
 # model parameters
-parms <- c (kf      = 1000,    # [/s]             forward rate ct 
-            kb      = 2e6,     # [/mol m3 /s]     backward rate ct
-            lambda  = 0.1      # [/s]             first-order loss ct for A
+parms <- c (kf      = 1000,    # [/s]         forward rate constant
+            kb      = 2e6,     # [/mol m3 /s] backward rate constant
+            lambda  = 0.1      # [/s]         rate constant for the first-order removal of A
+                               # note that lambda << kf and lambda << kb*Btot
+                               # (i.e., the local equilibrium assumption is valid)
 )
 ```
 
-A function to numerically solve for species B
+A function to numerically solve for the concentration of species $B$ based on the concentration of species $Atot$ and $Btot$ (assuming local equilibrium).
 
 ```{r}
 solveB <- function(Keq, Atot, Btot){
   
-  # function whose root has to be sought (eq. 10)
+  # function whose root has to be sought (eq. 10 in the reader)
   rootFun <- function(B) {
     return( B + B/(Keq+B)*Atot - Btot )
   }
@@ -57,7 +59,7 @@ solveB <- function(Keq, Atot, Btot){
 }
 ```
 
-The differential equation model
+The model function calculates the time derivatives determined by the differential equations.
 
 ```{r}
 EqModel_num <- function(t, state, parms) {
@@ -67,16 +69,18 @@ EqModel_num <- function(t, state, parms) {
     
     # calculate B from Atot and Btot numerically, using solveB
     B    <- solveB(Keq = Keq, Atot = Atot, Btot = Btot) 
-    # calculate A from Atot and B 
+    # calculate A from Atot and B (eq. 7 in the reader) 
     A    <- Keq /(Keq+B)*Atot
     
     # mass balance equations for Atot and Btot 
-    dAtot <- -lambda * A
-    dBtot <- 0
+    # under the local equilibrium condition, only the slow removal processes affect
+    # the lump sum species Atot and Btot
+    dAtot.dt <- -lambda * A 
+    dBtot.dt <- 0
     
-    return(list(c(dAtot, dBtot), 
-                B = B, A = A, AB = Atot-A,
-                Q = A*B/(Atot-A) ))
+    return(list(c(dAtot.dt, dBtot.dt),
+                B = B, A = A, AB = Atot-A, # individual species
+                Q = A*B/(Atot-A) ))        # quotient, Q=Keq in equilibrium
   })
 }
 ```

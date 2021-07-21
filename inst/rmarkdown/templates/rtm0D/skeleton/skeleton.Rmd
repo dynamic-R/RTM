@@ -1,6 +1,6 @@
 ---
 title: "The BOD-O2 model"
-subtitle: "A template markdown file for a simple dynamic model in 0D"
+subtitle: "A template R Markdown file for a simple dynamic model in 0-D"
 author: "your name here"
 date: "Date of creation here"
 output:
@@ -46,17 +46,18 @@ BODmodel <-function(t, state, pars) {
  
   # rate expressions [mol/m3/d]
     Decay      <- rDecay * BOD * O2/(O2+kO2) # BOD decay
-    Reaeration <- k * (satO2-O2)             # air-water exchange
+    Aeration   <- k * (satO2-O2)             # air-water exchange
 
   # Time-derivatives: dC/dt = production - consumption [mol/m3/d]
-    dO2dt      <- Reaeration - Decay
-    dBODdt     <- inputBOD   - Decay
+    dO2dt      <- Aeration - Decay
+    dBODdt     <- inputBOD - Decay
 
   # return time-derivatives and ordinary variables as a list     
     list(c(dO2dt, dBODdt), # vector with derivatives 
                            # (the same order as state variables!)
-      Decay      = Decay,  # other output
-      Reaeration = Reaeration)    
+      # other output: process rates
+      Decay    = Decay,
+      Aeration = Aeration)    
   })
 }
 ```

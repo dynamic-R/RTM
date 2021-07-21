@@ -1,5 +1,5 @@
 ---
-title: "Model template markdown file for the NPZD model exercise"
+title: "Model template for the NPZD exercise"
 author: "your name here"
 date: "Date of creation here"
 output:
@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Introduction
 
-This template file is a simple R markdown file that can be used to implement the NPZD model.
+This template file is a simple R Markdown file that can be used to implement the NPZD model.
 
 ## Model definition
 
@@ -26,30 +26,30 @@ state  <- c(DIN = 0.0015, PHYTO = 0.0005, ZOO = 0.0003, DET = 0.005)
 # parameters
 parms <- c(
   depth              = 10,        # [m] depth of the bay
-  maxUptake          = 1.0,       # [/day]
+  rUptake            = 1.0,       # [/day]
   ksPAR              = 140,       # [uEinst/m2/s]
   ksDIN              = 1.e-3,     # [molN/m3]
-  maxGrazing         = 1.0,       # [/day]
+  rGrazing           = 1.0,       # [/day]
   ksGrazing          = 1.e-3,     # [molN/m3]
   pFaeces            = 0.3,       # [-]
-  excretionRate      = 0.1,       # [/day]
-  mortalityRate      = 400        # [/(molN/m3)/day]
+  rEexcretion        = 0.1,       # [/day]
+  rMortality         = 400        # [/(molN/m3)/day]
 )
 
 # Model function
 
-NPZD <- function(t, state, parameters)
- {
- with(as.list(c(state, parameters)),{
+NPZD <- function(t, state, parameters) {
+  with(as.list(c(state, parameters)),{
 
-   # Forcing function = Light a sine function
-   # light = (540+440*sin(2*pi*t/365-1.4)), 50% of light is PAR 
-   # spring starts at day 81 (22 March)
-   # We calculate the PAR in the middle of the water column; 
-   # extinction coefficient = 0.05/m
+  # Forcing function
+    # Light is a sine function
+    # light = (540+440*sin(2*pi*t/365-1.4)), 50% of light is PAR 
+    # spring starts at day 81 (22 March)
+    # We calculate the PAR in the middle of the water column; 
+    # extinction coefficient = 0.05 [/m]
     PAR <- 0.5*(540+440*sin(2*pi*(t-81)/365))*exp(-0.05*depth/2)
    
-   # Rate expressions - all in units of [mmolN/m3/day]
+  # Rate expressions - all in units of [molN/m3/day]
     DINuptake      <- 
     Grazing        <-  
     Faeces         <-  
@@ -57,19 +57,21 @@ NPZD <- function(t, state, parameters)
     Excretion      <-  
     Mortality      <-  
 
-   # Mass balances [molN/m3/day]
-    dDIN      <-  
-    dPHYTO    <-  
-    dZOO      <-  
-    dDET      <-  
-    TotalN    <-  
+  # Mass balances [molN/m3/day]
+    dDIN.dt      <-  
+    dPHYTO.dt    <-  
+    dZOO.dt      <-  
+    dDET.dt      <-  
+    TotalN       <-  
       
-    # the output
-    return (list(c(dDIN, dPHYTO, dZOO, dDET),        # the rates of change
-                   TotalN = TotalN, PAR = PAR)  # ordinary output variables
+  # the output
+    return (list(c(dDIN.dt, dPHYTO.dt, dZOO.dt, dDET.dt), # the rates of change
+                 # additional output variables  
+                 TotalN = TotalN,
+                 PAR = PAR)
            )
     })
-  }  # end of model equations
+  }  # end of the model function
 
 ```
 
