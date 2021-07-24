@@ -44,8 +44,8 @@ SIRmodel <-function(t, state, pars) {
  
   # rate expressions [ind/d]
     Infection <- b * I * S # infection rate
-    Recovery  <- g * I     # recovery rate
-    Mortality <- m * I     # mortality rate
+    Recovery  <- g * I          # recovery rate
+    Mortality <- m * I          # mortality rate
     
   # Time-derivatives: dC/dt = production - consumption [ind/d]
     dSdt      <- -Infection
@@ -124,23 +124,24 @@ yini <- c(S = 17.5e6, I = 1e3, R = 0, D = 0) # number of people
 
 # Model parameters
 pars <- c(
-  b   = 0.00000002, # [/ind/d]  infection rate constant
-  g   = 0.07,       # [/d]      recovery  rate constant
-  m   = 0.007       # [/d]      mortality rate constant
+  b    = 0.00000002, # [/ind/d]  infection rate constant
+  g    = 0.07,       # [/d]      recovery  rate constant
+  m    = 0.007,      # [/d]      mortality rate constant
+  sInt = 1           # [-]       level of social interactions
 )
 
 # Model function: calculates time-derivatives and other output
-SIRmodel2 <-function(t, state, pars, bDyn) { 
+SIRmodel2 <-function(t, state, pars, sIntDyn) { 
   # t: time, state: state variables, pars: model parameters
   with (as.list(c(state, pars)),{
  
-  # parameter b is determined by an external forcing function
-    b <- bDyn(t)
+  # social interactions parameter sint is determined externally
+    sInt <- sIntDyn(t)
     
   # rate expressions [ind/d]
-    Infection <- b * I * S # infection rate
-    Recovery  <- g * I     # recovery rate
-    Mortality <- m * I     # mortality rate
+    Infection <- sInt * b * I * S # infection rate
+    Recovery  <- g * I            # recovery rate
+    Mortality <- m * I            # mortality rate
     
   # Time-derivatives: dC/dt = production - consumption [ind/d]
     dSdt      <- -Infection
@@ -150,8 +151,8 @@ SIRmodel2 <-function(t, state, pars, bDyn) {
 
   # return time-derivatives and ordinary variables as a list     
     list(c(dSdt, dIdt, dRdt, dDdt), # vector with derivatives 
-                           # (the same order as state variables!)
-      Infection  = Infection,  # other output
+                       # (the same order as state variables!)
+      Infection  = Infection,       # other output
       Mortality  = Mortality)    
   })
 }
@@ -159,18 +160,19 @@ SIRmodel2 <-function(t, state, pars, bDyn) {
 
 Now we define the forcing function:
 ```{r}
-# define forcing function based on data
-bDATA <- data.frame(time = c(0, 29,  30,  69, 70, 100),
-                    b    = c(2,  2, 0.2, 0.2,  2,   2)*1e-8)
-fbDATA <- approxfun(x=bDATA)
+# define forcing function for the social interactions parameter
+# sint = 1: no restrictions, sint = 0.1: restricted to 10% of normal
+sIntDATA <- data.frame(time = c(0, 29,  30,  69, 70, 100),
+                       sInt = c(1,  1, 0.1, 0.1,  1,   1)) 
+sIntFUN  <- approxfun(x=sIntDATA)
 ```
 
 Plot the forcing function:
 
 ```{r, fig.align='center', fig.height=5, fig.width=5}
-plot(outtimes, fbDATA(outtimes), main="Forcing b by external data",
-     type = "l", col=2, xlab="time (d)", ylab="b", ylim=c(0, 2e-8))
-points(bDATA, col=1, pch=5)
+plot(outtimes, sIntFUN(outtimes), main="Restriction on social interactions",
+     type = "l", col=2, xlab="time (d)", ylab="sInt", ylim=c(0, 1))
+points(sIntDATA, col=1, pch=5)
 ```
 
 # Model solution with a forcing function
@@ -179,7 +181,7 @@ points(bDATA, col=1, pch=5)
 require(deSolve)
 # ode integrates the model
 out2 <- ode(y=yini, parms=pars, func=SIRmodel2, times=outtimes, 
-            bDyn=fbDATA) # forcing function included
+            sIntDyn=sIntFUN) # forcing function included
 # plot the model output
 plot(out, out2)
 ```

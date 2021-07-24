@@ -174,21 +174,28 @@ knitr::kable(RTM:::RTMexercise(), row.names = TRUE,
              caption="List of available exercises provided by the RTM package.")
 ```
 
-A specific exercise is displayed by including the name, or the corresponding index, of the exercise as the input argument to ``RTMexercise()``. For example, the "COVID" exercise is started using one of the following commands:
+A specific exercise is displayed by including the name, or the corresponding index, of the exercise as the input argument to ``RTMexercise()``. For example, the "covid" exercise is started using one of the following commands:
 ```
-RTMexercise("COVID")
+RTMexercise("covid")
 RTMexercise(14)
-RTMexercise("COVID", output = "PDF")
+RTMexercise("covid", output = "PDF")
 ```
 By default, the exercise is converted into a ``HTML`` format and displayed in a web browser. Additional output formats include ``RMD``, ``PDF``, or ``WORD``. Note that the ``PDF`` option requires an installation of \LaTeX, while the ``WORD`` option requires an installation of programs such as Microsoft Word or LibreOffice.
 
+Exercise solutions are also provided within the RTM package. They can be used by students to compare their solutions to those worked out by us, which helps them learn how to write models more efficiently. They can also gain ideas how to start or make a certain step in the model development if they are unable to do so on their own. Students are advised to check the solutions only *after* they have tried their best to solve the exercise on their own, and it is their responsibility whether they follow this advice or not. Answer to a specific exercise (e.g., "covid") is displayed using the R-command
+
+```
+RTM:::RTManswer("covid", output = <output>)
+```
+where the ``<output>`` format is one of ``"HTML"``, ``"PDF"``, ``"WORD"``, or ``"RMD"``.
+
 ## Templates
 
-In one of the tasks in the "COVID" exercise, students are asked to develop a model that describes the spread of a viral infection in a population of susceptible, infected and recovered individuals (the so-called SIR model). To implement the model in R, they are offered the possibility to use a template R Markdown file rather than start from a blank sheet. 
+In one of the tasks in the "covid" exercise, students are asked to develop a model that describes the spread of a viral infection in a population of susceptible, infected and recovered individuals (the so-called SIR model). To implement the model in R, they are offered the possibility to use a template R Markdown file rather than start from a blank sheet. 
 
 The list of available templates (Table 3) is displayed by using the R-command
 ```
-RTMtemplate() ### note that this does not work at present. must use (x = "?")
+RTMtemplate()    ### note that presently this does not work. one must use (x = "?")
 ```
 
 ```{r, echo=FALSE}
@@ -198,15 +205,14 @@ knitr::kable(RTM:::RTMtemplate(x = "?"), row.names = TRUE,
 
 A specific template file is opened by including the name, or the corresponding index, of the template as the input argument to ``RTMtemplate()``. Alternatively, one can access it via the *RStudio* menu File $\rightarrow$ New File $\rightarrow$ R Markdown $\rightarrow$ From Template.
 
-For the "COVID" exercise, the template ``RTM_0D.Rmd`` is recommended. This template is opened using one of the R-commands
+For the "covid" exercise, the template ``RTM_0D.Rmd`` is recommended. This template is opened using one of the R-commands
 ```
 RTMtemplate("rtm0D")
 RTMtemplate(1)
 ```
-The core part of the template file is shown in Figure 3 (left panel). Using this template and the differential equations that the students formulated in the first part of the exercise, it should not be too difficult for them to implement the model in R. All they need to do is to modify the R-chunks where the initial values of the state variables, model parameters, rate expressions, mass balance equations (i.e., time-derivatives of the state variables), and extra output of the model function (e.g., process rates) are defined and the model is solved (Figure 3, right panel).
+The core part of the template file is shown in Figure 3 (left panel). Using this template and the differential equations that the students formulated in the first part of the exercise, it should not be too difficult for them to implement the model in R. All they need to do is to modify the R-chunks where the initial values of the state variables, model parameters, rate expressions, mass balance equations (i.e., time-derivatives of the state variables), and extra output of the model function (e.g., process rates) are defined and the model is solved, as indicated in Figure 3 (right panel).
 
 ![Core part of R Markdown files for solving dynamic models in 0D. Left panel shows the template, right panel shows the modified code implementing a simple SIR model. The different R-chunks are used to define the initial values of the state variables (a), model parameters (b), rate expressions (c), mass balance equations (d), and extra output of the model function (e). The R-chunk on the bottom solves the model depending on the model function (f) and plots the solution. ](images/template_solution.pdf)
-
 
 ## Auxiliary material
 
@@ -222,20 +228,20 @@ knitr::kable(RTM:::RTMreader(), row.names = TRUE,
 
 A specific reader is opened by including the name, or the corresponding index, of the template as the input argument to ``RTMreader()``.
 
-In one of the tasks in the "COVID" exercise, students are asked to enhance their SIR model by considering that in order to curb the spread of the viral infection, the society takes measures by temporarily reducing the contact between people by 90% between days 30 and 70 after the viral outbreak. These measures can be modelled by assuming that the infection rate constant is reduced by 90% during this time interval. One way to implement such a model in R is through the use of a forcing function. The reader that explains the use of forcing functions in dynamic R-models is generated using the R-command
+In one of the tasks in the "covid" exercise, students are asked to enhance their SIR model by considering that in order to curb the spread of the viral infection, the society takes measures by temporarily reducing social interactions by 90% between days 30 and 70 after the viral outbreak. One way to model this is by introducing a parameter *sInt* that is dynamically lowered from 1 to 0.1 during this time interval and then used as a factor to lower the infection rate constant *b*. A convenient way to implement such a model in R is through the use of a forcing function. The reader that explains the use of forcing functions in dynamic R-models is generated using the R-command
 ```
-RTMreader("forcing", output="PDF")
+RTMreader("forcings", output="PDF")
 ```
 By studying this reader, students will learn that all they need to do to implement such temporary measures in their model is to implement a forcing function based on data, add a forcing function as one of the input arguments of the model function, and include the forcing function when solving the model (Figure 4).
 
 ![Core parts of the simplest and enhanced COVID model. The simplest model is reproduced from the right panel in Figure 3. The enhanced model is developed by implementing the forcing function based on data (a), adding a forcing function as input of the model function (b), and including the forcing function when solving the model (c).](images/template_solution2.pdf)
 
-
 # Conclusion
 
 The RTM package contains tutorials, exercises, model templates, and extra readers that students study and work through during the course *Reactive transport modeling in the Hydrosphere* (taught at Utrecht University, The Netherlands) or *Environmental modelling* (taught at Ghent University, Belgium). Anyone who wants to learn environmental or reaction-transport modelling can consult the tutorials and make the exercises. The answers are also provided, and can be viewed using the R-command ``RTM:::RTManswer()``.
 
-
+New material can be added in the future, thus creating a repository from which modules can be selected
+based on students’ interests that vary from year to year.
 
 
 # References
