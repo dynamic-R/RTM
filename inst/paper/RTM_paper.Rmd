@@ -4,15 +4,11 @@ subtitle: "a Learning Environment for Reaction Transport Modelling in R"
 author: "Lubos Polerecky, Dries Bonte and Karline Soetaert"
 date: "July 2021"
 output: pdf_document
-<<<<<<< HEAD
-abstract: \noindent Since many years we have been teaching courses on environmental and reaction-transport modelling to master students at Ghent and Utrecht University. Our aim is to teach students how to create mechanistic mathematical models from scratch and apply them to advance their understanding of natural systems, including those perturbed by anthropogenic activities. Typically, students attending our classes have different backgrounds and highly variable levels of skills in quantitative and computational methods, which makes it difficult to find a teaching style that suits everyone. To overcome this issue, we revised our didactic approach and now teach in the form of a "flipped class", where students prepare themselves ahead of the class using material available on-line, and then, during the class, put the learned concepts into practice by solving problems and exercises with a direct feedback from us. To facilitate this teaching approach, we created educational videos, tutorials, and exercises that guide the students in learning and exploring the topics covered in the courses. Here, we present the R-package RTM, which merges this teaching material together with our modelling and teaching experiences under the common platform of the programming language R.
-=======
 header-includes: 
   \usepackage{float} 
   \floatplacement{figure}{th}
 fontsize: 10pt
-abstract: \noindent Since many years we have been teaching courses on environmental and reaction-transport modelling to master students at Ghent and Utrecht University. Our aim is to teach students how to create models "from scratch" and apply them to advance their understanding of natural systems, including those perturbed by anthropogenic activities. Typically, students attending our classes have different backgrounds and highly variable levels of skills in quantitative and computational methods, which makes it difficult to find a teaching style that suits everyone. To overcome this issue, we revised our didactic approach and now teach in the form of a "flipped class", where students prepare themselves ahead of the class using material available on-line, and then, during the class, put the learned concepts into practice by solving problems and exercises with a direct feedback from us. To facilitate this teaching approach, we created short educational videos, quizzes, exercises, and extra readers to guide the students in learning and exploring the topics covered in the courses. Here, we present the R-package RTM, which merges this teaching material into a common platform and thus simplifies their delivery to students.
->>>>>>> 798db1778063f2c6e65fffe9efebaee687d67d79
+abstract: \noindent Since many years we have been teaching courses on environmental and reaction-transport modelling to master students at Ghent and Utrecht University. Our aim is to instruct students how to create models "from scratch" and apply them to advance their understanding of natural systems, including those perturbed by anthropogenic activities. Typically, students attending our classes have different backgrounds and highly variable levels of skills in quantitative and computational methods, which makes it difficult to find a teaching style that suits everyone. To overcome this issue, we revised our didactic approach and now teach in the form of a "flipped class", where students prepare themselves ahead of the class using material available on-line, and then, during the class, put the learned concepts into practice by solving problems and exercises with a direct feedback from us. To facilitate this teaching approach, we created short educational videos, quizzes, exercises, and extra readers to guide the students in learning and exploring the topics covered in the courses. Here, we present the R-package RTM, which merges this teaching material into a common platform and thus simplifies their delivery to students.
 vignette: >
   %\VignetteIndexEntry{RTM: learning environment for reaction transport modelling}
   %\VignetteEngine{knitr::rmarkdown}
@@ -30,11 +26,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Introduction
 
-<<<<<<< HEAD
-The courses "Environmental Modelling" and "Reactive Transport Modelling in the Hydrosphere" have been taught at Ghent and Utrecht University, respectively, since many years. Students attending these courses learn how to make mechanistic models that start from first principles of physics, chemistry, biology, and ecology, are mathematically formulated as differential equations, and are solved numerically by a computer. The models aim to advance their understanding of natural systems by allowing prediction of the systems' behaviour under various scenarios (e.g., response of the global carbon cycle to fossil fuel burning).
-=======
-The courses Environmental Modelling and Reactive Transport Modelling in the Hydrosphere have been taught at Ghent University (Belgium) and Utrecht University (The Netherlands), respectively, since many years. Students attending these courses learn how to make mechanistic models that start from first principles of physics, chemistry, biology, and ecology, are mathematically formulated as differential equations, and are solved numerically by a computer. The models aim to advance their understanding of natural systems by allowing prediction of the systems' behaviour under various scenarios (e.g., response of the global carbon cycle to burning of fossil fuels).
->>>>>>> 798db1778063f2c6e65fffe9efebaee687d67d79
+The courses "Environmental Modelling" and "Reaction Transport Modelling in the Hydrosphere" have been taught at Ghent University (Belgium) and Utrecht University (The Netherlands), respectively, since many years. Students attending these courses learn how to make mechanistic models that start from first principles of physics, chemistry, biology, and ecology, are mathematically formulated as differential equations, and are solved numerically by a computer. The models aim to advance their understanding of natural systems by allowing prediction of the systems' behaviour under various scenarios (e.g., response of the global carbon cycle to burning of fossil fuels).
 
 The aim of the courses is to teach students how to make models "from scratch". This differs from many modelling courses where students merely learn how to apply existing models. More specifically, students in our courses learn to
 
@@ -54,12 +46,7 @@ Based on this experience, we decided to experiment with our didactic approach an
 
 The modelling course taught by Karline Soetaert and Dries Bonte at Ghent University has been in the form of a flipped class since the academic year 2019--2020, while the course taught by Lubos Polerecky and Karline Soetaert at Utrecht University first implemented this approach in the academic year 2020--2021. This way of teaching proved to be a positive experience: while in previous years students would complain that they did not get enough practice in class, there is now ample time for practical exercises. Also the class is much more dynamic, with dramatically improved students participation and involvement.
 
-<<<<<<< HEAD
-The modelling course taught by Karline Soetaert and Dries Bonte at Ghent University has been in the form of a flipped class since the academic year 2019--2020, while the course taught by Lubos Polerecky and Karline Soetaert at Utrecht University first implemented this approach in the academic year 2020--2021. This way of teaching proved to be a positive experience:
-while in previous years students would complain that they do not get enough practice in class, there is now ample time for practical exercises. Also the class is much more dynamic, with dramatically improved student participation and involvement.
-=======
 Here, we discuss how the flipped modelling class is implemented. Specifically, we describe a newly developed R-package RTM, which merges the main components of the teaching material --- tutorials, exercises, template files, and extra readers --- into a common platform and thus simplifies its delivery to students. 
->>>>>>> 798db1778063f2c6e65fffe9efebaee687d67d79
 
 # Implementation of the flipped class
 
@@ -83,13 +70,8 @@ While in the classroom, students work on practical modelling *exercises* that ad
 
 At the time of writing this text, the exercises address, among others, the following environmental problems:
 
-<<<<<<< HEAD
 * *The CO$_2$ problem*. Atmospheric CO$_2$ concentrations are described by an Earth-system box model that comprises carbon fluxes among the major Earth's carbon reservoirs. The model is used to estimate the impact of anthropogenic activities (e.g., burning of fossil fuels, deforestation) on the atmospheric CO$_2$ concentrations and to explore the effects of certain mitigation strategies (e.g., ocean fertilisation). This is an example of a linear model.
 * *The ozone problem*. Ozone is a green-house gas and, at high concentrations, harmful to humans and animals. It also plays an important protective role by absorbing harmful UV radiation. The ozone model is used to test how anthropogenic emissions of $NO$ (nitric oxide) due to combustion or burning of fuels alter the natural ozone dynamics in the lower atmosphere. It is a good example of a "typical" chemistry model.
-=======
-* *The CO$_2$ problem*. Atmospheric CO$_2$ concentrations are described by an Earth-system box model that comprises carbon fluxes among the major Earth's carbon reservoirs. The model is used to estimate the impact of anthropogenic activities (e.g., burning of fossil fuels, deforestation) on the atmospheric CO$_2$ concentrations and to explore the effects of certain mitigation strategies (e.g., ocean fertilisation). This exercise is an example of a linear model.
-* *The ozone problem*. Ozone is a green-house gas and, at high concentrations, harmful to humans and animals. It also plays an important protective role by absorbing harmful UV radiation. The ozone model is used to test how anthropogenic emissions of NO (nitric oxide) due to combustion or burning of fuels alter the natural ozone dynamics in the lower atmosphere. It is an example of a "typical" chemistry model.
->>>>>>> 798db1778063f2c6e65fffe9efebaee687d67d79
 * *Ocean acidification*. This is a very complex problem as it deals with equilibrium chemistry. The topic is introduced by three exercises of increasing complexity. A more extensive model dealing with ocean acidification is not part of the mandatory course material, but is provided as auxiliary material that students may consult if they are interested in the topic (see below).
 * *The COVID pandemic*.  An epidemiological model (so-called SIR model) is developed to describe the spread of the SARS-CoV2 (corona) virus within a population. In addition to infection and recovery, the model includes hospitalisations, mortality, vaccination, and virus mutations. The students practice how to use information from epidemiologists (who are not modelers) to develop and apply such models.
 * *Agricultural eutrophication*. This model describes how fertilization with nutrients affects the competition between crops and weeds, and explores the impact of different fertilization strategies on agricultural run-off. In addition to ecological interactions, the model also contains a (simplistic) economic component that lets students explore the monetary aspects of farming.
@@ -98,18 +80,11 @@ At the time of writing this text, the exercises address, among others, the follo
 Additional exercise topics include
 
 * introduction to R for modellers,
-<<<<<<< HEAD
 * conceptual diagrams and formulating of mass balance equations,
 * dissolution of silica particles (e.g., diatom frustules),
 * bacteria-mediated mineralisation of detritus,
 * the P cycle in marine sediments (a simplified early diagenetic model),
 * the coupled cycles of C, N, O, and S in aquatic sediments (a complex early diagenetic model),
-=======
-* making of conceptual diagrams and formulating of mass balance equations,
-* dissolution of silica particles (e.g., diatom frustules),
-* bacteria-mediated mineralisation of detritus,
-* early diagenesis in marine sediments (a simplified P cycle, and the coupled cycles of C, N, O, and S),
->>>>>>> 798db1778063f2c6e65fffe9efebaee687d67d79
 * food web modelling of a lake or river ecosystem,
 * competition between plants in grasslands,
 * competition between floating plants and algae in shallow lakes,
@@ -150,25 +125,8 @@ Additionally, they include templates used in some of the exercises, including mo
 
 After completing the tutorials, exercises, and the written mid-term exam, students proceed with a work on a larger project of their choice. This involves the development of a model about a specific environmental topic and is done in small groups of 2--4 people. In contrast to the exercises made in the classroom, they do this with less guidance from the tutors. They also need to document their work in a written report, where they outline the scientific rationale, describe their model (including assumptions and implementation), and present and interpret the results, much like they would do when writing a scientific paper. Note that the topics of these final projects are *not* part of the RTM package.
 
-<<<<<<< HEAD
-# References
 
-JJ Allaire, Yihui Xie, Jonathan McPherson, Javier Luraschi, Kevin Ushey, Aron Atkins, Hadley Wickham, Joe Cheng, Winston Chang and Richard Iannone (2021). rmarkdown: Dynamic Documents for R. R package version 2.9. \url{https://rmarkdown.rstudio.com}
-  
-R Core Team (2020). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria. \url{https://www.R-project.org/}
-  
-B. Schloerke, J.J. Allaire and B. Borges (2020). learnr: Interactive Tutorials for R. R package version 0.10.1. \url{https://CRAN.R-project.org/package=learnr}
-  
-K. Soetaert (2009).  rootSolve: Nonlinear root finding, equilibrium and steady-state analysis of ordinary differential equations.  R-package version 1.6
-  
-K. Soetaert, T. Petzoldt, R. W. Setzer (2010). Solving Differential Equations in R: Package deSolve. Journal of Statistical Software, 33(9), 1--25. \url{http://www.jstatsoft.org/v33/i09/ DOI 10.18637/jss.v033.i09}
-  
-K. Soetaert and F. Meysman (2012). Reactive transport in aquatic ecosystems: Rapid model prototyping in the open source software R. Environmental Modelling & Software, 32, 49--60.
-
-# Appendix - About the RTM package
-=======
-# Workflow example
->>>>>>> 798db1778063f2c6e65fffe9efebaee687d67d79
+# The RTM package
 
 We recommend that students use *RStudio* to learn and develop their models in R. At the beginning of the course, students install the RTM package. At present, this is done using the R-command
 ```
@@ -282,9 +240,21 @@ By studying this reader, students will learn that all they need to do to impleme
 
 # Conclusion
 
-The RTM package contains tutorials, exercises, model templates, and extra readers that students study and work through during the course *Reactive transport modeling in the Hydrosphere* (taught at Utrecht University, The Netherlands) or *Environmental modelling* (taught at Ghent University, Belgium). Anyone who wants to learn environmental or reaction-transport modelling can consult the tutorials and make the exercises. The answers are also provided, and can be viewed using the R-command ``RTM:::RTManswer()``.
+The RTM package contains tutorials, exercises, model templates, and extra readers that students study and work through during the course *Reaction transport modeling in the Hydrosphere* (taught at Utrecht University, The Netherlands) or *Environmental modelling* (taught at Ghent University, Belgium). Anyone who wants to learn environmental or reaction-transport modelling can consult the tutorials and make the exercises. The answers are also provided, and can be viewed using the R-command ``RTM:::RTManswer()``.
 
 New material can be added in the future, thus creating a repository from which modules can be selected
 based on students’ interests that vary from year to year.
 
+# References
 
+JJ Allaire, Yihui Xie, Jonathan McPherson, Javier Luraschi, Kevin Ushey, Aron Atkins, Hadley Wickham, Joe Cheng, Winston Chang and Richard Iannone (2021). rmarkdown: Dynamic Documents for R. R package version 2.9. \url{https://rmarkdown.rstudio.com}
+  
+R Core Team (2020). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria. \url{https://www.R-project.org/}
+  
+B. Schloerke, J.J. Allaire and B. Borges (2020). learnr: Interactive Tutorials for R. R package version 0.10.1. \url{https://CRAN.R-project.org/package=learnr}
+  
+K. Soetaert (2009).  rootSolve: Nonlinear root finding, equilibrium and steady-state analysis of ordinary differential equations.  R-package version 1.6
+  
+K. Soetaert, T. Petzoldt, R. W. Setzer (2010). Solving Differential Equations in R: Package deSolve. Journal of Statistical Software, 33(9), 1--25. \url{http://www.jstatsoft.org/v33/i09/ DOI 10.18637/jss.v033.i09}
+  
+K. Soetaert and F. Meysman (2012). Reactive transport in aquatic ecosystems: Rapid model prototyping in the open source software R. Environmental Modelling & Software, 32, 49--60.
