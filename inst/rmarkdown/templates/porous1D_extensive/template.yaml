@@ -1,2 +1,2 @@
 name: RTM_porous1D, template for a 1D model in porous media + text
-description: Template for dynamic reaction-transport model in 1D in porous media (with text)
+description: Template for a dynamic reaction-transport model in 1D in porous media (with text)

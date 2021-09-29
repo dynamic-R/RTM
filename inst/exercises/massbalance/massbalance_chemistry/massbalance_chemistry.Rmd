@@ -13,8 +13,8 @@ fontsize: 11pt
 linestretch: 1.15 
 ---
 
-```{r child = 'massbalance_Q.Rmd'}
+```{r child = 'massbalance_chemistry_Q.Rmd'}
 ```
 
-```{r child = 'massbalance_A.Rmd'}
+```{r child = 'massbalance_chemistry_A.Rmd'}
 ```

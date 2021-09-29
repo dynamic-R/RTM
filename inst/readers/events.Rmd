@@ -4,12 +4,12 @@ subtitle: "Reader Accompanying the Course Reaction Transport Modelling in the Hy
 author: "Karline Soetaert and Lubos Polerecky, Utrecht University"
 date: "April 2021"
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 vignette: >
+  %\VignetteEncoding{utf8}
   %\VignetteIndexEntry{Events in Dynamic Models developed in R: accessory material}
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{utf8}
 abstract: \noindent In dynamic models, an event corresponds to a situation when the value of a state variable is *suddenly* changed. Here we show how events are implemented in dynamic models developed in R. We illustrate this using the Crops and Weed model, where we implement soil fertilisation as discrete events occuring in weekly intervals rather than continuously.
 ---
 
@@ -19,9 +19,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Events
 
-In dynamic models, an event corresponds to a situation when the value of a state variable is *suddenly* changed (e.g., because a value is added, subtracted, or multiplied). Integration routines such as \texttt{ode} cannot deal easily with such state variable changes, as there is no possibility to change the values of state variables directly within the model function. One way to do this is to run the simulation until the event, then change the state variables, and restart the simulation again until the next event. This approach would be, however, rather cumbersome.
+In dynamic models, an event corresponds to a situation when the value of a state variable is *suddenly* changed (e.g., because a value is added, subtracted, or multiplied). Integration routines such as ``ode`` cannot deal easily with such state variable changes, as there is no possibility to change the values of state variables directly within the model function. One way to do this is to run the simulation until the event, then change the state variables, and restart the simulation again until the next event. This approach would be, however, rather cumbersome.
 
-In deSolve, events can be imposed without stopping the simulation by means of an input \texttt{data.frame} that specifies how and when a certain state variable is altered. We illustrate this using the Crops and Weed model developed in class. Note that there are also more complex and more flexible ways to implement events, but their explanation would go beyond the scope of this Reader. 
+In deSolve, events can be imposed without stopping the simulation by means of an input ``data.frame`` that specifies how and when a certain state variable is altered. We illustrate this using the Crops and Weed model developed in class. Note that there are also more complex and more flexible ways to implement events, but their explanation would go beyond the scope of this Reader. 
 
 First, we reproduce the Crops and Weed model implementation. The default model has continuous fertilisation.
 
@@ -87,14 +87,14 @@ Crops <- function(t, state, params) {
 
 ## Using events
 
-The \texttt{data.frame} that specifies the fertilisation events has four columns:
+The ``data.frame`` that specifies the fertilisation events has four columns:
 
 1. the name of the state variable to be changed;
 2. the time at which to change it;
 3. the value describing the change;
 4. the type of change. 
 
-In this example, we *add* a fixed amount of P to the state variable \texttt{P1} every 7 days, starting from day 7 (i.e., 12 additions). The added amount is chosen so that after 90 days the same total amount of P will be added as during the continuous fertilization (0.9 over 90 days, so 0.9/12 per addition). The corresponding \texttt{data.frame} for these events is defined as follows:
+In this example, we *add* a fixed amount of P to the state variable ``P1`` every 7 days, starting from day 7 (i.e., 12 additions). The added amount is chosen so that after 90 days the same total amount of P will be added as during the continuous fertilization (0.9 over 90 days, so 0.9/12 per addition). The corresponding ``data.frame`` for these events is defined as follows:
 
 ```{r}
 ferilisation.events <- data.frame(var = "P1",                   
@@ -113,7 +113,7 @@ outtimes <- seq(from=0, to=90, by=0.1)  # run for 3 months
 out <- ode(y=state, parms=parms, func=Crops, times=outtimes)
 ```
 
-Subsequently, we run the model with the events. First, we set the parameter describing the rate of continuous P-addition to 0. Then, we pass the event information to the \texttt{ode} solver as the input argument \texttt{events}.
+Subsequently, we run the model with the events. First, we set the parameter describing the rate of continuous P-addition to 0. Then, we pass the event information to the ``ode`` solver as the input argument ``events``.
 
 ```{r}
 p2 <- parms

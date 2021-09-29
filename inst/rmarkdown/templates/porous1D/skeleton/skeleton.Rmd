@@ -1,6 +1,6 @@
 ---
-title: "One-dimensional multiphase model"
-subtitle: "template markdown file for 1-D models including porosity"
+title: "One-dimensional reaction-transport multiphase model"
+subtitle: "A template R Markdown file for 1-D reaction-transport models in porous media"
 author: "your name here"
 date: "Date of creation here"
 output:
@@ -32,34 +32,37 @@ require(ReacTran)
 Define the model grid and model parameters that vary in space.
 
 ```{r}
-# spatial domain: total length of 20 cm, 200 boxes
+# units: time=days, space=meters, amount=moles, concentration=mol/m3
+
+# spatial domain
 Length    <- 0.20   # [m]
-N         <- 200
-# grid with equally sized boxes (not used here)
+N         <- 200    # number of grid cells
+
+# grid with equally sized boxes (not used here, see next R-command)
 Grid      <- setup.grid.1D(L = Length, N = N)
 
-# grid with an exponentially increasing grid size, starting from 0.05 cm (5e-4m)
+# grid with an exponentially increasing grid size, starting from 0.05 cm (5e-4 m)
 Grid      <- setup.grid.1D(L = Length, N = N, dx.1 = 0.05/100)
 
 # function describing the variation of porosity (volume fraction of LIQUID) with depth
 porFun.L  <- function(x, por.SWI, por.deep, porcoef)
   return( por.deep + (por.SWI-por.deep)*exp(-x*porcoef) )
 
-# function describing the SOLID volume fraction (svf = 1-porosity)
+# function describing the SOLID volume fraction (svf = 1 - porosity)
 porFun.S  <- function(x, por.SWI, por.deep, porcoef)
-  return( 1-porFun.L(x, por.SWI, por.deep, porcoef) )
+  return( 1 - porFun.L(x, por.SWI, por.deep, porcoef) )
 
 # calculate porosity and svf on the grid (mid-points and box interfaces, etc.)
 porLiquid <- setup.prop.1D(func=porFun.L, grid=Grid, por.SWI=0.9, por.deep=0.7, porcoef=100)
 porSolid  <- setup.prop.1D(func=porFun.S, grid=Grid, por.SWI=0.9, por.deep=0.7, porcoef=100)
 
-# Sediment diffusion coefficient for HCO3^- (m2/d), defined at box interfaces!! (N+1 values)
-diff.DIC  <- diffcoeff(S=35, t=20)$HCO3 * 3600*24  # m2/s to m2/d
+# Sediment diffusion coefficient for HCO3^-, defined at box interfaces!! (N+1 values)
+diff.DIC  <- diffcoeff(S=35, t=20)$HCO3 * 3600*24  # converted from m2/s to m2/d
 porInt    <- porLiquid$int                         # porosity at the box interfaces            
 diffDIC   <- diff.DIC/(1-log(porInt^2))            # corrected for tortuosity
 ```
 
-Visualise these settings:
+Visualise these settings.
 
 ```{r, fig.width=8, fig.height=2.7}
 par(mfrow = c(1,3))
@@ -77,11 +80,12 @@ Define model parameters that do *not* vary in space.
 
 ```{r}
 parms <- c(
- Dbio     = 5e-4/365,   # [m2/d]      bioturbation mixing coefficient
- v_adv    = 5e-6,       # [m/d]       sediment advection velocity   
- rMin     = 0.005,      # [/d]        POC mineralisation rate constant
- depoPOC  = 1e-3,       # [mol/m2/d]  POC deposition rate (flux at SWI)
- bwDIC    = 2           # [mol/m3]    DIC concentration at SWI
+ Dbio     = 5e-4/365,   # [m2/d]        bioturbation mixing coefficient
+ v_adv    = 5e-6,       # [m/d]         sediment accretion (=advection) velocity 
+ rMin     = 0.005,      # [/d]          POC mineralisation rate constant
+ depoPOC  = 1e-3,       # [molPOC/m2/d] POC deposition rate (flux at SWI)
+ bwDIC    = 2,          # [molDIC/m3]   DIC concentration at SWI
+ POC2DIC  = 1           # [mol/mol]     Stoichiometry of reaction POC -> DIC
 )
 ```
 
@@ -124,33 +128,33 @@ Diamodel <- function (t, state, pars)   # state is a LONG vector
  
     # === reaction rates ===
     # POC mineralisation
-    Mineralisation <- rMin * POC   # [mol/m3 SOLID/d] (per volume of solid!)
+    Mineralisation <- rMin * POC   # [molPOC/m3 SOLID/d] (per volume of solid!)
 
     # more rate expressions can be added here ...
     
     # === mass balances : dC/dt = transport + reactions ===
     
     # solid substances
-    dPOC.dt   <- ( tran.POC$dC                       # transport
-                 - Mineralisation )                  # reactions, [mol/m3 SOLID/d] !!
+    dPOC.dt   <- ( tran.POC$dC                              # transport
+                 - Mineralisation )                         # reactions, [molPOC/m3 SOLID/d] !!
     
     # dissolved substances
     poro      <- porLiquid$mid
-    dDIC.dt   <- ( tran.DIC$dC +                     # transport
-                   Mineralisation * (1-poro)/poro )  # reactions, [mol/m3 LIQUID/d] !!
+    dDIC.dt   <- ( tran.DIC$dC +                            # transport
+                   POC2DIC*Mineralisation * (1-poro)/poro ) # reactions, [molDIC/m3 LIQUID/d] !!
 
-    # depth-integrated rates: [mol/m2 BULK/d] !!
+    # depth-integrated rates: [mol POC/m2 BULK/d] !!
     TotalMin  <- sum(Mineralisation*Grid$dx*porSolid$mid)
   
     return(list(c(dPOC.dt, dDIC.dt),            # the time-derivatives, as a long vector
           Mineralisation = Mineralisation,      # Mineralisation rates, as a vector
              
           # for creating budgets
-          TotalMin      = TotalMin,             # [mol/m2 BULK/d]
-          DIC.SWI.Flux  = tran.DIC$flux.up,     # [mol/m2 BULK/d]
-          DIC.Deep.Flux = tran.DIC$flux.down,   # [mol/m2 BULK/d]
-          POC.SWI.Flux  = tran.POC$flux.up,     # [mol/m2 BULK/d]
-          POC.Deep.Flux = tran.POC$flux.down))  # [mol/m2 BULK/d]
+          TotalMin      = TotalMin,             # [molPOC/m2 BULK/d]
+          DIC.SWI.Flux  = tran.DIC$flux.up,     # [molDIC/m2 BULK/d]
+          DIC.Deep.Flux = tran.DIC$flux.down,   # [molDIC/m2 BULK/d]
+          POC.SWI.Flux  = tran.POC$flux.up,     # [molPOC/m2 BULK/d]
+          POC.Deep.Flux = tran.POC$flux.down))  # [molPOC/m2 BULK/d]
  })
 }
 ```
@@ -160,19 +164,19 @@ Diamodel <- function (t, state, pars)   # state is a LONG vector
 Find a steady-state solution with the function *steady.1D* from the package *rootSolve*.
 
 ```{r}
-p0 <- p1 <- p2 <- parms      # three runs with different deposition rates
+p0 <- p1 <- p2 <- parms      # three runs with different POC deposition rates
 
-p0["depoPOC"]  <- 0          # mol/m2/day
+p0["depoPOC"]  <- 0          # molPOC/m2/day
 std0 <- steady.1D (y=state, func=Diamodel, parms=p0, 
                    nspec=nspec, dimens=N, names=names,
                    positive = TRUE)     # to have only positive values! 
 
-p1["depoPOC"]  <- 1e-3       # mol/m2/day
+p1["depoPOC"]  <- 1e-3       # molPOC/m2/day
 std1 <- steady.1D (y=state, func=Diamodel, parms=p1, 
                    nspec=nspec, dimens=N, names=names,
                    positive = TRUE)     
 
-p2["depoPOC"]  <- 2e-3       # mol/m2/day
+p2["depoPOC"]  <- 2e-3       # molPOC/m2/day
 std2 <- steady.1D (y=state, func=Diamodel, parms=p2, 
                    nspec=nspec, dimens=N, names=names,
                    positive = TRUE) 
@@ -180,15 +184,15 @@ std2 <- steady.1D (y=state, func=Diamodel, parms=p2,
 
 ### Plotting
 
-Visualize the steady state solutions, including the depth profile of the process rate.
+Visualise the steady state solutions, including the depth profile of the process rate.
 
 ```{r, fig.width=8, fig.height=3}
 plot(std0, std1, std2, xyswap=TRUE, grid=Grid$x.mid, lty=1, lwd=2,
-     which = c("POC",            "DIC",             "Mineralisation"  ),
+     which = c("POC",           "DIC",            "Mineralisation"  ),
      xlab  = c("molC/m3 Solid", "molC/m3 Liquid", "molC/m3 Solid/d"), 
      ylab  = "depth (m)", mfrow=c(1,3))
 
-legend("bottomright", legend=c("0", "1e-3", "2e-3"), title="mol/m2/d", 
+legend("bottomright", legend=c("0", "1e-3", "2e-3"), title="depoPOC (mol/m2/d)",
        lwd=2, lty=1, col=1:3)
 ```
 
@@ -197,7 +201,8 @@ legend("bottomright", legend=c("0", "1e-3", "2e-3"), title="mol/m2/d",
 Check the fluxes at the domain boundaries (only done for the steady-state solution *std1*).
 
 ```{r}
-toselect <- c("TotalMin", "DIC.SWI.Flux", "DIC.Deep.Flux", "POC.SWI.Flux", "POC.Deep.Flux")
+toselect <- c("TotalMin", "DIC.SWI.Flux", "DIC.Deep.Flux", 
+              "POC.SWI.Flux", "POC.Deep.Flux")
 BUDGET   <- std1[toselect]
 unlist(BUDGET)    # show result
 ```
@@ -207,9 +212,11 @@ Construct the total C budget in the modeled spatial domain to verify that the ma
 ```{r}
 # should be the same:
 # net POC rate is negative => POC is net removed within the domain
-c(BUDGET$POC.Deep.Flux - BUDGET$POC.SWI.Flux, -BUDGET$TotalMin)
+c( BUDGET$POC.Deep.Flux - BUDGET$POC.SWI.Flux, 
+  -BUDGET$TotalMin )
 # net DIC rate is positive => DIC is net produced within the domain
-c(BUDGET$DIC.Deep.Flux - BUDGET$DIC.SWI.Flux,  BUDGET$TotalMin)
+c( BUDGET$DIC.Deep.Flux - BUDGET$DIC.SWI.Flux,  
+   BUDGET$TotalMin )
 ```
 
 ## Dynamic solution
@@ -219,7 +226,7 @@ Find the dynamic solution using the function *ode.1D* from the package *deSolve*
 ```{r}
 times          <- seq(from = 0, to = 2*365, by = 10)
 p2             <- parms
-p2["depoPOC"]  <- parms["depoPOC"]*10         # mol/m2/day
+p2["depoPOC"]  <- parms["depoPOC"]*10         # molPOC/m2/day
 out            <- ode.1D(y=std1$y, func=Diamodel, parms=p2, times = times,
                          nspec=nspec, dimens=N, names=names )
 ```
@@ -234,21 +241,22 @@ image(out, legend = TRUE, grid = Grid$x.mid, ylim = c(Length,0),
       las = 1, ylab = "depth (m)", xlab="time (d)")
 ```
 
-Output as lines showing the depth distribution for all time points.
+Display as lines showing the depth distribution for all time points.
 
 ```{r, fig.width=8, fig.height=4}
 matplot.1D(out, type = "l", grid = Grid$x.mid, 
-      col = grey(seq(0.2,0.8,len=length(times))), # This will use a sequence of greyish colors
+      col = grey(seq(0.2,0.8,len=length(times))), # This will use a sequence of greys
                                                   # grey(1) = white, grey(0) = black
       las = 1, xyswap = TRUE, lty = 1, ylab="depth (m)",
-      xlab = c("mol/m3 SOLID", "mol/m3 LIQUID"))
+      xlab = c("molPOC/m3 SOLID", "molDIC/m3 LIQUID"))
 ```
 
 Visualise the fluxes at the SWI and in the deep sediment as a function of time.
 
 ```{r, fig.width=10, fig.height=3}
-plot(out, which = c("DIC.SWI.Flux", "DIC.Deep.Flux", "POC.SWI.Flux", "POC.Deep.Flux"), 
-     mfrow=c(1,4), xlab="time (d)", ylab="mol/m2/d")
+plot(out, which = c("DIC.SWI.Flux", "DIC.Deep.Flux", 
+                    "POC.SWI.Flux", "POC.Deep.Flux"), 
+     mfrow=c(1,4), xlab="time (d)", ylab="molC/m2/d")
 ```
 
 # References
