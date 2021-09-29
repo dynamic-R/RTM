@@ -3,12 +3,12 @@ title: "Rstudio and Github --- Sharing your R-code with the World"
 author: "Lubos Polerecky and Karline Soetaert, Utrecht University"
 date: "July 2021"
 output:
-  html_document:
-    toc: no
-    df_print: paged
   pdf_document:
     number_sections: yes
     toc: no
+  html_document:
+    toc: no
+    df_print: paged
 subtitle: Reader Accompanying the Course Reaction Transport Modelling in the Hydrosphere
 abstract: \noindent Once you start working on a code or program with several people,
   it becomes worthwhile to invest some time into learning about the tools that are
