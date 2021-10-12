@@ -25,7 +25,7 @@ Reasonable units for the state variables are
 
 * Death of infected cells (by bursting) is a first-order process characterized by a rate constant *delta* (units of $d^{-1}$). 
 
-* When an infected algal cell bursts, it releases *n* free virions. Conversely, it takes *one* virion to infect a healthy algal cell. Thus, the infection efficiency parameter is $e=1~virions~cell^{-1}$.
+* When an infected algal cell bursts, it releases *n* free virions (units of $virion~cell^{-1}$). Conversely, it takes *one* virion to infect a healthy algal cell. Thus, the infection efficiency parameter is $e=1~virion~cell^{-1}$.
 
 * Free virions are not immortal but decay at a first-order rate characterized by the rate constant *c* (units of $d^{-1}$).
 

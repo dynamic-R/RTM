@@ -18,7 +18,7 @@ The model is devised to study the impact of viruses in the aquatic environment. 
 
 Equations in this exercise are adapted from a model that describes the dynamics of the *HIV* virus, which is responsible for the acquired immune-deficiency syndrome (AIDS). The model has three components, including the number of uninfected (i.e., healthy) cells, *H*, the number of infected cells, *I*, and the number of free virions, *V* (Figure 1).
 
-![Schematic diagram of the algae+virus model.](Virus.jpg){width=8cm}
+![Schematic diagram of the algae+virus model.](Virus.png){width=8cm}
 
 ## Tasks
 
