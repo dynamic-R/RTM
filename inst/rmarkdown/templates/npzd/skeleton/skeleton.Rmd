@@ -81,7 +81,7 @@ NPZD <- function(t, state, parameters) {
 outtimes <- seq(from = 0, to = 2*365, length.out = 100)  # run the model for 2 years
 
 # solve this model, using the ode function from deSolve
-out <- ode(y = state, parms = parms, func = NPZ, times = outtimes)  # solution
+out <- ode(y = state, parms = parms, func = NPZD, times = outtimes)  # solution
 
 # visualise output
 plot(out)

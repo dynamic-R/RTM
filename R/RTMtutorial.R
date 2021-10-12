@@ -101,8 +101,12 @@ RTMexercise <- function(x = c("?",
 RTMexerciseFULL(x=x, type=type, output=output, sub="_Q")
 
 # A private function - to be used as RTM:::RTManswer: prints question+answer
-RTManswer <- function(x, output) 
-  RTMexerciseFULL(x=x, output=output, sub="")
+RTManswer <- function(x, output=c("HTML", "PDF", "RMD", "WORD")) {
+  output <- match.arg(toupper(output), choices=c("HTML", "PDF", "RMD", "WORD"))
+  sub <- ""
+  if (output == "RMD") sub <- "_A"
+  RTMexerciseFULL(x=x, output=output, sub=sub)
+}
 
 RTMexerciseFULL <- function(x = c("?",
                               "introductionR", 
@@ -242,8 +246,6 @@ RTMtemplate <- function(x = c("?", "rtm0D", "rtm1D", "porous1D", "porous1D_exten
                               "rtmEquilibrium", "npzd", "rmarkdown_small")) {
   
   LL <- as.character(formals(RTMtemplate)$x[-(1:2)])
-  if (length(x) > 1) 
-     stop("only one template can be opened at a time - select one (number between 1,", length(LL), ")")
   if (x[1] == "?") {
     template <- data.frame(x=LL, description = 
                              c("Template for models in 0D",
@@ -259,6 +261,9 @@ RTMtemplate <- function(x = c("?", "rtm0D", "rtm1D", "porous1D", "porous1D_exten
       Which <- LL[pmatch(tolower(x), tolower(LL))[1]]
     else
       Which <- LL[x]
+    
+    if (length(x) > 1) 
+      stop("only one template can be opened at a time - select one (number between 1,", length(LL), ")")
     
     file <- paste0(system.file('rmarkdown', package = 'RTM'), "/templates/",
                    Which, "/skeleton/skeleton.Rmd", sep="")
