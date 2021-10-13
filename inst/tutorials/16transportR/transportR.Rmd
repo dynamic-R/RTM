@@ -51,11 +51,11 @@ $$
 \frac{1}{1-\phi_x} \cdot \frac{ \partial }{\partial x} \left[(1-\phi_x) \cdot v \cdot C\right]
 - r \cdot C
 $$
-where $C$ is in units of $mol~C~m^{-3}_S$, $x$ is sediment depth in $m$, $t$ is time in $days$, $\phi_x$ is the sediment porosity, $D_b$ is the bioturbation mixing coefficient, $v$ is the advective velocity (in $m~day^{-1}$; equal to the sediment accretion velocity), and $r$ is the rate constant describing POC mineralization (mineralization is assumed to be described by first-order kinetics).
+where $C$ is in units of $mol~C~m^{-3}_S$, $x$ is sediment depth in $m$, $t$ is time in $days$, $\phi_x$ is the sediment porosity, $D_b$ is the bioturbation mixing coefficient ($m^2~day^{-1}$), $v$ is the advective velocity (in $m~day^{-1}$); equal to the sediment accretion velocity), and $r$ is the rate constant describing POC mineralization, (units $day^{-1}$) (mineralization is assumed to be described by first-order kinetics).
 
 The boundary conditions are as follows:
 
-* POC flux at the sediment-water interface is $1~mmol~C~m^{-2}~d^{-1}$, i.e., $(1-\phi_x) D_b \frac{ \partial C}{\partial x}= 1\times 10^{-3}~mol~m^{-2}~d^{-1}$.
+* POC flux at the sediment-water interface is $1~mmol~C~m^{-2}~d^{-1}$, i.e., $(1-\phi_x) D_b \frac{ \partial C}{\partial x}|_{x=0} = 1\times 10^{-3}~mol~m^{-2}~d^{-1}$.
 * Zero-gradient deep in the sediment, i.e., $\left.\frac{\partial C}{\partial x}\right|_{x\rightarrow\infty}= 0$.
 
 The parameter values are as follows (all are assumed to be depth-independent):
@@ -150,7 +150,7 @@ As the POC is consumed, DIC is produced. Add DIC, which is a *dissolved* substan
 
 * Don't forget to convert from $m^3$ of solid to $m^3$ of liquid where appropriate.
 * Remember that the volume fraction for dissolved substances differs from that for solids.
-* Assume that the effective sediment diffusion coefficient of DIC is $D_{DIC} = 5\times 10^{-5}~m^2~d^{-1}$ and the bottom water DIC concentration is $0.002~mol~m^{-3}$. Add these two parameters to the parameter vector.
+* Assume that the effective sediment diffusion coefficient of DIC is $D_{DIC} = 5\times 10^{-5}~m^2~d^{-1}$ and the bottom water DIC concentration is $2~mol~m^{-3}$. Add these two parameters to the parameter vector.
 
 Expand the following code to include DIC dynamics.
 
@@ -166,7 +166,7 @@ pars <- c(
  por     = 0.8,    # [-]        sediment porosity (constant)
  r       = 0.01,   # [/d]       POC consumption rate constant
  depoPOC = 1e-3,   # [mol/m2/d] POC flux at SWI
- bwDIC   = 0.002,  # [mol/m3]   NEW: bottom water concentration DIC
+ bwDIC   = 2,      # [mol/m3]   NEW: bottom water concentration DIC
  dsDIC   = 5e-5    # [m2/d]     NEW: effective diffusion coefficient for DIC
 )
 
