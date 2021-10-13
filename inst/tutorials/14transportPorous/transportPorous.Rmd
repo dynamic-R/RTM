@@ -214,6 +214,55 @@ question(sprintf("Which is the correct expression for the rate of $SO_4^{2-}$ re
  correct=msg)
 ```
 
+## Integrating concentrations
+
+A researcher has estimated depth profiles of chlorophyll concentrations in an estuarine sediment. The data are depicted in the figure and the R-code that inputs the data is in the script below. Here “depth.from” and “depth.to” means the top and bottom depth of the sediment slice, in $cm$; the concentration (conc) is in $\mu$ gram Chl per gram dry sediment. 
+
+
+```{r chl-setup_, echo = TRUE, fig.height=4, fig.width=4, message = FALSE}
+Chl <- data.frame(depth.from = 0:9, depth.to = 1:10, 
+        conc = c(50.8,20.2,13.0,10,9.1,10.0,6.9,4.5,2.7,1.5))
+plot(x=Chl$conc, y=0.5*(Chl$depth.from+Chl$depth.to), ylim=c(10,0), 
+     xlab="ug/g dry", ylab="cm", main="Chlorophyll", las=1)
+```
+
+Question: what is the total concentration of chlorophyll over the upper 10 cm of sediment. Report your value in $mg~m^{-2}$.
+
+You have the following accessory information (note: not all is needed): 
+
+the sampling *surf*ace from which the sediment slices were taken was 1 $cm^2$ – the median grain size of the sediment (*mdgrain*) was 100 $\mu$m - the sediment dry density (*rho*) was 2.65 $g~cm^{-3}$ - the sediment porosity (*phi*) was 0.8. 
+
+```{r chl, exercise=TRUE, fig.height=4, fig.width=6}
+## estimate the integrated concentration of chlorophyll.
+Chl <- data.frame(depth.from = 0:9, depth.to = 1:10,           # cm
+        conc = c(50.8,20.2,13.0,10,9.1,10.0,6.9,4.5,2.7,1.5))  # microgr/g dry
+surf <- 1; mdgrain <- 100; rho <- 2.65; phi <- 0.8
+
+## your calculations here
+```
+
+```{r chl-hint}
+# convert concentrations from [microgram/g dry] to [microgram/cm3 bulk]
+chl_cm3 <- Chl$conc * ..
+
+# integrate (sum) over depth, taking into account the slice thicknesses
+chl_cm2 <- sum(chl_cm3 * ..)  # [microgram/cm2]
+
+# convert from microgram/cm2 to milligram/m2
+chl_m2  <- chl_cm2 * ..       # [milligram/m2]
+
+# print result
+  chl_m2
+```
+
+
+```{r chl-solution}
+chl_cm3 <- Chl$conc*rho*(1-phi)   # [ug/g dry]*[g dry/cm3 dry]*[cm3 dry/cm3 bulk]=[ug/cm3 bulk]
+chl_cm2 <- sum(chl_cm3*(Chl$depth.to-Chl$depth.from))  # sum([ugram/cm2]) -> [ugram/cm2]
+chl_m2  <- chl_cm2*1e4*1e-3                            # ug/cm2*[cm2/m2]*[mg/ug]= [mg/m2]
+
+chl_m2
+```
 ## Textbook and Slides
 
 Karline Soetaert, Peter M.J. Herman (2009). A Practical Guide to Ecological Modelling. Springer Netherlands. DOI: 10.1007/978-1-4020-8624-3.
