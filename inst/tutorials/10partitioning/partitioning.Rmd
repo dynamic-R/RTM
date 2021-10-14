@@ -32,7 +32,7 @@ There are no corresponding sections in the textbook.
 ## Mineral dissolution - quiz
 
 ```{r statements, echo=FALSE}
-msg <- sprintf("The answer is $k_d/k_p$. Tip: if you do not remember whether this would be $k_p/k_d$ or $k_d/k_p$, think about the units. Concentrations are in $mol~m^{-3}$, and this unit is obtained with $k_d/k_p$, not with $k_p/k_d$.")
+msg <- sprintf("The answer is $k_d/k_p$. Tip: if you do not remember whether this would be $k_p/k_d$ or $k_d/k_p$, think about the units. Concentrations are in $mol~m^{-3}$, and this unit is obtained with $k_d/k_p$, not with $k_p/k_d$. (there are two correct answers in the list)")
 
 question(sprintf("The rate constant describing the dissolution of a mineral in water is $k_d = 2~mol~m^{-2}~yr^{-1}$, and the rate constant describing the precipitation of that mineral is $k_p = 5~m~yr^{-1}$. What is the equilibrium concentration of the dissolved mineral in water?"), type = "learnr_checkbox",
  answer(sprintf("0.4 $mol~m^{-3}$"), correct=TRUE),
@@ -66,7 +66,7 @@ MW   <- 60   # g/mol
 N    <- 400
 V    <- 1    # L
 Cini <- 100  # umol/L (u stands for 'micro', so 1e-6)
-Dini <- 90   # um
+Dini <- 90   # um (micrometer)
 kd   <- 1    # mol/m2/yr
 kp   <- 1.5  # m/yr
 dens <- 2200 # kg/m3
@@ -95,9 +95,13 @@ $$
 \frac{dSi}{dt} = -k_p \times \frac {A}{V} \times (Si - Si_{eq})
 $$
 where $Si$ and $Si_{eq}$ is the instantaneous and equilibrium silicic acid concentration, respectively.
+
+* The volume and surface area of a sphere with radius $r$ is given by: $4/3 \times \pi \times r^3$ and $4 \times \pi r^2$.
+
 * Think about the meaning of $A$.
 * Do your calculation in several steps rather than using one (possibly large) formula.
 * Be careful with unit conversions.
+
 
 Type your R-code here:
 
@@ -115,9 +119,9 @@ dSi.dt <- -kp*A.V*(Cini - Ceq)   # the change in time umol/L/yr
 ```
 
 ```{r dSidt-solution}
-Ceq    <- kd/kp*1000                # equilibrium concentration (umol/L)
+Ceq    <- kd/kp*1000                # equilibrium concentration (umol/L=mmol/m3)
 A      <- 4*pi*(Dini/2*1e-6)^2 * N  # initial total active surface (m2)
-A.V    <- A/(V*1e-3)                # area density (/m)
+A.V    <- A/(V*1e-3)                # area density (total surface area per volume) (/m)
 dSi.dt <- -kp*A.V*(Cini - Ceq)      # the change in time umol/L/yr
 ```
 
@@ -138,7 +142,7 @@ question("Which statement is true?", type = "learnr_radio",
 ```{r statements2, echo=FALSE}
 msg <- sprintf("This is calculated as $k_p/h\\cdot (O_{2,eq} - 0)$.")
 
-question(sprintf("A well-mixed anoxic water column is in contact with the atmosphere. What is the initial rate of increase in the $O_2$ concentration in the water? Piston velocity is $1~m~d^{-1}$, $O_2$ solubility in the water is $300~\\mu mol~L^{-1}$, water column height is $50~cm$."), type = "learnr_radio",
+question(sprintf("A well-mixed anoxic water column is in contact with the atmosphere. What is the initial rate of increase in the $O_2$ concentration in the water? Piston velocity, $k_p$, is $1~m~d^{-1}$, $O_2$ solubility in the water is $300~\\mu mol~L^{-1}$, water column height, h, is $50~cm$."), type = "learnr_radio",
  answer(sprintf("$300~\\mu mol~L^{-1}~d^{-1}$")),
  answer(sprintf("$150~nmol~L^{-1}~d^{-1}$")),
  answer(sprintf("$600~nmol~L^{-1}~d^{-1}$")),
@@ -150,7 +154,7 @@ question(sprintf("A well-mixed anoxic water column is in contact with the atmosp
 
 ## Air-water exchange - exercise
 
-You plan to install in your garden a pond with goldfish. By swimming in the pond, the fish will mix the water in the pond, and by respiration they will decrease the dissolved $O_2$ concentration in the pond. This decrease in dissolved $O_2$ will be compensated by air-water exchange. Assume that goldfish respiration is unaffected if the dissolved $O_2$ concentration does not decrease below 80% of the air saturated value. Additionally assume the piston velocity of $1~m~d^{-1}$, the area of the pond of $4~m^2$, the average height of the water column of $1~m$, Henry’s constant for dissolved $O_2$ of $770~L~Atm~mol^{-1}$, molar fraction of $O_2$ in the atmosphere of 21%, atmospheric pressure of $1~Atm$, and the average goldfish respiration rate of $400~\mu mol~fish^{-1}~d^{-1}$.
+You plan to install in your garden a pond with goldfish. By swimming in the pond, the fish will mix the water in the pond, and by respiration they will decrease the dissolved $O_2$ concentration in the pond. This decrease in dissolved $O_2$ will be compensated by air-water exchange. Assume that goldfish respiration is unaffected if the dissolved $O_2$ concentration does not decrease below 80% of the air saturated value. Additionally assume the piston velocity, `kp`, of $1~m~d^{-1}$, the area of the pond of $4~m^2$, the average height, `h`, of the water column of $1~m$, Henry’s constant, `K0`, for dissolved $O_2$ of $770~L~Atm~mol^{-1}$, molar fraction of $O_2$ in the atmosphere of 21% (`pO2`), atmospheric pressure of $1~Atm$ (`P`), and the average goldfish respiration rate of $400~\mu mol~fish^{-1}~d^{-1}$ (`Resp`).
 
 The R-code chunk below introduces the values and units of the parameters you will need. 
 
@@ -203,8 +207,6 @@ N           <-                 # number of fish
 ```
 
 ```{r Fish-hint}
-# Hints:
-#
 # - At the minimal oxygen concentration, the aeration rate and respiration rate will be the same.
 #  - Estimate the total air-water exchange (amount of oxygen added to the pond per day) at the minimal oxygen concentration (units mmol/day). 
 #  - You know the respiration rate for one fish. The total respiration for all the fish should equal the total air-water exchange.
@@ -222,7 +224,7 @@ N
 And one extra question:
 
 ```{r Fish_point_height, echo=FALSE}
-msg <- "It may be somewhat counter-intuitive, but the answer is 'no'. This is because the air-water exchange rate - in terms of the *amount* of $O_2$ exchanged per unit time ($mol~O_2~d^{-1}$) - is proportional to the *area* of the air-water interface through which the exchange occurs (as long as the water column is well-mixed). This is in contrast to the air-water exchange rate in terms of the *concentration* of $O_2$ per unit time ($mol~O_2~m^{-3}~d^{-1}$), which is proportional to the *area density* ($A/V=1/h$)."
+msg <- "It may be somewhat counter-intuitive, but the answer is 'no'. This is because the air-water exchange rate - in terms of the *amount* of $O_2$ exchanged per unit time ($mol~O_2~d^{-1}$) - is proportional to the *area* of the air-water interface through which the exchange occurs (as long as the water column is well-mixed)."
   
 question("Does the maximum number of goldfish in the pond depend on the height of the water column?", type = "learnr_radio",
  answer("Yes"),
@@ -241,7 +243,7 @@ require(RTM)
 RTMexercise("partitioning")
 ```
 
-## References
+## References and slides
 
 R Core Team (2020). R: A language and environment for statistical computing. R
   Foundation for Statistical Computing, Vienna, Austria. URL

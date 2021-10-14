@@ -36,7 +36,9 @@ You can also read the following section(s) of the textbook:
 
 ## Ecological interactions: virus infection
 
-In a population comprising individuals that are *susceptible* to a virus and *infected* by a virus, infection can be modelled as a process similar to an elementary chemical reaction: a susceptible person can become infected if he/she "collides" with an infected person. Suppose that the *probability* that a susceptible person meets an infected person, whereby this encounter leads to the susceptible person becoming infected, is described by a parameter $b$ (in units of $ind^{-1}~d^{-1}$).  The amounts of susceptible and infected individuals in the population are denoted by $S$ and $I$, respectively.
+In a population comprising individuals that are *susceptible* to a virus and individuals that are *infected* by a virus, infection can be modelled as a process similar to an elementary chemical reaction: a susceptible person can become infected if he/she "collides" with an infected person. 
+
+Suppose that the *probability* that a susceptible person meets an infected person, whereby this encounter leads to the susceptible person becoming infected, is described by a parameter $b$ (in units of $ind^{-1}~d^{-1}$).  The amounts of susceptible and infected individuals in the population are denoted by $S$ and $I$, respectively.
 
 ```{r infection_rate, echo=FALSE}
 msg <- "To become infected, a susceptible person needs to 'collide' with *one* infected person. Therefore, the infection rate is *first-order* with respect to the infected and susceptible persons, i.e., $InfectionRate = b\\times S\\times I$. The proportionality constant, $b$, describes the probability (expressed per individual per day) that a susceptible person meets an infected person and their encounter results in the susceptible person becoming infected."
@@ -52,6 +54,10 @@ question(sprintf("What is a suitable expression for the infection rate?"), type 
  incorrect=sprintf(msg),
  correct=sprintf(msg))
 ```
+<div id="infection_rate-hint">
+**Note:** The "chemical reaction" that occurs between susceptible and infected persons can be written as:
+$S + I \rightarrow 2 I$, i.e. it is a reaction between S and I that causes 2 persons to be infected as a result.
+</div>
 
 ## Ecological interactions: predation
 
@@ -236,7 +242,7 @@ question(sprintf("How would you best characterize the growth of the population w
 )  
 ```
 
-```{r logistic2, echo=FALSE}
+```{r logistic2, echo=FALSE, eval=FALSE}
 question(sprintf("How would you best characterize the growth of the population when the population density is about $5\\times 10^5~ind~km^{-2}$?"), type = "learnr_radio",
  answer("The population growth is approximately linear", correct=TRUE),
  answer("The population growth is approximately exponential"),
@@ -295,7 +301,7 @@ output$carcapPlot <- renderPlot({
 ```{r RateLim, echo=FALSE}
 msg <- "Algal uptake of ammonia is less energy demanding than uptake of nitrate, and so the uptake of nitrate is inhibited by the presence of ammonia. Nitrate is the rate limiting substrate, so the dependence of the rate on nitrate concentration is described by the Michaelis-Menten kinetics. The work is performed by the algae, therefore the rate is first-order with respect to algae."
 
-question(sprintf("The rate expression that describes the uptake of nitrate (NO3) in the presence of ammonia (NH3) by marine microscopic algae (P) is $$R = r \\times \\frac{[NO3]}{[NO3]+K_N} \\times \\frac{K_A}{[NH3] + K_A} \\times [P].$$ Which of the following statements is true?"), type = "learnr_checkbox",
+question(sprintf("The rate expression that describes the uptake of nitrate ($NO_3$) in the presence of ammonia ($NH_3$) by marine microscopic algae (P) is $$R = r \\times \\frac{[NO_3]}{[NO_3]+K_N} \\times \\frac{K_A}{[NH_3] + K_A} \\times [P].$$ Which of the following statements is true?"), type = "learnr_checkbox",
  answer("The process is limited by nitrate",  correct = TRUE),
  answer("The process is inhibited by nitrate"),
  answer("The process is limited by ammonia"),
@@ -324,16 +330,17 @@ $r$         | 0.01        | basal respiration parameter |$hr^{-1}$              
 $m$         | 0.0005      | mortality rate constant         |$(mol~C~m^{-3})^{-1} hr^{-1}$| 
 
 The initial conditions are:
-$$ B_{ini} = 0.1~mol~C~m^{-3} \qquad DOC_{ini}=100~mol~C~m^{-3}$$
+$$ B_{0} = 0.1~mol~C~m^{-3} \qquad DOC_{0}=100~mol~C~m^{-3}$$
 
 ```{r bact1, echo=FALSE}
 question(sprintf("Based on the model scheme and parameter definitions, which is the correct expression for the bacterial growth?"), type = "learnr_radio",
- answer(sprintf("$g \\times \\frac{B}{B+k_s} \\times DOC$")),
- answer(sprintf("$g \\times \\frac{DOC}{DOC+k_s} \\times B$")),
- answer(sprintf("$\\gamma \\times g \\times \\frac{B}{B+k_s} \\times DOC$")),
+ answer(sprintf("$g \\times \\frac{B}{B+k_s} \\times DOC$"), message="this equations assumes that DOC is the active compartment"),
+ answer(sprintf("$g \\times \\frac{DOC}{DOC+k_s} \\times B$"), message = "almost correct - this formulation represents DOC uptake - not growth"),
+ answer(sprintf("$\\gamma \\times g \\times \\frac{B}{B+k_s} \\times DOC$"), message="this equations assumes that DOC is the active compartment"),
  answer(sprintf("$\\gamma \\times g \\times \\frac{DOC}{DOC+k_s} \\times B$"), correct=TRUE),
- answer(sprintf("$\\gamma \\times g \\times \\frac{DOC}{DOC+k_s}$")),
- answer(sprintf("$\\gamma \\times g \\times \\frac{DOC_0}{DOC_0+k_s}$"))
+ answer(sprintf("$\\gamma \\times g \\times \\frac{DOC}{DOC+k_s}$"), message = "you forgot to add the active compartment here"),
+ answer(sprintf("$\\gamma \\times g \\times \\frac{DOC_0}{DOC_0+k_s} \\times B_0$"), message = "Rate expressions use the concentrations of DOC and bacteria at the prevailing time steps; $B_0$ and $DOC_0$ are the initial conditions"),
+ allow_retry = TRUE
 )  
 ```
 
@@ -486,7 +493,7 @@ RTMexercise("npzd")
 RTMexercise("crops_weeds")
 ```
 
-## References
+## References and slides
 
 R Core Team (2020). R: A language and environment for statistical computing. R
   Foundation for Statistical Computing, Vienna, Austria. URL

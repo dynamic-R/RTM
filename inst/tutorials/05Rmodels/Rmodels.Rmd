@@ -30,7 +30,7 @@ $$     \frac{{dY}}{{dt}} = g \cdot b \cdot X \cdot Y - e \cdot Y$$
 
 * The initial values are: `X = 300`, `Y = 10` 
 * The parameter values are: `a = 0.05`, `K = 500`, `b = 0.0002`, `g = 0.8`, `e = 0.03`
-*	The model is run for 100 days, with an output shown every day.
+*	The model is run for 100 days, output is stored every day (as defined by `times`) and saved in a variable called `out`.
 
 ```{r LV-setup_, echo = TRUE, fig.height=4, fig.width=6, message = FALSE}
 require(deSolve)   # package with solution methods
@@ -152,27 +152,22 @@ plot(out, mfrow=c(2,2))
 ```{r LV2-solution}
 state.ini <- c(X = 300, Y = 10, Z = 10) 
 parms <- c(a = 0.05, K = 500, b = 0.0002, g = 0.8, e = 0.03, bz = 0.0001, ez = 0.01)
-
 LVmodel3 <- function(t, state, parameters) {
   with (as.list(c(state, parameters)), {
-    
     # process rates
     Growth.X     <- a*X*(1-X/K)
     Grazing.Y    <- b*X*Y
     Grazing.Z    <- bz*X*Z
     Mortality.Y  <- e*Y
     Mortality.Z  <- ez*Z
-    
     # time derivative
     dX.dt <- Growth.X  - Grazing.Y - Grazing.Z
     dY.dt <- g*Grazing.Y - Mortality.Y
     dZ.dt <- g*Grazing.Z - Mortality.Z
-
     return (list(c(dX.dt, dY.dt, dZ.dt), sum = X+Y+Z))
   })
 }
-times <- 1:1000
-out   <- ode(y = state.ini, func = LVmodel3, times = times, parms = parms)
+out   <- ode(y = state.ini, func = LVmodel3, times = 1:1000, parms = parms)
 plot(out, mfrow=c(2,2))
 ```
 

@@ -52,7 +52,7 @@ $$
 $$
 
 ```{r elementary, echo=FALSE}
-msg <- "There are two correct answers; answer 1 assumes that the rate R is expressed in mole of B per time; answer 4 assumes that R is expressed in mole of A per time - it is simplest to express the rate in terms of mole of B"
+msg <- "There are two correct answers; answer 1 assumes that the reaction rate R is expressed in mole of B per time; answer 4 assumes that R is expressed in mole of A per time - it is simplest to express the rate in terms of mole of B"
 
 question("Which of the following expressions correctly describe the reaction rate?", type = "learnr_checkbox",
  answer(sprintf("$R=r \\times [A]^2 \\times [B]$"), correct=TRUE),
@@ -165,7 +165,7 @@ out  <- ode(y=y.ini, times=times, parms=pars, func=elementaryReaction)
 pars2 <- c(r=0.05) # 5-fold faster reaction
 out2  <- ode(y=y.ini, times=times, parms=pars2, func=elementaryReaction)
 
-plot(out, out2, lty=1:2, col=1:2)
+plot(out, out2, lty=1, col=1:2)
 ```
 
 **TASK:** Run the model with a rate that is twice as slow as the default rate. Plot all three model results in one graph.
@@ -179,7 +179,7 @@ pars2 <- c(r=0.05)
 out2  <- ode(y=y.ini, times=times, parms=pars2, func=elementaryReaction)
 
 out3  <-     ### RUN WITH r=0.005
-plot(out, out2, out3, lty=1:3, col=1:3)
+plot(out, out2, out3, lty=1, col=1:3)
 ```
 
 ## More exercises
@@ -190,6 +190,10 @@ To learn more about modelling of chemical reactions --- and specifically of irre
 require(RTM)
 RTMexercise("ozone")
 ```
+
+## Slides
+
+Slides available at <a href="https://drive.google.com/drive/folders/1Bys0-xzXLCpFpWhD-HrH6jDKOyl8iJMd" target="_blank">google-drive</a>
 
 ## References
 
@@ -202,4 +206,3 @@ Karline Soetaert, Thomas Petzoldt, R. Woodrow Setzer (2010). Solving Differentia
 
 Karline Soetaert, Peter M.J. Herman (2009). A Practical Guide to Ecological Modelling. Springer Netherlands. DOI: 10.1007/978-1-4020-8624-3.
 
-Slides available at <a href="https://drive.google.com/drive/folders/1Bys0-xzXLCpFpWhD-HrH6jDKOyl8iJMd" target="_blank">google-drive</a>
