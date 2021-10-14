@@ -77,35 +77,64 @@ question(sprintf("What is the shape of the curve in the Michaelis-Menten rate ex
 )
 ```
 
+```{r, echo=FALSE, fig.width=8, fig.height=4}
+A <- 0:100
+par(mfrow=c(1,3))
+plot(x=A,y=A/(A+10), main="Hyperbola", ylab="", xlab="[A]", type="l", lwd=2)
+plot(x=A,y=1-(A-50)^2/2500, main="Parabola", ylab="", xlab="[A]", type="l", lwd=2)
+plot(x=A,y=0.001^(-A/200), main="exponential", ylab="", xlab="[A]", type="l", lwd=2)
+```
+
 ## Michaelis-Menten use
 
 ```{r enzUse, echo=FALSE}
+msg <- "When [A] is very small, the Michaelis-Menten rate expression $\\frac{[A]}{[A]+K_A}$ can be approximated as: $\\frac{[A]}{K_A}$ ~ $r[A]$ which is first-order in [A]"
 question("Michaelis-Menten kinetics is approximated by first-order kinetics when the substrate concentration is", type = "learnr_radio",
  answer("around the affinity concentration"),
  answer("much lower than the affinity concentration", correct = TRUE),
- answer("much greater than the affinity concentration")
+ answer("much greater than the affinity concentration"),
+ incorrect = paste("incorrect. ", msg),
+ correct = paste("correct. ", msg)
+ 
 )
 ```
 
 ```{r enzUse2, echo=FALSE}
+msg <- "When [A] is very large, the Michaelis-Menten rate expression $\\frac{[A]}{[A]+K_A}$ can be approximated as: $\\frac{[A]}{[A]} \\approx 1$ which is zero-order in [A]"
+
 question("Michaelis-Menten kinetics is approximated by zero-order kinetics when the substrate concentration is", type = "learnr_radio",
  answer("around the affinity concentration"),
  answer("much lower than the affinity concentration"),
- answer("much greater than the affinity concentration", correct = TRUE)
+ answer("much greater than the affinity concentration", correct = TRUE),
+ incorrect = paste("incorrect. ", msg),
+ correct = paste("correct. ", msg)
 )
+```
+
+```{r, echo=FALSE, fig.width=8, fig.height=4}
+A <- 0:100
+ks <- 10
+par(mfrow=c(1,3))
+plot(x=A,y=A/(A+10), main="Michaelis-Ment3n", ylab="", xlab="[A]", type="l", lwd=2)
+plot(x=A,y=A/ks, main="first-order", ylab="", xlab="[A]", type="l", lwd=2)
+plot(x=A,y=rep(1, times=101), main="zero-order", ylab="", xlab="[A]", type="l", lwd=2)
 ```
 
 ## Recognizing rate-limitation
 
 ```{r enzRateLim, echo=FALSE}
+msg <- sprintf("The dependency of the process on A is given by the Michaelis-Menten kinetics $\\frac{[A]}{[A]+K_A}$; the dependency on B is given by $\\frac{K_B}{[B] + K_B}$ which is equal to $1-\\frac{[B]}{[B] + K_B}$, and this function will decrease with increasing [B] (inhibition); the dependency on C is given by $r \\times [C]$, which is a first-order function with respect to [C]")
+
 question(sprintf("How would you characterize a process whose rate is described by the following rate expression (where $r$, $K_A$ and $K_B$ are constants): $R = r \\times \\frac{[A]}{[A]+K_A} \\times \\frac{K_B}{[B] + K_B} \\times [C]$?"), type = "learnr_checkbox",
  answer("The process is stimulated by substrate A",  correct = TRUE),
  answer("The process is inhibited by substrate A"),
  answer("The process is stimulated by substrate B"),
  answer("The process is inhibited by substrate B",  correct = TRUE),
  answer("The process is first-order with respect to substrate C",  correct = TRUE),
- answer("The process is zero-order with respect to substrate C")
-)
+ answer("The process is zero-order with respect to substrate C"),
+ incorrect = paste("incorrect. ", msg),
+ correct = paste("correct. ", msg)
+ )
 ```
 
 ## Textbook and Slides

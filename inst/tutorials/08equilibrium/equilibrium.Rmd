@@ -282,7 +282,7 @@ $$
 To make use of the local equilibrium, we need to find combinations of species that are not affected by the above reactions.
 
 ```{r eq2Lumpsum, echo=FALSE}
-msg <- sprintf("The lump sum $[HCO_3^-] + 2 [CO_3^{2-}] - [H^+]$ is unaffected by reaction 1 (because production of $HCO_3^-$: +1, production of $H^+$: -1) and unaffected by reaction 2 (because consumption of $HCO_3^-$: -1, production of $H^+$: -1, production of $CO_3^{2-}$: +2). This lump sum is called the *carbonate alkalinity* or *excess negative charge*. The fifth lump sum is the *total dissolved inorganic carbon (DIC)*. The last lump sum ($2[H_2CO_3] + [HCO_3^-] + [H^+]$) would also be suitable - it accounts for the excess protons - but it is never used in models.")
+msg <- sprintf("The lump sum $ALK_C=[HCO_3^-] + 2 [CO_3^{2-}] - [H^+]$ is unaffected by reaction 1 because: production of 1 $HCO_3^-$ causes production of 1 $ALK_C$, production of $H^+$: -1 $ALK_C$. It is also unaffected by reaction 2 (consumption of 1 $HCO_3^-$: -1 $ALK_C$, production of 1 $H^+$: -1 $ALK_C$, production of 1 $CO_3^{2-}$: +2 $ALK_C$). This lump sum is called the *carbonate alkalinity* or *excess negative charge*. The fifth lump sum is the *total dissolved inorganic carbon (DIC)*. The last lump sum ($2[H_2CO_3] + [HCO_3^-] + [H^+]$) would also be suitable - it accounts for the excess protons - but it is never used in models.")
 
 question("Which of the following lump sums would be suitable to reformulate a model that involves these equilibrium reactions?", type = "learnr_checkbox",
  answer(sprintf("$[HCO_3^-] + 2 [CO_3^{2-}] - [H^+]$"), correct=TRUE),

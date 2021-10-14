@@ -36,7 +36,9 @@ You can also read the following section(s) of the textbook:
 
 ## Ecological interactions: virus infection
 
-In a population comprising individuals that are *susceptible* to a virus and *infected* by a virus, infection can be modelled as a process similar to an elementary chemical reaction: a susceptible person can become infected if he/she "collides" with an infected person. Suppose that the *probability* that a susceptible person meets an infected person, whereby this encounter leads to the susceptible person becoming infected, is described by a parameter $b$ (in units of $ind^{-1}~d^{-1}$).  The amounts of susceptible and infected individuals in the population are denoted by $S$ and $I$, respectively.
+In a population comprising individuals that are *susceptible* to a virus and individuals that are *infected* by a virus, infection can be modelled as a process similar to an elementary chemical reaction: a susceptible person can become infected if he/she "collides" with an infected person. 
+
+Suppose that the *probability* that a susceptible person meets an infected person, whereby this encounter leads to the susceptible person becoming infected, is described by a parameter $b$ (in units of $ind^{-1}~d^{-1}$).  The amounts of susceptible and infected individuals in the population are denoted by $S$ and $I$, respectively.
 
 ```{r infection_rate, echo=FALSE}
 msg <- "To become infected, a susceptible person needs to 'collide' with *one* infected person. Therefore, the infection rate is *first-order* with respect to the infected and susceptible persons, i.e., $InfectionRate = b\\times S\\times I$. The proportionality constant, $b$, describes the probability (expressed per individual per day) that a susceptible person meets an infected person and their encounter results in the susceptible person becoming infected."
@@ -52,6 +54,10 @@ question(sprintf("What is a suitable expression for the infection rate?"), type 
  incorrect=sprintf(msg),
  correct=sprintf(msg))
 ```
+<div id="infection_rate-hint">
+**Note:** The "chemical reaction" that occurs between susceptible and infected persons can be written as:
+$S + I \rightarrow 2 I$, i.e. it is a reaction between S and I that causes 2 persons to be infected as a result.
+</div>
 
 ## Ecological interactions: predation
 
@@ -170,73 +176,24 @@ question(sprintf("The change in time of a quantity M (in moles) is described by 
 )  
 ```
 
-## Interactive differential equations
-
-```{r, echo=FALSE}
-radioButtons("type", label = "Differential equation:", choices = list("dM/dt = -r" = "a" , "dM/dt = r" = "b", "dM/dt = -r . M" = "c", "dM/dt = r . M"= "d", "dM/dt = r . M . (1-M/K)"="e"))
-sliderInput("r", "Rate constant:", min = 0, max = 1, value = 0.1)
-sliderInput("Mini", "Initial value of M:", min = 0, max = 1.2e6, value = 1e3, step=1e3)
-plotOutput("eqType")
-```
-
-```{r, context="server"}
-output$eqType <- renderPlot({
-  r  <- 0.5
-  r2 <- input$r 
-  K  <- 1e6
-  M0 <- input$Mini
-  times <- seq(0 , 10, length.out = 100)
- 
-  Type <- input$type
-  if (Type == "a"){
-    M <- M0 - r*times
-    M2 <- M0 - r2*times
-    Lab <- c("Zero-order kinetics: dM/dt= -r", 
-             "Linear decrease")
-  } else if (Type == "b"){
-    M  <- M0 + r*times
-    M2 <- M0 + r2*times
-    Lab <- c("Zero-order kinetics: dM/dt= r", 
-             "Linear increase")
-  } else if (Type == "c") {
-    M <- M0*exp(- r*times)
-    M2 <- M0*exp(- r2*times)
-    Lab <- c("First-order kinetics: dM/dt= -r . M", 
-             "Exponential decrease")
-  } else if (Type == "d") {
-    M <- M0*exp(r*times)
-    M2 <- M0*exp(r2*times)
-    Lab <- c("First-order kinetics: dM/dt= r . M", 
-             "Exponential increase")
-  } else if (Type == "e")  {
-    times <- seq(0 , 50, length.out = 100)
-    A  <- (K -M0)/M0
-    M  <- K/(1 +A*exp(-r*times))
-    M2 <- K/(1 +A*exp(-r2*times))
-    Lab <- c("Logistic growth: dM/dt = r . M . (1-M/K)",
-    "K = carrying capacity = 1e6")
-  }
-  par(mfrow = c(1,1), las = 1, oma= c(0,0,2,0))
-  matplot(times, cbind(M, M2), type="l", lwd=2, lty=1, main = Lab[2], ylab="M(t)", xlab="t")
-  legend (col = 1:2, lwd = 2, legend = c(r, r2), title = "r", x = "left")
-  mtext(outer = TRUE, line = -1, Lab[1], cex = 2)
-})
-```
 
 ## Logistic model
 
-A population is growing according to the logistic model characterised by the carrying capacity of $K=10^6~ind~km^{-2}$.
+A population is growing according to the logistic model $\frac{dM}{dt} = r \times M \times \left(1-\frac{M}{K}\right)$ characterised by the carrying capacity of $K=10^6~ind~km^{-2}$.
 
 ```{r logistic1, echo=FALSE}
+msg <- "At population size that is much smaller than the carrying capacity, the term of the logistic expression in brackets $(1-\\frac{M}{K})$ will be very close to 1, so that $$\frac{dM}{dt} \\approx r \times M $, which has an exponential behavior."
 question(sprintf("How would you best characterize the growth of the population when the population density is about $10^5~ind~km^{-2}$?"), type = "learnr_radio",
  answer("The population growth is approximately linear", correct=FALSE),
  answer("The population growth is approximately exponential", correct=TRUE),
  answer("The population stays relatively constant"), 
- answer("The population shrinks exponentially towards K")
+ answer("The population shrinks exponentially towards K"),
+ incorrect = paste("incorrect. ", msg)
+ correct = paste("correct. ", msg)
 )  
 ```
 
-```{r logistic2, echo=FALSE}
+```{r logistic2, echo=FALSE, eval=FALSE}
 question(sprintf("How would you best characterize the growth of the population when the population density is about $5\\times 10^5~ind~km^{-2}$?"), type = "learnr_radio",
  answer("The population growth is approximately linear", correct=TRUE),
  answer("The population growth is approximately exponential"),
@@ -247,47 +204,27 @@ question(sprintf("How would you best characterize the growth of the population w
 
 
 ```{r logistic3, echo=FALSE}
+msg <- "At population size that is almost equal to the carrying capacity, the term of the logistic expression in brackets $(1-\\frac{M}{K})$ becomes very small, so that $$\frac{dM}{dt} \\approx 0$, which indicates that the population will remain (almost) constant."
 question(sprintf("How would you best characterize the growth of the population when the population density is about $9.8\\times 10^5~ind~km^{-2}$?"), type = "learnr_radio",
  answer("The population growth is approximately linear"),
  answer("The population growth is approximately exponential"),
  answer("The population stays relatively constant", correct=TRUE), 
- answer("The population shrinks exponentially towards K")
+ answer("The population shrinks exponentially towards K"),
+ incorrect = paste("incorrect. ", msg)
+ correct = paste("correct. ", msg)
 )  
 ```
 
 ```{r logistic4, echo=FALSE}
+msg <- "When $M = 0$, then the $\frac{dM}{dt} = 0$ and the population will stay at 0."
 question(sprintf("How would you best characterize the growth of the population when the population density is  $0~ind~km^{-2}$?"), type = "learnr_radio",
  answer("The population growth is approximately linear"),
  answer("The population growth is approximately exponential"),
  answer("The population stays constant", correct=TRUE), 
- answer("The population shrinks exponentially towards K")
+ answer("The population shrinks exponentially towards K"),
+ incorrect = paste("incorrect. ", msg)
+ correct = paste("correct. ", msg)
 )  
-```
-
-## Logistic curve
-
-Select the initial population size, $M_{ini}$, and study how the population changes initially and on long time-scales. (Calculated using $r=1~yr^{-1}$ and $K=1\times 10^6$.)
-
-```{r, echo=FALSE}
-sliderInput("Mini2", "Initial population size:", min = 0, max = 2e6, value = 5e4, step=1e4)
-plotOutput("carcapPlot")
-```
-
-```{r, context="server"}
-output$carcapPlot <- renderPlot({
-  r  <- 1
-  K  <- 1e6
-  P0 <- input$Mini2
-  A  <- (K -P0)/P0
-  times <- seq(0 , 1, length.out = 100)
-  times2 <- seq(0 , 10, length.out = 100)
-  P  <- K/(1 +A*exp(-r*times))
-  P2 <- K/(1 +A*exp(-r*times2))
-  par(mfrow = c(1,2), las = 1, oma= c(0,0,2,0))
-  plot(times, P, type="l", lwd=2, main="initial", xlab="t (yr)", ylab="M(t)")
-  plot(times2, P2, type="l", lwd=2, main="long-term", xlab="t (yr)", ylab="M(t)")
-  mtext(outer = TRUE, line = -1, paste("Logistic model, Mini = ", P0), cex = 2)
-})
 ```
 
 ## Recognizing rate expressions
@@ -295,7 +232,7 @@ output$carcapPlot <- renderPlot({
 ```{r RateLim, echo=FALSE}
 msg <- "Algal uptake of ammonia is less energy demanding than uptake of nitrate, and so the uptake of nitrate is inhibited by the presence of ammonia. Nitrate is the rate limiting substrate, so the dependence of the rate on nitrate concentration is described by the Michaelis-Menten kinetics. The work is performed by the algae, therefore the rate is first-order with respect to algae."
 
-question(sprintf("The rate expression that describes the uptake of nitrate (NO3) in the presence of ammonia (NH3) by marine microscopic algae (P) is $$R = r \\times \\frac{[NO3]}{[NO3]+K_N} \\times \\frac{K_A}{[NH3] + K_A} \\times [P].$$ Which of the following statements is true?"), type = "learnr_checkbox",
+question(sprintf("The rate expression that describes the uptake of nitrate ($NO_3$) in the presence of ammonia ($NH_3$) by marine microscopic algae (P) is $$R = r \\times \\frac{[NO_3]}{[NO_3]+K_N} \\times \\frac{K_A}{[NH_3] + K_A} \\times [P].$$ Which of the following statements is true?"), type = "learnr_checkbox",
  answer("The process is limited by nitrate",  correct = TRUE),
  answer("The process is inhibited by nitrate"),
  answer("The process is limited by ammonia"),
@@ -324,16 +261,17 @@ $r$         | 0.01        | basal respiration parameter |$hr^{-1}$              
 $m$         | 0.0005      | mortality rate constant         |$(mol~C~m^{-3})^{-1} hr^{-1}$| 
 
 The initial conditions are:
-$$ B_{ini} = 0.1~mol~C~m^{-3} \qquad DOC_{ini}=100~mol~C~m^{-3}$$
+$$ B_{0} = 0.1~mol~C~m^{-3} \qquad DOC_{0}=100~mol~C~m^{-3}$$
 
 ```{r bact1, echo=FALSE}
 question(sprintf("Based on the model scheme and parameter definitions, which is the correct expression for the bacterial growth?"), type = "learnr_radio",
- answer(sprintf("$g \\times \\frac{B}{B+k_s} \\times DOC$")),
- answer(sprintf("$g \\times \\frac{DOC}{DOC+k_s} \\times B$")),
- answer(sprintf("$\\gamma \\times g \\times \\frac{B}{B+k_s} \\times DOC$")),
+ answer(sprintf("$g \\times \\frac{B}{B+k_s} \\times DOC$"), message="this equations assumes that DOC is the active compartment"),
+ answer(sprintf("$g \\times \\frac{DOC}{DOC+k_s} \\times B$"), message = "almost correct - this formulation represents DOC uptake - not growth"),
+ answer(sprintf("$\\gamma \\times g \\times \\frac{B}{B+k_s} \\times DOC$"), message="this equations assumes that DOC is the active compartment"),
  answer(sprintf("$\\gamma \\times g \\times \\frac{DOC}{DOC+k_s} \\times B$"), correct=TRUE),
- answer(sprintf("$\\gamma \\times g \\times \\frac{DOC}{DOC+k_s}$")),
- answer(sprintf("$\\gamma \\times g \\times \\frac{DOC_0}{DOC_0+k_s}$"))
+ answer(sprintf("$\\gamma \\times g \\times \\frac{DOC}{DOC+k_s}$"), message = "you forgot to add the active compartment here"),
+ answer(sprintf("$\\gamma \\times g \\times \\frac{DOC_0}{DOC_0+k_s} \\times B_0$"), message = "Rate expressions use the concentrations of DOC and bacteria at the prevailing time steps; $B_0$ and $DOC_0$ are the initial conditions"),
+ allow_retry = TRUE
 )  
 ```
 
@@ -486,7 +424,7 @@ RTMexercise("npzd")
 RTMexercise("crops_weeds")
 ```
 
-## References
+## References and slides
 
 R Core Team (2020). R: A language and environment for statistical computing. R
   Foundation for Statistical Computing, Vienna, Austria. URL

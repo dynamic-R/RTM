@@ -270,14 +270,14 @@ question("Which of the following equations represent the balance equation for st
 * The state variables [o], [c], and [i] are fractions that sum to 1 (i.e., they are unitless). 
 
 ```{r PS_units, echo=FALSE}
-question("If the time-unit in the model is 'second', what is the unit of the derivative $\\frac{d[i]}{dt}$?", type = "learnr_radio",
+question("If the time-unit in the model is 'second', what is the unit of the derivative $\\frac{d[i]}{dt}$?", type = "learnr_checkbox",
  answer(sprintf("$s$")),
  answer(sprintf("$/s$"), correct=TRUE),
  answer(sprintf("$-$ (unitless)")),
  answer(sprintf("$s^{-1}$"), correct=TRUE),
 
  incorrect = "The unit of a time-derivative = unit of the state variable per unit time.",   
- correct = "Indeed: the unit of a time-derivative = unit of the state variable per unit time."
+ correct = "Indeed: the unit of a time-derivative = unit of the state variable per unit time. There are two ways to write this unit."
  )
 ```
 
