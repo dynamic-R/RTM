@@ -1,27 +1,30 @@
 # RTM
 
-<img src="man/figures/RTMlogo.png" width="100">
+<center><img src="man/figures/RTMlogo.png" width="300"></center>
 
-An R-package with teaching material for Reaction-Transport Modelling in **R**. The material is used in the course
+**RTM** is an R-package that explains the basics of Reaction-Transport Modelling in **R**. It is used as a teaching material in the following courses:
 
 - Reactive Transport Modeling in the Hydrosphere, taught at Utrecht University
 - Environmental Modeling, taught at Ghent University
 
-The package is created with the *learnr* package.
+The package is created with the R-package *learnr*.
 
 ## Installation
 
-Before installing the *RTM* package, make sure you have installed the following R-packages and their dependencies:
+Before installing the *RTM* package, you need to first install the following R-packages and their dependencies:
 
-* *learnr, deSolve, rootSolve, ReacTran*;
-* *devtools* (this one is required to be able to install the package from the github repository). 
+* *deSolve*, *rootSolve*, *ReacTran* (required for creating RTM models in R);
+* *learnr* (required for creating an interactive learning environment);
+* *devtools* (required for seamless installation of the package from the github repository). 
 
-To install the *RTM* package, type in the R-console:
+Once the above packages are installed, type the following command in the R-console to install the *RTM* package:
 
 ```
 devtools::install_github("dynamic-R/RTM", depend=TRUE)
 ```
-Then, type ``require(RTM)`` in the R-console to load the package in R.
+Then, type ``require(RTM)`` in the R-console to load the package in R. 
+
+That's it! After this step, you should be able to use the package as described below.
 
 ## What can you do with the RTM package?
 
@@ -29,7 +32,7 @@ Then, type ``require(RTM)`` in the R-console to load the package in R.
 
 It is assumed that you use *Rstudio* to work in R. If you have installed the *RTM* package while running *Rstudio*, **restart** *Rstudio* and the tutorial will show up in the tab "Tutorial" (top-right panel of *Rstudio*). Select a tutorial and start it.
 
-![](inst/exercises/introductionR/images/Rstudio_tutorial.png)
+<center><img src="inst/exercises/R/introductionR/images/Rstudio_tutorial.png"></center>
 
 To see the list of all tutorials, type in the R-console
 
@@ -37,19 +40,14 @@ To see the list of all tutorials, type in the R-console
 RTMtutorial("?")
 ```
 
-To run a specific tutorial (e.g., "introduction"), type in the R-console
+To run a specific tutorial, for example the tutorial called "introduction", enter one of the following commands in the R-console:
 
 ```
 RTMtutorial("introduction")
-```
-
-or
-
-```
 RTMtutorial(1)
 ```
 
-Every tutorial contains a short knowledge-clip (hosted on YouTube). The corresponding slides can be downloaded from the folder [tutorial_slides](../../tree/main/tutorial_slides). 
+Every tutorial contains a short knowledge-clip (hosted on YouTube) and a corresponding slide show (hosted on Google drive).
 
 
 ### Start an Exercise
@@ -60,28 +58,28 @@ To see the list of all exercises, type in the R-console
 RTMexercise("?")
 ```
 
-To view a specific exercise (e.g., "conceptual"), type in the R-console
+To view a specific exercise, for example the exercise called "conceptual", enter one of the following commands in the R-console:
 
 ```
-RTMexercise("conceptual")             # to display it in a HTML format (default)
-RTMexercise("conceptual", type="PDF") # to display it in a PDF format (nicer)
-```
-
-or
-
-```
+RTMexercise("conceptual")
 RTMexercise(2)
 ```
 
-If you are new to R, it is recommended to first read the "introductionR" exercise. This is done by typing in R-console
+These commands will display the exercise in an HTML format by default. If you want to display the exercise in a PDF format, which is more pleasing to the eye, modify the command as follows:
 
 ```
+RTMexercise("conceptual", type="PDF")
+RTMexercise(2, type="PDF")
+```
+
+Note, however, that you will need to have a working installation of LaTeX on your computer to allow this latter feature.
+
+If you are new to R, it is recommended to first read the "introductionR" exercise. This is done by entering one of the following commands in the R-console:
+
+```
+RTMexercise("introductionR")
+RTMexercise(1)
 RTMexercise("introductionR", type="PDF")
-```
-
-or
-
-```
 RTMexercise(1, type="PDF")
 ```
 
@@ -93,15 +91,10 @@ To see the list of extra readers, type in the R-console
 RTMreader("?")
 ```
 
-To view a specific exercise (e.g., "fitting"), type in the R-console
+To view a specific reader, for example the reader called "fitting", enter one of the following commands in the R-console:
 
 ```
 RTMreader("fitting", type="PDF")
-```
-
-or
-
-```
 RTMreader(4, type="PDF")
 ```
 
@@ -121,4 +114,4 @@ To uninstall manually, type in the R-console (the version of the library may dif
   ```
 
 ---
-2021-07-19
+Last updates: 2022-01-18
