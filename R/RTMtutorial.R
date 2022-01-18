@@ -94,7 +94,7 @@ RTMexercise <- function(x = c("?",
     "covid", "virus", "bears_salmon", "plant_coexistence", 
     "hyacinth_algae", "aquaculture", "riverAnoxia", 
     "Pdiagenesis", "diagenesis"), 
-    type=c("massbalance", "linearmodels", "chemistry", 
+    type=c("R", "massbalance", "linearmodels", "chemistry", 
            "biogeochemistry", "epidemiology", "ecology", 
            "individualbased", "reaction_transport"),
             output = c("HTML", "PDF", "RMD", "WORD"))
