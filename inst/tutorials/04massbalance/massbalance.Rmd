@@ -223,7 +223,7 @@ question(sprintf("Which of the following differential equations correctly descri
 
 ## Photosynthesis - conceptual model
 
-Oxygenic photosynthesis (oxy-PS) is a process used by plants, algae and cyanobacteria to convert light energy into chemical energy stored in carbohydrates. In this process, enzymes comprising the photosystems I and II capture photons, which energize electrons and ultimately produce NADPH (the source of a proton) and ATP (chemical energy). These two components (NADPH and ATP) are then used in the Calvin cycle to convert $CO_2$ into carbohydrates.
+Oxygenic photosynthesis (oxy-PS) is a process used by plants, algae, and cyanobacteria to convert light energy into chemical energy stored in carbohydrates, releasing molecular oxygen ($O_2$) as a by-product. In this process, enzymes comprising the photosystems I and II capture photons, which energize electrons and ultimately produce NADPH (the source of a proton) and ATP (chemical energy). These two components (NADPH and ATP) are then used in the Calvin cycle to convert $CO_2$ into carbohydrates.
 
 In the overall flow of electrons through photosystems I and II, PSII can be in three states: 
 
@@ -270,7 +270,7 @@ question("Which of the following equations represent the balance equation for st
 * The state variables [o], [c], and [i] are fractions that sum to 1 (i.e., they are unitless). 
 
 ```{r PS_units, echo=FALSE}
-question("If the time-unit in the model is 'second', what is the unit of the derivative $\\frac{d[i]}{dt}$?", type = "learnr_checkbox",
+question("If the time-unit in the model is second ('s'), what is the unit of the derivative $\\frac{d[i]}{dt}$?", type = "learnr_checkbox",
  answer(sprintf("$s$")),
  answer(sprintf("$/s$"), correct=TRUE),
  answer(sprintf("$-$ (unitless)")),
@@ -318,7 +318,8 @@ More exercises on creating mass balance equations can be found in the R-package 
 
 ```
 require(RTM)
-RTMexercise("massbalance")
+RTMexercise("massbalance_chemistry")
+RTMexercise("massbalance_ecology")
 ```
 
 ## Textbook and Slides
