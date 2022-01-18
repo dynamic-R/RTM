@@ -13,11 +13,11 @@ The package is created with the R-package *learnr*.
 
 Before installing the *RTM* package, you need to first install the following R-packages and their dependencies:
 
-* *deSolve*, *rootSolve*, *ReacTran* (required for creating RTM models in R);
+* *deSolve*, *rootSolve*, *ReacTran* (required for creating reaction-transport models in R);
 * *learnr* (required for creating an interactive learning environment);
-* *devtools* (required for seamless installation of the package from the github repository). 
+* *devtools* (required for a seamless installation of the RTM package from this github repository). 
 
-Once the above packages are installed, type the following command in the R-console to install the *RTM* package:
+Once the above packages have been installed, type the following command in the R-console to install the *RTM* package:
 
 ```
 devtools::install_github("dynamic-R/RTM", depend=TRUE)
@@ -34,7 +34,7 @@ It is assumed that you use *Rstudio* to work in R. If you have installed the *RT
 
 <center><img src="inst/exercises/R/introductionR/images/Rstudio_tutorial.png"></center>
 
-To see the list of all tutorials, type in the R-console
+To see the list of all tutorials, enter the following command in the R-console:
 
 ```
 RTMtutorial("?")
@@ -47,12 +47,12 @@ RTMtutorial("introduction")
 RTMtutorial(1)
 ```
 
-Every tutorial contains a short knowledge-clip (hosted on YouTube) and a corresponding slide show (hosted on Google drive).
+Every tutorial contains a short knowledge-clip (hosted on YouTube), a corresponding slide show (hosted on Google drive), and a list of questions that test your comprehension of the material covered in the knowledge-clip.
 
 
 ### Start an Exercise
 
-To see the list of all exercises, type in the R-console
+To see the list of all exercises, enter the following command in the R-console:
 
 ```
 RTMexercise("?")
@@ -85,7 +85,7 @@ RTMexercise(1, type="PDF")
 
 ### View extra readers
 
-To see the list of extra readers, type in the R-console
+To see the list of extra readers, enter the following command in the R-console:
 
 ```
 RTMreader("?")
@@ -100,9 +100,9 @@ RTMreader(4, type="PDF")
 
 ## Uninstall
 
-To uninstall *RTM*, locate the *RTM* package in the "Packages" tab in *Rstudio*, and click on the "x" button on the right margin.
+To uninstall the *RTM* package, locate it in the "Packages" tab in *Rstudio*, and click on the encircled "x" button ("Remove package") on the right margin.
 
-To uninstall manually, type in the R-console (the version of the library may differ, here we assume 4.1):
+To uninstall the package manually, type the following command in the R-console (the version of the library may differ, here we assume 4.1):
 
 * Windows users: 
   ```
