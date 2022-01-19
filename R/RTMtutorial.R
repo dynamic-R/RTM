@@ -131,7 +131,7 @@ RTMexerciseFULL <- function(x = c("?",
                               "riverAnoxia", 
                               "Pdiagenesis", 
                               "diagenesis"), 
-                            type=c("massbalance", "linearmodels", "chemistry", 
+                            type=c("R", "massbalance", "linearmodels", "chemistry", 
                             "biogeochemistry", "epidemiology", "ecology", 
                             "individualbased", "reaction_transport"),
                             output = c("HTML", "PDF", "RMD", "WORD"), sub="") {
