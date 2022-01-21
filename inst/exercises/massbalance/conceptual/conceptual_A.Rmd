@@ -19,7 +19,7 @@ knitr::opts_chunk$set(echo = TRUE)
 * Suitable units: mol P $m^{-3}$
 * The effects of biomanipulation can be investigated by changing **f10**.
 
-# Exercise 2 ANSWER.	Bacterial decay of particulate organic matter in marine sediments
+# Exercise 2 ANSWER. Decay of particulate organic matter due to bacterial activity
 
 ![Conceptual scheme of the bacteria-detritus model.](images/conceptual_detritus.png){width=10cm}
 

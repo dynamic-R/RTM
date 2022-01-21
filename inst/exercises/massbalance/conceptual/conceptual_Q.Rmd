@@ -37,7 +37,7 @@ Draw the conceptual model as a flowchart.
 
 How would you investigate the effect of biomanipulation?
 
-# Exercise 2.	Bacterial decay of particulate organic matter in marine sediments
+# Exercise 2.	Decay of particulate organic matter due to bacterial activity
 
 Organic detritus enters marine sediments by sinking of free-floating particulate organic matter from the water column.  Once in the sediment, this detritus is degraded (mineralized) by the action of heterotrophic bacteria. 
 
