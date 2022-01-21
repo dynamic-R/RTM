@@ -13,7 +13,7 @@ output:
 
 # Modelling detritus mineralization by bacteria
 
-In class you have seen how to write rate expressions for ecological interactions: you need to distinguish between compartments that are actively performing the task (the "worker"), and compartments that are taken up as a result (the "resource"). This exercise is meant to make you think about these different roles that compartments may play.
+In class you have seen how to write rate expressions for ecological interactions: you need to distinguish between compartments that are actively performing the task (the "worker"), and compartments that are taken up as a result (the "resource"). This exercise is meant to make you think about these different roles that compartments may play in the model.
 
 You already made the conceptual diagram for this problem. Now you need to find rate expressions for each of the flows. If you have time, you can also implement the model in R.
 
@@ -50,7 +50,7 @@ The parameters are:
 | rClos	         | 50	           | quadratic mortality rate constant for bacteria     | $(mol~C~m^{-3})^{-1}~d^{-1}$   |
 | fluxPOC        | 0.0005        | constant influx of POC                  | $mol~C~m^{-3}~d^{-1}$          |
 
-* Check the dimensionality of your model.
+* Check the units of your model equations.
 
 ## If you have time
 
