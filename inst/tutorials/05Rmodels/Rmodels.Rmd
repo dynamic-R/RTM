@@ -1,7 +1,7 @@
 ---
-title: "RTM course - R model"
+title: "Mechanistic modelling in R"
 author: "Karline Soetaert and Lubos Polerecky"
-description: "video and exercises on making mechanistic models in R"
+description: "Videos and exercises on making mechanistic models in R"
 date: "June 2021"
 output: 
   learnr::tutorial:
@@ -17,11 +17,21 @@ library(learnr)
 
 ## Tutorial
 
-You are advised to first watch the following video. It briefly explains how to implement a simple COVID model in R.
+You are advised to watch the following videos first. They give you a taste of how to create 0-dimensional mechanistic models in R.
 
-![](https://www.youtube.com/watch?v=4-gjEhk7wfU&t=28s)
+This video gives an overview of the first steps of model development: formulating mass balance equations based on the conceptual diagram and rate expressions describing the modeled system.
 
-## LV: Lotka-Volterra dynamics
+![](https://www.youtube.com/watch?v=MhW365ASMzU)
+
+This video gives an overview of how the mass balance equations can be solved in R using the R-package deSolve. The flow of N in a lake ecosystem (the so-called NPZD model) is used as an example.
+
+![](https://www.youtube.com/watch?v=KYYFHN7yono)
+
+This video describes another example of a 0-dimensional mechanistic model solved in R.
+
+![](https://www.youtube.com/watch?v=eOsZzk_eN4I)
+
+## Lotka-Volterra model
 
 The following R-code implements the Lotka-Volterra model. This model describes a predator-prey type of ecological interactions. The dynamics of the prey ($X$) and predator ($Y$) are described by these two coupled differential equations:
 
@@ -112,7 +122,9 @@ out2   <- ode(y = state.ini2, func = LVmodel, times = times2, parms = parms)
 plot(out, out2, mfrow = c(1,3))
 ```
 
-## LV: Adding a state variable
+## Adding a state variable
+
+### TASK 3
 
 Now enhance the Lotka-Volterra model by adding an extra state variable `Z`. This new state variable will represent a new predator that competes for prey with the predator `Y`. The extra input you will need is as follows:
 
@@ -187,8 +199,8 @@ $$\frac{dS}{dt} = -InfectionRate\\
 where 
 
 $$
-InfectionRate = b \cdot I \cdot S\\
-RecoveryRate = g \cdot I\\
+InfectionRate = b \cdot I \cdot S\\[3mm]
+RecoveryRate = g \cdot I\\[3mm]
 MortalityRate = m \cdot I
 $$
 
@@ -289,4 +301,4 @@ Karline Soetaert, Thomas Petzoldt, R. Woodrow Setzer (2010). Solving Differentia
 
 Karline Soetaert, Peter M.J. Herman (2009). A Practical Guide to Ecological Modelling. Springer Netherlands. DOI: 10.1007/978-1-4020-8624-3.
 
-Slides available at <a href="https://drive.google.com/drive/folders/1Bys0-xzXLCpFpWhD-HrH6jDKOyl8iJMd" target="_blank">google-drive</a>
+Videos created by Anna van der Kaaden. They are part of the youtube playlist available at https://www.youtube.com/playlist?list=PL80j3_tiZjWnljuE_j7pH7zNrMD6guHj1
