@@ -28,6 +28,8 @@ You are advised to watch the following video first. Only the first part (0:00-5:
 
 ![](https://www.youtube.com/watch?v=loHVpLNQBZE&list=PLx8PHcDdmF-uD1Pr07TU9SzlhlGpfrxqn&index=5)
 
+Slides available at <a href="https://drive.google.com/drive/folders/1Bys0-xzXLCpFpWhD-HrH6jDKOyl8iJMd" target="_blank">google-drive</a>
+
 You can also read the following section(s) of the textbook:
 
 * Chapter 2.3. Formulation of chemical reaction
@@ -191,10 +193,6 @@ require(RTM)
 RTMexercise("ozone")
 ```
 
-## Slides
-
-Slides available at <a href="https://drive.google.com/drive/folders/1Bys0-xzXLCpFpWhD-HrH6jDKOyl8iJMd" target="_blank">google-drive</a>
-
 ## References
 
 R Core Team (2020). R: A language and environment for statistical computing. R
@@ -205,4 +203,3 @@ Karline Soetaert, Thomas Petzoldt, R. Woodrow Setzer (2010). Solving Differentia
   DOI: 10.18637/jss.v033.i09. http://www.jstatsoft.org/v33/i09/
 
 Karline Soetaert, Peter M.J. Herman (2009). A Practical Guide to Ecological Modelling. Springer Netherlands. DOI: 10.1007/978-1-4020-8624-3.
-

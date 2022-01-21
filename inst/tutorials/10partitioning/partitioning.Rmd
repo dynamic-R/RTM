@@ -1,6 +1,6 @@
 ---
 title: "RTM course - partitioning between phases"
-author: "Karline Soetaert and Lubos Polerecky"
+author: "Lubos Polerecky and Karline Soetaert"
 date: "June 2021"
 description: "video and exercises on rate expressions for dissolution/precipitation, degassing reactions, including mineral and gas solubility"
 output: 
@@ -26,6 +26,8 @@ You are advised to watch the following video first.
 * 8:07 Extra information about gas solubility
 
 ![](https://www.youtube.com/watch?v=CPme0Qz3L7Y&list=PLx8PHcDdmF-uD1Pr07TU9SzlhlGpfrxqn&index=8)
+
+Slides available at <a href="https://drive.google.com/drive/folders/1Bys0-xzXLCpFpWhD-HrH6jDKOyl8iJMd" target="_blank">google-drive</a>
 
 There are no corresponding sections in the textbook.
 
@@ -154,7 +156,7 @@ question(sprintf("A well-mixed anoxic water column is in contact with the atmosp
 
 ## Air-water exchange - exercise
 
-You plan to install in your garden a pond with goldfish. By swimming in the pond, the fish will mix the water in the pond, and by respiration they will decrease the dissolved $O_2$ concentration in the pond. This decrease in dissolved $O_2$ will be compensated by air-water exchange. Assume that goldfish respiration is unaffected if the dissolved $O_2$ concentration does not decrease below 80% of the air saturated value. Additionally assume the piston velocity, `kp`, of $1~m~d^{-1}$, the area of the pond of $4~m^2$, the average height, `h`, of the water column of $1~m$, Henry’s constant, `K0`, for dissolved $O_2$ of $770~L~Atm~mol^{-1}$, molar fraction of $O_2$ in the atmosphere of 21% (`pO2`), atmospheric pressure of $1~Atm$ (`P`), and the average goldfish respiration rate of $400~\mu mol~fish^{-1}~d^{-1}$ (`Resp`).
+You plan to install in your garden a pond with goldfish. By swimming in the pond, the fish will mix the water in the pond, and by respiration they will decrease the dissolved $O_2$ concentration in the pond. This decrease in dissolved $O_2$ will be compensated by air-water exchange. Assume that goldfish respiration is unaffected if the dissolved $O_2$ concentration does not decrease below 80% of the air saturated value. Additionally assume the piston velocity, ``kp``, of $1~m~d^{-1}$, the area of the pond of $4~m^2$, the average height, ``h``, of the water column of $1~m$, Henry’s constant, ``K0``, for dissolved $O_2$ of $770~L~Atm~mol^{-1}$, molar fraction of $O_2$ in the atmosphere of 21% (``pO2``), atmospheric pressure of $1~Atm$ (``P``), and the average goldfish respiration rate of $400~\mu mol~O_2~fish^{-1}~d^{-1}$ (``Resp``).
 
 The R-code chunk below introduces the values and units of the parameters you will need. 
 
@@ -243,12 +245,10 @@ require(RTM)
 RTMexercise("partitioning")
 ```
 
-## References and slides
+## References
 
 R Core Team (2020). R: A language and environment for statistical computing. R
   Foundation for Statistical Computing, Vienna, Austria. URL
   https://www.R-project.org/.
 
 Karline Soetaert, Peter M.J. Herman (2009). A Practical Guide to Ecological Modelling. Springer Netherlands. DOI: 10.1007/978-1-4020-8624-3.
-
-Slides available at <a href="https://drive.google.com/drive/folders/1Bys0-xzXLCpFpWhD-HrH6jDKOyl8iJMd" target="_blank">google-drive</a>
