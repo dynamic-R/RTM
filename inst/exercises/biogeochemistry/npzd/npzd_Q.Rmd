@@ -69,19 +69,19 @@ The following assumptions are made:
 | DET       	 | 	0.005	 | $mol~N~m^{-3}$  |
 
 
-* Implement the model in R, using the R+markdown file *RTM_npzd.Rmd* to start with (this file already contains the statement that estimates the light intensity as a function of the time of the year and the depth of the water column).\footnote{You can download this file from Rstudio: File $\rightarrow$ new File $\rightarrow$ Rmarkdown $\rightarrow$ from template $\rightarrow$ RTM\_npzd.} First, change the heading and rename this file to *NPZD.Rmd*.
+* Implement the model in R, starting with the R Markdown file ``RTM_npzd.Rmd`` (this file already contains the statement that estimates the light intensity as a function of time and depth of the water column).\footnote{You can download this file from Rstudio: File $\rightarrow$ new File $\rightarrow$ Rmarkdown $\rightarrow$ from template $\rightarrow$ RTM\_npzd.} First, change the heading and rename this file to *NPZD.Rmd*.
 *	Run the model and inspect the output.
 
 ##	Step 2. NPZD2 --- expand the NPZD model with sediment detritus
 
-First copy the file that implements the NPZD model and rename it as *NPZD2.Rmd*.  (The "D2" means that there will be eventually two types of detritus).
+First, copy the file that implements the NPZD model and rename it as ``NPZD2.Rmd``  (``D2`` means that there will be eventually two types of detritus).
 
   *	Redraw the conceptual diagram by adding bottom detritus. Add the new flows. 
      - What are suitable units for bottom detritus? 
      - What are the units of the new flows?
-  *	Assume that both algae and detritus sink with a sinking velocity of 1 $m~d^{-1}$. Upon entering the sediment, the algae die and add to  bottom detritus. 
+  *	Assume that both algae and detritus sink with a sinking velocity of $1~m~d^{-1}$. Upon entering the sediment, the algae die and add to  bottom detritus. 
   *	Bottom detritus mineralizes with the same rate constant as suspended detritus;  DIN released by this process is immediately exchanged with the entire water column (i.e., well-mixed water column). 
   *	Find suitable initial conditions for the bottom detritus. You may use trial and error; the bottom detritus concentration should not show any long-term trends, rather its dynamics should be repeated annually.
-  *	Implement this model in R and run the model.
-  *	At the last day of the simulation, where do we find most of the organic matter --- in the water or in the sediment? (tip: out[nrow(out),] shows the values on the last day).
+  *	Implement this model in R and run it.
+  *	At the last day of the simulation, where do we find most of the organic matter --- in the water or in the sediment? (Tip: ``out[nrow(out),]`` shows the values on the last day.)
   * Compare N contents in the different model compartments as a function of time. Where is most of the N stored during the summer and winter seasons?
