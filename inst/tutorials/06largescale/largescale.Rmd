@@ -151,13 +151,13 @@ out2 <- ode(y=state.ini2, time=t.seq, func=model2box, parms=pars)
 plot(out1,out2, lwd=2, mfrow=c(1,3))  # plot solutions
 ```
 
-## Challenging questions
+## Challenging questions - response time and equilibrium
 
-If you want a challenge, try to solve the following questions.
+To challenge yourself, try to solve the following questions.
 
-The system has been perturbed from the steady state by adding 100 Pg C from an external source to A. This perturbation did not affect the rate laws nor the rate constants. After some time, the system returned to a new steady state (equilibrium).
+The system has been perturbed from the steady state by adding 100 Pg C from an external source to A. This perturbation did not affect the rate laws nor the rate constants. After some time, the system returned to a new steady state (new equilibrium).
 
-Quantify the *response time* of the system ($\tau_{AB}$), and the amounts of carbon in both reservoirs in this new steady state ($A_{eq}$ and $B_{eq}$). Use R and the values of X, Y and Z defined earlier in this tutorial to calculate $\tau_{AB}$, $A_{eq}$ and $B_{eq}$. Use the R-code from the earlier part of this tutorial to verify that your calculated values agree with those predicted by the numerical model.
+Quantify the *response time* of the system ($\tau_{AB}$), and the amounts of carbon in both reservoirs in this new equilibrium ($A_{eq}$ and $B_{eq}$). Use R and the values of X, Y and Z defined earlier in this tutorial to calculate $\tau_{AB}$, $A_{eq}$ and $B_{eq}$. Use the R-code from the earlier part of this tutorial to verify that your calculated values agree with those predicted by the numerical model.
 
 ```{r Tab, exercise=TRUE}
 tau.AB  <- # enter formula
@@ -167,13 +167,13 @@ c(tau.AB=tau.AB, A.eq=A.eq, B.eq=B.eq)
 ```
 
 <div id="Tab-hint">
-**Hint:** It is time to use the 'pen & paper method' and do a little bit of maths.
-<BR> 1. Write mass balance equations for $A$ and $B$, and substitute $$A=A_{eq} + \Delta A\cdot e^{-r\cdot t}$$ for $A$, and $$B = B_{eq} + \Delta B\cdot e^{-r\cdot t}$$ for $B$. 
-<BR> 2. If you assume that $t$ is a very large number ($t\gg 1/r$), you will be able to derive the following relationship: $$r_{AB}\cdot A_{eq} = r_{BA}\cdot B_{eq}$$. 
+**Hint:** To solve this exercise, use first the 'pen & paper method' and do a little bit of maths.
+<BR> 1. Write the mass balance equations for $A$ and $B$. Substitute $$A=A_{eq} + \Delta A\cdot e^{-r\cdot t}$$ as a solution for $A$, and $$B = B_{eq} + \Delta B\cdot e^{-r\cdot t}$$ as a solution for $B$, where $r$ is a parameter describing the rate of decay in the carbon content in both reservoirs. Verify that these functions are, indeed, solutions to the mass balance equations for $A$ and $B$.
+<BR> 2. If you assume that $t$ is a very large number ($t\gg 1/r$), i.e., corresponding to time when the system reaches an equilibrium, you will be able to derive the following relationship: $$r_{AB}\cdot A_{eq} = r_{BA}\cdot B_{eq}$$. 
 <BR> 3. If you consider that $A+B$ must remain constant at *all* times (conservation of carbon in the system), you will be able to derive the following relationship: $$\Delta A = -\Delta B$$.
-<BR> 4. By simplifying the equation obtained in 1, and combining it with relationships obtained in steps 2 and 3, you will be able to derive a relationship for $r$. The response time is then calculated as $$\tau_{AB}=1/r.$$
+<BR> 4. By simplifying the equation obtained in step 1, and combining it with relationships obtained in steps 2 and 3, you will be able to derive a relationship for $r$. The *response time* is then calculated, by definition, as $$\tau_{AB}=1/r.$$
 <BR> 5. The conservation of carbon in the system (point 3) implies a relationship $$A_{eq}+B_{eq} = A_{ini}+B_{ini},$$ where $A_{ini}$ and $B_{ini}$ are the initial values of $A$ and $B$, respectively, determined from $X$, $Y$ and the magnitude of the perturbation (now 100 Pg C).
-<BR> 6. By combining the relationships obtained in steps 2 and 5, you will be able to derive formulas for $A_{eq}$ and $B_{eq}$.
+<BR> 6. By combining the relationships obtained in steps 2 and 5, you will be able to derive formulas for $A_{eq}$ and $B_{eq}$. As mentioned above, most of this exercise should be solved using the 'pen & paper method'.
 </div>
 
 ```{r Tab-solution1, echo=FALSE}
@@ -214,6 +214,17 @@ question("What is the value of the equilibrium carbon content in reservoir B?", 
  incorrect = paste("Incorrect.", msg),
  correct = paste("Correct.", msg)
          )
+```
+
+## More exercises
+
+To apply the knowledge you gained so far, expand the 2-box model from this tutorial towards a more complicated system: the Earth's global carbon cycle. If you are following the modelling course at Utrecht University, this task is part of your **homework assignment** (worth 10% of your final grade).
+
+Type the following commands in the R console to get the full description of this exercise.
+
+```
+require(RTM)
+RTMexercise("carbonCycle")
 ```
 
 ## Slides
