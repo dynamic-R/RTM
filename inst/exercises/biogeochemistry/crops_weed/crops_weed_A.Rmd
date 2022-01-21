@@ -12,7 +12,7 @@ output:
 
 ## R-implementation --- biological part
 
-In addition to the amounts of P in the soil compartments, crops and weeds, we also introduce a state variable *Plost* to be able to trace the amount of P lost to the bottom soil due to percolation. Furthermore, we export the factors *(1-TotBiom/ktot)*, *NutCrop/(NutCrop+ksCrop)* and *NutWeed/(NutWeed+ksWeed)* to be able to trace what limits the plant growth. These two pieces of information are relevant when assessing the environmental impact of the agriculture and interpreting the P dynamics predicted by the model.
+In addition to the amounts of P in the soil compartments, crops and weeds, we also introduce a state variable *Plost* to be able to trace the amount of P lost to the bottom soil due to percolation. Furthermore, we export the factors $(1-TotBiom/ktot)$, $NutCrop/(NutCrop+ksCrop)$ and $NutWeed/(NutWeed+ksWeed)$ to be able to trace what limits the plant growth. These two pieces of information are relevant when assessing the environmental impact of the agriculture and interpreting the P dynamics predicted by the model.
 
 ```{r, eval = TRUE, cache = FALSE, echo = TRUE, warning=FALSE, message=FALSE}
 require(deSolve)  # package with solution methods

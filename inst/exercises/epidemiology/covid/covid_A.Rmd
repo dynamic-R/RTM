@@ -16,8 +16,8 @@ output:
 
 * To calculate the average duration of the infection period, $\tau$, the short answer is $\tau = 1/(g+m)$. This parameter corresponds to what is typically called the *residence time*. A rigorous mathematical derivation of the residence time is given in the Appendix, which shows that, for a first-order removal process characterized by the rate constant $k$, the residence time is $\tau=1/k$. Applying this to the situation here, the rate constant characterizing the "removal" of infected individuals is $g+m$ ($g$ due to recovery, $m$ due to mortality), yielding the value of $\tau=1/(g+m)$.
 
-* The reproduction number (RN) can be estimated from the infection rate, which is the *total* number of infections per day. Dividing the infection rate by the number of infected individuals, we get the number of people that *one* infected individual infects on average *per day*. We need to multiply this with the average duration of the infectious period (parameter $\tau$) to arrive at $RN$. Thus, $RN = \tau*Infection/I$, which yields
-$$ RN = \frac{b}{g+m}S.$$
+* The reproduction number (RN) can be estimated from the infection rate, which is the *total* number of infections per day. Dividing the infection rate by the number of infected individuals, we get the number of people that *one* infected individual infects on average *per day*. We need to multiply this with the average duration of the infectious period (parameter $\tau$) to arrive at $RN$. Thus, $RN = \tau\cdot Infection/I$, which yields
+$$ RN = \frac{b}{g+m}\cdot S.$$
 
 * To keep an eye on the total number of deceased individuals, we introduce a new state variable that integrates the mortality rate over time:
 $$\frac{dDeceased}{dt} = Mortality$$
