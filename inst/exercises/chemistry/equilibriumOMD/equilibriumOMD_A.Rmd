@@ -1,5 +1,7 @@
 ---
-title: 'Local Equilibrium Chemistry in R --- part III: Mixed Equilibrium-Irreversible Reactions'
+title: |
+  | Local Equilibrium Chemistry in R --- part III:
+  | Mixed Equilibrium-Irreversible Reactions
 subtitle: "Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
 author: "Karline Soetaert and Lubos Polerecky, Utrecht University"
 date: "February 2021"

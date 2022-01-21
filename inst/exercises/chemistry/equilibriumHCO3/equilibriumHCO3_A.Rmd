@@ -1,5 +1,7 @@
 ---
-title: 'Local equilibrium chemistry in R --- part II: Two Equilibrium Reactions'
+title: |
+  | Local Equilibrium Chemistry in R --- part II:
+  | Two Equilibrium Reactions
 subtitle: "Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
 author: "Lubos Polerecky and Karline Soetaert, Utrecht University"
 date: "February 2021"
@@ -13,7 +15,7 @@ output:
 
 ## Task 1: Mass balance equations of the carbonate system
 
-Assuming that the forward and backward reactions are elementary, we can use the first-order kinetics to describe the rate laws for each reaction. Considering the stoichiometries of R1 and R2, we obtain the following mass balance equations:
+Assuming that the forward and backward reactions are elementary, we can use the first-order kinetics to describe the rate laws for each reaction. Considering the stoichiometry of Reactions 1 and 2, we obtain the following mass balance equations:
 
 $$
 \begin{array}{rclr}
@@ -44,7 +46,7 @@ Note that the rate $R_C$ of the slow process only affects $H_2CO_3$.
 
 ## Task 2: Equilibrium conditions
 
-In the absence of the removal process RC, the carbonate species will reach an equilibrium as a result of the reversible reactions R1 and R2. In this equilibrium, the time derivative of each species in the system is zero. Based on equations 1a and 2a, we obtain $R_1=0$, which yields the relationship
+In the absence of the removal process RC, the carbonate species will reach an equilibrium as a result of the reversible reactions 1 and 2. In this equilibrium, the time derivative of each species in the system is zero. Based on equations 1a and 2a, we obtain $R_1=0$, which yields the relationship
 
 $$
 K_{1} = \frac{ [HCO_3^-] \cdot [H^+] }{ [H_2CO_3] } \qquad\hspace{2cm} (3a)
@@ -74,7 +76,7 @@ These equations show that DIC is *added* at a rate of the *slow process* ($R_C$)
 By solving for $[H_2CO_3]$ and $[CO_3^{2-}]$ in equations 3a and 3b, and by substituting the result to the definition of $[DIC]$, we obtain 
 
 $$
-[DIC] = [HCO_3^-] + [H^+] \frac{[HCO_3^-]}{K_{1}} + K_{2} \frac{ [HCO_3^-]}{[H^+]}
+[DIC] = [HCO_3^-] + [H^+]\cdot \frac{[HCO_3^-]}{K_{1}} + K_{2}\cdot \frac{ [HCO_3^-]}{[H^+]}
 $$
 
 When we bring each term on the right-hand side to the common denominator ($K_1\cdot [H^+]$), we obtain
@@ -86,21 +88,21 @@ $$
 This equation can easily be solved for $[HCO_3^-]$:
 
 $$
-[HCO_3^-]= \frac{K_{1}[H^+]}{[H^+][H^+] + K_{1}[H^+] +  K_{1} K_{2}} [DIC]
+[HCO_3^-]= \frac{K_{1}\cdot [H^+]}{[H^+]\cdot [H^+] + K_{1}\cdot [H^+] +  K_{1}\cdot K_{2}}\cdot [DIC]
 \qquad\hspace{2cm} (5a)
 $$
 
 Combining this result with equation 3a, we obtain 
 
 $$
-[H_2CO_3] = \frac{[H^+][H^+]}{[H^+][H^+] + K_{1}[H^+] +  K_{1} K_{2}} [DIC]
+[H_2CO_3] = \frac{[H^+]\cdot [H^+]}{[H^+]\cdot [H^+] + K_{1}\cdot [H^+] +  K_{1}\cdot K_{2}}\cdot [DIC]
 \qquad\hspace{2cm} (5b)
 $$
 
 Similarly, combining the result with equation 3b, we obtain
 
 $$
-[CO_3^{2-}] = \frac{K_1 K_2}{[H^+][H^+] + K_{1}[H^+] +  K_{1} K_{2}}[DIC]
+[CO_3^{2-}] = \frac{K_1\cdot K_2}{[H^+]\cdot [H^+] + K_{1}\cdot [H^+] +  K_{1}\cdot K_{2}}\cdot [DIC]
 \qquad\hspace{2cm} (5c)
 $$
 
@@ -121,7 +123,7 @@ Because $[HCO_3^-]$ and $[CO_3^{2-}]$ depend on $[DIC]$ and $[H^+]$ (see 5a and 
 
 Because equation 5d is highly non-linear, these calculations are done numerically.
 
-## Task 5: Application to atmospheric CO2 exchange 
+## Task 5: Application to atmospheric CO$_2$ exchange 
 
 ### Implementation in R
 

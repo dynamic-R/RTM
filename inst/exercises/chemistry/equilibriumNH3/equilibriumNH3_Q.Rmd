@@ -1,5 +1,7 @@
 ---
-title: "Local Equilibrium Chemistry in R --- part I: One Equilibrium Reaction"
+title: |
+  | Local Equilibrium Chemistry in R --- part I:
+  | One Equilibrium Reaction
 subtitle: "Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
 author: "Karline Soetaert and Lubos Polerecky, Utrecht University"
 date: "March 2021"
@@ -171,7 +173,7 @@ As explained in class, the local equilibrium condition implies the following mas
 \frac{d[Btot]}{dt} & = &  0
 \end{array}
 \end{equation}
-Additionally, it implies the following relationships between the new and the original state variables:\footnote{From $Keq = \frac{[A] \cdot [B]}{[AB]}$ we derive $[AB] = \frac{[A] \cdot [B]}{Keq}$, which yields $[Atot] = [A] + [AB] = [A] \cdot \left(1 +\frac{[B]}{Keq}\right)$ and $[A] = \frac{K_{eq}}{K_{eq} + [B]} \cdot [Atot].$}
+Additionally, it implies the following relationships between the new and the original state variables:\footnote{From $K_{eq} = \frac{[A] \cdot [B]}{[AB]}$ we derive $[AB] = \frac{[A] \cdot [B]}{K_{eq}}$, which yields $[Atot] = [A] + [AB] = [A] \cdot \left(1 +\frac{[B]}{K_{eq}}\right)$ and $[A] = \frac{K_{eq}}{K_{eq} + [B]} \cdot [Atot].$}
 
 \begin{equation}
 [B] + \frac{[B]}{K_{eq} + [B]} \cdot [Atot] = [Btot]
@@ -292,7 +294,7 @@ out.eq_num <- ode(y=yini.eq, times=times, func=EqModel_num, parms=parms)
 
 # Compare all models
 
-We output the dynamics of the full model (black), alongside the equilibrium formulation (red and green). To optimize the plotting code, we introduce a function *plot_AB* that plots a specific variable (A, B, etc.) for all models in one graph. This function illustrates the usefulness of having named columns in matrices, as we do not need to worry that the *order* of state variables in columns of the outputs "out.full", "out.eq_an" and "out.eq_num" is *different*.
+We output the dynamics of the full model (black), alongside the equilibrium formulation (red and green). To optimize the plotting code, we introduce a function *plot_AB* that plots a specific variable (A, B, etc.) for all models in one graph. This function illustrates the usefulness of having named columns in matrices, as we do not need to worry that the *order* of state variables in columns of the outputs ``out.full``, ``out.eq_an`` and ``out.eq_num`` is *different*.
 
 ```{r, fig.height=6.5, fig.width=10}
 # plotting function

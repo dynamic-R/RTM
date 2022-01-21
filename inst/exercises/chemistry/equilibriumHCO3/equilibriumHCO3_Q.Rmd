@@ -1,5 +1,7 @@
 ---
-title: 'Local Equilibrium Chemistry in R --- part II: Two Equilibrium Reactions'
+title: |
+  | Local Equilibrium Chemistry in R --- part II:
+  | Two Equilibrium Reactions
 subtitle: "Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
 author: "Lubos Polerecky and Karline Soetaert, Utrecht University"
 date: "February 2021"
@@ -29,7 +31,7 @@ are coupled to a slow process that specifically affects (adds or removes) $H_2CO
 
 # Approach
 
-The aproach followed in this Reader is based on a set of tasks that you should be able to solve on your own if you have understood the material presented in part I of the Reader. It is challenging, but possible if you are motivated, persistent, and patient. If you feel you are stuck, you can of course look up the solutions provided at the end of this document. But we encourage you to try first on your own.
+The aproach followed in this Reader is based on a set of tasks that you should be able to solve on your own if you have understood the material presented in part I of the Reader. It is challenging --- but possible, if you are motivated, persistent, and patient. If you feel you are stuck, you can of course look up the solutions provided at the end of this document. But we encourage you to try first on your own.
 
 
 ## Task 1: Mass balance equations of the carbonate system
@@ -62,9 +64,10 @@ Assume that the system is in an equilibrium, and that the concentrations $[DIC]$
 * derive expressions for $[H_2CO_3]$, $[HCO_3^-]$, and $[CO_3^{2-}]$ as a function of $[DIC]$ and $[H^+]$.
 * find a relationship between $[ALK]$, $[DIC]$ and $[H^+]$ from which one of the three state variables can be calculated provided that the other two are known.
 
-This will be somewhat laborious, but rather straight forward. 
+This will be somewhat laborious, but technically rather straight forward. 
 
 ## Task 5: Application to atmospheric CO2 exchange
+
 Consider seawater with a pH of 8 and a DIC concentration of $2~mmol~L^{-1}$. Assume that dissolved $CO_2$ is added to the water at a rate $0.1~mmol~L^{-1}~d^{-1}$, and that this is a slow process in comparison to the equilibration reactions 1 and 2. Additionally, assume that the reactions 1, 2 and the slow process with the rate $R_C$ are the only processes in the system.
 
 * Write a model to predict the dynamics of the carbonate species, alkalinity and pH due to this process. You can start with the R-markdown template model file *RTM_equilibrium.Rmd*.\footnote{You can obtain this file from Rstudio: File $\rightarrow$ new File $\rightarrow$ Rmarkdown $\rightarrow$ from template $\rightarrow$ RTM\_equilibrium. Save this file under a different name, do not forget to change the heading of this file.}

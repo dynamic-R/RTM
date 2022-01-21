@@ -1,5 +1,7 @@
 ---
-title: "Local equilibrium chemistry in R --- part I ANSWER"
+title: |
+  | Local Equilibrium Chemistry in R --- part I (ANSWER):
+  | One Equilibrium Reaction
 subtitle: "Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
 author: "Karline Soetaert and Lubos Polerecky, Utrecht University"
 date: "March 2021"

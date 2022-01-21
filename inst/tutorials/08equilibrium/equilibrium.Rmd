@@ -28,6 +28,8 @@ You are advised to watch the following video first. If you want, you can skip th
 
 ![](https://www.youtube.com/watch?v=loHVpLNQBZE&list=PLx8PHcDdmF-uD1Pr07TU9SzlhlGpfrxqn&index=5)
 
+Slides available at <a href="https://drive.google.com/drive/folders/1Bys0-xzXLCpFpWhD-HrH6jDKOyl8iJMd" target="_blank">google-drive</a>
+
 You can also read the following section(s) of the textbook:
 
 * Chapter 8. Multiple time scales and Equilibrium Processes
@@ -46,7 +48,7 @@ $$
 * The rate constant for the backward reaction is $k_b$.
 
 ```{r ammonia_eq, echo=FALSE}
-question("What is the correct expression for the rate of change of ammonia concentration?", type = "learnr_radio",
+question("What is the correct expression for the rate of change in ammonia concentration?", type = "learnr_radio",
  answer(sprintf("$\\frac{d[NH_3]}{dt}=k_f \\times [NH_4^+] - k_b \\times [NH_3] \\times [H^+]$"), correct=TRUE),
  answer(sprintf("$\\frac{d[NH_3]}{dt}=k_f \\times [NH_4^+]$"), correct=FALSE),
  answer(sprintf("$\\frac{d[NH_3]}{dt}=k_f \\times [NH_4^+] - k_b \\times [NH_3]$"), correct=FALSE)
@@ -54,7 +56,7 @@ question("What is the correct expression for the rate of change of ammonia conce
 ```
 
 ```{r proton_diffeq, echo=FALSE}
-question("What is the correct expression for the rate of change of protons?", type = "learnr_radio",
+question("What is the correct expression for the rate of change in proton concentration?", type = "learnr_radio",
  answer(sprintf("$\\frac{d[H^+]}{dt}=k_f \\times [NH_4^+]$"), correct=FALSE),
  answer(sprintf("$\\frac{d[H^+]}{dt}=k_f \\times [NH_4^+] - k_b \\times [NH_3]$"), correct=FALSE),
  answer(sprintf("$\\frac{d[H^+]}{dt}=k_f \\times [NH_4^+] - k_b \\times [NH_3] \\times [H^+]$"), correct=TRUE)
@@ -169,10 +171,10 @@ msg <- sprintf("If you find it difficult to remember which formula applies for w
 question("Which of the following statements is true?", type = "learnr_checkbox",
  answer(sprintf("$[NH_3]^* = \\frac{K_N}{K_N+[H^+]}$"), correct=FALSE),
  answer(sprintf("$[NH_3]^* = \\frac{K_N}{K_N+[H^+]} [\\sum NH_x]$"), correct=TRUE),
- answer(sprintf("$[NH_3]^* = \\frac{[H+]}{K_N+[H^+]}[\\sum NH_x]$"), correct=FALSE),
+ answer(sprintf("$[NH_3]^* = \\frac{[H^+]}{K_N+[H^+]}[\\sum NH_x]$"), correct=FALSE),
  answer(sprintf("$[NH_4^+]^* = \\frac{K_N}{K_N+[H^+]}$"), correct=FALSE),
  answer(sprintf("$[NH_4^+]^* = \\frac{K_N}{K_N+[H^+]}[\\sum NH_x$]"), correct=FALSE),
- answer(sprintf("$[NH_4^+]^* = \\frac{[H+]}{K_N+[H^+]}[\\sum NH_x$]"), correct=TRUE),
+ answer(sprintf("$[NH_4^+]^* = \\frac{[H^+]}{K_N+[H^+]}[\\sum NH_x$]"), correct=TRUE),
  
  incorrect=msg, 
  correct=msg)
@@ -180,7 +182,7 @@ question("Which of the following statements is true?", type = "learnr_checkbox",
 
 ## Bjerrum plot
 
-Bjerrum plots show how the equilibrium concentration (or fraction) of the various ionic forms of a lump-sum (aka equilibrium speciation) changes as a function of pH. For ammonia ($NH_3$), we have $K_N = 5.380823\times 10^{-10}~mol~kg^{-1}$. Thus, we obtain
+Bjerrum plots show how the equilibrium concentration (or fraction) of the various ionic forms of a lump-sum (aka *equilibrium speciation*) changes as a function of pH. For ammonia ($NH_3$), we have $K_N = 5.380823\times 10^{-10}~mol~kg^{-1}$. Thus, we obtain
 
 ```{r, fig.width=6, fig.height=4}
 KN     <- 5.380823e-10
@@ -416,5 +418,3 @@ R Core Team (2020). R: A language and environment for statistical computing. R
   https://www.R-project.org/.
 
 Karline Soetaert, Peter M.J. Herman (2009). A Practical Guide to Ecological Modelling. Springer Netherlands. DOI: 10.1007/978-1-4020-8624-3.
-
-Slides available at <a href="https://drive.google.com/drive/folders/1Bys0-xzXLCpFpWhD-HrH6jDKOyl8iJMd" target="_blank">google-drive</a>
