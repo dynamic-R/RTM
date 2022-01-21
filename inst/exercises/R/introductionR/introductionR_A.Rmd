@@ -1,11 +1,11 @@
 ---
 title: |
-  | Introduction to R and R Markdown 
+  | Introduction to R, R Markdown and the RTM package
   | for Reaction-Transport Modellers
 subtitle: |
   | Teaching material accompanying the course 
   | Reaction Transport Modelling in the Hydrosphere
-author: "Karline Soetaert and Lubos Polerecky, Utrecht University"
+author: "Lubos Polerecky and Karline Soetaert, Utrecht University"
 date: "July 2021"
 output:
   pdf_document: 

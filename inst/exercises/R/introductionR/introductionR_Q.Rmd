@@ -1,11 +1,11 @@
 ---
 title: |
-  | Introduction to R and R Markdown 
+  | Introduction to R, R Markdown and the RTM package
   | for Reaction-Transport Modellers
 subtitle: |
   | Teaching material accompanying the course 
   | Reaction Transport Modelling in the Hydrosphere
-author: "Karline Soetaert and Lubos Polerecky, Utrecht University"
+author: "Lubos Polerecky and Karline Soetaert, Utrecht University"
 date: "July 2021"
 output:
   pdf_document: 
@@ -16,7 +16,7 @@ output:
     \floatplacement{figure}{ht}
   word_document: default
   html_document: default
-abstract: \noindent This short reader introduces you to the programming tools that we will use in the *Reaction-Transport Modelling* class. It will show you how to merge text, programming code, and the results of this code in one document. The programming language we use is R, the text is written in *R Markdown*, and the creation of the documents is done by *knitr*. We recommend that you recreate the examples provided in this document and then solve the exercises. In this way you will start gradually building your knowledge of R and *R Markdown*, which will help you understand more efficiently the material covered in the course.
+abstract: \noindent This short reader introduces you to the teaching and programming tools that we will use in the *Reaction-Transport Modelling* class. Sections 1 and 2 explain how to install the required programs and packages It will show you how to merge text, programming code, and the results of this code in one document. The programming language we use is R, the text is written in *R Markdown*, and the creation of the documents is done by *knitr*. We recommend that you recreate the examples provided in this document and then solve the exercises. In this way you will start gradually building your knowledge of R and *R Markdown*, which will help you understand more efficiently the material covered in the course.
 ---
 
 ```{r , include=FALSE}
@@ -28,11 +28,11 @@ library(ReacTran)
 library(marelac)
 ```
 
-# If you are a total beginner and need to get started from scratch
+# If you are a total beginner or need to get started from scratch
 
-You will need to install couple of programs on your computer to be able to do all the learning, modelling and reporting work in the course. The software we will use is free of charge and used by millions of people all around the world. In this section we will explain step by step how to get started with the installation to make sure that everything works on your computer as it should.
+You will need to install couple of programs on your computer to be able to do all the learning, modelling and reporting work in the course. The software we will use is free of charge and used by millions of people all around the world. In this section we will explain --- step by step --- how to get started with the installation to make sure that everything works on your computer as required.
 
-We assume here that you use Microsoft Windows. The sequence of steps for Linux or Mac-OS users is the same, although the actual execution of the steps may be different. 
+We assume here that you use Microsoft Windows. The sequence of steps for Linux or Mac-OS users is the same, although their execution may differ in specific details. 
 
 ## Core R software
 
@@ -72,12 +72,12 @@ In this course, we will use several packages. We recommend that you install them
 
   ```devtools::install_github("dynamic-R/RTM", depend=TRUE)```
 
-  More information about the RTM package is provided at the end of this document (section *Learning reaction-transport modelling using the package RTM*).
+  More information about the RTM package is provided in Section 2 of this document.
 
 ## LaTeX distribution
 
 We will use the typesetting program \LaTeX\ to produce beautifully typeset documents. This program is extremely powerful and versatile, and it is widely used especially by people who want to write equations in their documents. In this course we will use it to convert documents written in R Markdown into PDF.
-To install \LaTeX, go to \url{https://miktex.org/}, choose *Download*, download the installation file (e.g., ``basic-miktex-21.6-x64.exe``), and install it. During the installation process, select *yes* when asked *Install missing packages on-the-fly*. It is handy to check for updates just after the installation has finished, to be sure that all \LaTeX\ packages are up-to-date.
+To install \LaTeX, go to \url{https://miktex.org/}, choose *Download*, download the installation file (e.g., ``basic-miktex-21.6-x64.exe``), and install it.\footnote{The MacTex distribution (\url{https://tug.org/mactex/}) is recommended for Mac-OS users, the TexLive distribution is recommended for Linux users. Follow the installation instructions on the respective websites.} During the installation process, select *yes* when asked *Install missing packages on-the-fly*. It is handy to check for updates just after the installation has finished, to be sure that all \LaTeX\ packages are up-to-date. 
 
 Restart *Rstudio* if it was running before \LaTeX\ installation.
 
@@ -85,7 +85,7 @@ Restart *Rstudio* if it was running before \LaTeX\ installation.
 
 To check whether everything is working at this point, open *Rstudio*, and create a new R Markdown file. This is done from the menu by selecting File $\rightarrow$ New file $\rightarrow$ R Markdown $\rightarrow$ Document. Type the title, your name in the author box, check the ``PDF`` checkbox, and click *Ok*. If everything goes as expected, your *Rstudio* session should look similar as shown in Figure 1.
 
-![Screenshot of Rstudio with the default Rmd file.](images/Rstudio.png){width=80%}
+![Screenshot of Rstudio with the default Rmd file.](images/Rstudio.png){width=98%}
 
 The top-left panel contains the editor, where you will write your text and R-code. In the top-right panel, you can view several things, including the "Environment" (which shows values of your R-variables) and "Tutorials". The bottom-left panel contains the R-console, where you can type R-commands, and the R Markdown console, where you can see the progress of your Rmd file compilation (see next). Finally, the bottom-right panel allows you to manage your R-packages, view help files, or see plots.
 
@@ -93,7 +93,84 @@ Once you create a new Rmd file, it is best to first save it under a name of your
 
 ![Nicely formatted output produced from the Rmd file. Left: PDF, viewed in SumatraPDF. Middle: DOC, viewed in Microsoft Word. Right: HTML, viewed in Firefox.](images/Rmd_pdf_html_doc.png)
 
-Note that if you are converting the Rmd file into PDF for the very first time, the compilation may take a while. This is because *MikTeX* is installing extra \LaTeX\ packages, which are likely missing on your computer as they have not been installed by default during the installation process.\footnote{This assumes that you have selected \emph{yes} when asked \emph{Install missing packages on-the-fly} during \emph{MikTeX} installation. If you forgot to do that, you need to stop the \emph{knitting} process by clicking the red stop button, and go to the folder of your \texttt{test1.Rmd} file. There should be a file called \texttt{test1.tex}. Open it in the native \TeX\ editor that comes with the \emph{MikTeX} distribution (most likely \texttt{TeXworks}), and compile it with pdf\LaTeX\ from there. In this process, you should be prompted to install missing \LaTeX\ packages.} Be patient and wait until the compilation process is finished.\footnote{At the time of writing this reader, it took about two minutes until the first-time \emph{knitting} and \LaTeX\ compilation were complete.} If everything goes well, you should find a file ``test1.pdf`` in the same folder as the ``test1.Rmd``. You can open it in any PDF reader.\footnote{Note that \emph{Acrobat reader}, which is a commonly used PDF reader, may not be the best choice. This is because the PDF file is \emph{locked} for writing when open by \emph{Acrobat reader}. This means that if you want to re-knit your Rmd file to a PDF file, you may end up with a writing error rather than an updated PDF file. To avoid this, you will need to close the PDF file in \emph{Acrobat reader} before clicking the \emph{knit} button in \emph{Rstudio}. We recommend a better solution: use a PDF viewer that does \emph{not} lock the viewed PDF file. One such program is called \emph{SumatraPDF}, which can be downloaded from \url{http://www.sumatrapdfreader.org}.} After the lengthy first-time compilation, the subsequent compilations will only take a few seconds.
+Note that if you are converting the Rmd file into PDF for the very first time, the compilation may take a while. This is because *MikTeX* is installing extra \LaTeX\ packages, which are likely missing on your computer as they have not been installed by default during the installation process.\footnote{This assumes that you have selected \emph{yes} when asked \emph{Install missing packages on-the-fly} during \emph{MikTeX} installation. If you forgot to do that, you need to stop the \emph{knitting} process by clicking the red stop button, and go to the folder of your \texttt{test1.Rmd} file. There should be a file called \texttt{test1.tex}. Open it in the native \TeX\ editor that comes with the \emph{MikTeX} distribution (most likely \texttt{TeXworks}), and compile it with pdf\LaTeX\ from there. In this process, you should be prompted to install missing \LaTeX\ packages.} Be patient and wait until the compilation process is finished.\footnote{At the time of writing this reader, it took about two minutes until the first-time \emph{knitting} and \LaTeX\ compilation were complete.} If everything goes well, you should find a file ``test1.pdf`` in the same folder as the ``test1.Rmd``. You can open it in any PDF reader.\footnote{Note that \emph{Acrobat Reader}, which is a commonly used PDF reader, may not be the best choice. This is because the PDF file is \emph{locked} for writing when open by \emph{Acrobat Reader}. This means that if you want to re-knit your Rmd file to a PDF file, you may end up with a writing error rather than an updated PDF file. To avoid this, you will need to close the PDF file in \emph{Acrobat Reader} before clicking the \emph{knit} button in \emph{Rstudio}. We recommend a better solution: use a PDF viewer that does \emph{not} lock the viewed PDF file. One such program is called \emph{SumatraPDF}, which can be downloaded from \url{http://www.sumatrapdfreader.org}.} After the lengthy first-time compilation, the subsequent compilations will only take a few seconds.
+
+# Learning reaction-transport modelling using the package RTM
+
+Now that you have installed the required software, you can proceed by studying other material prepared for the reaction-transport modelling course. This material is put together in the R-package call *RTM*. You can install this package in *Rstudio* by entering in the R-console:
+
+```devtools::install_github("dynamic-R/RTM", depend=TRUE)```
+
+The RTM package contains *tutorials*, *exercises* and extra *readers*. This division reflects the main course activities, as described in the following.
+
+## RTM tutorials
+
+The *tutorials* contain short videos about a specific modelling topic. The topics range from basic principles (e.g., conceptual diagrams, mass balance equations) to more advanced (e.g., rate laws) and very advanced topics (e.g., pH modelling, reaction-transport modelling in porous media). The tutorials also contain simple tasks and exercises, which allow you to test your knowledge gained from the videos and prepare you for the exam. 
+
+We recommend that you study the tutorials in advance, i.e., *before the class*. You try to learn as much as possible by watching the short videos (once, but preferably multiple times), consult the textbook, and solve the tasks and exercises within the individual tutorials. In the process, you note questions about topics that you have not fully understood. You will be able to consult these questions with your peers and with the lecturers during the class.
+
+If you installed the *RTM* package, you will find the tutorials in the *Tutorial* tab of the *Rstudio* program (Figure 3). Run the *tutorial* by clicking the *Start Tutorial* button.
+
+![Left: Rstudio with the Tutorial tab selected. Right: RTM tutorial *conceptual* run as a web-based app, created using the *learnr* package.](images/Rstudio_tutorial.png)
+
+Alternatively, enter the following command in the R-console to see the complete list of available tutorials (output shown in table below):
+```
+RTMtutorial("?")
+```
+
+```{r, echo=FALSE}
+#RTM:::RTMtutorial("?")
+knitr::kable(RTM:::RTMtutorial("?"))
+```
+
+Then, choose a tutorial you want to view (e.g., ``conceptual``), and start it by entering the following command in the R-console:
+```
+RTMtutorial("conceptual")
+```
+Note that the tutorials are sorted from basics to intermediate and advanced topics. By studying the tutorials in the same order, you will be able to build up your knowledge of modelling in R in a gradual way. We will adhere to the same order during the course.
+
+\newpage
+
+## RTM exercises
+
+Each tutorial comes with a set of *exercises*, which contain more complicated problems that you should be able to solve once you have learned the basics from the tutorial. These exercises will be solved *during the class*. This means that you will be able to consult your questions, ideas, and solutions with the lecturers in a direct and interactive way. 
+
+The exercises recommended for a given tutorial are listed at the end of the tutorial (section *More exercises*). For example, the tutorial on *Reversible reactions and equilibrium chemistry* recommends three additional exercises (*equilibriumNH3*, *equilibriumHCO3*, *equilibriumOMD*) (Figure 4).
+
+![Screenshot of an RTM tutorial *Reversible reactions and equilibrium chemistry*, showing the suggestions for extra exercises to solidify the knowledge gained in the tutorial.](images/RTMexercises.png)
+
+Enter the following command in the R-console to see the complete list of available exercises (output shown in table below):
+```
+RTMexercise("?")
+```
+
+```{r, echo=FALSE}
+#RTM:::RTMexercise("?")
+knitr::kable(RTM:::RTMexercise("?"))
+```
+Then, choose an exercise you want to solve (e.g., ``diagenesis``) and generate the corresponding PDF file by entering the following command in the R-console:
+```
+RTMexercise("diagenesis", type="PDF")
+```
+If you want to export the exercise in a HTML or DOC format, change the value of the parameter ``type`` to ``HTML`` or ``DOC``, respectively.
+
+## RTM readers
+
+Finally, the *RTM* package contains extra readers. These readers explain topics that are not part of the course but are nevertheless useful in the context of reaction-transport modelling. They explain, e.g., how to visualise multi-dimensional data generated by the models, implement events and forcing functions based on data, fit data with a model, create interactive model applications, analyse the response times of perturbed systems, or model pH gradients. 
+
+Enter the following command in the R-console to see the complete list of available readers (output shown in table below):
+```
+RTMreader("?")
+```
+
+```{r, echo=FALSE}
+knitr::kable(RTM:::RTMreader("?"))
+```
+
+To generate a PDF file of the reader (e.g., ``visualisation``), enter the following command in the R-console:
+```
+RTMreader("visualisation", type="PDF")
+```
 
 # Scientific programming practice
 
@@ -101,9 +178,9 @@ Scientific research often involves computation, e.g., to convert numbers to diff
 
 It is a good programming practice to write computer codes that are easy to understand. This not only facilitates exchange of these codes with other people (e.g., colleagues, your supervisor or lecturer), but it will also give you a head-start if you want to use these codes in the future. In addition, a well-documented code is an essential step to reproducible and reusable science.
 
-## The first coding attempt
+## The first coding attempt in R
 
-Consider the following piece of an R-code:
+Consider the following R-code:
 
 ```{r, eval = FALSE}
 head(airquality,n=2)
@@ -112,22 +189,22 @@ plot(airquality$Solar.R,type="l",xlab="time",ylab="Solar.R")
 plot(airquality$Wind,type="l",xlab="time",ylab="Wind")
 ```
 
-While we can more or less guess what this code does, it is not clear where the data come from and what the purpose of this code is. Also, the statements themselves are not legible. 
+While we can more or less guess what this code does, it is not clear where the data come from and what the purpose of this code is. Also, the statements themselves are not extraordinarily legible. 
 
 ## Adding structure and comments in the code
 
-Legibility of the code can easily be increased by adding a *structure* to the code: alignment of comparable sections, use of spaces, etc. 
+Legibility of the code can easily be increased by adding a *visual structure* to the code: alignment of comparable sections, use of spaces, etc. 
 
 One way to document the above code is to add comments. In R, comments are preceded by a hash-sign (``#``). 
 
-The following code is self explanatory. If we execute this code, then the first two lines of the dataset will be printed to the console, and the graphs will be created and included in a figure within the document. However, the output will be separate from the code that generated it.
+The following code is self explanatory. If we execute this code, then the first two lines of the dataset will be printed to the console, and the graphs will be created and included in a figure within the document (Figure 5). However, the output will be separate from the code that generated it.
 
 ```{r, eval = TRUE, fig.width = 8, fig.height = 4, fig.cap="Example of a plot generated by an R-code."}
 # The R dataset "airquality" contains daily air quality measurements in New York,
 # from May to September 1973. 
 # In the code below, we first look at the first two rows of this dataset
-# and then plot the solar radiation and wind data, in two figures next to one another
-# source code written by Karline Soetaert
+# and then plot the solar radiation and wind data, in two figures next to one another.
+# Source code written by Karline Soetaert.
 
 head(airquality, n = 2)  # show first two lines of the dataset
 
@@ -138,7 +215,7 @@ plot(airquality$Wind,    type = "l", xlab = "time", ylab = "Wind"   )
 
 # R Markdown --- creating fully integrated documents
 
-Even better is to have the text, the code and the output in one document. This is what *R Markdown* does. When the final document is "created", the R-code is executed and the results are merged in the document. Figure 4 illustrates how this works in *Rstudio*.
+Even better is to have the text, the code and the output in one document. This is what *R Markdown* does. When the final document is "created", the R-code is executed and the results are merged in the document. Figure 6 illustrates how this works in *Rstudio*.
 
 ![Screenshot of *Rstudio* showing an R Markdown code (left) and the resulting document produced via *knit* (right).](images/Rmarkdown_ex1.png)
 
@@ -147,9 +224,9 @@ There are several parts in the *R Markdown* document:
 * The title section (called *yaml header*) is between the two '- - -' sections at the start of the document. Here you can give a title, specify the author, include a date, abstract, etc.
 * Headings are defined with ``#``, or ``##``, or ``###`` for first, second and third level headings, respectively.
 * Text sections can include many features. For instance, lists are created by using an asterisk (``*``) for bullets and numbers such as ``1``, ``2``, etc., for numbered lists. Figures, tables, equations can be added as well, and so on.
-* The R-code is embedded between the $`\,`\,`\{r\}$ and $`\,`\,`$ symbols. These are so-called code-chunks. In the top-right position of each code-chunk you will find three symbols (two of them are marked with an orange circle in Figure 4). Pressing the middle symbol will run all code-chunks above, while the right symbol will run the current code-chunk. If you move with the cursor to a specific line within the code-chunk and press ``Ctrl+Enter``, the code on that line will be executed. If there is any output, it will be displayed in the console.
+* The R-code is embedded between the $`\,`\,`\{r\}$ and $`\,`\,`$ symbols. These are so-called code-chunks. In the top-right position of each code-chunk you will find three symbols (two of them are marked with an orange circle in Figure 6). Pressing the middle symbol will run all code-chunks above, while the right symbol will run the current code-chunk. If you move with the cursor to a specific line within the code-chunk and press ``Ctrl+Enter``, the code on that line will be executed. If there is any output, it will be displayed in the console.
 
-Finally, the *Knit* button (encircled in blue in Figure 4) will execute the *R Markdown* document and generate the document on the right. This final document contains both the R-code and the results. It fully documents the analysis.
+Finally, the *Knit* button (encircled in blue in Figure 6) will execute the *R Markdown* document and generate the document on the right. This final document contains both the R-code and the results. It fully documents the analysis.
 
 ## Getting started with R Markdown
 
@@ -161,7 +238,7 @@ Short help on the text format that can be used in Markdown documents can be foun
 
 ## Exercises --- Creating and exporting an Rmd document
 
-Open the *R Markdown* file called ``Rmarkdown_small.Rmd`` in *Rstudio*. The file is available via Blackboard and was used to generate Figure 4.
+Open the *R Markdown* file called ``Rmarkdown_small.Rmd`` in *Rstudio*. The file is available via Blackboard and was used to generate Figure 5.
 
 * Try the different buttons featuring on the top right of the R-code.
 * Change the title of the document and make yourself the author. 
@@ -170,9 +247,9 @@ Open the *R Markdown* file called ``Rmarkdown_small.Rmd`` in *Rstudio*. The file
 
 # A quick overview of R and Rstudio
 
-An R-code is legible once you realise that:
+An R-code is easy to read once you realise that:
 
-* ``<-`` is the assignment operator (e.g., ``A <- 1`` assigns the value of 1 to the variable A).\footnote{Note that within an R-code edited in *Rstudio*, you can quickly type this operator by pressing a shortcut \textbf{Alt+minus}. This will also include spaces around the operator for increased legibility of the command. This works well for Windows and Linux users. Mac-OS users may need to search the internet for a suitable shortcut.}
+* ``<-`` is the assignment operator (e.g., ``A <- 1`` assigns the value of 1 to the variable A).\footnote{Note that within an R-code edited in \emph{Rstudio}, you can quickly type this operator by pressing a shortcut \textbf{Alt+minus}. This will also include spaces around the operator for increased legibility of the command. This works well for Windows and Linux users. Mac-OS users may need to search the internet for a suitable shortcut.}
 * everything starting with a hash-sign (``#``) is considered a comment.
 * R is case-sensitive: ``a`` and ``A`` are two different objects.
 
@@ -292,10 +369,10 @@ will demonstrate some modelling output generated with package  *ReacTran*.
 
 Pathnames in R are written with forward slashes (``/``). Note that this contrasts to the convention used in Windows, which uses a backslash (``\``) to separate folders in the paths.
 
-To set a working directory in R, use this command:
+To set a working directory in R (e.g., to ``C:\Dirk\MyRcodes\``), use this command:
       
 ```{R, eval = FALSE }
-setwd("C:/R code/") 
+setwd("C:/Dirk/MyRcodes/") 
 ```
 Within *Rstudio*, you can do this via menu *Session*/*Set Working Directory*.
 
@@ -396,12 +473,12 @@ Alternatively, we may assign the result of calculations to a variable AND view t
 Apart from integers, real and complex numbers, R also recognizes infinity (``Inf``) and Not a Number (``NaN``). Try:
 
 ```{R, eval = FALSE }
-1/0
-0/0
-2.3e-8 * 1000
+1/0           # yields Inf
+0/0           # yields NaN
+2.3e-8 * 1000 # it is recommended to use 2.3e-8 rather than 2.3*10^-8
 ```
 
-Note that ``e-8`` denotes $10^{-8}$.
+Note that ``e-8`` is a preferred syntax for $10^{-8}$, as the latter one is prone to confusion or unexpected errors.
 
 ### Vectors
 
@@ -430,14 +507,12 @@ The next command calculates the sine of this vector and outputs the result:
 sin( seq(0, 2*pi, pi/2) )
 ```
 
-The next statements
+The next statements create a sequence of integers between 1 and 10 and take the square root of all of them, displaying the result to the screen. The operator ``<-`` assigns the sequence to V.
 
 ```{r}
 V <- 1:10
 sqrt(V)
 ```
-
-create a sequence of integers between 1 and 10 and take the square root of all of them, displaying the result to the screen. The operator ``<-`` assigns the sequence to V.
 
 A peculiar feature of R is that the elements of a vector can also be given *names*:
 
@@ -458,22 +533,20 @@ A <- matrix(nrow = 3, data = c(1, 2, 3, 4, 6, 8, 10, 12, 14))
 ```
   
 creates a *matrix* A, with three rows, and, as there are nine elements, three columns.
-Note that the ``data`` are input as a vector (using the ``c()`` function), and these values are sorted into the matrix column after column (by default).
+Note that the ``data`` are input as a vector (using the ``c()`` function), and these values are sorted into the matrix column after column (by default). The following commands display the matrix and the square root of its elements.
 
 ```{r}
 A
 sqrt(A)
 ```
 
-The above statements display the matrix followed by the square root of its elements.
-
 ## Selecting and extracting elements
 
 To select subsets of vectors or matrices, we can either
 
 *	specify the numbers of the elements that we want,
-*	specify the names of the elements that we want ,
-*	specify a vector of logical values (TRUE/FALSE) to indicate which elements to include (TRUE) and which not to include (FALSE). This uses logical expressions.
+*	specify the names of the elements that we want,
+*	specify a vector of logical values (TRUE/FALSE) to indicate which elements to include (TRUE) and which not to include (FALSE). This option uses logical expressions.
 
 
 ### Simple indexing
@@ -491,15 +564,13 @@ The following statement takes the elements on the $1^{st}$ and $3^{rd}$ row and 
 A[c(1, 3), 1:2]
 ```
 
-If an index is omitted, then all the rows ($1^{st}$ index omitted) or  columns ($2^{nd}$ index omitted) are selected. In the following:
+If an index is omitted, then all the rows ($1^{st}$ index omitted) or  columns ($2^{nd}$ index omitted) are selected. In the following, the elements on the first three rows of A are multiplied with $2$ and reassigned to the same elements of the matrix.
 
 ```{r}
 A[1:3, ] <- A[1:3, ] * 2
 A
 ```
 
-the elements on the first three rows of A are multiplied with $2$.
-  
 Similar selection methods apply to vectors:
 
 ```{r}
@@ -547,7 +618,7 @@ will show the contents of matrix ``A``, except the first column, while the comma
 V[- V < 0]
 ```
 
-will only show the positive elements of ``V``.
+will only show the positive or zero elements of ``V`` (i.e., elements that are *not* negative).
   
 
 ## More complex data structures
@@ -945,7 +1016,8 @@ out2 <- ode(y = state, times = time.seq, func = model, parms = parms2)
 plot(out, out2, lty = 1, lwd = 2, mfrow = c(1, 3))
 ```
 
-For completeness we here list the entire R-code that solves and plots the above set of differential equations.
+For completeness, the entire R-code that solves and plots the above set of differential equations is listed here.
+
 ```
 model <- function(t, state, parameters) {
   
@@ -1006,91 +1078,6 @@ $$     \frac{{dX}}{{dt}} =  - \frac{8}{3} \cdot X + Y \cdot Z$$
 * It takes about 10 lines of an R-code to generate the solutions and plot them. Try it out.
 * Use the initial conditions $X = Y = Z = 1$.
 * Create output for a time sequence ranging from 0 to 100, and with a time step of 0.005.
-
-
-# Learning reaction-transport modelling using the package RTM
-
-Now that you have successfully learned the basics of R, you can proceed by studying other material prepared for the reaction-transport modelling course. This material is put together in the R-package *RTM*. You can install this package in *Rstudio* by typing in the R-console:
-
-```devtools::install_github("dynamic-R/RTM", depend=TRUE)```
-
-The RTM package contains *tutorials*, *exercises* and extra *readers*. This division reflects the main course activities, as described in the following.
-
-## RTM tutorials
-
-The *tutorials* contain short videos about a specific modelling topic. The topics range from basic principles (e.g., conceptual diagrams, mass balance equations) to more advanced (e.g., rate laws) and very advanced topics (e.g., pH modelling, reaction-transport modelling in porous media). The tutorials also contain simple tasks and exercises, which allow you to test your knowledge gained from the videos and prepare you for the exam. 
-
-We recommend that you study the tutorials in advance, i.e., *before the class*. You try to learn as much as possible by watching the short videos (once, but preferably multiple times), consult the textbook, and solve the tasks and exercises within the individual tutorials. In the process, you note questions about topics that you have not fully understood. You will be able to consult these questions with your peers and with the lecturers during the class.
-
-If you installed the *RTM* package, you will find the tutorials in the *Tutorial* tab of the *Rstudio* program (Figure 5). Run the *tutorial* by clicking the *Start Tutorial* button.
-
-![Left: Rstudio with the Tutorial tab selected. Right: RTM tutorial *conceptual* run as a web-based app, created using the *learnr* package.](images/Rstudio_tutorial.png)
-
-Alternatively, type in the R-console
-```
-RTMtutorial("?")
-```
-to see the complete list of available tutorials (see table below).
-```{r, echo=FALSE}
-RTM:::RTMtutorial("?")
-```
-Then, choose a tutorial you want to view (e.g., ``conceptual``), and start it by typing in the R-console
-```
-RTMtutorial("conceptual")
-```
-or
-```
-RTMtutorial(3)
-```
-Note that the tutorials are sorted from basics to intermediate and advanced topics. By studying the tutorials in the same order, you will be able to build up your knowledge of modelling in R in a gradual way. We will adhere to the same order during the course.
-
-### RTM exercises
-
-Each tutorial comes with a set of *exercises*, which contain more complicated problems that you should be able to solve once you have learned the basics from the tutorial. These exercises will be solved *during the class*. This means that you will be able to consult your questions, ideas, and solutions with the lecturers in a direct and interactive way. 
-
-The exercises recommended for a given tutorial are listed at the end of the tutorial (section *More exercises*). For example, the tutorial on *Reversible reactions and equilibrium chemistry* recommends three additional exercises (*equilibriumNH3*, *equilibriumHCO3*, *equilibriumOMD*) (Figure 6).
-
-![Screenshot of an RTM tutorial *Reversible reactions and equilibrium chemistry*, showing the suggestions for extra exercises to solidify the knowledge gained in the tutorial.](images/RTMexercises.png)
-
-Type in the R-console
-```
-RTMexercise("?")
-```
-to see the complete list of available exercises (see table below).
-```{r, echo=FALSE}
-RTM:::RTMexercise("?")
-```
-Then, choose an exercise you want to solve (e.g., ``diagenesis``), and generate the corresponding PDF file by typing in the R-console
-```
-RTMexercise("diagenesis", type="PDF")
-```
-or
-```
-RTMexercise(20, type="PDF")
-```
-If you want to export the exercise in a HTML or DOC format, change the value of the parameter ``type`` to ``HTML`` or ``DOC``, respectively.
-
-### RTM readers
-
-Finally, the *RTM* package contains extra readers. These readers explain topics that are not part of the course but are nevertheless useful in the context of reaction-transport modelling. They explain, e.g., how to visualise multi-dimensional data generated by the models, implement events and forcing functions based on data, fit data with a model, create interactive model applications, analyse the response times of perturbed systems, or model pH gradients. 
-
-The complete list of extra readers is obtained by typing in the R-console
-```
-RTMreader("?")
-```
-
-```{r, echo=FALSE}
-knitr::kable(RTM:::RTMreader("?"))
-```
-
-To generate a PDF file of the reader, type in the R-console
-```
-RTMreader("visualisation", type="PDF")
-```
-or
-```
-RTMreader(5, type="PDF")
-```
 
 # References
 
