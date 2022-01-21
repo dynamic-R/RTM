@@ -57,7 +57,7 @@ Write a model for predicting the dissolution (or precipitation) of silica partic
 * The initial radius of the spherical silica particles is $r_{ini} = 0.1~mm$. 
 * For the first run, assume that the initial concentration of dissolved silica is 0.
   
-Note: in your R-code you will need to calculate $x^n$, where $n$ is a non-integer value. This at times gives numerical problems if $x<0$. Many programming languages, including *R*, then return a *NaN*, i.e., "not a number". In an ideal world, and when dealing with concentrations, the value of $x$ should *not* be negative. But, due to finite precision of the integration methods, very small negative numbers *may* arise. It is therfore prudent to set to 0 any negative values representing concentrations. That is, rather than writing *x^(1/2)*, write *max(0, x)^(1/2)*.
+Note: in your R-code you will need to calculate $x^n$, where $n$ is a non-integer value. This may cause numerical problems if $x<0$, as many programming languages, including *R*, then return a *NaN*, i.e., "not a number". In an ideal world, and when dealing with concentrations, the value of $x$ should *not* be negative. But, due to finite precision of the integration methods, very small negative numbers *may* arise. It is therefore prudent to set any negative values representing concentrations to 0. That is, rather than writing ``x^n``, write ``max(0,x)^n``.
   
 ## Task 3. Model application
 
