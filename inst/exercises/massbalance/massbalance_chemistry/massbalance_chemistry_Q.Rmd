@@ -12,7 +12,7 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Exercise 1. Bacterial decay of particulate organic matter in marine sediments
+# Exercise 1. Decay of particulate organic matter due to bacterial activity
 
 You are given a conceptual diagram for the carbon flow describing decay of particulate organic matter in marine sediments. 
 

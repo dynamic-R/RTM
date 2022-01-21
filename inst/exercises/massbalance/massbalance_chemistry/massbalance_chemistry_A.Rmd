@@ -10,7 +10,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Exercise 1 ANSWER. Bacterial decay of particulate organic matter in marine sediments
+# Exercise 1 ANSWER. Decay of particulate organic matter due to bacterial activity
 
 Based on the conceptual diagram in Figure 1, the mass balance equations are:
 
