@@ -55,9 +55,9 @@ RTMtutorial <- function(x = c("?",
       "Partitioning between phases", 
       "Ecological interactions",
       "The general reaction-transport equation", 
-      "Transport fluxes due to advection and diffusion/dispersion",
+      "Transport due to advection and diffusion/dispersion",
       "Reaction-transport in porous media", 
-      "Boundary conditions in teaction-transport models",
+      "Boundary conditions in reaction-transport models",
       "Implementation of reaction-tranport models in R"))
     return(tutorial)
   } else {
@@ -92,7 +92,7 @@ RTMexercise <- function(x = c("?",
     "dissolutionSi", "equilibriumNH3", "equilibriumHCO3",
     "equilibriumOMD", "detritus", "npzd",  "crops_weed", 
     "covid", "virus", "bears_salmon", "plant_coexistence", 
-    "hyacinth_algae", "aquaculture", "riverAnoxia", 
+    "hyacinth_algae", "aquaculture", "estuaryAnoxia", 
     "Pdiagenesis", "diagenesis"), 
     type=c("R", "massbalance", "linearmodels", "chemistry", 
            "biogeochemistry", "epidemiology", "ecology", 
@@ -128,7 +128,7 @@ RTMexerciseFULL <- function(x = c("?",
                               "plant_coexistence", 
                               "hyacinth_algae", 
                               "aquaculture", 
-                              "riverAnoxia", 
+                              "estuaryAnoxia", 
                               "Pdiagenesis", 
                               "diagenesis"), 
                             type=c("R", "massbalance", "linearmodels", "chemistry", 
@@ -159,7 +159,7 @@ RTMexerciseFULL <- function(x = c("?",
       "Equilibrium chemistry - the carbonate system", 
       "Equilibrium chemistry - impact of mineralisation on pH", 
       "Bacterial decay of detritus",
-      "nutrients, phytoplankton, zooplankton, detritus",
+      "Nutrients, Phytoplankton, Zooplankton, Detritus",
       "Crops and weed competition for nutrients",
       "The COVID pandemic (population dynamics)", 
       "Virus dynamics in the ocean",
@@ -167,9 +167,9 @@ RTMexerciseFULL <- function(x = c("?",
       "Competition and coexistence of plants in grasslands",
       "Competition between floating plants and algae",
       "Model of scallop aquaculture, including economics",
-      "Anoxia in an estuary (1-D model)",    
+      "Anoxia in an estuary (1D model)",    
       "Simple phosphorus diagenesis in marine sediments (1D)",
-      "Complex diagenesis in marine sediments (C,N,O2,S)"
+      "Complex diagenesis in marine sediments (C,O,N,S)"
       ),type=subdirectory)
   if (x[1] == "?") {
       return(exercise[exercise$type %in% type,])
@@ -248,11 +248,11 @@ RTMtemplate <- function(x = c("?", "rtm0D", "rtm1D", "porous1D", "porous1D_exten
   LL <- as.character(formals(RTMtemplate)$x[-(1:2)])
   if (x[1] == "?") {
     template <- data.frame(x=LL, description = 
-                             c("Template for models in 0D",
-                               "Template for reaction-transport models in 1D",
-                               "Template for reaction-transport models in porous media in 1D",
-                               "Template for reaction-transport models in porous media in 1D (with text)",
-                               "Template for local equilibrium chemistry model",
+                             c("Template for 0D models",
+                               "Template for 1D reaction-transport models",
+                               "Template for 1D reaction-transport models in porous media",
+                               "Template for 1D reaction-transport models in porous media (with text)",
+                               "Template for local equilibrium chemistry models",
                                "Template to be used for the NPZD exercise",
                                "Template to be used for the introductionR exercise"))
     return(template)
