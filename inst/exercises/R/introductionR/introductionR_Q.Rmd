@@ -1020,12 +1020,11 @@ For completeness, the entire R-code that solves and plots the above set of diffe
 
 ```
 model <- function(t, state, parameters) {
-  
-with (as.list(c(state, parameters)), {
-  
- dA.dt <- r*(x-A) - k*A*B
- dB.dt <- r*(y-B) + k*A*B
- return (list(c(dA.dt, dB.dt), sum = A+B))
+  with (as.list(c(state, parameters)), {
+    
+    dA.dt <- r*(x-A) - k*A*B
+    dB.dt <- r*(y-B) + k*A*B
+    return (list(c(dA.dt, dB.dt), sum = A+B))
  
  })
 }
@@ -1056,7 +1055,7 @@ STD$y; STD$sum
 The Lotka-Volterra model is a famous model that describes predator-prey interactions or competitive interactions between two species. A. J. Lotka and V. Volterra formulated the model almost simultaneously in the 1920's.
 
 *	Write an R-script that solves the Lotka-Volterra model
-$$ \frac{{dX}}{{dt}} = a \cdot X \cdot (1 - \frac{X}{k}) - b \cdot X \cdot Y$$
+$$ \frac{{dX}}{{dt}} = a \cdot X \cdot \left(1 - \frac{X}{k}\right) - b \cdot X \cdot Y$$
 $$     \frac{{dY}}{{dt}} = g \cdot b \cdot X \cdot Y - e \cdot Y$$
 for the initial values of $X = 670$ and $Y = 610$, and for the parameter values of $a = 0.04$, $k = 1000$, $b = 5\times 10^{-5}$, $g = 0.8$, and $e = 0.008$.
 
