@@ -17,7 +17,9 @@ library(learnr)
 
 ## Tutorial
 
-You are advised to watch the following video first 
+This tutorial series explains the basics of reaction-transport modeling in R. This fourth part focuses on *boundary and initial conditions*.
+
+You are advised to watch the following video first.
 
 ### Video timeline
 * 0:00 Introduction
@@ -26,6 +28,8 @@ You are advised to watch the following video first
 * 3:18 Boundary conditions for transient solutions
 
 ![](https://www.youtube.com/watch?v=ec3B41FXsjw&list=PLx8PHcDdmF-uD1Pr07TU9SzlhlGpfrxqn&index=13)
+
+Slides available at <a href="https://drive.google.com/drive/folders/1Bys0-xzXLCpFpWhD-HrH6jDKOyl8iJMd" target="_blank">google-drive</a>
 
 You can also read the following section(s) of the textbook:
 
@@ -42,18 +46,26 @@ $$
 $$
 
 ```{r GTE, echo=FALSE}
+msg <- sprintf("Boundary conditions are always required to find a unique solution to a differential equation. Imposing a concentration or flux value at a boundary are both good options.")
+
 question("Which is a good boundary condition for $C$ at the upstream boundary ($x=0$)?", type = "learnr_checkbox",
  answer(sprintf("No boundary condition needed.")),
  answer(sprintf("An imposed flux value."), correct = TRUE),
- answer(sprintf("An imposed concentration value."), correct = TRUE)
+ answer(sprintf("An imposed concentration value."), correct = TRUE),
+ incorrect = paste("Incorrect. ", msg),
+ correct = paste("Correct. ", msg)
 )  
 ```
 
 ```{r GTE2, echo=FALSE}
+msg <- sprintf("Boundary conditions are always required to find a unique solution to a differential equation. Imposing a concentration or flux value at a boundary are both good options.")
+
 question("Which is a good boundary condition for $C$ at the downstream boundary ($x=L$)?", type = "learnr_checkbox",
  answer(sprintf("No boundary condition needed.")),
  answer(sprintf("An imposed flux value."), correct = TRUE),
- answer(sprintf("An imposed concentration value."), correct = TRUE)
+ answer(sprintf("An imposed concentration value."), correct = TRUE),
+ incorrect = paste("Incorrect. ", msg),
+ correct = paste("Correct. ", msg)
 )  
 ```
 
@@ -66,20 +78,28 @@ $$
 $$
 
 ```{r GTE3, echo=FALSE}
-question("Which is a good boundary condition for $C$ at the upstream boundary ($x=0$)? '", type = "learnr_checkbox",
+msg <- sprintf("Boundary conditions are always required to find a unique solution to a differential equation. Imposing a concentration or flux value at the upstream boundary are both good options.")
+
+question("Which is a good boundary condition for $C$ at the upstream boundary ($x=0$)?", type = "learnr_checkbox",
  answer(sprintf("No boundary condition needed.")),
  answer(sprintf("An imposed flux value."), correct = TRUE),
  answer(sprintf("A zero-gradient boundary condition.")),
- answer(sprintf("An imposed concentration value."), correct = TRUE)
+ answer(sprintf("An imposed concentration value."), correct = TRUE),
+ incorrect = paste("Incorrect. ", msg),
+ correct = paste("Correct. ", msg)
 )  
 ```
 
 ```{r GTE4, echo=FALSE}
-question("Which is a good boundary condition for $C$ at the downstream boundary ($x=L$)?", type = "learnr_checkbox",
+msg <- sprintf("For first-order differential equations, such as the one above, only *one* boundary condition is required. Thus, there is no need for a condition at the downstream boundary if a condition at the upstream boundary is specified.")
+
+question("Which is a good boundary condition for $C$ at the downstream boundary ($x=L$)? Assume that a boundary condition at the upstream boundary (see previous question) is already specified.", type = "learnr_checkbox",
  answer(sprintf("No boundary condition needed."), correct = TRUE),
  answer(sprintf("An imposed flux value.")),
- answer(sprintf("An imposed concentration value."))
-)  
+ answer(sprintf("An imposed concentration value.")),
+ incorrect = paste("Incorrect. ", msg),
+ correct = paste("Correct. ", msg)
+ )
 ```
 
 ## Early diagenesis
@@ -97,47 +117,66 @@ $$
 The rate of sulphate reduction, $R_{sr}$ is expressed in $mol~C~m^{-3}_S~d^{-1}$.
 
 ```{r earlydia1, echo = FALSE}
-question("Which is a good boundary condition for $POM$ at the sediment-water interface ($x=0$)? ", type = "learnr_checkbox",
+msg <- sprintf("In models of sediment diagenesis, we typically impose a flux value at the upper boundary (sediment-water interface) for solid components.")
+
+question("Which is a good boundary condition for $POM$ at the sediment-water interface ($x=0$)?", type = "learnr_checkbox",
  answer(sprintf("No boundary condition needed.")),
  answer(sprintf("An imposed flux value."), correct = TRUE),
  answer(sprintf("A zero-gradient boundary condition.")),
- answer(sprintf("An imposed concentration value."))
+ answer(sprintf("An imposed concentration value.")),
+ incorrect = paste("Incorrect. ", msg),
+ correct = paste("Correct. ", msg)
 )  
 ```
 
 ```{r earlydia2, echo = FALSE}
+msg <- sprintf("In models of sediment diagenesis, we typically impose a concentration value at the upper boundary (sediment-water interface) for solutes.")
+
 question(sprintf("Which is a good boundary condition for $SO_4^{2-}$ at the sediment-water interface ($x=0$)? "), type = "learnr_checkbox",
  answer(sprintf("No boundary condition needed.")),
  answer(sprintf("An imposed flux value.")),
  answer(sprintf("A zero-gradient boundary condition.")),
- answer(sprintf("An imposed concentration value."), correct = TRUE)
+ answer(sprintf("An imposed concentration value."), correct = TRUE),
+ incorrect = paste("Incorrect. ", msg),
+ correct = paste("Correct. ", msg)
 )  
 ```
 
 ```{r earlydia3, echo = FALSE}
+msg <- sprintf("In models of sediment diagenesis, we typically impose the zero-gradient boundary condition at the lower boundary (deep in the sediment) for solid components.")
+
 question(sprintf("Which is a good boundary condition for $POM$ deep down in the sediment ($x\\rightarrow \\infty$)?"), type = "learnr_checkbox",
  answer(sprintf("No boundary condition needed.")),
  answer(sprintf("An imposed flux value.")),
  answer(sprintf("A zero-gradient boundary condition."), correct = TRUE),
- answer(sprintf("An imposed concentration value."))
+ answer(sprintf("An imposed concentration value.")),
+ incorrect = paste("Incorrect. ", msg),
+ correct = paste("Correct. ", msg)
 )  
 ```
 
 ```{r earlydia4, echo = FALSE}
-msg <- "The zero-gradient boundary condition is usually chosen for deep concentrations of solutes in diagenetic models. However, sometimes concentrations are imposed, e.g., if there has been a historic build-up of solutes at depth."
+msg <- "In models of sediment diagenesis, we typically impose the zero-gradient boundary condition at the lower boundary (deep in the sediment) for solutes as well. However, fixed concentrations or fluxes are sometimes imposed, e.g., if there has been a historic build-up of solutes at depth or if there is upwards seapage of solutes."
 
 question(sprintf("Which is a good boundary condition for $SO_4^{2-}$ deep down in the sediment ($x\\rightarrow \\infty$)?"), type = "learnr_checkbox",
  answer(sprintf("No boundary condition needed.")),
- answer(sprintf("An imposed flux value.")),
+ answer(sprintf("An imposed flux value."), correct = TRUE),
  answer(sprintf("A zero-gradient boundary condition."), correct = TRUE),
  answer(sprintf("An imposed concentration value."), correct = TRUE),
- correct=msg,
- incorrect=msg)  
+ incorrect = paste("Incorrect. ", msg),
+ correct = paste("Correct. ", msg)
+)  
 
 ```
 
-## Textbook and Slides
+## Learn more
+
+Finish this tutorial series by learning how to implement 1D reactive-transport models in R.
+
+```
+RTMturorial("transportR")
+```
+
+## Textbook
 
 Karline Soetaert, Peter M.J. Herman (2009). A Practical Guide to Ecological Modelling. Springer Netherlands. DOI: 10.1007/978-1-4020-8624-3.
-
-Slides available at <a href="https://drive.google.com/drive/folders/1Bys0-xzXLCpFpWhD-HrH6jDKOyl8iJMd" target="_blank">google-drive</a>

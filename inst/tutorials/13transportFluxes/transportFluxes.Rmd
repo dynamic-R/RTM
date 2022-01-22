@@ -17,6 +17,8 @@ library(learnr)
 
 ## Tutorial
 
+This tutorial series explains the basics of reaction-transport modeling in R. This second part focuses on the different *modes of transport*, including advection, molecular diffusion, dispersion, and diffusion-like mixing due to bioturbation. 
+
 You are advised to watch the following video first.
 
 ### Video timeline
@@ -30,6 +32,8 @@ You are advised to watch the following video first.
 * 9:50 Conclusion - total transport flux
 
 ![](https://www.youtube.com/watch?v=zAj4m6tGDhQ&list=PLx8PHcDdmF-uD1Pr07TU9SzlhlGpfrxqn&index=11)
+
+Slides available at <a href="https://drive.google.com/drive/folders/1Bys0-xzXLCpFpWhD-HrH6jDKOyl8iJMd" target="_blank">google-drive</a>
 
 You can also read the following section(s) of the textbook:
 
@@ -54,13 +58,13 @@ question("Which of the following statements is true?", type = "learnr_checkbox",
  answer(sprintf("This expression describes the flux due to diffusion")), 
  answer(sprintf("This expression describes the flux due to bioturbation")), 
 
- answer(sprintf("$v$ is the flow rate of the medium (e.g., water), in $m^3~s^{-1}$")),
- answer(sprintf("$v$ is the bulk velocity of the medium (e.g., water), in $m~s^{-1}$"), correct = TRUE),
- answer(sprintf("$v$ is the dispersion or diffusion coefficient of the medium (e.g., water), in $m^2~s^{-1}$")),
- answer(sprintf("$v$ is the bulk volume of the medium (e.g., water), in $m^{3}$")),
- answer(sprintf("$C$ is the concentration of a substance in the medium, in $mol~m^{-3}$"), correct=TRUE),
- answer(sprintf("$C$ is the volume of the medium, in $m^3$")),
- answer(sprintf("$C$ is the concentration gradient of a substance in the medium, in $mol~m^{-4}$")),
+ answer(sprintf("$v$ denotes the flow rate of the medium (e.g., water), in $m^3~s^{-1}$")),
+ answer(sprintf("$v$ denotes the bulk velocity of the medium (e.g., water), in $m~s^{-1}$"), correct = TRUE),
+ answer(sprintf("$v$ denotes the dispersion or diffusion coefficient of the medium (e.g., water), in $m^2~s^{-1}$")),
+ answer(sprintf("$v$ denotes the bulk volume of the medium (e.g., water), in $m^{3}$")),
+ answer(sprintf("$C$ denotes the concentration of a substance in the medium, in $mol~m^{-3}$"), correct=TRUE),
+ answer(sprintf("$C$ denotes the volume of the medium, in $m^3$")),
+ answer(sprintf("$C$ denotes the concentration gradient of a substance in the medium, in $mol~m^{-4}$")),
 
  incorrect=msg,
  correct=msg)
@@ -81,14 +85,14 @@ question("Which of the following statements is true?", type = "learnr_checkbox",
  answer(sprintf("This expression describes the flux due to diffusion"), correct = TRUE), 
  answer(sprintf("This expression describes the flux due to bioturbation"), correct = TRUE), 
 
- answer(sprintf("$D$ is the flow rate of the medium (e.g., water), in $m^3~s^{-1}$")),
- answer(sprintf("$D$ is the bulk velocity of the medium (e.g., water), in $m~s^{-1}$")),
- answer(sprintf("$D$ is the dispersion coefficient in the medium (e.g., water), in $m^2~s^{-1}$"), correct = TRUE),
- answer(sprintf("$D$ is the diffusion coefficient in the medium (e.g., water), in $m^2~s^{-1}$"), correct = TRUE),
- answer(sprintf("$D$ is the bulk volume of the medium (e.g., water), in $m^{3}$")),
- answer(sprintf("$C$ is the concentration of a substance in the medium, in $mol~m^{-3}$"), correct=TRUE),
- answer(sprintf("$C$ is the volume of the medium, in $m^3$")),
- answer(sprintf("$C$ is the concentration gradient in the medium, in $mol~m^{-4}$")),
+ answer(sprintf("$D$ denotes the flow rate of the medium (e.g., water), in $m^3~s^{-1}$")),
+ answer(sprintf("$D$ denotes the bulk velocity of the medium (e.g., water), in $m~s^{-1}$")),
+ answer(sprintf("$D$ denotes the dispersion coefficient in the medium (e.g., water), in $m^2~s^{-1}$"), correct = TRUE),
+ answer(sprintf("$D$ denotes the diffusion coefficient in the medium (e.g., water), in $m^2~s^{-1}$"), correct = TRUE),
+ answer(sprintf("$D$ denotes the bulk volume of the medium (e.g., water), in $m^{3}$")),
+ answer(sprintf("$C$ denotes the concentration of a substance in the medium, in $mol~m^{-3}$"), correct=TRUE),
+ answer(sprintf("$C$ denotes the volume of the medium, in $m^3$")),
+ answer(sprintf("$C$ denotes the concentration gradient in the medium, in $mol~m^{-4}$")),
  answer(sprintf("$\\frac{\\partial C}{\\partial x}$ is the concentration gradient in the medium, in $mol~m^{-2}$")),
  answer(sprintf("$\\frac{\\partial C}{\\partial x}$ is the concentration gradient in the medium, in $mol~m^{-4}$"), correct=TRUE),
 
@@ -161,8 +165,15 @@ question(sprintf("What is the relationship between the typical values of the dis
 )
 ```
 
-## Textbook and Slides
+## Learn more
+
+Continue this tutorial series by learning about reaction-transport modeling in porous media.
+
+```
+RTMturorial("transportPorous")
+```
+
+## Textbook
 
 Karline Soetaert, Peter M.J. Herman (2009). A Practical Guide to Ecological Modelling. Springer Netherlands. DOI: 10.1007/978-1-4020-8624-3.
 
-Slides available at <a href="https://drive.google.com/drive/folders/1Bys0-xzXLCpFpWhD-HrH6jDKOyl8iJMd" target="_blank">google-drive</a>

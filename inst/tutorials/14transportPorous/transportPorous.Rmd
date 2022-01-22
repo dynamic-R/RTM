@@ -17,6 +17,8 @@ library(learnr)
 
 ## Tutorial
 
+This tutorial series explains the basics of reaction-transport modeling in R. This third part focuses on reaction-transport models in *porous media*.
+
 You are advised to watch the following video first.
 
 ### Video timeline
@@ -35,6 +37,8 @@ You are advised to watch the following video first.
 * 15:30 Conclusion
 
 ![](https://www.youtube.com/watch?v=ANdrxhanosk&list=PLx8PHcDdmF-uD1Pr07TU9SzlhlGpfrxqn&index=12)
+
+Slides available at <a href="https://drive.google.com/drive/folders/1Bys0-xzXLCpFpWhD-HrH6jDKOyl8iJMd" target="_blank">google-drive</a>
 
 You can also read the following section(s) of the textbook:
 
@@ -155,7 +159,7 @@ question(sprintf("The form of the reaction-diffusion equation in porous media is
 ```{r rteqpor3, echo=FALSE}
 msg <- sprintf("To calculate the flux across the sediment-water interface in the units of mol per $m^2$ of *total* surface per time, we definitely need porosity: $J=-\\phi D(\\partial C/\\partial x)$.")
 
-question(sprintf("When sediment porosity is constant in time AND in space, the following equation fully determines the diffusion model in a water-saturated sediment: $$\\frac{\\partial C}{\\partial t} = \\frac{\\partial}{\\partial x}\\left(D \\frac{ \\partial C}{\\partial x}\\right),$$ where $D$ is the effective (i.e., corrected for tortuosity) diffusion coeffient. Since there is no porosity in the equation, we do not need to know porosity at all."), type = "learnr_checkbox",
+question(sprintf("When sediment porosity is constant in time AND in space, the following equation fully determines the reaction-free diffusion model in a water-saturated sediment: $$\\frac{\\partial C}{\\partial t} = \\frac{\\partial}{\\partial x}\\left(D \\frac{ \\partial C}{\\partial x}\\right),$$ where $D$ is the effective (i.e., corrected for tortuosity) diffusion coeffient. Since there is no porosity in the equation, we do not need to know porosity at all."), type = "learnr_checkbox",
  answer("This is true as porosity does not play a role at all.", correct=FALSE),
  answer("This is not true if we want to quantify the flux across the sediment-water interface.", correct=TRUE),
  
@@ -216,55 +220,65 @@ question(sprintf("Which is the correct expression for the rate of $SO_4^{2-}$ re
 
 ## Integrating concentrations
 
-A researcher has estimated depth profiles of chlorophyll concentrations in an estuarine sediment. The data are depicted in the figure and the R-code that inputs the data is in the script below. Here “depth.from” and “depth.to” means the top and bottom depth of the sediment slice, in $cm$; the concentration (conc) is in $\mu$ gram Chl per gram dry sediment. 
-
+A researcher has estimated depth profiles of chlorophyll concentrations in an estuarine sediment. The data are depicted in the figure and the R-code that inputs the data is below. In the code, ``depth.from`` and ``depth.to`` denote, respectively, the top and bottom depth of the sediment slice (both in $cm$), while ``conc`` contains the chlorophyll concentration values in $\mu g~Chl$ per gram of dry sediment. 
 
 ```{r chl-setup_, echo = TRUE, fig.height=4, fig.width=4, message = FALSE}
 Chl <- data.frame(depth.from = 0:9, depth.to = 1:10, 
-        conc = c(50.8,20.2,13.0,10,9.1,10.0,6.9,4.5,2.7,1.5))
+        conc = c(50.8, 20.2, 13.0, 10, 9.1, 10.0, 6.9, 4.5, 2.7, 1.5))
 plot(x=Chl$conc, y=0.5*(Chl$depth.from+Chl$depth.to), ylim=c(10,0), 
-     xlab="ug/g dry", ylab="cm", main="Chlorophyll", las=1)
+     xlab="Chl (ug/g dry sediment)", ylab="depth (cm)", main="Chlorophyll", las=1)
 ```
 
-Question: what is the total concentration of chlorophyll over the upper 10 cm of sediment. Report your value in $mg~m^{-2}$.
+### Task
 
-You have the following accessory information (note: not all is needed): 
+Quantify the total concentration of chlorophyll in the upper $10~cm$ of sediment. Report your value in $mg~Chl~m^{-2}$.
 
-the sampling *surf*ace from which the sediment slices were taken was 1 $cm^2$ – the median grain size of the sediment (*mdgrain*) was 100 $\mu$m - the sediment dry density (*rho*) was 2.65 $g~cm^{-3}$ - the sediment porosity (*phi*) was 0.8. 
+You have the following accessory information (note that not all of this information is needed in this exercise):
+
+* the sampling surface (``surf``) from which the sediment slices were taken was $1~cm^2$
+* the median grain size of the sediment (``mdgrain``) was $100~\mu m$ 
+* the density of dry sediment (``rho``) was $2.65~g~cm^{-3}_S$ 
+* the sediment porosity (``phi``) was 0.8. 
 
 ```{r chl, exercise=TRUE, fig.height=4, fig.width=6}
 ## estimate the integrated concentration of chlorophyll.
 Chl <- data.frame(depth.from = 0:9, depth.to = 1:10,           # cm
-        conc = c(50.8,20.2,13.0,10,9.1,10.0,6.9,4.5,2.7,1.5))  # microgr/g dry
+        conc = c(50.8,20.2,13.0,10,9.1,10.0,6.9,4.5,2.7,1.5))  # ug/g dry
 surf <- 1; mdgrain <- 100; rho <- 2.65; phi <- 0.8
 
 ## your calculations here
 ```
 
 ```{r chl-hint}
-# convert concentrations from [microgram/g dry] to [microgram/cm3 bulk]
+# convert concentrations from [ug/g dry] to [ug/cm3 bulk]
 chl_cm3 <- Chl$conc * ..
 
 # integrate (sum) over depth, taking into account the slice thicknesses
-chl_cm2 <- sum(chl_cm3 * ..)  # [microgram/cm2]
+chl_cm2 <- sum(chl_cm3 * ..)  # [ug/cm2]
 
-# convert from microgram/cm2 to milligram/m2
-chl_m2  <- chl_cm2 * ..       # [milligram/m2]
+# convert from ug/cm2 to mg/m2
+chl_m2  <- chl_cm2 * ..       # [mg/m2]
 
 # print result
   chl_m2
 ```
 
-
 ```{r chl-solution}
-chl_cm3 <- Chl$conc*rho*(1-phi)   # [ug/g dry]*[g dry/cm3 dry]*[cm3 dry/cm3 bulk]=[ug/cm3 bulk]
-chl_cm2 <- sum(chl_cm3*(Chl$depth.to-Chl$depth.from))  # sum([ugram/cm2]) -> [ugram/cm2]
-chl_m2  <- chl_cm2*1e4*1e-3                            # ug/cm2*[cm2/m2]*[mg/ug]= [mg/m2]
+chl_cm3 <- Chl$conc*rho*(1-phi)   # [ug/g dry]*[g dry/cm3 dry]*[cm3 dry/cm3 bulk]  = [ug/cm3 bulk]
+chl_cm2 <- sum(chl_cm3*(Chl$depth.to-Chl$depth.from))  # sum([ug/cm3 bulk]*[cm])   = [ug/cm2]
+chl_m2  <- chl_cm2*1e4*1e-3                            # [ug/cm2]*[cm2/m2]*[mg/ug] = [mg/m2]
 
-chl_m2
+chl_m2                                                 # mg Chl per m2
 ```
-## Textbook and Slides
+
+## Learn more
+
+Continue this tutorial series by learning about boundary and initial conditions.
+
+```
+RTMturorial("transportBoundaries")
+```
+
+## Textbook
 
 Karline Soetaert, Peter M.J. Herman (2009). A Practical Guide to Ecological Modelling. Springer Netherlands. DOI: 10.1007/978-1-4020-8624-3.
-
-Slides available at <a href="https://drive.google.com/drive/folders/1Bys0-xzXLCpFpWhD-HrH6jDKOyl8iJMd" target="_blank">google-drive</a>

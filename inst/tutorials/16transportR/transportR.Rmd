@@ -17,7 +17,9 @@ library(learnr)
 
 ## Tutorial
 
-You are advised to first watch the following video to learn about the *structure* of an R code implementing a reaction-transport model in a porous medium.
+This tutorial series explains the basics of reaction-transport modeling in R. In this fifth part, you will learn how reaction-transport models are *implemented in R* using the R-package ``ReacTran``. It is recommended to be fully acquainted with the material covered in the first four parts of this tutorial series (``transportProcesses``, ``transportFluxes``, ``transportPorous``, and ``transportBoundaries``) before proceeding with this last part.
+
+The first video explains the overall *structure* of a 1D reaction-transport model.
 
 ### Video timeline
 * 00:00 Introduction
@@ -41,6 +43,11 @@ You are advised to first watch the following video to learn about the *structure
 * 18:06 Conclusion
 
 ![](https://www.youtube.com/watch?v=NXAnPCZUCyE&list=PLx8PHcDdmF-uD1Pr07TU9SzlhlGpfrxqn&index=14)
+
+Slides available at <a href="https://drive.google.com/drive/folders/1Bys0-xzXLCpFpWhD-HrH6jDKOyl8iJMd" target="_blank">google-drive</a>
+
+The second video explains the development of a 2D reaction-transport model.
+![](https://www.youtube.com/watch?v=1-FqyEHv7Jk)
 
 ## Sediment carbon dynamics
 
@@ -255,6 +262,16 @@ plot(std, grid=Grid$x.mid, xyswap=TRUE, lty=1, las=1,
      ylab="depth (m)", xlab=c("molC/m3 SOLID", "molC/m3 LIQUID"))
 ```
 
+## More exercises
+
+To learn more about 1D reaction-transport modeling in R, try to solve the following exercises.
+
+```
+RTMexercise("estuaryAnoxia")
+RTMexercise("Pdiagenesis")
+RTMexercise("diagenesis")
+```
+
 ## References
 
 R Core Team (2020). R: A language and environment for statistical computing. R
@@ -264,5 +281,3 @@ R Core Team (2020). R: A language and environment for statistical computing. R
 Soetaert, Karline and Meysman, Filip (2012). Reactive transport in aquatic ecosystems: Rapid model prototyping in the open source software R. Environmental Modelling & Software, 32, 49-60.
   
 Karline Soetaert, Peter M.J. Herman (2009). A Practical Guide to Ecological Modelling. Springer Netherlands. DOI: 10.1007/978-1-4020-8624-3.
-
-Slides available at <a href="https://drive.google.com/drive/folders/1Bys0-xzXLCpFpWhD-HrH6jDKOyl8iJMd" target="_blank">google-drive</a>

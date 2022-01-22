@@ -18,7 +18,13 @@ library(learnr)
 
 ## Tutorial
 
-You are advised to watch the following video first.
+This tutorial series explains the basics of reaction-transport modeling in R. It starts with the *governing mass balance equation*. 
+
+The first video provides a simple explanation of how transport affects the mass balance equation for a given component in the modeled system.
+
+![](https://www.youtube.com/watch?v=JghYa733hn4)
+
+The second video explains the derivation of the reaction-transport mass balance equation in a more technical way.
 
 ### Video timeline
 * 0:00 Introduction: towards spatially resolved models
@@ -26,6 +32,8 @@ You are advised to watch the following video first.
 * 3:59 Mass balance: transport-reaction equation
 
 ![](https://www.youtube.com/watch?v=4ZwKZiobm0Y&list=PLx8PHcDdmF-uD1Pr07TU9SzlhlGpfrxqn&index=10)
+
+Slides available at <a href="https://drive.google.com/drive/folders/1Bys0-xzXLCpFpWhD-HrH6jDKOyl8iJMd" target="_blank">google-drive</a>
 
 You can also read the following section(s) of the textbook:
 
@@ -62,12 +70,12 @@ $$
 
 ```{r GTE2, echo=FALSE}
 question("Which of the following statements is true?", type = "learnr_checkbox",
- answer(sprintf("C is the transport flux of the substance")),
- answer(sprintf("C is the concentration of the substance"), correct = TRUE),
- answer(sprintf("t is time in s"), correct = TRUE),
- answer(sprintf("t is space in m"), correct = FALSE),
- answer(sprintf("x is time in s"), correct = FALSE),
- answer(sprintf("x is space in m"), correct = TRUE)
+ answer(sprintf("C denotes the transport flux of the substance")),
+ answer(sprintf("C denotes the concentration of the substance"), correct = TRUE),
+ answer(sprintf("t denotes time in s"), correct = TRUE),
+ answer(sprintf("t denotes space in m"), correct = FALSE),
+ answer(sprintf("x denotes time in s"), correct = FALSE),
+ answer(sprintf("x denotes space in m"), correct = TRUE)
 )  
 ```  
 
@@ -146,8 +154,14 @@ question("When does the above equation apply?", type = "learnr_checkbox",
  correct=msg)
 ```
 
-## Textbook and Slides
+## Learn more
+
+Continue this tutorial series by learning about different types of transport fluxes:
+
+```
+RTMturorial("transportFluxes")
+```
+
+## Textbook
 
 Karline Soetaert, Peter M.J. Herman (2009). A Practical Guide to Ecological Modelling. Springer Netherlands. DOI: 10.1007/978-1-4020-8624-3.
-
-Slides available at <a href="https://drive.google.com/drive/folders/1Bys0-xzXLCpFpWhD-HrH6jDKOyl8iJMd" target="_blank">google-drive</a>
