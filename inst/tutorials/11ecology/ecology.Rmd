@@ -36,15 +36,15 @@ You can also read the following section(s) of the textbook:
 
 (You can download each chapter of the textbook via the e-book University library for free!)
 
-## Extra videos about ecological models
+## Examples of ecological models
 
 The following videos describe two examples of 0-dimensional ecological models solved in R.
 
-The first model describes the spread of a virus through a population.
+### Spread of a virus through a population
 
 ![](https://www.youtube.com/watch?v=eOsZzk_eN4I)
 
-The second model describes N flow in a lake ecosystem.
+### N flow in a lake ecosystem
 
 ![](https://www.youtube.com/watch?v=KYYFHN7yono)
 
@@ -441,14 +441,19 @@ plot(out, mfrow=c(1,4))
 
 ## More exercises
 
-To learn more about modelling of ecological interactions, solve additional exercises available in the R-package RTM. To display these exercises, enter one of the following commands in the R-console:
+To learn more about modeling of ecological interactions, solve additional exercises available in the R-package RTM. 
 
 ```
-require(RTM)
+required(RTM)
 RTMexercise("detritus")
-RTMexercise("COVID")
+RTMexercise("covid")
 RTMexercise("npzd")
-RTMexercise("crops_weeds")
+RTMexercise("crops_weed")
+RTMexercise("virus")
+RTMexercise("bears_salmon")
+RTMexercise("plant_coexistence")
+RTMexercise("hyacinth_algae")
+RTMexercise("aquaculture")
 ```
 
 ## References
