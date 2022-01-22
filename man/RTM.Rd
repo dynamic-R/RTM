@@ -1,23 +1,23 @@
 \name{RTM-package}
 \alias{RTM}
-\title{Reaction Transport Modelling Course - tutorials}
+\title{Reaction Transport Modelling - teaching material}
 \description{
-This package contains a  number of tutorials, that serve in preparation for the exam for the course taught at Utrecht University, entitled:
-
-Reaction Transport Modelling in the Hydrosphere.
+This package contains material for teaching reaction-transport modelling in R. The material is used in the course "Reaction Transport Modelling in the Hydrosphere" taught at Utrecht University.
 
 Tutors: Lubos Polerecky and Karline Soetaert
 
-To toggle the tutorials, just write:
+The package contains tutorials, exercises, extra readers, and Rmd template files for writing reaction-transport models. 
 
-run_tutorial(name_of_tutorial, package = "RTM")
-
-or use function \link{RTMtutorial}
+Available functions: \link{RTMtutorial}
 }
 
 \examples{
-# To have a list of all available tutorials:
-
+# To list all available tutorials:
 RTMtutorial("?")
-}
 
+# To list all available exercises:
+RTMexercise("?")
+
+# To list available readers with extra material:
+RTMreader("?")
+}

@@ -3,7 +3,7 @@
 \alias{RTMexercise}
 \alias{RTMreader}
 \alias{RTMtemplate}
-\title{Reaction Transport Modelling Course: tutorials, exercises, templates and readers with accessory material}
+\title{Reaction Transport Modelling: tutorials, exercises, extra readers, templates}
 \usage{
 RTMtutorial(x = c("?", "introduction", "why", "conceptual", "massbalance",     
                "Rmodels", "largescale", "chemical", "equilibrium", "enzymatic", 
@@ -16,7 +16,7 @@ RTMexercise(x = c("?", "introductionR", "conceptual", "massbalance_chemistry",
                "equilibriumNH3", "equilibriumHCO3", "equilibriumOMD", "detritus",           
                "npzd", "crops_weed", "covid", "virus", "bears_salmon",  
                "plant_coexistence", "hyacinth_algae", "aquaculture", 
-               "riverAnoxia", "Pdiagenesis", "diagenesis"),               
+               "estuaryAnoxia", "Pdiagenesis", "diagenesis"),               
             type = c("R", "massbalance", "linearmodels", "chemistry", 
                "biogeochemistry", "epidemiology", "ecology", 
                "individualbased", "reaction_transport"),            
@@ -33,27 +33,30 @@ RTMtemplate(x = c("?", "rtm0D", "rtm1D", "porous1D", "porous1D_extensive",
 
 }
 \arguments{
-  \item{x }{the name or the number of the tutorial, exercise or reader. When x = "?" (the default), 
-    a list of tutorials, exercises or readers will be displayed, including a short description.
+  \item{x }{the name, or the identification number, of the tutorial, exercise or reader. If \code{x="?"} (the default), a list of tutorials, exercises or readers is displayed, including a short description.
   }
-  \item{output }{ how the exercise or reader should be displayed. When selecting PDF, you need to have 
-    LaTeX installed. See note for RTMtutorial.
+  \item{output }{ how the exercise or reader should be displayed. You need to have LaTeX installed if you want to generate PDF output. See note below for RTMtutorial.
   }
   \item{type }{ the type of the exercise; only used when \code{x="?"}.
   }
 }
 
 \description{
-The tutorials contain a link to the videos that introduce the theory, followed by questions/quizzes (multiple choice) and small exercises to be written in R. They can be used to test how well the theory has been understood. They also serve in preparation for the exam.
+Tutorials start with a short video that introduces the theory behind a specific topic, followed by questions (mostly multiple-choice) and short exercises (to be solved using R) that can be used to test how well the theory explained in the video has been understood. Students should be able to complete most tutorials in 20-30 minutes, while the more challenging tutorials may take up to 45-60 minutes to complete. 
 
-The exercises are short tasks to be completed in 2 to 4 hours. Before making the exercises, students should have prepared the theory using the tutorials.
+Exercises contain more complicated problems and tasks. Their aim is to deepen the understanding of the knowledge gained in the tutorial. Thus, each exercise should be solved after completing the corresponding tutorial. Students should be able to complete the tasks from each exercise in 2-4 hours.
 
-The readers contain accessory material. They is not mandatory, but provide an extension to the tutorials, and may help to prepare for the exam.
+Readers contain accessory material. They are not mandatory for the course, but they provide useful information that helps students expand their knowledge of modelling and programming in R. 
+
+Templates are R Markdown files with a basic skeleton of a document that merges an R-code implementing a model with an explanatory text and results of the model. They provide a convenient way to start developing a model in R. Different templates are available for dynamic box models and 1D reaction-transport models. 
+
+All material in this package should help students prepare for the exam.
 }
-\note{
-RTMtutorial should best be run with type = "tutorial" (the default). 
 
-However, for some versions of Rstudio/R/operating systems this does not work properly. The solution is to open the tutorial as an Rmd file, and then to press the button <Run Document>.
+\note{
+RTMtutorial should best be run with \code{output = "tutorial"} (the default). 
+
+However, for some operating systems or versions of Rstudio/R, this may not work properly. In this circumstances, the work-around is to open the tutorial in the editor of Rstudio as an Rmd file, and then press the button <Run Document>.
 
 For instance, if this does not work:
 
@@ -61,21 +64,24 @@ RTMtutorial(1)
 
 then try:
 
-RTMtutorial(1, type="Rmd")
+RTMtutorial(1, output="Rmd")
 
 }
+
 \details{
-The tutorials, readers and exercises are created on the fly, i.e. they are stored in the package as R markdown files (extension .Rmd), and still need to be converted, so you may need to have some patience!
+Tutorials, exercises, and readers are created on the fly. That is, they are stored in the RTM package as R markdown files (extension .Rmd) and need to be converted to the output format when called from the command line. This may require extra patience.
 
 DO NOT try to create the reader "fitting", unless you have plenty of time!
 
-The answers to the exercises are also stored in the package, but we did not include a public function to extract them. However, you may use the private function RTManswer to do so.
+Answers to all exercises are also included in the package. However, we did not include a public function to extract them. The private function RTManswer can be used to do so.
 }
+
 \examples{
 \dontrun{
  RTMtutorial("largescale")
  RTMtutorial(2)
- RTMexercise("COVID")
+ RTMexercise("covid")
+ RTMexercise(12, output="PDF")
  RTMtemplate(1)
 }
 
