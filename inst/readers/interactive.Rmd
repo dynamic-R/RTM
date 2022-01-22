@@ -6,34 +6,20 @@ date: "March 2021"
 output:
   pdf_document: default
   html_document: default
-vignette: >
-  %\VignetteIndexEntry{Interactive Applications in R: accessory material}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{utf8}
-abstract: \noindent Here we illustrate how to use the R package *shiny* to make interactive (web-based) reaction-transport models in R. Among other things, the approach allows you to quickly explore how the model output changes as a function of the input parameters. We use the ozone model as an example.
+abstract: \noindent Here we illustrate how to use the R-package *shiny* (Chang et al., 2020) to make interactive (web-based) reaction-transport models in R. Among other things, the approach allows you to quickly explore how the model output changes as a function of the input parameters. We use the ozone model as an example.
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-To write interactive applications in R ("webpages"), you need to install and load the *shiny* package (Chang et al., 2020).
-
-
-```{r, message=FALSE}
-require(shiny)
-```
 # Ozone model
 
 ## Model implementation in R
 
-A detailed description of the ozone model is provided in the *ozone* exercise (type ``RTMexercise("ozone")`` in the R-console to see the exercise). Here we only reproduce the R-code.
+A detailed description of the ozone model is provided in the *ozone* exercise (enter ``RTMexercise("ozone")`` in the R-console to see the exercise). Here we only reproduce the R-code.
 
 ```{r, message = FALSE}
-require(deSolve)
-```
-
-```{r}
 state <- c(O = 0, NO = 1.3e8, NO2 = 5e11, O3 = 8e11)  # initial conditions
 
 default.parms <- list(
@@ -70,7 +56,9 @@ Ozone <- function(t, state, params) {
 
 For the web interface, we will create sliders so that we can change the values of the model parameters and see the effect on the model result. It is most instructive if we compare these altered model runs with the default model run. We therefore run the model first with the default parameters:
 
-```{r}
+```{r, message=FALSE}
+require(deSolve)
+
 outtimes <- seq(from = 0, to = 5, length.out = 300)  # run for 5 days
 Default  <- ode(y=state, parms=default.parms, func=Ozone, times=outtimes, method="vode")
 ```
@@ -91,7 +79,9 @@ We choose a main page with a side bar as the layout for this webpage (``pageWith
    - a button that, when clicked, will reset the default parameter values; its name is *resetButton* (``actionButton``).
 * The main panel contains the plot of the model run. Note that the name *PlotOzone* is used in the server function.
 
-```{r}
+```{r, message=FALSE}
+require(shiny)
+
 UI.O3 <- shinyUI(pageWithSidebar(      # Define UI (user interface)
 
   # Application title
