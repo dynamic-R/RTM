@@ -4,8 +4,8 @@ subtitle: "Reader Accompanying the Course Reaction Transport Modelling in the Hy
 author: "Lubos Polerecky and Karline Soetaert, Utrecht University"
 date: "March 2021"
 output:
-  html_document: default
   pdf_document: default
+  html_document: default
 abstract: \noindent Here we illustrate how to use the R-package *shiny* (Chang et al., 2020) to make interactive (web-based) reaction-transport models in R. Among other things, the approach allows you to quickly explore how the model output changes as a function of the input parameters. We use the silica dissolution model as an example.
 ---
 
@@ -181,11 +181,18 @@ Server.Si <- shinyServer(function(input, output, session) {
 
 ## Run the web application
 
-To run this app, first run the entire R-code above (e.g., in R-studio, choose Run $\rightarrow$ Run All) and then 
-write the following in the R-console (see screenshot in Figure 1):
+To run this app, first run the entire R-code above (e.g., in R-studio, choose Run $\rightarrow$ Run All) and then write the following in the R-console (see screenshot in Figure 1):
 
 ```{}
 shinyApp(ui = UI.Si, server = Server.Si)
+```
+
+Alternatively, set R's working directory to the directory containing the Rmd file and run the following commands:
+
+```{}
+knitr::purl("interactive2.Rmd")    # to convert the R markdown file into an R-script
+source("interactive2.R")           # to run the generated R-script
+shinyApp(ui = UI.Si, server = Server.Si)  # to run the shiny app
 ```
 
 You can leave the application by pressing ESC within the console.

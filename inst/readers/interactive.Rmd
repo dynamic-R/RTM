@@ -181,6 +181,14 @@ write the following in the R-console (see screenshot in Figure 1):
 shinyApp(ui = UI.O3, server = Server.O3)
 ```
 
+Alternatively, set R's working directory to the directory containing the Rmd file and run the following commands:
+
+```{}
+knitr::purl("interactive.Rmd")    # to convert the R markdown file into an R-script
+source("interactive.R")           # to run the generated R-script
+shinyApp(ui = UI.O3, server = Server.O3)  # to run the shiny app
+```
+
 You can leave the application by pressing ESC within the console.
 
 ![Screenshot of the ozone model run as a *shiny* application.](OzoneShiny.png){width=14cm}
