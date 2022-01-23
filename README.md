@@ -98,6 +98,10 @@ RTMreader("fitting", type="PDF")
 RTMreader(4, type="PDF")
 ```
 
+### More help
+
+As for any other R-package, you can get extra help by entering ``?RTM`` in the R console.
+
 ## Uninstall
 
 To uninstall the *RTM* package, locate it in the "Packages" tab in *Rstudio*, and click on the encircled "x" button ("Remove package") on the right margin.
