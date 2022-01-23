@@ -63,7 +63,6 @@ outtimes <- seq(from = 0, to = 5, length.out = 300)  # run for 5 days
 Default  <- ode(y=state, parms=default.parms, func=Ozone, times=outtimes, method="vode")
 ```
 
-
 ## The webpage part
 
 The code for interactive applications consists of a user interface (UI) and a server.
@@ -185,11 +184,6 @@ shinyApp(ui = UI.O3, server = Server.O3)
 You can leave the application by pressing ESC within the console.
 
 ![Screenshot of the ozone model run as a *shiny* application.](OzoneShiny.png){width=14cm}
-
-```{r}
-
-```
-
 # References
 
 Winston Chang, Joe Cheng, JJ Allaire, Yihui Xie and Jonathan McPherson (2020). shiny: Web

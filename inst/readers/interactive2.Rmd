@@ -4,30 +4,20 @@ subtitle: "Reader Accompanying the Course Reaction Transport Modelling in the Hy
 author: "Lubos Polerecky and Karline Soetaert, Utrecht University"
 date: "March 2021"
 output:
-  pdf_document: default
   html_document: default
-abstract: \noindent Here we illustrate how to use the R package *shiny* to make interactive (web-based) reaction-transport models in R. Among other things, the approach allows you to quickly explore how the model output changes as a function of the input parameters. We use the silica dissolution model as an example.
+  pdf_document: default
+abstract: \noindent Here we illustrate how to use the R-package *shiny* (Chang et al., 2020) to make interactive (web-based) reaction-transport models in R. Among other things, the approach allows you to quickly explore how the model output changes as a function of the input parameters. We use the silica dissolution model as an example.
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-To write interactive applications in R ("webpages"), you need to install and load the *shiny* package (Chang et al., 2020).
-
-
-```{r, message=FALSE}
-require(shiny)
-```
 # Silica dissolution model
 
 ## Model implementation in R
 
-A detailed description of the silica dissolution model is provided in the *dissolutionSi* exercise (type ``RTMexercise("dissolutionSi")`` in the R-console to see the exercise). Here we only reproduce the R-code.
-
-```{r, message = FALSE}
-require(deSolve)
-```
+A detailed description of the silica dissolution model is provided in the *dissolutionSi* exercise (enter ``RTMexercise("dissolutionSi")`` in the R-console to see the exercise). Here we only reproduce the R-code.
 
 ```{r}
 default.parms <- list(
@@ -66,7 +56,9 @@ InitialCondition.fun <- function(parms)  # initial concentrations
 
 For the web interface, we will create sliders, so that we can change the values of some model parameters and initial conditions, and see the effect on the model result. It is most instructive if we compare these altered model runs with the default model run. We therefore run the model first with the default parameters:
 
-```{r}
+```{r, message=FALSE}
+require(deSolve)
+
 state  <- InitialCondition.fun(default.parms)  # initial conditions
 times  <- seq(from=0, to=30, by=0.1)           # time in years
 Default <- ode(y=state, times=times, func=DissolveSilica, parms=default.parms)
@@ -87,7 +79,9 @@ We choose a main page with a side bar as the layout for this webpage (``pageWith
    - a button that, when clicked, will reset the default parameter values; its name is *resetButton* (``actionButton``).
 * The main panel contains the plot of the model run. Note that the name *PlotSi* is used in the server function.
 
-```{r}
+```{r, message=FALSE}
+require(shiny)
+
 UI.Si <- shinyUI(pageWithSidebar(      # Define UI (user interfae)
 
   # Application title

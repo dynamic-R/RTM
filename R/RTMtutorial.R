@@ -202,6 +202,7 @@ RTMreader <- function(x = c("?", "events",
                             "perturbation_I",
                             "perturbation_II",
                             "interactive", 
+                            "interactive2", 
                             "numericalR", 
                             "git_sharing_code"), 
                       output = c("HTML", "PDF", "RMD", "WORD")) {
@@ -219,7 +220,8 @@ RTMreader <- function(x = c("?", "events",
       "Estimating pH in a 1D reaction-transport model in R",
       "Response of systems to a perturbation from equilibrium - Part I", 
       "Response of systems to a perturbation from equilibrium - Part II", 
-      "Developing interactive applications in R", 
+      "Developing interactive applications in R - example 1", 
+      "Developing interactive applications in R - example 2", 
       "Numerical methods used for reaction-transport modelling in R", 
       "Sharing code with the world via Git in RStudio"
       ))
