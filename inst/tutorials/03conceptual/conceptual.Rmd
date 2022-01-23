@@ -27,6 +27,8 @@ You are advised to watch the following video first.
 
 ![](https://www.youtube.com/watch?v=AwG9fYz3das&list=PLx8PHcDdmF-uD1Pr07TU9SzlhlGpfrxqn&index=3)
 
+Slides available at <a href="https://drive.google.com/drive/folders/1Bys0-xzXLCpFpWhD-HrH6jDKOyl8iJMd" target="_blank">google-drive</a>
+
 You can also read the following section(s) of the textbook:
 
 * Chapter 2.1. Conceptual model

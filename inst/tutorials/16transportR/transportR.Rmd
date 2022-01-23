@@ -46,7 +46,8 @@ The first video explains the overall *structure* of a 1D reaction-transport mode
 
 Slides available at <a href="https://drive.google.com/drive/folders/1Bys0-xzXLCpFpWhD-HrH6jDKOyl8iJMd" target="_blank">google-drive</a>
 
-The second video explains the development of a 2D reaction-transport model.
+The second video gives a brief overview of the development of a 2D reaction-transport model.
+
 ![](https://www.youtube.com/watch?v=1-FqyEHv7Jk)
 
 ## Sediment carbon dynamics
@@ -281,3 +282,7 @@ R Core Team (2020). R: A language and environment for statistical computing. R
 Soetaert, Karline and Meysman, Filip (2012). Reactive transport in aquatic ecosystems: Rapid model prototyping in the open source software R. Environmental Modelling & Software, 32, 49-60.
   
 Karline Soetaert, Peter M.J. Herman (2009). A Practical Guide to Ecological Modelling. Springer Netherlands. DOI: 10.1007/978-1-4020-8624-3.
+
+The 2D SIR-model video created by Anna van der Kaaden. It is part of the youtube playlist available at https://www.youtube.com/playlist?list=PL80j3_tiZjWnljuE_j7pH7zNrMD6guHj1
+
+Slides available at <a href="https://drive.google.com/drive/folders/1Bys0-xzXLCpFpWhD-HrH6jDKOyl8iJMd" target="_blank">google-drive</a>

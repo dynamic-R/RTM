@@ -30,6 +30,8 @@ You are advised to watch the following video first.
 
 ![](https://www.youtube.com/watch?v=uJTbH2XoQN0&list=PLx8PHcDdmF-uD1Pr07TU9SzlhlGpfrxqn&index=2)
 
+Slides available at <a href="https://drive.google.com/drive/folders/1Bys0-xzXLCpFpWhD-HrH6jDKOyl8iJMd" target="_blank">google-drive</a>
+
 You can also read the following section(s) of the textbook:
 
 * Chapter 1. Introduction

@@ -27,7 +27,7 @@ This video gives an overview of how the mass balance equations can be solved in 
 
 ![](https://www.youtube.com/watch?v=KYYFHN7yono)
 
-This video describes another example of a 0-dimensional mechanistic model solved in R.
+This video describes another example of a 0-dimensional mechanistic model solved in R, specifically a SIR model that can be used to model the spread of a disease through a population.
 
 ![](https://www.youtube.com/watch?v=eOsZzk_eN4I)
 

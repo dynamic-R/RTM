@@ -40,7 +40,7 @@ You can also read the following section(s) of the textbook:
 
 The following videos describe two examples of 0-dimensional ecological models solved in R.
 
-### Spread of a virus through a population
+### Spread of a disease through a population
 
 ![](https://www.youtube.com/watch?v=eOsZzk_eN4I)
 
@@ -468,3 +468,4 @@ Karline Soetaert, Thomas Petzoldt, R. Woodrow Setzer (2010). Solving Differentia
   
 Karline Soetaert, Peter M.J. Herman (2009). A Practical Guide to Ecological Modelling. Springer Netherlands. DOI: 10.1007/978-1-4020-8624-3.
 
+Slides available at <a href="https://drive.google.com/drive/folders/1Bys0-xzXLCpFpWhD-HrH6jDKOyl8iJMd" target="_blank">google-drive</a>
