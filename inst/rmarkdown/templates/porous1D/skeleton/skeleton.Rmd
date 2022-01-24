@@ -82,7 +82,7 @@ Define model parameters that do *not* vary in space.
 parms <- c(
  Dbio     = 5e-4/365,   # [m2/d]        bioturbation mixing coefficient
  v_adv    = 5e-6,       # [m/d]         sediment accretion (=advection) velocity 
- rMin     = 0.005,      # [/d]          POC mineralisation rate constant
+ kMin     = 0.005,      # [/d]          POC mineralisation rate constant
  depoPOC  = 1e-3,       # [molPOC/m2/d] POC deposition rate (flux at SWI)
  bwDIC    = 2,          # [molDIC/m3]   DIC concentration at SWI
  POC2DIC  = 1           # [mol/mol]     Stoichiometry of reaction POC -> DIC
@@ -92,11 +92,11 @@ parms <- c(
 ## Definition and initialisation of state variables
 
 ```{r}
-names    <- c("POC", "DIC")
-nspec    <- length(names)
 POC.ini  <- rep(0, length = N)      # initial conditions 
 DIC.ini  <- rep(0, length = N)
-state    <- c(POC.ini, DIC.ini)
+state    <- c(POC.ini, DIC.ini)     # note the order!
+names    <- c("POC", "DIC")
+nspec    <- length(names)
 ```
 
 ## Definition of the model function
@@ -109,8 +109,8 @@ Diamodel <- function (t, state, pars)   # state is a LONG vector
   with (as.list(pars),{ 
     
     # unpack state variables
-    POC <- state[   1 :   N ]    # first N elements: POC
-    DIC <- state[(N+1):(2*N)]    # next N elements:  DIC
+    POC <- state[ (0*N+1) : (1*N) ]    # first N elements: POC
+    DIC <- state[ (1*N+1) : (2*N) ]    # next N elements:  DIC
 
     # === transport rates ===
     # note: zero gradient by default at lower boundaries
@@ -128,26 +128,26 @@ Diamodel <- function (t, state, pars)   # state is a LONG vector
  
     # === reaction rates ===
     # POC mineralisation
-    Mineralisation <- rMin * POC   # [molPOC/m3 SOLID/d] (per volume of solid!)
+    Miner <- kMin * POC   # [molPOC/m3 SOLID/d] (per volume of solid!)
 
     # more rate expressions can be added here ...
     
     # === mass balances : dC/dt = transport + reactions ===
     
     # solid substances
-    dPOC.dt   <- ( tran.POC$dC                              # transport
-                 - Mineralisation )                         # reactions, [molPOC/m3 SOLID/d] !!
+    dPOC.dt  <- ( tran.POC$dC                   # transport
+                - Miner )                       # reactions, [molPOC/m3 SOLID/d] !!
     
     # dissolved substances
-    poro      <- porLiquid$mid
-    dDIC.dt   <- ( tran.DIC$dC +                            # transport
-                   POC2DIC*Mineralisation * (1-poro)/poro ) # reactions, [molDIC/m3 LIQUID/d] !!
+    por      <- porLiquid$mid
+    dDIC.dt  <- ( tran.DIC$dC +                 # transport
+                  POC2DIC*Miner * (1-por)/por ) # reactions, [molDIC/m3 LIQUID/d] !!
 
     # depth-integrated rates: [mol POC/m2 BULK/d] !!
-    TotalMin  <- sum(Mineralisation*Grid$dx*porSolid$mid)
+    TotalMin  <- sum(Miner*Grid$dx*porSolid$mid)
   
     return(list(c(dPOC.dt, dDIC.dt),            # the time-derivatives, as a long vector
-          Mineralisation = Mineralisation,      # Mineralisation rates, as a vector
+          Mineralisation = Miner,               # Mineralisation rates, as a vector
              
           # for creating budgets
           TotalMin      = TotalMin,             # [molPOC/m2 BULK/d]
@@ -207,21 +207,21 @@ BUDGET   <- std1[toselect]
 unlist(BUDGET)    # show result
 ```
 
-Construct the total C budget in the modeled spatial domain to verify that the mass balances are correct.
+Construct the total C budget in the modeled spatial domain to verify that the mass balances are correct: for each state variable, the *difference between fluxes* at the lower and upper boundaries should be **equal** to the *net production rate* integrated along the domain.
 
 ```{r}
-# should be the same:
-# net POC rate is negative => POC is net removed within the domain
-c( BUDGET$POC.Deep.Flux - BUDGET$POC.SWI.Flux, 
-  -BUDGET$TotalMin )
-# net DIC rate is positive => DIC is net produced within the domain
-c( BUDGET$DIC.Deep.Flux - BUDGET$DIC.SWI.Flux,  
-   BUDGET$TotalMin )
+# POC mass balance check
+c(flux_difference =  BUDGET$POC.Deep.Flux - BUDGET$POC.SWI.Flux, 
+  integrated_rate = -BUDGET$TotalMin) # net production
+
+# DIC mass balance check
+c(flux_difference =  BUDGET$DIC.Deep.Flux - BUDGET$DIC.SWI.Flux, 
+  integrated_rate =  BUDGET$TotalMin) # net production
 ```
 
 ## Dynamic solution
 
-Find the dynamic solution using the function *ode.1D* from the package *deSolve*. The steady-state solution *std1* is used as the initial condition. 
+Find the dynamic solution using the function *ode.1D* from the package *deSolve*. The steady-state solution *std1* is used as the initial condition, the POC deposition flux is increased 10-fold. 
 
 ```{r}
 times          <- seq(from = 0, to = 2*365, by = 10)
@@ -241,7 +241,7 @@ image(out, legend = TRUE, grid = Grid$x.mid, ylim = c(Length,0),
       las = 1, ylab = "depth (m)", xlab="time (d)")
 ```
 
-Display as lines showing the depth distribution for all time points.
+Display results as lines showing the depth distribution for all time points.
 
 ```{r, fig.width=8, fig.height=4}
 matplot.1D(out, type = "l", grid = Grid$x.mid, 

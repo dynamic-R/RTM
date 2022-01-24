@@ -16,18 +16,18 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Introduction
 
-This template file contains a simple one-dimensional reaction-transport model describing the dynamics of molecular oxygen (O$_2$, in $mol~m^{-3}$) and biochemical oxygen demand (BOD, in $mol~m^{-3}$) in an estuary that is in contact with the air. 
+This template file contains a simple one-dimensional reaction-transport model describing the dynamics of molecular oxygen (O$_2$, in $mol~m^{-3}$) and biochemical oxygen demand (BOD, in $mol~m^{-3}$) in an estuary that is in contact with air. 
 
 The model domain is divided into a grid with N equally sized boxes ($N=100$).
 
 Both BOD and O2 are *vectors* with a length of N. They represent the concentrations of the state variables in the *center* of the boxes.
 
-With regard to the reaction, a simple first-order decay of BOD that is limited by oxygen is assumed. This reaction consumes both BOD and O2 with a stoichiometry of 1:1. O2 is also exchanged with the atmosphere.
+With regard to the reactions, a simple first-order decay of BOD that is limited by O2 is assumed. This reaction consumes both BOD and O2 with a stoichiometry of 1:1. O2 is additionally exchanged with the atmosphere.
 
 The species are modeled with the following boundary conditions:
 
 * BOD: imposed flux upstream (*flux.up*), imposed concentration downstream (*C.down*).
-* O2: imposed concentration upstream (*C.up*), zero-gradient boundary downstream (default, need not be specified).
+* O2: imposed concentration upstream (*C.up*), zero-gradient downstream (default, need not be specified).
 
 The partial derivatives related to *transport* are approximated with function ``tran.1D()`` from the *ReacTran* package. The steady-state and dynamic solutions are obtained using functions from the *rootSolve* and *deSolve* packages, respectively. The latter two packages are loaded together with *ReacTran*.
 
@@ -43,9 +43,6 @@ Length <- 1000                                 # [m]
 N      <- 100                                  # [-] number of boxes
 Grid   <- setup.grid.1D(L = Length, N = N)     # grid of N equally-sized boxes
 
-# Modeled state variables
-SVnames <- c("O2", "BOD")
-
 # initial conditions - state variables are defined in the middle of grid cells
 O2      <- rep(0.1,   times = N)               # [mol/m3]
 BOD     <- rep(0.001, times = N)               # [mol/m3]
@@ -53,17 +50,20 @@ BOD     <- rep(0.001, times = N)               # [mol/m3]
 # initial state of the system: a vector with all state variables (2*N)
 yini   <- c(O2, BOD)
 
+# names of the modeled state variables
+SVnames <- c("O2", "BOD")
+
 # model parameters
 pars <- c(      
-  D        = 100,   # [m2/d]      dispersion coefficient (tidal mixing)
-  v        = 10,    # [m/d]       advection velocity
-  rDecay   = 0.05 , # [/d]        rate constant of BOD decay (first-order process)
-  kO2      = 0.001, # [mol/m3]    half-saturation O2 concentration for BOD decay
-  inputBOD = 10,    # [mol/m2/d]  BOD input rate upstream
-  BODdown  = 0.1,   # [mol/m3]    BOD concentration downstream
-  O2up     = 0.25 , # [mol/m3]    O2 concentration upstream
-  satO2    = 0.3  , # [mol/m3]    saturation concentration of O2 (i.e., solubility)
-  k        = 0.1    # [/d]        rate constant for air-water O2 exchange
+  D         = 100,   # [m2/d]      dispersion coefficient (tidal mixing)
+  v         = 10,    # [m/d]       advection velocity
+  kDecay    = 0.05 , # [/d]        rate constant of BOD decay (first-order process)
+  K.O2      = 0.001, # [mol/m3]    half-saturation O2 concentration for BOD decay
+  inputBOD  = 10,    # [mol/m2/d]  BOD input rate upstream
+  BODdown   = 0.1,   # [mol/m3]    BOD concentration downstream
+  O2up      = 0.25,  # [mol/m3]    O2 concentration upstream
+  satO2     = 0.3,   # [mol/m3]    saturation concentration of O2 (i.e., solubility)
+  kAeration = 0.1    # [/d]        rate constant for air-water O2 exchange
 )
 
 # Model function
@@ -72,8 +72,8 @@ BOD1D <-function(t, state, pars) {  # state is a long vector
     
   # The vectors of the state variables O2 and BOD are
   # "extracted" from the LONG vector state passed to the function as input.
-    O2  <- state[   1 :   N ]   # first N elements for O2
-    BOD <- state[(N+1):(2*N)]   # second N elements for BOD
+    O2  <- state[ (0*N+1) : (1*N) ]   # first N elements for O2
+    BOD <- state[ (1*N+1) : (2*N) ]   # second N elements for BOD
 
   # Transport - tran.1D approximates the spatial derivatives
     # note: for O2: zero-gradient boundary downstream (default)
@@ -83,22 +83,22 @@ BOD1D <-function(t, state, pars) {  # state is a long vector
                        dx = Grid)           # Grid
 
     tranBOD <- tran.1D(C       = BOD,
-                       flux.up = inputBOD,  # imposed boundary flux upstream
-                       C.down  = BODdown,   # imposed boundary conc downstream
+                       flux.up = inputBOD,  # imposed flux upstream
+                       C.down  = BODdown,   # imposed conc downstream
                        D = D, v = v,        # dispersion, advection
                        dx = Grid)           # Grid
 
-  # rate expressions [mol/m3/d]
-    Decay    <- rDecay * BOD * O2/(O2+kO2) # BOD decay, limited by O2
-    Aeration <- k * (satO2-O2)             # air-water exchange of O2
+  # rate expressions [mol/m3/d] - values in the middle of grid cells
+    Decay    <- kDecay * BOD * O2/(O2+K.O2) # BOD decay, limited by O2
+    Aeration <- kAeration * (satO2-O2)      # air-water exchange of O2
 
   # Time-derivatives: dC/dt = transport + production - consumption [mol/m3/d]
-    dO2dt    <- tranO2$dC  + Aeration - Decay 
-    dBODdt   <- tranBOD$dC            - Decay   
+    dO2.dt    <- tranO2$dC  + Aeration - Decay 
+    dBOD.dt   <- tranBOD$dC            - Decay   
 
   # return vector of time-derivatives and ordinary variables as a list     
-  list(c(dO2dt, dBODdt),  # time-derivatives 
-                          # (the same order as state variables!)
+  list(c(dO2.dt, dBOD.dt),  # time-derivatives 
+                            # (the same order as state variables!)
   # additional output:
     
     # process rates along the domain (1D vector)
@@ -114,9 +114,9 @@ BOD1D <-function(t, state, pars) {  # state is a long vector
     TotalAeration   = sum(Aeration*Grid$dx), # mol/m2/d
     
     # fluxes at domain boundaries (for budgetting)
-    BODinflux = tranBOD$flux.up,     # BOD flux INto the system upstream,     mol/m2/d
+    BODinflux = tranBOD$flux.up,     # BOD flux INTO the system upstream,     mol/m2/d
     BODefflux = tranBOD$flux.down,   # BOD flux OUT of the system downstream, mol/m2/d       
-    O2influx  = tranO2$flux.up,      # O2 flux INto the system upstream,      mol/m2/d
+    O2influx  = tranO2$flux.up,      # O2 flux INTO the system upstream,      mol/m2/d
     O2efflux  = tranO2$flux.down)    # O2 flux OUT of the system downstream,  mol/m2/d       
   })
 }
@@ -150,8 +150,10 @@ matplot.1D(out, type = "l", lty = 1,
 ```
 
 ```{r, fig.height = 6, fig.width = 6}
+# plot selected output variables
 plot(out, which=c("MeanDecay", "MeanAeration", "O2influx", "BODinflux"), 
-          ylab=c("mol/m3/d","mol/m3/d","mol/m2/d","mol/m2/d"))
+     mfrow=c(2,2),                  # graph arrangement (2x2)
+     ylab=c("mol/m3/d","mol/m3/d","mol/m2/d","mol/m2/d"))
 ```
 
 ## Steady-state solution
@@ -173,7 +175,7 @@ A second run without aeration.
 
 ```{r}
 p2 <- pars              # copy of parameter vector
-p2["k"] <- 0            # set reaeration rate constant to 0
+p2["kAeration"] <- 0    # set reaeration rate constant to 0
 
 std2 <- steady.1D(y = yini, parms = p2, func = BOD1D, 
           positive = TRUE,               # to ensure that the solution is positive
@@ -184,31 +186,47 @@ std2 <- steady.1D(y = yini, parms = p2, func = BOD1D,
 Display results.
 
 ```{r, fig.height = 4, fig.width = 8}
-plot(std, std2, grid = Grid$x.mid,  # plot state variables
+plot(std, std2, grid = Grid$x.mid,  # plot ONLY state variables (default)
      ylab = "mol/m3", xlab = "distance (m)")
 ```
 
 ```{r, fig.height = 6, fig.width = 6}
 plot(std, std2, grid = Grid$x.mid, 
      which=c("O2", "BOD",           # plot state variables 
-             "Decay", "Aeration"),  # and process rates
+             "Decay", "Aeration"),  # AND process rates
+     mfrow=c(2,2),                  # graph arrangement (2x2)
      ylab =c("mol/m3","mol/m3","mol/m3/d", "mol/m3/d"), xlab = "distance (m)") 
 ```
 
 ## Budgetting of the steady-state model
 
 ```{r}
-toselect <- c("TotalDecay", "TotalAeration", 
-              "O2influx", "O2efflux", "BODinflux", "BODefflux")
-BUDGET   <- std[toselect]
+toselect <- c("TotalDecay", "TotalAeration", # select output for budgetting
+              "O2influx",   "O2efflux",      # all values in mol/m2/d
+              "BODinflux",  "BODefflux")
+BUDGET <- std[toselect]
 unlist(BUDGET)
+```
 
-# should be same
-BUDGET$BODinflux - BUDGET$BODefflux  
-BUDGET$TotalDecay
+Check mass balances across the modeled domain: for each state variable, the *difference between fluxes* at the lower and upper boundaries should be **equal** to the *net production rate* integrated along the domain.
 
-# should be ~0
-BUDGET$O2influx - BUDGET$O2efflux -BUDGET$TotalDecay + BUDGET$TotalAeration
+```{r}
+# BOD mass balance check
+c(flux_difference =  BUDGET$BODefflux - BUDGET$BODinflux, 
+  integrated_rate = -BUDGET$TotalDecay) # net production
+
+# O2 mass balance check
+c(flux_difference =  BUDGET$O2efflux - BUDGET$O2influx,
+  integrated_rate = -BUDGET$TotalDecay + BUDGET$TotalAeration) # net production
+```
+
+Tables in R Markdown can also be displayed in a prettier way using ``kable`` from the ``knitr`` package:
+
+```{r}
+budget <- data.frame(quantity=names(unlist(BUDGET)), 
+                     value=unlist(BUDGET), 
+                     row.names = NULL)
+knitr::kable(budget, digits = 3, col.names = c("quantity", "mol/m2/d"))
 ```
 
 

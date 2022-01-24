@@ -29,7 +29,7 @@ Two species (*POC* and *DIC*) are modeled with the following boundary conditions
   - imposed concentration at the upstream boundary (C.up), 
   - zero-gradient at the downstream boundary.
 
-The biogeochemical process is the first-order mineralization of POC to DIC, with a stoichiometry of 1:1 (i.e., POC -> DIC).
+The biogeochemical process is the first-order mineralization of POC to DIC, with a stoichiometry of 1:1 (i.e., POC $\rightarrow$ DIC).
 
 Units: length in $m$, time in $d$, concentrations in $mol~m^{-3}$, fluxes in $mol~m^{-2}~d^{-1}$. 
 
@@ -97,23 +97,23 @@ Next, we specify the model parameters that do *not* vary with depth in the sedim
 
 ```{r}
 parms <- c(
- Dbio     = 5e-4/365,   # [m2/d]        bioturbation mixing coefficient
- v_adv    = 5e-6,       # [m/d]         sediment accretion (=advection) velocity 
- rMin     = 0.005,      # [/d]          POC mineralisation rate constant
- depoPOC  = 1e-3,       # [molPOC/m2/d] POC deposition rate (flux at SWI)
- bwDIC    = 2,          # [molDIC/m3]   DIC concentration at SWI
- POC2DIC  = 1           # [mol/mol]     Stoichiometry of reaction POC -> DIC
+  Dbio     = 5e-4/365, # [m2/d]        bioturbation mixing coefficient
+  v_adv    = 5e-6,     # [m/d]         sediment accretion (=advection) velocity 
+  kMin     = 0.005,    # [/d]          POC mineralisation rate constant
+  depoPOC  = 1e-3,     # [molPOC/m2/d] POC deposition rate (flux at SWI)
+  bwDIC    = 2,        # [molDIC/m3]   DIC concentration at SWI
+  POC2DIC  = 1         # [mol/mol]     Stoichiometry of reaction POC -> DIC
 )
 ```
 
 ## Definition and initialisation of state variables
 
 ```{r}
-names    <- c("POC", "DIC")
-nspec    <- length(names)
 POC.ini  <- rep(0, length = N)      # initial conditions 
 DIC.ini  <- rep(0, length = N)
-state    <- c(POC.ini, DIC.ini)
+state    <- c(POC.ini, DIC.ini)     # note the order
+names    <- c("POC", "DIC")
+nspec    <- length(names)
 ```
 
 ## Definition of the model function
@@ -126,8 +126,8 @@ Diamodel <- function (t, state, pars)   # state is a LONG vector
   with (as.list(pars),{ 
     
     # unpack state variables
-    POC <- state[   1 :   N ]    # first N elements: POC
-    DIC <- state[(N+1):(2*N)]    # next N elements:  DIC
+    POC <- state[ (0*N+1) : (1*N) ]    # first N elements: POC
+    DIC <- state[ (1*N+1) : (2*N) ]    # next N elements:  DIC
 
     # === transport rates ===
     # note: zero gradient by default at lower boundaries
@@ -145,33 +145,34 @@ Diamodel <- function (t, state, pars)   # state is a LONG vector
  
     # === reaction rates ===
     # POC mineralisation
-    Mineralisation <- rMin * POC   # [molPOC/m3 SOLID/d] (per volume of solid!)
+    Miner <- kMin * POC   # [molPOC/m3 SOLID/d] (per volume of solid!)
 
     # more rate expressions can be added here ...
     
     # === mass balances : dC/dt = transport + reactions ===
     
     # solid substances
-    dPOC.dt   <- ( tran.POC$dC                              # transport
-                 - Mineralisation )                         # reactions, [molPOC/m3 SOLID/d] !!
+    dPOC.dt <- ( tran.POC$dC                   # transport
+                -Miner )                       # reactions, [molPOC/m3 SOLID/d] !!
     
     # dissolved substances
-    poro      <- porLiquid$mid
-    dDIC.dt   <- ( tran.DIC$dC +                            # transport
-                   POC2DIC*Mineralisation * (1-poro)/poro ) # reactions, [molDIC/m3 LIQUID/d] !!
+    por     <-   porLiquid$mid                 # porosity in the middle of grid cells
+    dDIC.dt <- ( tran.DIC$dC +                 # transport
+                 POC2DIC*Miner * (1-por)/por ) # reactions, [molDIC/m3 LIQUID/d] !!
 
     # depth-integrated rates: [molPOC/m2 BULK/d] !!
-    TotalMin  <- sum(Mineralisation*Grid$dx*porSolid$mid)
+    svf      <- porSolid$mid                   # svf in the middle of grid cells
+    TotalMin <- sum(Miner*Grid$dx*svf)         # depth-integration
   
-    return(list(c(dPOC.dt, dDIC.dt),            # the time-derivatives, as a long vector
-          Mineralisation = Mineralisation,      # Mineralisation rates, as a vector
+    return(list(c(dPOC.dt, dDIC.dt),           # the time-derivatives, as a long vector
+          Mineralisation = Miner,              # Mineralisation rates, as a vector
              
           # for creating budgets
-          TotalMin      = TotalMin,             # [molPOC/m2 BULK/d]
-          DIC.SWI.Flux  = tran.DIC$flux.up,     # [molDIC/m2 BULK/d]
-          DIC.Deep.Flux = tran.DIC$flux.down,   # [molDIC/m2 BULK/d]
-          POC.SWI.Flux  = tran.POC$flux.up,     # [molPOC/m2 BULK/d]
-          POC.Deep.Flux = tran.POC$flux.down))  # [molPOC/m2 BULK/d]
+          TotalMin      = TotalMin,            # [molPOC/m2 BULK/d]
+          DIC.SWI.Flux  = tran.DIC$flux.up,    # [molDIC/m2 BULK/d]
+          DIC.Deep.Flux = tran.DIC$flux.down,  # [molDIC/m2 BULK/d]
+          POC.SWI.Flux  = tran.POC$flux.up,    # [molPOC/m2 BULK/d]
+          POC.Deep.Flux = tran.POC$flux.down)) # [molPOC/m2 BULK/d]
  })
 }
 ```
@@ -227,23 +228,23 @@ BUDGET   <- std1[toselect]
 unlist(BUDGET)    # show result
 ```
 
-To verify that our mass balances are correct, we construct the total C budget in the modelled sediment column. What goes *out* at the *lower* boundary minus what comes *in* at the *upper* boundary must be equal to the total (i.e., depth-integrated) *net* production rate *within* the domain! Indeed, the output values confirm this.
+To verify that our mass balances are correct, we construct the total C budget in the modelled sediment column. We require that, for each state variable, the *difference between fluxes* at the lower and upper boundaries should be **equal** to the *net production rate* integrated along the domain. In other words, what goes *out* at the *lower* boundary minus what comes *in* at the *upper* boundary must be equal to the total *net* production rate *within* the domain! Indeed, the output values confirm this.
 
 ```{r}
-# should be the same:
-# net POC rate is negative => POC is net removed within the domain
-c( BUDGET$POC.Deep.Flux - BUDGET$POC.SWI.Flux, 
-  -BUDGET$TotalMin )
-# net DIC rate is positive => DIC is net produced within the domain
-c( BUDGET$DIC.Deep.Flux - BUDGET$DIC.SWI.Flux,  
-   BUDGET$TotalMin )
+# POC mass balance check
+c(flux_difference =  BUDGET$POC.Deep.Flux - BUDGET$POC.SWI.Flux, 
+  integrated_rate = -BUDGET$TotalMin) # net production
+
+# DIC mass balance check
+c(flux_difference =  BUDGET$DIC.Deep.Flux - BUDGET$DIC.SWI.Flux, 
+  integrated_rate =  BUDGET$TotalMin) # net production
 ```
 
 ## Dynamic solution
 
 The model can be run dynamically with the function *ode.1D* from the package *deSolve*. This requires a good set of initial conditions. 
 
-We use the steady-state solution found above for the POC deposition flux of $1~10^{-3}~mol~m^{-2}~d^{-1}$ (*std1*). We then increase the deposition rate 10-fold and run the model for 2 years.
+We use the steady-state solution found above for the POC deposition flux of $1\times 10^{-3}~mol~m^{-2}~d^{-1}$ (*std1*). We then increase the deposition rate 10-fold and run the model for 2 years.
 
 ```{r}
 times          <- seq(from = 0, to = 2*365, by = 10)
@@ -265,25 +266,25 @@ dim(POC)
 times <- attributes(POC)$time 
 ```
 
-Based on that, we can plot the profile of POC at a certain time or the times-series of POC at a particular depth.
+### Plotting
 
-```{r}
-day <- 20
+We can now plot the profile of POC at a certain time (day) or the times-series of POC at a particular location (depth).
+
+```{r, fig.width=4, fig.height=3.5}
+day <- 20 # specified as index(!) of the time vector --> real time = times[day]
 POC_t <- POC[day,]
 plot(y=Grid$x.mid, x=POC_t, ylim=c(0.10,0), type="l", ylab="depth (m)",
      xlab="molPOC/m3 solid", main = paste("POC profile at day", times[day]))
 ```
 
-```{r}
-depth <- 20
+```{r, fig.width=4, fig.height=3.5, fig.align='center'}
+depth <- 20 # specified as index(!) of the depth vector --> real depth = Grid$x.mid[depth]
 POC_x <- POC[,depth]
 plot(x=times, y=POC_x, type = "l", ylab="molPOC/m3 solid", xlab="time (d)",
-     main=paste("POC dynamics at ",format(Grid$x.mid[20],digits=2),"m"))
+     main=paste("POC dynamics at ",format(Grid$x.mid[depth],digits=2),"m"))
 ```
 
-### Plotting
-
-Output as an image.
+Plot output as an image.
 
 ```{r, fig.width=8, fig.height=4}
 par(mar = c(4,4,4,4))
@@ -291,7 +292,7 @@ image(out, legend = TRUE, grid = Grid$x.mid, ylim = c(Length,0),
       las = 1, ylab = "depth (m)", xlab="time (d)")
 ```
 
-Output as lines showing the depth distribution for all time points.
+Plot output as lines showing the depth distribution for all time points.
 
 ```{r, fig.width=8, fig.height=4}
 matplot.1D(out, type = "l", grid = Grid$x.mid, 
@@ -301,15 +302,13 @@ matplot.1D(out, type = "l", grid = Grid$x.mid,
       xlab = c("molPOC/m3 SOLID", "molDIC/m3 LIQUID"))
 ```
 
-
-### Simple plots
-
 We also plot the fluxes at the SWI and in the deep sediment as a function of time. The POC flux at the SWI should be constant, as specified by the boundary condition at the SWI.
 
 ```{r, fig.width=10, fig.height=3}
 plot(out, which = c("DIC.SWI.Flux", "DIC.Deep.Flux", 
                     "POC.SWI.Flux", "POC.Deep.Flux"), 
-     mfrow=c(1,4), xlab="time (d)", ylab="molC/m2/d")
+     mfrow=c(1,4), # modify the plot arrangement (1 row, 4 columns)
+     xlab="time (d)", ylab="molC/m2/d")
 ```
 
 The miniscule but detectable increase in the POC flux at the lower boundary shows that for the given POC input at the SWI, not all POC is converted into DIC within the sediment column of 20 cm! The rest is self-explanatory.

@@ -19,8 +19,8 @@ knitr::opts_chunk$set(echo = TRUE)
 This template file contains a simple box model describing the dynamics of molecular oxygen (O$_2$, in $mol~m^{-3}$) and biochemical oxygen demand (BOD, in $mol~m^{-3}$) in a lake. It is assumed that 
 
 * O$_2$ and BOD are removed due to BOD decay (O$_2$:BOD stoichiometry of 1:1),
-* BOD decay is a first-order process with respect to BOD ($r = 0.05~d^{-1}$) and depends on O$_2$ according to the Michaelis-Menten kinetics ($kO_2=0.001~mol~m^{-3}$),
-* O$_2$ is added by air-water exchange ($k=0.1~d^{-1}$, O$_{2,sat} = 0.3~mol~m^{-3}$),
+* BOD decay is a first-order process with respect to BOD ($k_{Decay} = 0.05~d^{-1}$) and depends on O$_2$ according to the Michaelis-Menten kinetics ($K_{O2}=0.001~mol~m^{-3}$),
+* O$_2$ is added by air-water exchange ($k_{Aeration}=0.1~d^{-1}$, O$_{2,sat} = 0.3~mol~m^{-3}$),
 * DOB is added at a constant rate ($0.001~mol~m^{-3}~d^{-1}$),
 * initial concentrations are O$_{2,ini}=0.25~mol~m^{-3}$ and BOD$_{ini} = 0.5~mol~m^{-3}$.
 
@@ -32,11 +32,11 @@ yini <- c(O2 = 0.25, BOD = 0.5) # both in [mol/m3]
 
 # Model parameters
 pars <- c(
-  rDecay   = 0.05 , # [/d]       first-order rate constant
-  kO2      = 0.001, # [mol/m3]   half-saturation O2 concentration
-  satO2    = 0.3  , # [mol/m3]   O2 solubility
-  k        = 0.1  , # [/d]       reaeration rate constant
-  inputBOD = 0.001  # [mol/m3/d] constant BOD input rate
+  kDecay     = 0.05 , # [/d]       first-order rate constant
+  K.O2       = 0.001, # [mol/m3]   half-saturation O2 concentration
+  satO2      = 0.3  , # [mol/m3]   O2 solubility
+  kAeration  = 0.1  , # [/d]       reaeration rate constant
+  inputBOD   = 0.001  # [mol/m3/d] constant BOD input rate
 )
 
 # Model function: calculates time-derivatives and other output
@@ -45,15 +45,15 @@ BODmodel <-function(t, state, pars) {
   with (as.list(c(state, pars)),{
  
   # rate expressions [mol/m3/d]
-    Decay      <- rDecay * BOD * O2/(O2+kO2) # BOD decay
-    Aeration   <- k * (satO2-O2)             # air-water exchange
+    Decay      <- kDecay * BOD * O2/(O2+K.O2) # BOD decay
+    Aeration   <- kAeration * (satO2-O2)      # air-water exchange
 
   # Time-derivatives: dC/dt = production - consumption [mol/m3/d]
-    dO2dt      <- Aeration - Decay
-    dBODdt     <- inputBOD - Decay
+    dO2.dt      <- Aeration - Decay
+    dBOD.dt     <- inputBOD - Decay
 
   # return time-derivatives and ordinary variables as a list     
-    list(c(dO2dt, dBODdt), # vector with derivatives 
+    list(c(dO2.dt, dBOD.dt), # vector with derivatives 
                            # (the same order as state variables!)
       # other output: process rates
       Decay    = Decay,
@@ -77,8 +77,8 @@ outtimes <- seq(from = 1, to = 100, length.out = 100) # vector of output times
 out <- ode(y = yini, parms = pars, func = BODmodel, times = outtimes)                
 
 # change the value of the reaeration rate constant
-pars2      <- pars         # copy the original parameter vector
-pars2["k"] <- pars["k"]/10 # 10-fold lower k
+pars2      <- pars              # copy the original parameter vector
+pars2["kAeration"] <- pars["kAeration"]/10 # 10-fold lower kAeration
 
 # integrate the model with the new parameters
 out2 <- ode(y = yini, parms = pars2, func = BODmodel, times = outtimes)                
@@ -122,7 +122,7 @@ O2.seq  <- vector()
 for (i in 1:length(k.seq)){
   # parameter values for this run
   p <- pars
-  p["k"] <- k.seq[i]  # reaeration rate constant based on the sequence
+  p["kAeration"] <- k.seq[i]  # reaeration rate constant based on the sequence
   # steady-state with new parameter values
   std <- steady(y = yini, parms = p, func = BODmodel, positive = TRUE)  
   BOD.seq[i] <- std$y["BOD"]
@@ -134,8 +134,8 @@ Finally, we plot the results of the sensitivity analysis:
 
 ```{r, fig.width=7, fig.height=3.5}
 par(mfrow=c(1,2)) # figures in 1 row, 2 columns
-plot(k.seq, O2.seq,  type="l", xlab="k [/d]", main="O2",  ylab="mol/m3")
-plot(k.seq, BOD.seq, type="l", xlab="k [/d]", main="BOD", ylab="mol/m3")
+plot(k.seq, O2.seq,  type="l", xlab="kAeration [/d]", main="O2",  ylab="mol/m3")
+plot(k.seq, BOD.seq, type="l", xlab="kAeration [/d]", main="BOD", ylab="mol/m3")
 ```
 
 # References
