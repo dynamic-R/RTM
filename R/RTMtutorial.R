@@ -5,7 +5,7 @@ openRmdFile <- function(file, output) {
     output_file <- tempfile(fileext = ".Rmd")
     file.copy(file, output_file)
 #    browseURL(output_file)
-    file.edit(output_file)
+    file.edit(output_file, editor="internal")
   }
   else if (toupper(output) == "PDF")
     browseURL(rmarkdown::render(input = file, output_format = "pdf_document",
