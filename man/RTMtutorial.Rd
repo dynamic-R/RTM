@@ -24,12 +24,12 @@ RTMexercise(x = c("?", "introductionR", "conceptual", "massbalance_chemistry",
                "individualbased", "reaction_transport"),            
             output = c("HTML", "PDF", "RMD", "WORD"))
 
-RTManswer(x, output = c("HTML", "PDF", "RMD", "WORD")
+RTManswer(x, output = c("HTML", "PDF", "RMD", "WORD"))
 
 RTMreader  (x = c("?", "events", "forcings", "observations", 
                "fitting", "visualisation", "pHprofiles", 
                "perturbation_I", "perturbation_II", 
-               "interactive", "numericalR", "git_sharing_code"),
+               "interactive", "interactive2", "numericalR", "git_sharing_code"),
             output = c("HTML", "PDF", "RMD", "WORD"))      
 
 RTMtemplate(x = c("?", "rtm0D", "rtm1D", "porous1D", "porous1D_extensive", 
