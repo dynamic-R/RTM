@@ -10,93 +10,169 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Introduction
+# Problem definition
 
-We consider here an experimental setup where two containers with water are enclosed in a gas-tight container filled with (partially humid) air. In the first container, the water height is $h_1$ and the area of the air-water interface is $A_1$. In the second container, the water height is $h_2$ and the area of the air-water interface is $A_2$. The volume of the gas-tight container is $V_3$ and the air pressure is $P_3$. Water molecules can be transferred between the liquid and gas phase by evaporation and precipitation. 
+Consider an experimental setup where an open container is enclosed in a gas-tight container filled with air. Both containers are partially filled with water (Figure 1). Initially, water in the reservoir 1 is isotopically enriched in ${}^{18}O_2$ (e.g., by the addition of ${}^{18}O_2$-labeled $H_2O$), water in the reservoir 2 has a natural abundance of ${}^{18}O_2$, and there is no water vapor above the liquid. Due to evaporation and precipitation, there will be an isotope exchange between the two liquid water reservoirs. Your task is to model the dynamics of this exchange. 
 
-## Problem
+![Experimental setup with two liquid water reservoirs enclosed in a gas-tight container.](water_reservoirs.pdf){width=50%}
 
-Suppose that the liquid water in reservoir 1 is isotopically enriched in ${}^{18}O$. The task is to model the transfer of this isotopic enrichment from the reservoir 1 through the gas phase into the reservoir 2. All reservoirs can be assumed to be well mixed.
+## Assumptions
 
-## Theoretical background
+* Temperature of the system is constant.
+* In the first container, the water height is $h_1$ and the area of the air-water interface is $A_1$. 
+* In the second container, the water height is $h_2$ and the area of the air-water interface is $A_2$. 
+* The volume of the gas-tight container is $V_3$ and the air pressure is $P_3$.
+* Water molecules can be transferred between the liquid and gas phase by evaporation and precipitation. The rate of these processes is governed by equations described below.
+* Changes in $V_3$ associated with changes in $h_1$ and $h_2$ due to evaporation and precipitation can be neglected.
+* All reservoirs are well mixed, so water transport within the reservoirs does not need to be considered.
+* Water vapor behaves as an ideal gas, i.e., its volume, partial pressure, and temperature are related through the ideal gas law ($P\cdot V = n\cdot R\cdot T$).
 
-* Forward reaction = evaporation: rate constant $k_f$ (in $mol~m^{-2}~s^{-1}$)
-* Backward reaction = precipitation: rate constant $k_b$ (in $m~s^{-1}$)
+# Theoretical background
 
-Without considering isotopes, the rate of change in the number of H$_2$O molecules in water vapor is described by the differential equation
+## Evaporation and precipitation of water
 
-$$ \frac{N_{vap}}{dt} = k_f\cdot A_{liq} - k_b\cdot A_{liq} \cdot \frac{N_{vap}}{V_{vap}}. $$
-
-That is, evaporation is assumed to be a zero-order process with the rate proportional to the area of the air-water interface, and precipitation is assumed to be a first-order process with the rate proportional to the interface area and the concentration of water molecules in the gas phase ($N_{vap}/V_{vap}$).
-
-The above formulation implies that in an equilibrium, i.e., when the time-derivative is zero, the equilibrium concentration of water molecules in the gas phase is equal to the ratio between the rate constants for the forward and backward reaction:
-
-$$ \left( \frac{N_{vap}}{V_{vap}}\right)_{eq} = \frac{k_f}{k_b}. $$
-Since $({N_{vap}}/{V_{vap}})_{eq}$ can be calculated from the Clausius-Clapeyron equation (physical chemistry), it can be considered as a known parameter. Thus, the above equation can be used to calculate $k_f$ from $k_b$.
-
-Considering isotopes, we rewrite the above mass balance equation separately for $^{18}O$ and $^{16}O$ water molecules:
-
-$$ 
-\frac{{}^{18}N_{vap}}{dt} = {}^{18}k_f \cdot x_{liq} \cdot A_{liq} - 
-{}^{18}k_b\cdot x_{vap} \cdot A_{liq} \cdot \frac{N_{vap}}{V_{vap}}, 
+In the first instance, we consider a simplified system consisting of two water reservoirs enclosed in a gas-tight container: liquid water (volume $V_{liq}$, amount $N_{liq}$), and water vapor (volume $V_{vap}$, amount $N_{vap}$). Water in the liquid phase can evaporate to form water vapor, and vice versa, water vapor can precipitate to form liquid water. In the first approximation, precipitation is assumed to be described by first-order kinetics, i.e., the rate is linearly proportional to $N_{vap}$ (more specifically to the concentration of water vapor molecules $N_{vap}/V_{vap}$), whereas evaporation is assumed to follow zero-order kinetics, i.e., the rate is independent of $N_{vap}$ (as long as the liquid water is present). Additionally, since both processes occur at the interface between the liquid and gas phase, their rates are assumed to be proportional to the area of this interface, $A_{liq}$. Thus, the change over time in the number of water vapor molecules above the liquid is described by the following differential equation:
+\begin{equation}
+\label{eq1}
+\frac{dN_{vap}}{dt} = k_f\cdot A_{liq} 
+  - k_b\cdot A_{liq} \cdot \frac{N_{vap}}{V_{vap}},
+\end{equation}
+where the rate constants $k_f$ (in $mol~m^{-2}~s^{-1}$) and $k_b$ (in $m~s^{-1}$) correspond to the forward (evaporation) and backward (precipitation) reaction, respectively. In a thermodynamic equilibrium, the time derivative $dN_{vap}/dt$ is equal to zero, which implies that the equilibrium concentration of water vapor molecules is equal to the ratio between the rate constants for the forward and backward reaction:\footnote{In this document we use an asterisk ($*$) to denote a thermodynamic equilibrium.} 
 $$
-$$ \frac{{}^{16}N_{vap}}{dt} = {}^{16}k_f \cdot (1-x_{liq}) \cdot A_{liq} - {}^{16}k_b\cdot (1-x_{vap}) \cdot A_{liq} \cdot \frac{N_{vap}}{V_{vap}}, $$
-These equations consider that 
+\left( \frac{N_{vap}}{V_{vap}}\right)^* = \frac{k_f}{k_b}.
+$$
 
-* the rate of evaporation of $^{18}O$-water is proportional to the probability that the water molecule in the liquid phase contains $^{18}O$. This probability is equal to the ${}^{18}O$ atom fraction of liquid water, which is denoted as $x_{liq}$ and calculated as $x_{liq} = {}^{18}N_{liq} / ({}^{18}N_{liq} + {}^{16}N_{liq})$.
+Assuming that water vapor behaves as an ideal gas, we have 
+$$
+P_{vap}\cdot V_{vap} = N_{vap}\cdot R\cdot T,
+$$
+where $P_{vap}$ is the vapor pressure (in $Pa$), $R$ is the gas constant ($8.314~J~K^{-1}~mol^{-1}$), and $T$ is the temperature (in $K$). Consequently, the concentration of vapor molecules, $N_{vap}/V_{vap}$, is proportional to the vapor pressure, $P_{vap}$, and Eq. \ref{eq1} can be rewritten in the form
+\begin{equation}
+\label{eq2}
+\frac{dN_{vap}}{dt} = k_b'\cdot A_{liq} \cdot \left( P_{vap}^* - P_{vap} \right).
+\end{equation}
+In this equation, $k_b' = k_b/(R\cdot T)$ is a renormalised precipitation rate constant and $P_{vap}^*$ denotes to the vapor pressure in a thermodynamic equilibrium. A direct comparison of Eqs. 1 and 2 yields that $P_{vap}^*$ is proportional to the equilibrium concentration of the water vapor molecules and thus to the ratio between the rate constants for the forward and backward reaction:
 
-* the rate of precipitation of $^{18}O$-water is proportional to the probability that the water molecule in the gas phase contains $^{18}O$. This probability is equal to the ${}^{18}O$ atom fraction of water vapor, which is denoted as $x_{vap}$ and calculated as $x_{vap} = {}^{18}N_{vap} / ({}^{18}N_{vap} + {}^{16}N_{vap})$.
+\begin{equation}
+\label{eq3}
+P_{vap}^* = R\cdot T\cdot \left( \frac{N_{vap}}{V_{vap}}\right)^*
+ = R\cdot T\cdot \frac{k_f}{k_b}.
+\end{equation}
+
+Equation 2 implies that, in the first approximation, the dynamic of the partitioning of water between the liquid and gas phase is driven by a thermodynamic disequilibrium: the net rate of change in the number of water molecules in the gas phase is proportional to the difference between the equilibrium and instantaneous vapor pressure above the liquid, $P_{vap}^* - P_{vap}$. This is consistent with our intuition: there is net evaporation when $P_{vap}$ is below $P_{vap}^*$, net precipitation when $P_{vap}$ exceeds $P_{vap}^*$, and no net exchange when $P_{vap}$ and $P_{vap}^*$ are equal. 
+
+The equilibrium vapor pressure depends on temperature according to the Clausius-Clapeyron equation:\footnote{See notes on Physical Chemistry.}
+\begin{equation}
+\label{eq4}
+\ln\left[\frac{P_{vap}^*(T)}{P_{vap}^*(T_0)}\right] =
+-\frac{\Delta H_{vap}}{R}\cdot \left(\frac{1}{T} - \frac{1}{T_0}\right),
+\end{equation}
+where $\Delta H_{vap}$ is the enthalpy of vaporisation of water ($\approx 40.66~kJ~mol^{-1}$), $P_{vap}^*(T_0)=1~bar \approx 101325~Pa$, and $T_0 = 373.15~K$ (all values correspond to the standard boiling point of water). 
+
+When considering air, which is a mixture of gases such as $N_2$, $O_2$, and water vapor, the partial pressure of water vapor is typically expressed as a *fraction* of the equilibrium pressure,
+\begin{equation}
+\label{eq5}
+P_{vap}(T) = h\cdot P_{vap}^*(T),
+\end{equation}
+where the fraction, $h$, is called the relative humidity. 
+
+## Isotope fractionation during evaporation and precipitation
+
+Now, we consider isotope effects on the kinetics of water evaporation and precipitation and rewrite the mass balance Eq. 1 separately for $^{18}O$ and $^{16}O$ water molecules. We assume that
+
+* the rate of evaporation of $^{18}O$-water is proportional to the probability that the water molecule in the liquid phase contains $^{18}O$. This probability is equal to the ${}^{18}O$ atom fraction of the liquid water, which is denoted as $x_{liq}$ and calculated as $$x_{liq} = \frac{{}^{18}N_{liq}}{{}^{18}N_{liq} + {}^{16}N_{liq}}.$$
+
+* the rate of precipitation of $^{18}O$-water is proportional to the probability that the water molecule in the gas phase contains $^{18}O$. This probability is equal to the ${}^{18}O$ atom fraction of the water vapor, which is denoted as $x_{vap}$ and calculated as $$x_{vap} = \frac{{}^{18}N_{vap} }{{}^{18}N_{vap} + {}^{16}N_{vap}}.$$
 
 * the rate of evaporation of $^{16}O$-water is proportional to the probability that the water molecule in the liquid phase contains $^{16}O$. This probability is equal to $1-x_{liq}$.
 
 * the rate of precipitation of $^{16}O$-water is proportional to the probability that the water molecule in the gas phase contains $^{16}O$. This probability is equal to $1-x_{vap}$.
 
-Now we explore how the equilibrium isotope fractionation between the water vapor and water liquid arises from the above mass balance formulation. Specifically, in an equilibrium, the time derivatives are equal to zero, which yields the following simplification of the above equations:
+* the rate constants of the forward and backward reactions are different.
 
-$$ \frac{{}^{18}N_{vap}}{dt} = 0 \quad\rightarrow\quad {}^{18}k_f \cdot x_{liq} = {}^{18}k_b\cdot x_{vap}  \cdot \frac{N_{vap}}{V_{vap}}, $$
-$$ \frac{{}^{16}N_{vap}}{dt} = 0 \quad\rightarrow\quad {}^{16}k_f \cdot (1-x_{liq}) = {}^{16}k_b\cdot (1-x_{vap}) \cdot \frac{N_{vap}}{V_{vap}}. $$
-By dividing the above equations with each other, we obtain
-$$
-\frac{{}^{18}k_f}{{}^{16}k_f}\cdot \frac{x_{liq}}{1-x_{liq}} = \frac{{}^{18}k_b}{{}^{16}k_b} \cdot \frac{x_{vap}}{1-x_{vap}},
-$$
-which can be simplified to 
-$$
-\frac{x_{liq}}{1-x_{liq}} = \alpha_{liq}(vap) \cdot \frac{x_{vap}}{1-x_{vap}}
-$$
-if we define the parameter $\alpha_{liq}(vap)$ according to
-$$
+Based on these assumptions, the exchange of $^{18}O$ and $^{16}O$ water molecules between the liquid water and water vapor is described by the following differential equations:
+
+\begin{equation}
+\label{eq6}
+\frac{{}^{18}N_{vap}}{dt} = {}^{18}k_f \cdot x_{liq} \cdot A_{liq} - 
+{}^{18}k_b\cdot x_{vap} \cdot A_{liq} \cdot \frac{N_{vap}}{V_{vap}}, 
+\end{equation}
+
+\begin{equation}
+\label{eq7}
+\frac{{}^{16}N_{vap}}{dt} = {}^{16}k_f \cdot (1-x_{liq}) \cdot A_{liq} - {}^{16}k_b\cdot (1-x_{vap}) \cdot A_{liq} \cdot \frac{N_{vap}}{V_{vap}}.
+\end{equation}
+
+## Equilibrium fractionation
+
+Now we show how the equilibrium isotope fractionation between the liquid water and water vapor arises from the above formulation of mass balances. In a thermodynamic equilibrium, the time derivatives are equal to zero, which yields the following relationships:
+
+\begin{equation}
+\label{eq8}
+\frac{{}^{18}N_{vap}}{dt} = 0 \quad\rightarrow\quad {}^{18}k_f \cdot x_{liq} = {}^{18}k_b\cdot x_{vap}  \cdot \frac{N_{vap}}{V_{vap}},
+\end{equation}
+
+\begin{equation}
+\label{eq9}
+\frac{{}^{16}N_{vap}}{dt} = 0 \quad\rightarrow\quad {}^{16}k_f \cdot (1-x_{liq}) = {}^{16}k_b\cdot (1-x_{vap}) \cdot \frac{N_{vap}}{V_{vap}}.
+\end{equation}
+
+By dividing Eq. 8 with Eq. 9, we obtain
+\begin{equation}
+\label{eq10}
+\frac{{}^{18}k_f}{{}^{16}k_f}\cdot \frac{x_{liq}}{1-x_{liq}} = \frac{{}^{18}k_b}{{}^{16}k_b} \cdot \frac{x_{vap}}{1-x_{vap}}.
+\end{equation}
+
+If we define a fractionation factor $\alpha_{liq}(vap)$ according to
+\begin{equation}
+\label{eq11}
 \alpha_{liq} (vap) \equiv \left(\frac{{}^{18}k_b}{{}^{16}k_b}\right) \left/ \left(\frac{{}^{18}k_f}{{}^{16}k_f}\right)\right. .
-$$
+\end{equation}
 
-In isotope chemistry, isotope composition of a sample is typically expressed as the isotope ratio or atom fraction. When applied to water, the isotope ratio is calculated from the number of ${}^{18}O$ and ${}^{16}O$ water molecules:
-$$
+the relationship in Eq. 10 can be simplified as
+
+\begin{equation}
+\label{eq12}
+\frac{x_{liq}}{1-x_{liq}} = \alpha_{liq}(vap) \cdot \frac{x_{vap}}{1-x_{vap}}.
+\end{equation}
+
+In isotope chemistry, isotope composition of a sample is typically expressed as the isotope ratio or atom fraction. When applied to water, the isotope ratio is calculated from the number of ${}^{18}O$ and ${}^{16}O$ water molecules,
+\begin{equation}
+\label{eq13}
 R = \frac{{}^{18}N}{{}^{16}N},
-$$
-Similarly, the atom fraction is calculated from the number of ${}^{18}O$ and total (${}^{18}O+ {}^{16}O$) water molecules:
-$$
+\end{equation}
+whereas the atom fraction is calculated from the number of ${}^{18}O$ and total (${}^{18}O+ {}^{16}O$) water molecules,
+\begin{equation}
+\label{eq14}
 x = \frac{{}^{18}N}{{}^{18}N + {}^{16}N}.
-$$
+\end{equation}
 These expressions imply the following relationship between $x$ and $R$:
-$$
+\begin{equation}
+\label{eq15}
 x = \frac{R}{1+R}\quad \leftrightarrow \quad R = \frac{x}{1-x}
-$$
-Differences in the isotope composition of two samples are typically expressed in the $\delta$ notation. Specifically, the difference of sample *b* versus sample *a* is calculated according to 
-$$
+\end{equation}
+
+Since absolute isotope ratios or atom fractions are difficult to determine analytically, they are typically expressed as a relative difference between two samples. These differences are typically expressed in the $\delta$ notation. Specifically, the difference of sample *b* versus sample *a* is defined according to \begin{equation}
+\label{eq16}
 \delta_a (b) = \frac{R_b}{R_a} - 1,
-$$
+\end{equation}
 where $R_a$ and $R_b$ are the corresponding isotope ratios. 
 
-We apply this definition to our specific situation and define the difference between the isotope composition of water vapor relative to liquid water according to
-$$
+We apply this definition to our specific situation and calculate the difference between the isotope composition of water vapor relative to liquid water in a thermodynamic equilibrium according to
+\begin{equation}
+\label{eq17}
 \delta_{liq} (vap) = \frac{R_{vap}}{R_{liq}}-1.
-$$
+\end{equation}
 
-Combining the above equations, we find the following relationships, which allow calculation of $\alpha$ from $\delta$ or vice versa:
-$$
-\delta_{liq}(vap) = \frac{1-\alpha_{liq}(vap)}{\alpha_{liq}(vap)} \quad \leftrightarrow \quad \alpha_{liq}(vap)=\frac{1}{1+\delta_{liq}(vap)}.
-$$
-We emphasize that the parameter $\alpha_{liq}(vap)$ relates the rate constants of the forward and backward reactions (evaporation and precipitation) for the light and heavy water isotopes, whereas the parameter $\delta_{liq}(vap)$ relates the difference in the ${}^{18}O/{}^{16}O$ isotope ratio between water vapor and liquid in an equilibrium.
+Combining equations 12, 15, and 17, we find the following relationships between the equilibrium fractionation factor, $\delta_{liq} (vap)$, and the kinetic fractionation factor, $\alpha_{liq}(vap)$:
+\begin{equation}
+\label{eq18}
+\delta_{liq}(vap) = \frac{1-\alpha_{liq}(vap)}{\alpha_{liq}(vap)} \quad \mathrm{or} \quad \alpha_{liq}(vap)=\frac{1}{1+\delta_{liq}(vap)}.
+\end{equation}
+We emphasize that the parameter $\alpha_{liq}(vap)$ relates the rate constants of the forward and backward reactions (evaporation and precipitation) for the light and heavy water isotopes (Eq. 11), whereas the parameter $\delta_{liq}(vap)$ relates the difference in the ${}^{18}O/{}^{16}O$ isotope ratio between water vapor and liquid water in a thermodynamic equilibrium (Eq. 17).
 
+## Work in progress
+To do: expand the above model formulation to two water reservoirs "connected" via the gas phase (Figure 1).
 
 # Model definition
 
