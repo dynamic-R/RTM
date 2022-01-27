@@ -100,7 +100,7 @@ RTMexercise <- function(x = c("?",
             output = c("HTML", "PDF", "RMD", "WORD"))
 RTMexerciseFULL(x=x, type=type, output=output, sub="_Q")
 
-# A private function - to be used as RTM:::RTManswer: prints question+answer
+#  prints question+answer
 RTManswer <- function(x, output=c("HTML", "PDF", "RMD", "WORD")) {
   output <- match.arg(toupper(output), choices=c("HTML", "PDF", "RMD", "WORD"))
   sub <- ""

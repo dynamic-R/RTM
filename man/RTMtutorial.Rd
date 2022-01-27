@@ -1,6 +1,7 @@
 \name{RTMtutorial}
 \alias{RTMtutorial}
 \alias{RTMexercise}
+\alias{RTManswer}
 \alias{RTMreader}
 \alias{RTMtemplate}
 \title{Reaction Transport Modelling: tutorials, exercises, extra readers, templates}
@@ -23,10 +24,12 @@ RTMexercise(x = c("?", "introductionR", "conceptual", "massbalance_chemistry",
                "individualbased", "reaction_transport"),            
             output = c("HTML", "PDF", "RMD", "WORD"))
 
+RTManswer(x, output = c("HTML", "PDF", "RMD", "WORD"))
+
 RTMreader  (x = c("?", "events", "forcings", "observations", 
                "fitting", "visualisation", "pHprofiles", 
                "perturbation_I", "perturbation_II", 
-               "interactive", "numericalR", "git_sharing_code"),
+               "interactive", "interactive2", "numericalR", "git_sharing_code"),
             output = c("HTML", "PDF", "RMD", "WORD"))      
 
 RTMtemplate(x = c("?", "rtm0D", "rtm1D", "porous1D", "porous1D_extensive", 
@@ -43,13 +46,13 @@ RTMtemplate(x = c("?", "rtm0D", "rtm1D", "porous1D", "porous1D_extensive",
 }
 
 \description{
-Tutorials start with a short video that introduces the theory behind a specific topic, followed by questions (mostly multiple-choice) and short exercises that can be used to test how well the theory explained in the video has been understood. Each tutorial can be completed in 20-30 minutes, although some of them are more challenging and may take up to 45-60 minutes to complete. 
+\code{Tutorials} start with a short video that introduces the theory behind a specific topic, followed by questions (mostly multiple-choice) and short exercises that can be used to test how well the theory explained in the video has been understood. Each tutorial can be completed in 20-30 minutes, although some of them are more challenging and may take up to 45-60 minutes to complete. 
 
-Exercises contain more complicated problems and tasks. Their aim is to deepen the understanding of the knowledge gained in the tutorial. Thus, each exercise is linked to a particular tutorial (see "More exercises" at the end of each tutorial) and should be solved after completing that tutorial. It should be possible to complete the tasks from each exercise in 2-4 hours.
+\code{Exercises} contain more complicated problems and tasks. Their aim is to deepen the understanding of the knowledge gained in the tutorial. Thus, each exercise is linked to a particular tutorial (see "More exercises" at the end of each tutorial) and should be solved after completing that tutorial. It should be possible to complete the tasks from each exercise in 2-4 hours.
 
-Readers contain accessory material. They are not mandatory for the course, but they provide useful information that helps students expand their knowledge of modelling and programming in R. 
+\code{Readers} contain accessory material. They are not mandatory for the course, but they provide useful information that helps students expand their knowledge of modelling and programming in R. 
 
-Templates are R Markdown files containing a basic skeleton of a document that merges an R-code implementing a model with an explanatory text and results of the model. They provide a convenient way to start developing a model in R. Different templates are available for dynamic box models and 1D reaction-transport models. 
+\code{Templates} are R Markdown files containing a basic skeleton of a document that merges an R-code implementing a model with an explanatory text and results of the model. They provide a convenient way to start developing a model in R. Different templates are available for dynamic box models and 1D reaction-transport models. 
 
 All material in this package is designed to help students prepare for the exam.
 }
@@ -71,8 +74,6 @@ RTMtutorial(1, output="Rmd")
 
 \details{
 Tutorials, exercises, and readers are created "on the fly". That is, they are stored in the RTM package as R markdown files (extension .Rmd) and are converted to the output format from the R command line (see Usage). This conversion should typically take a few seconds.
-
-Answers to all exercises are also included in the RTM package. They can be generated using a private function RTManswer.
 }
 
 \examples{
