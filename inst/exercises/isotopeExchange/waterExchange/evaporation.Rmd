@@ -1,0 +1,329 @@
+---
+title: "Evaporation and precipitation of water --- Part I"
+subtitle: "Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
+author: "Lubos Polerecky, Utrecht University"
+date: "January 2022"
+output: pdf_document
+abstract: \noindent Consider a water body surrounded by air. If the relative humidity of the air is below 100%, water will evaporate. In contrast, if the relative air humidity exceeds 100%, which occurs, for instance, when air with a given water vapor content cools down, water will precipitate from the gas phase to form a liquid. In both cases, the process will continue until an equilibrium is reached, i.e., until the relative humidity reaches 100%. In this reader, we will show how these processes can be modeled in R.
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Theoretical background
+
+Consider a system consisting of two water reservoirs enclosed in a gas-tight container: liquid water (volume $V_{liq}$, amount $N_{liq}$), and water vapor above the liquid (volume $V_{vap}$, amount $N_{vap}$). Both the liquid water and water vapor have equal temperature, $T$. Water in the liquid phase can evaporate to form water vapor, and vice versa, water vapor can precipitate to form liquid water. These processes occur across the liquid-vapor boundary (area $A_{liq}$). 
+
+In the first approximation, precipitation is assumed to be described by first-order kinetics, i.e., the rate is linearly proportional to $N_{vap}$ (more specifically to the concentration of water vapor molecules $N_{vap}/V_{vap}$), whereas evaporation is assumed to follow zero-order kinetics, i.e., the rate is independent of $N_{vap}$ (as long as the liquid water is present). Additionally, since both processes occur at the interface between the liquid and gas phase, their rates are assumed to be proportional to $A_{liq}$. Thus, the change over time in the number of water vapor molecules above the liquid is described by the following differential equation:
+\begin{equation}
+\label{eq1}
+\frac{dN_{vap}}{dt} = k_f\cdot A_{liq} 
+  - k_b\cdot A_{liq} \cdot \frac{N_{vap}}{V_{vap}},
+\end{equation}
+where the rate constants $k_f$ (in $mol~m^{-2}~s^{-1}$) and $k_b$ (in $m~s^{-1}$) correspond to the forward (evaporation) and backward (precipitation) reaction, respectively. Considering that the system is closed, the total amount of water molecules must be conserved. Thus, the amount of molecules of liquid water changes over time at the same rate as the amount of vapor molecules but in the opposite direction:
+
+\begin{equation}
+\label{eq2}
+\frac{dN_{liq}}{dt} = - \frac{dN_{vap}}{dt}.
+\end{equation}
+
+When the time derivative $dN_{vap}/dt$ becomes equal to zero, the system reaches an equilibrium. Equation 1 implies that the corresponding equilibrium concentration of vapor molecules is equal to the ratio between the rate constants for the forward and backward reaction:\footnote{In this document, values of variables in a thermodynamic equilibrium are marked with an asterisk ($*$).} 
+\begin{equation}
+\label{eq3}
+\frac{dN_{liq}}{dt} = 0 \quad\rightarrow\quad
+\left( \frac{N_{vap}}{V_{vap}}\right)^* = \frac{k_f}{k_b}.
+\end{equation}
+Using this value, Eq. 1 can be rewritten in the following form:
+\begin{equation}
+\label{eq4}
+\frac{dN_{liq}}{dt} = - \frac{dN_{vap}}{dt} = k_b\cdot A_{liq} \cdot
+\left[ \left(\frac{N_{vap}}{V_{vap}}\right)^* - 
+\left(\frac{N_{vap}}{V_{vap}}\right) \right].
+\end{equation}
+Thus, the process of evaporation and precipitation can be thought of as being driven by a chemical disequilibrium, i.e., the rate is proportional to the difference between the equilibrium and instantaneous concentration of vapor molecules above the liquid.
+
+## Reformulation of the equations using vapor pressure
+
+If water vapor behaves as an ideal gas, the concentration of water vapor molecules is related to the vapor pressure, $P_{vap}$, through the ideal gas law,
+\begin{equation}
+\label{eq5}
+\frac{N_{vap}}{V_{vap}} = \frac{P_{vap}}{R\cdot T},
+\end{equation}
+where $R=8.314~J~K^{-1}~mol^{-1}$ is the gas constant, and $T$ is the vapor temperature (in $K$). Using this relationship, Eq. 4 can be rewritten in the form
+\begin{equation}
+\label{eq6}
+\frac{dN_{vap}}{dt} = \frac{k_b}{R\cdot T} \cdot A_{liq}\cdot \left( P_{vap}^* - P_{vap} \right).
+\end{equation}
+This form is equivalent to the empirical relationship developed by Carrier\footnote{Carrier W. H., “The Temperature of Evaporation,” Trans. Am. Soc. Heat. Vent. Eng., vol. 24, p. 25, 1918.} to describe water evaporation and precipitation: 
+\begin{equation}
+\label{eq7}
+\frac{dN_{vap}}{dt} = \frac{c_1 + c_2\cdot v}{\Delta\bar{H}_{vap}} \cdot A_{liq}\cdot \left( P_{vap}^* - P_{vap} \right),
+\end{equation}
+where $\Delta \bar{H}_{vap}$ is the molar enthalpy of vaporization of water ($\approx 40.66~kJ~mol^{-1}$), $v$ is the wind velocity (in $m~s^{-1}$), and $c_1 = 0.0888~m~s^{-1}$ and $c_2=0.0783$ are empirical constants. 
+
+By comparing Eqs. 6 and 7, we see that the precipitation rate constant $k_b$ can be calculated from the empirical constants $c_1$ and $c_2$ according to
+\begin{equation}
+\label{eq8}
+k_b = \frac{R\cdot T}{\Delta \bar{H}_{vap}}\cdot (c_1+c_2\cdot v).
+\end{equation}
+Additionally, by combining this result with Eq. 3, the evaporation rate constant $k_f$ can be calculated from $k_b$, temperature, and the equilibrium vapor pressure according to 
+\begin{equation}
+\label{eq9}
+k_f = k_b \cdot \frac{P_{vap}^*}{R\cdot T}.
+\end{equation}
+
+## Equilibrium vapor pressure
+
+The equilibrium vapor pressure depends on the temperature of the system comprising liquid water and water vapor and can be calculated if the temperature is known. For example, we know that water boils at a temperature of $100~^\circ C$ when the external pressure is $1~atm$. Thus, the equilibrium vapor pressure at a temperature of $T_{boil} = 373.15~K$ is $P_{vap}^*(T_{boil}) = 1~atm = 101325~Pa$. At any other temperature, $T$, the equilibrium vapor pressure is calculated using the Clausius-Clapeyron equation:
+\begin{equation}
+\label{eq10}
+\ln\left[\frac{P_{vap}^*(T)}{P_{vap}^*(T_{boil})}\right] =
+-\frac{\Delta \bar{H}_{vap}}{R}\cdot \left(\frac{1}{T} - \frac{1}{T_{boil}}\right).
+\end{equation}
+
+## Molar fraction
+
+When dealing with mixtures, properties of individual components in the mixture are described by *partial molar* quantities. One of the most important partial molar quantities is *molar fraction*, typically denoted by $x$. For a component $A$, this quantity is defined as the ratio between the amount of component $A$ and the total amount of the mixture (both amounts are in moles):
+\begin{equation}
+\label{eq11}
+x_A = N_A / N_{tot}.
+\end{equation}
+
+When dealing with gas mixtures, such as atmospheric air, individual components are characterized by another important partial molar quantity: partial pressure. If a mixture behaves as an ideal gas, partial pressures are additive. Thus, partial pressure of an individual component is equal to the product of the total pressure, $P_{tot}$, and the molar fraction of that component: $P_A=x_A\cdot P_{tot}$. Because moist air at typical conditions behaves as an ideal gas, partial pressure of water vapor is calculated as
+\begin{equation}
+\label{eq12}
+P_{vap} = x_{vap}\cdot P_{air},
+\end{equation}
+where $x_{vap}$ is the molar fraction of water vapor in air and $P_{air}$ is the total air pressure. For example, if the total air pressure is $1~atm$ and 1 in every 1000 molecules of air is water, the molar fraction of water vapor is $x_{vap}=0.001$ and the corresponding partial pressure of water vapor is $P_{vap}= 1~matm$.
+
+## Relative air humidity
+
+Rather than using molar fractions, we typically express the water content of air in terms of a *relative humidity*, $\phi$. This quantity is defined as the ratio between the vapor pressure and the equilibrium vapor pressure. Thus, the vapor pressure is calculated from the relative humidity according to
+\begin{equation}
+\label{eq13}
+P_{vap} = \phi \cdot P_{vap}^*.
+\end{equation}
+
+Because the molar fraction and humidity are relative quantities, they are often expressed in %. This can cause confusion. We emphasize here that they are fundamentally different quantities: while molar fraction of water vapor in air is the ratio between the vapor pressure and the *total* air pressure (Eq. 11), relative humidity of air is the ratio between the vapor pressure and the *equilibrium* vapor pressure (Eq. 13).
+
+# Task 1
+
+Calculate the equilibrium vapor pressure, $P_{vap}^*$, for temperatures of $10~^\circ C$, $20~^\circ C$, and $50~^\circ C$. What are the corresponding vapor pressures, $P_{vap}$, and molar fractions, $x_{vap}$, if the total air pressure is $0.95~atm$ and the relative air humidity is 80 %?
+
+## Solution 1
+
+First, we implement the Clausius-Clapeyron equation (Eq. 10) to calculate the equilibrium vapor pressure, then use Eq. 13 to calculate the partial vapor pressure, and finally Eq. 12 to calculate the molar fraction.
+```{r, echo=TRUE, eval=TRUE}
+# implement Clausius-Clapeyron equation
+Peq_vapor <- function(TK=300)
+  101325 * exp( -40.66e3/8.314 * (1/TK - 1/373.15) )
+
+# conditions
+Pair  <- 0.95*101325            # air pressure, in Pa
+humid <- 0.8                    # relative air humidity
+TK    <- c(10, 20, 50) + 273.15 # temperature, in K
+Peq   <- Peq_vapor(TK)          # equilibrium vapor pressure, in Pa
+Pvap  <- humid*Peq              # partial vapor pressure, in Pa
+xvap  <- Pvap/Pair              # molar fraction of water vapor
+
+# merge results in a data.frame
+data.frame(T_K = TK, Peq_Pascal = Peq, xvap_percent = xvap*100)
+```
+
+The above results show that although the relative air humidity stays constant, the molar fraction of water vapor steeply increases with temperature from about 1 % to about 11 %. This increase is caused by the steep increase in the equilibrium vapor pressure with temperature.
+
+
+# Task 2
+
+Consider a gas-tight container filled with liquid water and air (total air pressure of $1~atm$). The air is initially dry (relative humidity of 0 %). The temperature of air and liquid water is initially $20~^\circ C$ for $1~h$ and then abruptly decreases to $10~^\circ C$ for another $1~h$.
+
+* Write a model that calculates the amount of water vapor above the liquid as a function of time. Express this amount in moles, as a molar fraction, and as a relative air humidity. 
+
+* Evaluate the gross and net amounts of water transferred between the liquid and gas phase during the first and second hour.
+
+## Assumptions
+
+* Initial volume of the liquid $V_{liq} = 1~L$, initial volume of the air is $1~m^3$.
+
+* Area of the liquid is constant, $A_{liq} = 1~m^2$.
+
+* Air is stagnant. Thus, you can assume the wind velocity of $v=0$.
+
+* Since the differences in the molar volumes of the liquid and gas water at standard conditions are very large, you can neglect the small changes in $V_{vap}$ associated with the evaporation/precipitation processes. You can also ignore the dissolution of the other air components (e.g., $N_2$ or $O_2$) in water.
+
+# Solution 2
+
+## Model implementation in R
+
+First, we define model parameters and empirical constants.
+
+```{r}
+# model parameters
+Aliq     <- 1           # liquid water area (m2) 
+Pext     <- 101325      # external pressure (Pa)
+v        <- 0           # wind speed (m h-1)
+TK1      <- 293.15      # temperature during first period (K)
+TK2      <- 283.15      # temperature during second period (K)
+
+# empirical constants or parameters
+Rgas     <- 8.314       # gas constant (J mol-1 K-1)
+dHvap    <- 40.66e3     # molar enthalpy of vaporisation of water (J mol-1)
+c1       <- 0.0888*3600 # empirical constant in Eq. 7 (m h-1)
+c2       <- 0.0783      # empirical constant in Eq. 7 (-)
+rho      <- 1e3         # water density (kg m-3)
+MW       <- 18e-3       # molar weight of water (kg mol-1)
+```
+
+Then, we define auxillary functions for calculating the amounts of water molecules from the volume of the water vapor and liquid, respectively, and the rate constants from the temperature. We use the ``Peq_vapor()`` function defined above.
+
+```{r}
+Nwater_vapor <- function(humid, TK, V){ # calculate Nvap from volume, T, and humidity
+  humid*Peq_vapor(TK)*V/(TK*Rgas)       # based on the ideal gas law (Eq. 5) and Eq. 13
+}
+
+Nwater_liquid <- function(V){           # calculate Nliq from volume
+  rho*V/MW                              # using density and molar weight
+}
+
+kbT <- function(TK, v=0){               # rate constant of water precipitation (m h-1)
+  Rgas*TK/dHvap*(c1+c2*v)               # Eq. 8
+}
+
+kfT <- function(TK, v=0){               # rate constant of water evaporation (mol m-2 h-1)
+  kbT(TK, v) * Peq_vapor(TK)/(Rgas*TK)  # Eq. 9
+}
+```
+
+Finally, we define the model function based on the differential equations 1 and 2. 
+
+```{r, eval = TRUE, cache = FALSE, echo = TRUE, warning=FALSE, message=FALSE}
+WaterEvapPrecip <-function(t, state, pars) {
+  with (as.list(c(state, pars)),{
+    
+    # rate constants at the given temperature (TK given in pars)
+    kb <- kbT(TK)
+    kf <- kfT(TK)
+    
+    # volume of the gas phase (air+vapor) at a given Nvap, TK, and Pext
+    Vvap <- Rgas*TK*(Nair+Nvap)/Pext # based on ideal gas law
+    
+    # process rates, mol h-1, Eq. 1
+    evaporation   <- kf*Aliq
+    precipitation <- kb*Aliq * Nvap/Vvap
+    
+    # time-derivatives
+    dNvap.dt <-  evaporation - precipitation
+    dNliq.dt <- -evaporation + precipitation
+    
+    # extra output quantities 
+    Pvap  <- Nvap/Vvap * Rgas * TK # partial pressure of vapor, Eq. 5
+    Pair  <- Nair/Vvap * Rgas * TK # partial pressure of air
+    Ptot  <- Pvap + Pair           # total pressure of the gas phase
+    humid <- Pvap/Peq_vapor(TK)    # humidity, Eq. 13
+    Vliq  <- Nliq*MW/rho           # volume of the liquid water
+    Vtot  <- Vvap + Vliq           # total volume (liquid + gas)
+    
+    # return time-derivatives and ordinary variables as a list
+    list(c(dNvap.dt, dNliq.dt),
+         
+         # extra output:
+         # amounts of molecules
+         Ntot.water = Nvap + Nliq,                  # water, total
+         Ntot.air   = Pext * Vvap/(Rgas*TK) - Nvap, # air, total
+         
+         # process rates, mol h-1
+         R.evaporation   = evaporation,
+         R.precipitation = precipitation,
+         
+         # rate constants
+         kb = kb,             # m h-1
+         kf = kf,             # mol m-2 h-1
+         
+         # volumes
+         Vgas.m3 = Vvap,      # gas phase
+         Vliq.L  = Vliq*1e3,  # liquid phase
+         Vtot.m3 = Vtot,      # total (gas+liquid)
+         
+         # pressures
+         Pvap = Pvap,         # partial pressure of vapor, Pa
+         Pair = Pair/101325,  # partial pressure of air, atm
+         Pgas = Ptot/101325,  # total gas pressure (vapor+air), atm
+         
+         # fractions
+         xvap = Nvap/(Nvap+Nair), # molar fraction of vapor, Eq. 11
+         #xvap = Pvap/Pext,       # molar fraction of vapor, Eq. 12
+         humid = humid            # humidity, (-)
+         )
+  })
+}
+
+```
+
+## Model solution
+
+First, we define a function that returns the values of state variables and model parameters based on the conditions defined by the problem (i.e., initial volumes and relative air humidity).
+
+```{r}
+find_state_pars <- function(Vtot, Vliq, humid, TK){
+  # volume of the vapor (=gas phase)
+  Vvap <- Vtot - Vliq
+
+  # amounts of vapor, liquid, and air in the gas phase
+  Nvap <- Nwater_vapor(humid, TK, Vvap)
+  Nliq <- Nwater_liquid(Vliq)
+  Nair <- Pext * Vvap/(Rgas*TK) - Nvap
+  
+  # output: state variables and parameters
+  SV   <- c(Nvap = Nvap, Nliq = Nliq)
+  pars <- c(TK = TK, Nair = Nair)
+  return(list(SV=SV, pars=pars))
+}
+```
+
+Now, we can use the above function to generate the initial conditions and model parameters and use it to solve the model over the first hour.
+
+```{r}
+# initial conditions
+ini   <- find_state_pars(Vtot=1, Vliq=1e-3, humid=0.5, TK=TK1)
+pars  <- ini$pars
+SVini <- ini$SV
+
+require(deSolve)
+
+# solve the model over the first hour
+outtimes <- seq(from = 0, to = 1, length.out = 100) # time in hr
+out1 <- ode(y = SVini, parms = pars, func = WaterEvapPrecip, times = outtimes)
+```
+
+Subsequently, we use the end values of the first model run to calculate the initial condition for the model run over the second hour. We consider an ideal gas law when calculating the new volume of the gas phase during cooling from $T_1$ to $T_2$.
+
+WORK in progress...
+
+```{r}
+SVini2 <- tail(out1[,c("Nvap","Nliq")],1)
+
+```
+
+We plot the number of water molecules in the model reservoirs:
+
+```{r, fig.height=8, fig.width=8}
+plot(out1,
+     #which=c("Nvap",   "Nliq",
+     #         "evaporation","precipitation"),
+     xlab="time (hr)", lty=1, las=1, lwd=2, mfrow=c(3,4),
+     ylab="mol O2")
+```
+
+```{r, eval=FALSE, fig.height=4, fig.width=8}
+plot(out1, out1, out2, 
+     which=c("delta_LiqB_vs_LiqA","delta_Vap_vs_LiqA"),
+     xlab="time (days)", las=1, lwd=2, lty=1, mfrow=c(1,2))
+abline(h=pars1["delta"], lty=2, col=2)
+abline(h=pars2["delta"], lty=2, col=3)
+legend("bottomright", title="delta (permil):",
+       legend=c(sprintf("%.1f",pars["delta"]), 
+                sprintf("%.1f",pars1["delta"]),
+                sprintf("%.1f",pars2["delta"])), 
+       lty=1, lwd=2, col=1:3, bty="n")
+```
