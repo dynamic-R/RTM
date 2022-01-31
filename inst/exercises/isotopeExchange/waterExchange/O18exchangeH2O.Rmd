@@ -1,0 +1,327 @@
+---
+title: "${}^{18}$O exchange between two water reservoirs"
+subtitle: "Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
+author: "Lubos Polerecky, Utrecht University"
+date: "January 2022"
+output: pdf_document
+header-includes: 
+  \usepackage{float} 
+  \floatplacement{figure}{th}
+  \usepackage{siunitx}
+abstract: \noindent There is a continuous exchange of water molecules between liquid water and air due to evaporation and precipitation. Because lighter and heavier water molecules in the gas phase move at different speeds and are bound by slightly different forces within the liquid water, the exchange results in a fractionation of the $H_2{}^{18}O/H_2{}^{16}O$ isotope ratio between water vapor and liquid water. In this reader, we will show how the dynamics of this fractionation can be modeled in R.
+---
+
+# Theoretical background
+
+The theoretical background of the processes governing water exchange between the liquid and gas phase is described in the reader "Evaporation and precipitation of water". This reader can be viewed using the command
+```
+RTMexercise("evaporationH2O")
+```
+Here, we expand the equations in that reader towards the $H_2{}^{16}O$ and $H_2{}^{18}O$ water molecules.
+
+## Isotope ratio, atom fraction, $\delta$-notation
+
+First, we introduce quantities that are commonly used in stable isotope research. For a given sample, $s$, we denote the number of $H_2{}^{16}O$ and $H_2{}^{18}O$ molecules in the sample by ${}^{16}N_s$ and ${}^{18}N_s$, respectively, and define the ${}^{18}O/{}^{16}O$ *isotope ratio*, $R_s$, and the ${}^{18}O$ *atom fraction*, $x_s$, according to
+\begin{equation}\label{eq1}
+R_s = \frac{{}^{18}N_{s}}{{}^{16}N_{s}}, \qquad
+x_s = \frac{{}^{18}N_{s}}{{}^{18}N_{s} + {}^{16}N_{s}}.
+\end{equation}
+In the last definition, we assumed that the contribution of the $H_2{}^{17}O$ molecules is minor and therefore negligible. We will make this assumption throughout this document.
+Equations 1 imply the following relationship between $x_s$ and $R_s$,
+\begin{equation}\label{eq2}
+x_s = \frac{R_s}{1+R_s}, \qquad R_s = \frac{x_s}{1-x_s},
+\end{equation}
+which can be verified by direct substitution.
+
+Since absolute isotope ratios or atom fractions are difficult to determine analytically, they are typically expressed as a *relative difference* between two samples. These differences are typically expressed in the $\delta$ notation. Specifically, the difference of sample *b* versus sample *a* is defined according to 
+\begin{equation}\label{eq3}
+\delta_a (b) = \frac{R_b}{R_a} - 1,
+\end{equation}
+where $R_a$ and $R_b$ are the corresponding isotope ratios. Most commonly, the $\delta$ value calculated by Eq. \ref{eq3} is multiplied by 1000 and reported in permil (\textperthousand).
+
+## Kinetic isotope fractionation
+
+We make the following assumptions to formulate the kinetic isotope fractionation effects.
+
+* the rate of evaporation of $^{18}O$-water is proportional to the probability that the water molecule in the liquid phase contains $^{18}O$. This probability is equal to the ${}^{18}O$ atom fraction of the liquid water, $x_{liq}$.
+
+* the rate of precipitation of $^{18}O$-water is proportional to the probability that the water molecule in the gas phase contains $^{18}O$. This probability is equal to the ${}^{18}O$ atom fraction of the water vapor, $x_{vap}$.
+
+* the rate of evaporation of $^{16}O$-water is proportional to the probability that the water molecule in the liquid phase contains $^{16}O$. This probability is equal to $1-x_{liq}$.
+
+* the rate of precipitation of $^{16}O$-water is proportional to the probability that the water molecule in the gas phase contains $^{16}O$. This probability is equal to $1-x_{vap}$.
+
+* the rate constants of the forward and backward reactions are different for the lighter and heavier water molecules.
+
+In the reader "Evaporation and precipitation of water", we formulated the exchange of water molecules between the liquid water and water vapor by differential equations 1 and 2. Based on the above assumptions, those differential equations can be written separately for the $H_2{}^{16}O$ and $H_2{}^{18}O$ molecules as follows:
+\begin{equation}\label{eq4}
+\frac{{}^{18}N_{vap}}{dt} = {}^{18}k_f \cdot x_{liq} \cdot A_{liq} - 
+{}^{18}k_b\cdot x_{vap} \cdot A_{liq} \cdot \frac{N_{vap}}{V_{gas}}, 
+\end{equation}
+\begin{equation}\label{eq5}
+\frac{{}^{16}N_{vap}}{dt} = {}^{16}k_f \cdot (1-x_{liq}) \cdot A_{liq} - {}^{16}k_b\cdot (1-x_{vap}) \cdot A_{liq} \cdot \frac{N_{vap}}{V_{gas}},
+\end{equation}
+where ${}^{16}k_f$, ${}^{16}k_b$, ${}^{18}k_f$ and ${}^{18}k_b$ are rate constants describing the corresponding process, $V_{gas}$ is the volume of the gas phase (containing water vapor), and $A_{liq}$ is the area of the liquid water surface.
+
+## Kinetic versus equilibrium fractionaction
+
+In an equilibrium, the time derivatives are equal to zero, which yields the following relationships:\footnote{In this document, values of variables in an equilibrium are marked with an asterisk (*).}
+
+\begin{equation} \label{eq6}
+\frac{{}^{18}N_{vap}}{dt} = 0 \quad\rightarrow\quad {}^{18}k_f \cdot x_{liq}^* = {}^{18}k_b\cdot x_{vap}^*  \cdot \left( \frac{N_{vap}}{V_{gas}}\right)^*,
+\end{equation}
+
+\begin{equation} \label{eq7}
+\frac{{}^{16}N_{vap}}{dt} = 0 \quad\rightarrow\quad {}^{16}k_f \cdot (1-x_{liq}^*) = {}^{16}k_b\cdot (1-x_{vap}^*) \cdot \left( \frac{N_{vap}}{V_{gas}}\right)^*.
+\end{equation}
+
+By dividing Eq. \ref{eq6} with Eq. \ref{eq7}, we obtain
+\begin{equation} \label{eq8}
+\frac{{}^{18}k_f}{{}^{16}k_f}\cdot \frac{x_{liq}^*}{1-x_{liq}^*} = \frac{{}^{18}k_b}{{}^{16}k_b} \cdot \frac{x_{vap}^*}{1-x_{vap}^*}.
+\end{equation}
+
+We define the *kinetic fractionation factor*, $\alpha_{liq}(vap)$, according to the following equation:
+\begin{equation} \label{eq9}
+\alpha_{liq} (vap) \equiv \left(\frac{{}^{18}k_b}{{}^{16}k_b}\right) \left/ \left(\frac{{}^{18}k_f}{{}^{16}k_f}\right)\right. .
+\end{equation}
+Additionally, we define the relative difference in the isotopic composition of water vapor versus liquid water, and the corresponding equilibrium value, according to (see Eq. \ref{eq3})
+\begin{equation} \label{eq10}
+\delta_{liq} (vap) = \frac{R_{vap}}{R_{liq}}-1, \qquad
+\delta^*_{liq} (vap) = \frac{R_{vap}^*}{R_{liq}^*}-1.
+\end{equation}
+By combining these definitions with the relationships in Eq. \ref{eq2}, the relationship in Eq. \ref{eq8} can be written in the following simple form:
+\begin{equation} \label{eq11}
+\delta^*_{liq}(vap) = \frac{1-\alpha_{liq}(vap)}{\alpha_{liq}(vap)} \quad \mathrm{or} \quad \alpha_{liq}(vap)=\frac{1}{1+\delta^*_{liq}(vap)}.
+\end{equation}
+
+Equation \ref{eq11} shows that there is an *intimate relationship* between the kinetic and equilibrium isotope fractionation effects. Specifically, $\alpha_{liq}(vap)$ is a measure of the differences between the *rate constants* of the forward and backward reactions (evaporation and precipitation) for the lighter and heavier water molecules (Eq. \ref{eq9}), whereas $\delta^*_{liq}(vap)$ measures the difference between the *isotopic composition* (the ${}^{18}O/{}^{16}O$ isotope ratio) of the water vapor and liquid water in a thermodynamic equilibrium (Eq. \ref{eq10}). Thus, equation \ref{eq11} provides an important insight that forms a basis of stable isotope applications to the hydrological cycle on Earth: if the rate constants of the forward and backward reactions differ between the $H_2{}^{16}O$ and $H_2{}^{18}O$ molecules such that the factor $\alpha_{liq}(vap)$ calculated according to Eq. \ref{eq9} is *different from 1*, the isotopic composition of the water vapor will *differ* from the isotopic composition of the liquid water. In a thermodynamic equilibrium, this difference will be equal to $\delta^*_{liq}(vap)$ calculated from $\alpha_{liq}(vap)$ according to Eq. \ref{eq11}.
+
+# Task
+
+Consider an experimental setup where an open container is enclosed in a gas-tight container filled with air. Both containers are partially filled with water, and the air is initially dry (Figure 1). Although there is no direct mixing of liquid water between the reservoirs 1 and 2, there will be an isotope exchange between them due to evaporation and precipitation (i.e., the two liquid reservoirs are connected through the water vapor reservoir). Your task is to model the dynamics of this exchange. 
+
+* In the first model run, assume that the initial ${}^{18}O$ atom fraction is 0.002 for both liquid water reservoirs. Thus, the aim of this model run is to demonstrate the equilibrium isotope fractionation between the liquid water and water vapor.
+
+* In the second model run, assume the initial ${}^{18}O$ atom fractions of $x_{liq,1}=0.01$ and $x_{liq,2}=0.002$. Thus, the aim is to model the transfer of label between the two liquid water reservoirs through the head space.
+
+![Experimental setup with two liquid water reservoirs enclosed in a gas-tight container.](water_reservoirs.pdf){width=50%}
+
+## Assumptions
+
+* Temperature of the system and the total pressure of the gas phase are constant ($T=298~K$, $P_{tot} = 1~atm = 101325~Pa$). You can assume that this is accomplished by the walls of the gas-tight container being flexible (to keep the pressure constant) and heat being absorbed or supplied by the surrounding, as needed (to keep the temperature constant).
+* Dissolution in water of air components such as $N_2$ or $O_2$ can be ignored.
+* For the first liquid water reservoir, the area of the water surface is $A_{liq,1} = 1~m^2$ (constant), and the initial height of the water column is $h_{liq,1} = 1~mm$. 
+* For the second liquid water reservoir, the area of the water surface is $A_{liq,2} = 1~m^2$ (constant), and the initial height of the water column is $h_{liq,2} = 1~mm$. 
+* The initial total volume of the gas-tight container ($V_{tot}=V_{air}+V_{liq,1}+V_{liq,2}$) is $1~m^3$.
+* Both air and water vapor behave as an ideal gas, i.e., their volume, partial pressure, and temperature are related through the ideal gas law ($P\cdot V = n\cdot R\cdot T$).
+* The liquid and gas phases are well mixed (i.e., homogeneous). Thus, you can ignore transport processes and base your model entirely on mass balances (Eqs. 4 and 5) and the ideal gas law.
+* To calculate rate constants, use Eqs. 8, 9, and 10 derived in the reader "Evaporation and precipitation of water" and proceed as follows. First, calculate ${}^{16}k_b$ according to 
+\begin{equation}\label{eq12}
+k_b = \frac{R\cdot T}{\Delta \bar{H}_{vap}}\cdot (c_1+c_2\cdot v),
+\end{equation}
+where $\Delta \bar{H}_{vap}$ is the molar enthalpy of vaporization of water ($\approx 40.66~kJ~mol^{-1}$), $v$ is the wind velocity (in $m~s^{-1}$), and $c_1 = 0.0888~m~s^{-1}$ and $c_2=0.0783$ are empirical constants (Carrier, 1918). In this step, you can assume that the gas phase in the container is stagnant, i.e., $v=0$. Then, assume that ${}^{18}k_f = {}^{16}k_f$ and calculate ${}^{18}k_b$ according to 
+\begin{equation}\label{eq13}
+{}^{18}k_b = \alpha_{liq}(vap)\cdot {}^{16}k_b,
+\end{equation}
+as follows from Eq. 9 (this reader). Then, calculate the equilibrium vapor pressure, $P_{vap}^*$, using the Clausius-Clapeyron equation 
+\begin{equation}
+\label{eq14}
+\ln\left[\frac{P_{vap}^*(T)}{P_{vap}^*(T_{boil})}\right] =
+-\frac{\Delta \bar{H}_{vap}}{R}\cdot \left(\frac{1}{T} - \frac{1}{T_{boil}}\right),
+\end{equation}
+where $T_{boil} = 373.15~K$ is $P_{vap}^*(T_{boil}) = 1~atm = 101325~Pa$. Finally, calculate ${}^{18}k_f$ and ${}^{16}k_f$ according to
+\begin{equation}
+\label{eq15}
+{}^{16}k_f = {}^{18}k_f = {}^{16}k_b \cdot \frac{P_{vap}^*}{R\cdot T}.
+\end{equation}
+
+* Assume $\delta_{liq}(vap) = 20$ \textperthousand\ when calculating $\alpha_{liq}(vap)$ from Eq. \ref{eq11}.
+
+ 
+
+# Model definition
+
+## Parameters describing the experimental setup
+
+```{r}
+V3    <- 1      # air volume (m3)
+P     <- 101325 # air pressure (Pa)
+Rgas  <- 8.314  # gas constant (SI units)
+TK    <- 293.15 # temperature (K)
+fH2O  <- 0.01   # molar fraction of water in air at 100% humidity
+kb    <- 10     # rate constant of water precipitation (m d-1)
+A1    <- 1      # area of the water reservoir 1 (m2) 
+                # (corresponds to 3*4 subcores, each with inner diameter 1.2 cm)
+A2    <- 1      # area of the water reservoir 2 (m2)
+                # square of 25x25 cm
+h1    <- 1e-3   # height of the water reservoir 1 (m)
+h2    <- 1e-3   # height of the water reservoir 2 (m)
+xini  <- 0.002  # natural 18O atom fraction
+x1ini <- 0.002  # initial 18O atom fraction in water reservoir 1
+x2ini <- 0.002  # initial 18O atom fraction in water reservoir 2
+x3ini <- 0.002  # initial 18O atom fraction of water vapor (=water reservoir 3)
+rho   <- 1e3    # water density (kg m-3)
+MW    <- 18e-3  # molar weight of water (kg mol-1)
+                # rho/MW is assumed to be the same for 16O-H2O and 18O-H2O!
+```
+
+## Derived parameters
+
+```{r}
+c3eq  <- P/(Rgas*TK) * fH2O # density of H2O molecules in air at 100% humidity (mol/m3)
+V1    <- A1*h1              # volume of water in reservoir 1 (m3)
+V2    <- A2*h2              # volume of water in reservoir 2 (m3)
+# note: the density of particles (N/V=rho/MW) is assumed to be the same for 16O-H2O and 18O-H2O!
+N1ini <- rho*V1/MW          # initial amount of H2O molecules in reservoir 1 (mol)
+N2ini <- rho*V2/MW          # initial amount of H2O molecules in reservoir 2 (mol)
+N3eq  <- c3eq*V3            # equilibrium amount of H2O molecules in reservoir 3 (mol)
+```
+
+## Model parameters
+```{r}
+pars <- c(delta = 0, # delta = steady state (R3/R1-1)*1e3, in permil!
+          f1    = 1, # consider reservoir 1
+          f2    = 0  # consider reservoir 2
+          )
+```
+
+## Initial conditions
+
+```{r}
+# function to calculate initial state based on initial humidity of the air
+humidityH2Oini <- function(humidity=1){
+  # all values are in moles (16O-H2O and 18O-H2O isotopes separately)
+  H2Oini <- c(N1_16 = N1ini*(1-x1ini),
+              N1_18 = N1ini*x1ini,
+              N2_16 = N2ini*(1-x2ini),
+              N2_18 = N2ini*x2ini,
+              N3_16 = N3eq*(1-x3ini) * humidity,
+              N3_18 = N3eq*x3ini     * humidity
+             )
+  return(H2Oini)
+}
+```
+
+# Model definition
+
+```{r, eval = TRUE, cache = FALSE, echo = TRUE, warning=FALSE, message=FALSE}
+WaterExchangeModel <-function(t, state, pars) {
+  # t: time, state: state variables, pars: model parameters
+  with (as.list(c(state, pars)),{
+    
+    # convert delta (in permil!) to alpha = kb_18/kb_16
+    alpha <- 1/(delta*1e-3 + 1)
+    
+    # calculate all rate constants based on the rate constant 
+    # of water precipitation (kb), the fractionation factor (alpha), 
+    # and the equilibrium concentration c3eq
+    kb_16 <- kb
+    kb_18 <- kb * alpha
+    kf_16 <- kb * c3eq
+    kf_18 <- kb * c3eq
+          
+    # current amounts of H2O molecules in all reservoirs
+    N1 <- N1_16+N1_18 
+    N2 <- N2_16+N2_18 
+    N3 <- N3_16+N3_18
+    # current 18O atom fractions in all reservoirs
+    x1 <- N1_18/N1 
+    x2 <- N2_18/N2
+    x3 <- N3_18/N3
+    
+    # rate expressions [mol/d]
+    
+    # exchange between reservoir 1 (water) and 3 (water vapour)
+    Evap1_16 <- kf_16 * (1-x1) * A1 * (N1>0)
+    Evap1_18 <- kf_18 *    x1  * A1 * (N1>0)
+    Cond1_16 <- kb_16 * (1-x3) * A1 * N3/V3
+    Cond1_18 <- kb_18 *    x3  * A1 * N3/V3
+    
+    # exchange between reservoir 2 (water) and 3 (water vapour)
+    Evap2_16 <- kf_16 * (1-x2) * A2 * (N2>0)
+    Evap2_18 <- kf_18 *    x2  * A2 * (N2>0)
+    Cond2_16 <- kb_16 * (1-x3) * A2 * N3/V3
+    Cond2_18 <- kb_18 *    x3  * A2 * N3/V3
+    
+    # Time-derivatives: dN/dt = production - consumption [mol/d]
+    dN1_16.dt <- (-Evap1_16 + Cond1_16)*f1
+    dN1_18.dt <- (-Evap1_18 + Cond1_18)*f1
+    dN2_16.dt <- (-Evap2_16 + Cond2_16)*f2
+    dN2_18.dt <- (-Evap2_18 + Cond2_18)*f2
+    dN3_16.dt <- ( Evap1_16 - Cond1_16)*f1 + (Evap2_16 - Cond2_16)*f2
+    dN3_18.dt <- ( Evap1_18 - Cond1_18)*f1 + (Evap2_18 - Cond2_18)*f2
+    
+    # return time-derivatives and ordinary variables as a list
+    list(c(dN1_16.dt, dN1_18.dt,
+           dN2_16.dt, dN2_18.dt,
+           dN3_16.dt, dN3_18.dt),
+         
+         # number of molecules
+         Ntot_16 = N1_16+N2_16+N3_16, # total 16O-water
+         Ntot_18 = N1_18+N2_18+N3_18, # total 18O-water
+         N1 = N1_16 + N1_18,          # total water molecules, liquid 1
+         N2 = N2_16 + N2_18,          # total water molecules, liquid 2
+         N3 = N3_16 + N3_18,          # total water molecules, vapor
+         Ntot = N1_16+N2_16+N3_16+N1_18+N2_18+N3_18, # all water molecules
+         
+         # 18O atom fractions
+         x1 = N1_18/(N1_16+N1_18),
+         x2 = N2_18/(N2_16+N2_18),
+         x3 = N3_18/(N3_16+N3_18),
+         
+         # delta values (permil): delta_a_vs_b = (Ra/Rb-1)*1e3
+         delta_Vap_vs_LiqA =  ( (N3_18/N3_16) / (N1_18/N1_16) - 1 ) * 1e3,
+         delta_LiqB_vs_LiqA = ( (N2_18/N2_16) / (N1_18/N1_16) - 1 ) * 1e3
+         )
+  })
+}
+
+```
+
+# Model solution
+
+We calculate the dynamic solution for the initial humidity close to 0 and three values of the equilibrium fractionation factor $\delta$ (0, 50, and 100 permil):
+
+```{r, message=FALSE}
+require(deSolve)
+outtimes <- seq(from = 0, to = 1, length.out = 100) # time in days
+SVini <- humidityH2Oini(humidity = 1e-6)
+pars1 <- pars2 <- pars
+pars1["delta"] <- 50
+pars2["delta"] <- 100
+out0 <- ode(y = SVini, parms = pars,  func = WaterExchangeModel, times = outtimes)
+out1 <- ode(y = SVini, parms = pars1, func = WaterExchangeModel, times = outtimes)
+out2 <- ode(y = SVini, parms = pars2, func = WaterExchangeModel, times = outtimes)
+```
+
+We plot the number of water molecules in the model reservoirs:
+
+```{r, fig.height=6, fig.width=8}
+plot(out0, out1, out2, 
+     which=c("N1",   "N2",   "N3",   "Ntot",
+             "N1_16","N2_16","N3_16","Ntot_16", 
+             "N1_18","N2_18","N3_18","Ntot_18"),
+     xlab="time (days)", ylab="mol O2", lty=1, las=1, lwd=2, mfrow=c(3,4))
+```
+
+We plot the ${}^{18}O$ atom fractions:
+
+```{r, fig.height=3, fig.width=8}
+plot(out0, out1, out2, which=c("x1","x2","x3"),
+     xlab="time (days)", las=1, lwd=2, lty=1, mfrow=c(1,3))
+```
+
+Finally, we plot the $\delta$ values:
+
+```{r, fig.height=4, fig.width=8}
+plot(out0, out1, out2, 
+     which=c("delta_LiqB_vs_LiqA","delta_Vap_vs_LiqA"),
+     xlab="time (days)", las=1, lwd=2, lty=1, mfrow=c(1,2))
+abline(h=pars1["delta"], lty=2, col=2)
+abline(h=pars2["delta"], lty=2, col=3)
+legend("bottomright", title="delta (permil):",
+       legend=c(sprintf("%.1f",pars["delta"]), 
+                sprintf("%.1f",pars1["delta"]),
+                sprintf("%.1f",pars2["delta"])), 
+       lty=1, lwd=2, col=1:3, bty="n")
+```
