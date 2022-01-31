@@ -86,7 +86,8 @@ WaterEvapPrecip <-function(t, state, pars) {
     Vgas <- Rgas*TK*(Nair+Nvap)/Ptot # based on the ideal gas law
     
     # process rates, mol h-1, Eq. 1
-    evaporation   <- kf*Aliq
+    evaporation   <- kf*Aliq * (Nliq/(Nliq+1e-5)) # ensure that evaporation only occurs
+                                                  # if liquid water is present
     precipitation <- kb*Aliq * Nvap/Vgas
     
     # time-derivatives
