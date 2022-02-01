@@ -1,0 +1,30 @@
+---
+title: "${}^{18}$O exchange between water reservoirs"
+subtitle: "Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
+author: "Lubos Polerecky, Utrecht University"
+date: "February 2022"
+output: pdf_document
+header-includes: 
+  \usepackage{float} 
+  \floatplacement{figure}{th}
+  \usepackage{siunitx}
+abstract: \noindent There is a continuous exchange of water molecules between liquid water and air due to evaporation and precipitation. Because lighter and heavier water molecules in the gas phase move at different speeds and are bound by slightly different forces within the liquid water, the exchange results in a fractionation of the $H_2{}^{18}O/H_2{}^{16}O$ isotope ratio between water vapor and liquid water. In this reader, we will show how the dynamics of this fractionation can be modeled in R.
+---
+
+```{r child = 'O18exchangeH2O_Q.Rmd'}
+```
+
+\newpage
+```{r child = 'O18exchangeH2O_A.Rmd'}
+```
+
+# References
+
+R Core Team (2020). R: A language and environment for statistical computing. R Foundation for
+  Statistical Computing, Vienna, Austria. URL https://www.R-project.org/.
+  
+Karline Soetaert, Thomas Petzoldt, R. Woodrow Setzer (2010). Solving Differential Equations in R:
+  Package deSolve. Journal of Statistical Software, 33(9), 1--25. URL
+  http://www.jstatsoft.org/v33/i09/ DOI 10.18637/jss.v033.i09
+
+Carrier W. H. (1918). “The Temperature of Evaporation,” Trans. Am. Soc. Heat. Vent. Eng., vol. 24, p. 25.
