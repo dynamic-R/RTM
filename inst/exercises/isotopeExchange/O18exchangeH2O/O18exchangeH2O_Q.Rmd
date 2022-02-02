@@ -160,7 +160,8 @@ Consider a gas-tight container partially filled with liquid water and air. Using
 * Assume $\delta^*_{liq}(vap) = -10$ \textperthousand\ when calculating the rate constants.
 
 # Task 2
-Consider an experimental setup where an open container is enclosed in a gas-tight container filled with air. Both containers are partially filled with water, and the air is initially fully saturated with water vapor (Figure 1). Although there is no direct mixing of liquid water between the reservoirs 1 and 2, there will be an isotope exchange between them due to evaporation and precipitation (i.e., the two liquid reservoirs are connected through the water vapor reservoir). Your task is to model the dynamics of this exchange, i.e., predict the isotopic composition of the water vapor and the two liquid water reservoirs as a function of time.
+
+Consider an experimental setup where an open container is enclosed in a gas-tight container filled with air. Both containers are partially filled with water, and the air is initially fully saturated with water vapor (Figure 1). Although there is no direct mixing of liquid water between the reservoirs 1 and 2, there will be an isotope exchange between them due to evaporation and precipitation (i.e., the two liquid reservoirs are connected through the water vapor reservoir). Your task is to model the dynamics of this exchange, i.e., predict the isotopic composition of the water vapor and the two liquid water reservoirs as a function of time. How long does it take until all water reservoirs reach an isotopic equilibrium?
 
 ![Experimental setup with two liquid water reservoirs enclosed in a gas-tight container.](water_reservoirs.pdf){width=50%}
 
@@ -168,6 +169,10 @@ Consider an experimental setup where an open container is enclosed in a gas-tigh
 
 In addition to the assumptions made in Task 1, assume that
 
-* for the second liquid water reservoir, the area of the water surface in contact with the gas phase is $A_{liq,2} = 1~m^2$ (constant), the initial volume is $V_{liq,2} = 1~L$, and the initial ${}^{18}O$ atom fraction is 0.01.
+* for both liquid water reservoirs, the area of the water surface in contact with the gas phase is $0.5~m^2$ (constant), the initial volume is $0.5~L$.
+
+* for the first and second liquid water reservoir, the initial ${}^{18}O$ atom fraction is 0.002 and 0.004, respectively.
+
+* for the water vapor, the initial ${}^{18}O$ atom fraction is 0.002.
 
 * the initial total volume of the gas-tight container is $V_{tot}=V_{gas}+V_{liq,1} +V_{liq,2} = 1~m^3$.
