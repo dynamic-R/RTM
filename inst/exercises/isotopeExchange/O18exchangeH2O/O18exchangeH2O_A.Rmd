@@ -20,23 +20,23 @@ Aliq     <- 1           # liquid water area (m2)
 Ptot     <- 101325      # total pressure (Pa)
 v        <- 0           # wind speed (m h-1)
 TK       <- 298         # temperature (K)
+xini     <- 0.002       # initial 18O atom fraction of liquid water
 
 # empirical constants or parameters
 Rgas     <- 8.314       # gas constant (J mol-1 K-1)
-dHvap    <- 40.66e3     # molar enthalpy of vaporization of water (J mol-1)
-c1       <- 0.0888*3600 # empirical constant in Eq. 2 (m h-1)
-c2       <- 0.0783      # empirical constant in Eq. 2 (-)
-xini     <- 0.002       # initial 18O atom fraction of liquid water
+dHvap    <- 40.66e3     # molar enthalpy of vaporization of 16O-water (J mol-1)
+Pstd     <- 101325      # standard pressure (1 atm, in Pa)
+Tboil    <- 373.15      # boiling point of water at standard pressure (K)
 rho      <- 1e3         # water density (kg m-3)
 MW       <- 18e-3       # molar weight of water (kg mol-1)
                         # rho/MW is assumed to be the same for 16O-H2O and 18O-H2O!
 ```
 
-Then, we define auxiliary functions for calculating the equilibrium vapor pressure, amounts of water molecules in the gas and liquid phase, rate constants, and state variables.
+Second, we define auxiliary functions for calculating the equilibrium vapor pressure and amounts of water molecules in the gas and liquid phase from temperature, volume, and air humidity.
 
 ```{r}
-Peq_vapor <- function(TK=300)                        # input temperature in K!
-  101325 * exp( -40.66e3/8.314 * (1/TK - 1/373.15) ) # Clausius-Clapeyron equation
+Peq_vapor <- function(TK=300)                  # input temperature in K!
+  Pstd * exp( -dHvap/Rgas * (1/TK - 1/Tboil) ) # Clausius-Clapeyron equation
 
 Nwater_vapor <- function(humid, TK, V){ # calculate Nvap from humidity, T, and volume
   humid*Peq_vapor(TK)*V/(TK*Rgas)       # based on the ideal gas law
@@ -45,17 +45,12 @@ Nwater_vapor <- function(humid, TK, V){ # calculate Nvap from humidity, T, and v
 Nwater_liquid <- function(V){           # calculate Nliq from volume
   rho*V/MW                              # using density and molar weight
 }
+```
 
-kfbT <- function(TK, v=0, delta18O){    # rate constants
-  kb16 <- Rgas*TK/dHvap*(c1+c2*v)       # water precipitation (m h-1)
-  alpha <- 1/(delta18O*1e-3 + 1)        # convert delta18O (in permil!) to alpha
-  kb18 <- kb16 * alpha                  # this is the source of overall fractionation!
-  kf16 <- kb16 * Peq_vapor(TK)/(Rgas*TK)
-  kf18 <- kf16                          # kf16 and kf18 assumed to be equal!
-  return(c(kb16=kb16, kb18=kb18, kf16=kf16, kf18=kf18))
-}
+Third, we define a function for calculating state variables based on the initial conditions specified by the problem.
 
-find_state <- function(Vtot, Vliq, humid, TK, x18vap, x18liq){
+```{r}
+find_state <- function(Vtot, Vliq, humid, TK, Ptot, x18vap, x18liq){
   Vgas <- Vtot - Vliq  # volume of the gas phase = Vtotal - Vliquid
 
   # total amounts of vapor, liquid, and air in the gas phase:
@@ -70,7 +65,28 @@ find_state <- function(Vtot, Vliq, humid, TK, x18vap, x18liq){
 }
 ```
 
-Finally, we define the model function based on the differential equations 8 and 9. 
+Fourth, we implement the calculation of rate constants as described in the section "Rate constants" (see above).
+
+```{r}
+kfbT <- function(TK, v=0, delta18O){    # rate constants
+  alpha <- 1/(delta18O*1e-3 + 1)        # convert delta18O (in permil!) to alpha
+  # enthalpy of vaporization of water
+  dH16vap <- dHvap                                           # 16O-water, given above
+  dH18vap <- dH16vap + Rgas*TK*Tboil/(Tboil-TK) * log(alpha) # 18O-water
+  # empirical constants (Carrier, 1918), assumed equal for 16O and 18O-water!
+  c1      <- 0.0888*3600 # (m h-1)
+  c2      <- 0.0783      # (-)
+  # rate constants for water precipitation (m h-1)
+  kb16 <- Rgas*TK/dH16vap*(c1+c2*v)                          # 16O-water
+  kb18 <- Rgas*TK/dH18vap*(c1+c2*v)                          # 18O-water
+  # rate constants for water evaporation (mol m-2 h-1)
+  kf16 <- kb16 * Peq_vapor(TK)/(Rgas*TK)                     # 16O-water
+  kf18 <- kb18 * Peq_vapor(TK)/alpha/(Rgas*TK)               # 18O-water
+  return(c(kb16=kb16, kb18=kb18, kf16=kf16, kf18=kf18))
+}
+```
+
+Finally, we implement the model function based on the differential equations 8 and 9. 
 
 ```{r, eval = TRUE, cache = FALSE, echo = TRUE, warning=FALSE, message=FALSE}
 Water18Oexchange <-function(t, state, pars) {
@@ -80,19 +96,16 @@ Water18Oexchange <-function(t, state, pars) {
     Nvap <- N18vap + N16vap
     Nliq <- N18liq + N16liq
     
-    # current 18O atom fractions, isotope ratios, and delta vap vs. liq
+    # 18O atom fractions
     x18vap           <- N18vap/Nvap
     x18liq           <- N18liq/Nliq
-    R18vap           <- N18vap/N16vap
-    R18liq           <- N18liq/N16liq
-    delta_Vap_vs_Liq <- (R18vap/R18liq-1)*1e3
     
     # volume of the gas phase (air+vapor) at a given Nvap, Nair, TK, and Ptot
     Vgas <- Rgas*TK*(Nair+Nvap)/Ptot # based on the ideal gas law
     
-    # process rates, mol h-1
-    evap16 <- kf16*Aliq * (1-x18liq) * (Nliq/(Nliq+1e-5))
-    evap18 <- kf18*Aliq *    x18liq  * (Nliq/(Nliq+1e-5))
+    # process rates, mol h-1 (rate constants in pars!)
+    evap16 <- kf16*Aliq * (1-x18liq) * (Nliq/(Nliq+1e-6))
+    evap18 <- kf18*Aliq *    x18liq  * (Nliq/(Nliq+1e-6))
     prec16 <- kb16*Aliq * (1-x18vap) * Nvap/Vgas
     prec18 <- kb18*Aliq *    x18vap  * Nvap/Vgas
     
@@ -104,60 +117,67 @@ Water18Oexchange <-function(t, state, pars) {
     dNair.dt   <- 0 # no gas dissolution in water!
     
     # extra output
-    Pvap <- Nvap/Vgas * Rgas * TK  # partial pressure of vapor
+    Pvap <- Nvap/Vgas * Rgas * TK  # partial pressure of water vapor
     Pair <- Nair/Vgas * Rgas * TK  # partial pressure of air
     
     # return time-derivatives and ordinary variables as a list
     list(c(dN18vap.dt, dN16vap.dt, dN18liq.dt, dN16liq.dt, dNair.dt),
          
          # extra output quantities:
-         
-         # amounts of molecules
          Nwater = Nvap + Nliq,       # total amount of water (vapor+liquid)
          
-         # volumes, m3
+         # volumes (m3)
          Vgas = Vgas,                # gas phase
          Vliq = Nliq*MW/rho,         # liquid phase
          Vtot = Vgas+Nliq*MW/rho,    # total (gas+liquid)
          
          # pressures (Pa) and relative humidity
-         Pvap = Pvap,                # partial pressure of vapor
-         Pair = Pair,                # partial pressure of air
+         Pvap = Pvap,                # water vapor (16O+18O-water!)
+         Pair = Pair,                # air
          Pgas = Pvap+Pair,           # total gas pressure (vapor+air)
-         humid = Pvap/Peq_vapor(TK), # relative humidity
+         humid = Pvap/Peq_vapor(TK), # relative humidity (16O+18O-water!)
          
          # 18O atom fractions and delta vapor vs. liquid
          x18vap = x18vap,
          x18liq = x18liq,
-         delta_Vap_vs_Liq = delta_Vap_vs_Liq # permil
+         delta_Vap_vs_Liq = ((N18vap/N16vap)/(N18liq/N16liq)-1)*1e3 # permil
       )
   })
 }
-
 ```
 
 ## Model application
 
-First, we use the above functions to evaluate the initial conditions and model parameters based on the definition of the problem. We solve the model for two initial values of the relative air humidity: 0 (scenario 1) and 1 (scenario 2). In the scenario 1, we use a very small initial humidity instead of 0 to avoid problems with division by zero.
+We solve the model for two initial values of the relative air humidity: 0 (scenario 1) and 1 (scenario 2). 
+
+First, we use the above functions to calculate the rate constants and set the initial values of the state variables based on the definition of the problem. Note that in scenario 1, we use a very small initial humidity instead of 0 to avoid problems with division by zero. Additionally, as there is initially no precipitation in this scenario (because $N_{vap,ini}=0$), equations 8 and 9 imply that the amount of water vapor increases in time according to ${}^{18}N_{vap}={}^{18}k_f\cdot x_{liq,ini}\cdot A_{liq}\cdot t$ and ${}^{16}N_{vap}={}^{16}k_f\cdot (1-x_{liq,ini})\cdot A_{liq}\cdot t$ when $t$ is very small. These expressions imply that $x_{vap}$ increases from the initial value of 
+$$
+x_{vap,ini} = \frac{{}^{18}k_f\cdot x_{liq,ini}}{{}^{18}k_f\cdot x_{liq,ini}+{}^{16}k_f\cdot (1-x_{liq,ini})}.
+$$
+Thus, for scenario 1, we set ``x18vap`` to this value when calculating the initial values of the state variables.
 
 ```{r, message=FALSE}
-# initial conditions
-SVini1 <- find_state(Vtot=1, Vliq=1e-3, humid=1e-6, TK=TK, x18vap=0.002,     x18liq=0.002)
-SVini2 <- find_state(Vtot=1, Vliq=1e-3, humid=1, TK=TK, x18vap=0.002, x18liq=0.002)
+# rate constants (used as model parameters)
+k <- kfbT(TK=TK, delta18O=-10)
 
-# model parameters
-pars <- kfbT(TK=TK, delta18O=20)
+# initial conditions, scenario 1 (see note above)
+xvap.ini <- k[["kf18"]]*xini / ( k[["kf18"]]*xini + k[["kf16"]]*(1-xini) )
+SVini1 <- find_state(Vtot=1, Vliq=1e-3, TK=TK, Ptot=Ptot, x18liq=xini,
+                     humid=1e-6, x18vap=xvap.ini)
+# initial conditions, scenario 2
+SVini2 <- find_state(Vtot=1, Vliq=1e-3, TK=TK, Ptot=Ptot, x18liq=xini,
+                     humid=1,    x18vap=xini)
 
 # solve the model
 require(deSolve)
 outtimes <- seq(from = 0, to = 0.5, length.out = 400) # time in hr
-out1 <- ode(y = SVini1, parms = pars, func = Water18Oexchange, times = outtimes)
-out2 <- ode(y = SVini2, parms = pars, func = Water18Oexchange, times = outtimes)
+out1 <- ode(y = SVini1, parms = k, func = Water18Oexchange, times = outtimes)
+out2 <- ode(y = SVini2, parms = k, func = Water18Oexchange, times = outtimes)
 ```
 
 ## Results & Discussion
 
-First, we plot the amounts of molecules to validate the mass balances. The results below show that the total amounts of water and air remain constant, as required. The total amount of water is slightly greater for the second run, since the air is initially humid and the initial volume of the liquid is the same as in the first run. The amount of air follows the opposite pattern. 
+First, we plot the amounts of molecules to validate the mass balances. The results below show that the total amounts of water and air remain constant, as required. The total amount of water is slightly greater for scenario 2, since the air is initially humid and the initial volume of the liquid is the same as in scenario 1. Because the total volume is the same, the amount of air follows the opposite pattern (more water vapor implies less air for the given volume, pressure and temperature of the gas phase). 
 
 ```{r, fig.height=5, fig.width=8}
 plot(out1, out2, 
@@ -167,8 +187,9 @@ legend("right", title="initial air humidity:", legend=c("0","1"),
        lty=1, lwd=2, col=1:2, bty="n")
 ```
 
-Next, we plot volumes (see graphs below). In the first scenario (initially dry air), the volume of the gas phase and the total volume increase, and the liquid water decreases, due to water evaporation occurring at a constant total pressure and temperature. There is no volume change in the second scenario because the air is initially fully saturated with water vapor, thus there is no net transfer of water between the liquid and gas phase. 
-```{r, fig.height=2.3, fig.width=8}
+Next, we plot volumes (see graphs below). In scenario 1, the volume of the gas phase and the total volume increase, whereas the liquid water decreases, due to the net water evaporation occurring at a constant total pressure and temperature. There is no volume change in scenario 2 because the air is initially fully saturated with water vapor, thus there is no net transfer of water from the liquid to the gas phase. 
+
+```{r, fig.height=2.5, fig.width=8}
 plot(out1, out2, 
      which=c("Vgas", "Vliq", "Vtot"),
      xlab="time (hr)", lty=1, las=1, lwd=2, mfrow=c(1,3), ylab="m3")
@@ -176,24 +197,26 @@ legend("right", title="initial air humidity:", legend=c("0","1"),
        lty=1, lwd=2, col=1:2, bty="n")
 ```
 
-Next, we plot pressures and the relative air humidity to verify that the results make sense. In the first scenario, the partial pressure of water vapor increases, the partial pressure of air decreases, while the total gas pressure remains constant, as required. The relative air humidity increases from 0 to 1, as required. In the second scenario, there are no changes in the pressures or relative air humidity, as the initial condition corresponds to the equilibrium for the total amount of water vapor in the gas phase.
+Next, we plot pressures and the relative air humidity to verify that the results make sense. In scenario 1, the partial pressure of water vapor increases, the partial pressure of air decreases, and the total gas pressure remains constant as required. The relative air humidity increases from 0 to 1, as required, and the equilibrium is reached in about 15 minutes. In scenario 2, there are no changes in the pressures or relative air humidity, as the initial condition corresponds to the equilibrium for the total amount of water vapor in the gas phase.
 
 ```{r, fig.height=2.5, fig.width=8}
 plot(out1, out2, 
      which=c("Pvap", "Pair", "Pgas", "humid"),
      xlab="time (hr)", lty=1, las=1, lwd=2, mfrow=c(1,4), 
      ylab=c(rep("Pa",3),"-"))
+legend("right", title="initial air humidity:", legend=c("0","1"), 
+       lty=1, lwd=2, col=1:2, bty="n")
 ```
 
-```{r, fig.height=3, fig.width=8}
+Finally, we plot the ${}^{18}O$ atom fractions of the water vapor and liquid water along with the relative difference in the isotopic composition of water vapor versus liquid water ($\delta_{liq}(vap)$). In both scenarios, water vapor becomes depleted in ${}^{18}O$, and the equilibrium value of $\delta^*_{liq}(vap)$ is equal to $-10$ \textperthousand, as required. How this value is approached depends, however, on the initial condition: the equilibrium is approached from below and from above if the air is initially dry and fully saturated with water vapor, respectively. 
+
+```{r, fig.height=2.5, fig.width=8}
 plot(out1, out2, 
      which=c("x18vap", "x18liq", "delta_Vap_vs_Liq"),
      xlab="time (hr)", lty=1, las=1, lwd=2, mfrow=c(1,3), ylab="-")
+legend("right", title="initial air humidity:", legend=c("0","1"), 
+       lty=1, lwd=2, col=1:2, bty="n")
 ```
-
-# Conclusion
-
-The model results illustrate that much more water evaporation and precipitation occurs than "meets the eye"! The exchange occurs on the time-scale of minutes, consistent with our daily experience.
 
 
 

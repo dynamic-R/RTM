@@ -77,9 +77,7 @@ Now we are ready to formulate the model of water precipitation and evaporation s
 
 * the rate of precipitation of $^{16}O$-water is proportional to the probability that the water molecule in the gas phase contains $^{16}O$. This probability is equal to $1-x_{vap}$.
 
-* the rate constants of the forward and backward reactions are *different* for the lighter and heavier water molecules.
-
-Based on these assumptions, the dynamics of the $H_2{}^{16}O$ and $H_2{}^{18}O$ molecules in the gas phase are described by the following differential equations:
+Based on these assumptions, the dynamics of the amounts of $H_2{}^{16}O$ and $H_2{}^{18}O$ molecules in the gas phase are described by the following differential equations:
 
 \begin{equation}\label{eq4}
 \frac{{}^{18}N_{vap}}{dt} = {}^{18}k_f \cdot x_{liq} \cdot A_{liq} - 
@@ -89,7 +87,7 @@ Based on these assumptions, the dynamics of the $H_2{}^{16}O$ and $H_2{}^{18}O$ 
 \begin{equation}\label{eq5}
 \frac{{}^{16}N_{vap}}{dt} = {}^{16}k_f \cdot (1-x_{liq}) \cdot A_{liq} - {}^{16}k_b\cdot (1-x_{vap}) \cdot A_{liq} \cdot \frac{N_{vap}}{V_{gas}},
 \end{equation}
-where ${}^{16}k_f$, ${}^{16}k_b$, ${}^{18}k_f$ and ${}^{18}k_b$ are rate constants describing the corresponding process, and $N_{vap}={}^{18}N_{vap} + {}^{16}N_{vap}$ is the total amount of $H_2O$ molecules in the gas phase.
+where ${}^{16}k_f$, ${}^{16}k_b$, ${}^{18}k_f$, and ${}^{18}k_b$ are the rate constants and $N_{vap}={}^{18}N_{vap} + {}^{16}N_{vap}$ is the total amount of $H_2O$ molecules in the gas phase. For both the forward and backward reactions, the rate constants *differ* between the $H_2{}^{16}O$ and $H_2{}^{18}O$ molecules (${}^{16}k_f\neq {}^{18}k_f$ and ${}^{16}k_b\neq {}^{18}k_b$; see section "Rate constants" below).
 
 ## Kinetic versus equilibrium fractionation
 
@@ -122,11 +120,26 @@ By combining these definitions with Eq. \ref{eq2}, the relationship in Eq. \ref{
 \delta^*_{liq}(vap) = \frac{1-\alpha_{liq}(vap)}{\alpha_{liq}(vap)} \quad \mathrm{or} \quad \alpha_{liq}(vap)=\frac{1}{1+\delta^*_{liq}(vap)}.
 \end{equation}
 
-Equation \ref{eq11} shows that there is an *intimate relationship* between the kinetic and equilibrium isotope fractionation effects. On the one hand, $\alpha_{liq}(vap)$ is a measure of the differences between the *rate constants* of the forward and backward reactions (evaporation and precipitation) for the lighter and heavier water molecules (Eq. \ref{eq9}). On the other hand, $\delta^*_{liq}(vap)$ measures the difference between the *isotopic composition* (the ${}^{18}O/{}^{16}O$ isotope ratio) of the water vapor and liquid water in a thermodynamic equilibrium (Eq. \ref{eq10}). Thus, equation \ref{eq11} provides an important insight that forms a basis of stable isotope applications to the hydrological cycle on Earth: if the rate constants of the forward and backward reactions differ between the $H_2{}^{16}O$ and $H_2{}^{18}O$ molecules such that the factor $\alpha_{liq}(vap)$, calculated according to Eq. \ref{eq9}, *differs from 1*, the isotopic composition of the water vapor will *differ* from the isotopic composition of the liquid water. In a thermodynamic equilibrium, this difference will be equal to $\delta^*_{liq}(vap)$ calculated from $\alpha_{liq}(vap)$ according to Eq. \ref{eq11}. In practice, this conclusion is applied in reverse: first, $\delta^*_{liq}(vap)$ is determined experimentally, and then the kinetic fractionation factor $\alpha_{liq}(vap)$ is calculated from the second formula in Eq. \ref{eq11}.
+Equation \ref{eq11} shows that there is an *intimate relationship* between the kinetic and equilibrium isotope fractionation effects. On the one hand, $\alpha_{liq}(vap)$ is a measure of the differences between the *rate constants* of the forward and backward reactions (evaporation and precipitation) for the lighter and heavier water molecules (Eq. \ref{eq9}). On the other hand, $\delta^*_{liq}(vap)$ measures the difference between the *isotopic composition* (the ${}^{18}O/{}^{16}O$ isotope ratio) of the water vapor and liquid water in a thermodynamic equilibrium (Eq. \ref{eq10}). Thus, equation \ref{eq11} provides an important insight that forms a basis of applications of stable oxygen isotopes to the hydrological cycle on Earth: if the rate constants of the forward and backward reactions differ between the $H_2{}^{16}O$ and $H_2{}^{18}O$ molecules such that the factor $\alpha_{liq}(vap)$, calculated according to Eq. \ref{eq9}, *differs from 1*, the isotopic composition of the water vapor will *differ* from the isotopic composition of the liquid water. In a thermodynamic equilibrium, this difference will be equal to $\delta^*_{liq}(vap)$ calculated from $\alpha_{liq}(vap)$ according to Eq. \ref{eq11}. In practice, this conclusion is applied in reverse: first, $\delta^*_{liq}(vap)$ is determined experimentally, and then the kinetic fractionation factor $\alpha_{liq}(vap)$ is calculated from the second formula in Eq. \ref{eq11} (see next).
+
+## Rate constants
+
+We assume that the empirical coefficients $c_1$ and $c_2$ in Eq. \ref{eq2a} and the boiling temperature ($T_{boil}$) in Eq. \ref{eq4a} are the same for $H_2{}^{16}O$ and $H_2{}^{18}O$. By substituting the expressions for $k_b$ and $k_f$ from Eqs. \ref{eq2a} and \ref{eq3a} into the definition of $\alpha_{liq}(vap)$ (Eq. \ref{eq9}), this assumption yields
+\begin{equation} \label{eq12}
+\alpha_{liq}(vap)=\frac{{}^{16}P_{vap}^*}{{}^{18}P_{vap}^*}.
+\end{equation}
+
+Empirically, it was determined that, at a given temperature, the equilibrium vapor pressure is greater for the isotopically lighter water, i.e., ${}^{16}P_{vap}^* > {}^{18}P_{vap}^*$. This inequality implies that $\Delta{}^{18} \bar{H}_{vap} > \Delta{}^{16} \bar{H}_{vap}$ (Eq. \ref{eq4a}) and ${}^{16}k_b > {}^{18}k_b$ (Eq. \ref{eq2a}). Another empirical result is that, in a thermodynamic equilibrium, water vapor is by about 10 \textperthousand\ depleted in ${}^{18}O$ relative to liquid water, i.e., $\delta_{liq}(vap) \approx -10$ \textperthousand.\footnote{Although $\delta_{liq}(vap)$ depends on temperature, we neglect this dependency in this reader.} 
+
+We can combine these results to calculate the rate constants ${}^{16}k_b$, ${}^{18}k_b$, ${}^{16}k_f$, and ${}^{18}k_f$. Specifically, we first combine the value of $\delta_{liq}(vap) \approx -10$ \textperthousand\ with Eq. \ref{eq11} to calculate $\alpha_{liq}(vap)$. Then, we assume that $\Delta \bar{H}_{vap} = 40.66~kJ~mol^{-1}$ is a good approximation of the enthalpy of vaporization for pure $H_2{}^{16}O$, given that natural water only contains about 0.2 % of $H_2{}^{18}O$. This assumption combined with the Clausius-Clapeyron equation (Eq. \ref{eq4a}) yields the following expression for the enthalpy of vaporization for pure $H_2{}^{18}O$:
+$$
+\Delta^{18} \bar{H}_{vap} = \Delta^{16} \bar{H}_{vap} + R\cdot \frac{T_{boil}\cdot T}{T_{boil}-T} \cdot \ln\alpha_{liq}(vap).
+$$
+Finally, using the values of $\Delta^{16} \bar{H}_{vap}$ and $\Delta^{18} \bar{H}_{vap}$, we can calculate the precipitation rate constants ${}^{16}k_b$ and ${}^{18}k_b$ from Eq. \ref{eq2a} and the evaporation rate constants ${}^{16}k_f$ and ${}^{18}k_f$ from Eqs. \ref{eq3a} and \ref{eq12}.
 
 # Task 1
 
-Consider a gas-tight container partially filled with liquid water and air. Using Eqs. \ref{eq4} and \ref{eq5}, implement a model that can predict the amount of $H_2{}^{16}O$ and $H_2{}^{18}O$ molecules in the water vapor and liquid water as a function of time. Specifically, demonstrate that, in an equilibrium, the ${}^{18}O/{}^{16}O$ isotope ratio in the liquid water will *differ* from the isotope ratio in the water vapor. Run the model assuming that air is initially dry or fully saturated with water vapor (i.e., the initial relative air humidity is 0 or 1, respectively). 
+Consider a gas-tight container partially filled with liquid water and air. Using Eqs. \ref{eq4} and \ref{eq5}, implement a model that can predict the amount of $H_2{}^{16}O$ and $H_2{}^{18}O$ molecules in the water vapor and liquid water as a function of time. Specifically, demonstrate that, in an equilibrium, the ${}^{18}O/{}^{16}O$ isotope ratio in the liquid water *differs* from the isotope ratio in the water vapor. Run the model assuming that the air is initially dry or fully saturated with water vapor (i.e., the initial relative air humidity is 0 or 1, respectively). 
 
 ## Assumptions
 
@@ -144,10 +157,10 @@ Consider a gas-tight container partially filled with liquid water and air. Using
 
 * The ratio between the molar mass and density of water is equal for both $H_2{}^{16}O$ and $H_2{}^{18}O$.
 
-* Assume $\delta^*_{liq}(vap) = 20$ \textperthousand\ when calculating the rate constants. In this process, first calculate ${}^{16}k_b$ using Eq. \ref{eq2a}, then calculate ${}^{18}k_b$ using Eqs. \ref{eq9} and \ref{eq11} assuming ${}^{16}k_f = {}^{18}k_f$. Finally, calculate ${}^{16}k_f$ and ${}^{18}k_f$ using Eqs. \ref{eq3a} and \ref{eq4a}.
+* Assume $\delta^*_{liq}(vap) = -10$ \textperthousand\ when calculating the rate constants.
 
 # Task 2
-Consider an experimental setup where an open container is enclosed in a gas-tight container filled with air. Both containers are partially filled with water, and the air is initially dry (Figure 1). Although there is no direct mixing of liquid water between the reservoirs 1 and 2, there will be an isotope exchange between them due to evaporation and precipitation (i.e., the two liquid reservoirs are connected through the water vapor reservoir). Your task is to model the dynamics of this exchange, i.e., predict the amount of $H_2{}^{16}O$ and $H_2{}^{18}O$ molecules in the water vapor and the two liquid water reservoirs as a function of time.
+Consider an experimental setup where an open container is enclosed in a gas-tight container filled with air. Both containers are partially filled with water, and the air is initially fully saturated with water vapor (Figure 1). Although there is no direct mixing of liquid water between the reservoirs 1 and 2, there will be an isotope exchange between them due to evaporation and precipitation (i.e., the two liquid reservoirs are connected through the water vapor reservoir). Your task is to model the dynamics of this exchange, i.e., predict the isotopic composition of the water vapor and the two liquid water reservoirs as a function of time.
 
 ![Experimental setup with two liquid water reservoirs enclosed in a gas-tight container.](water_reservoirs.pdf){width=50%}
 
