@@ -55,7 +55,7 @@ RTMtemplate(x = c("?", "rtm0D", "rtm1D", "porous1D", "porous1D_extensive",
 \code{Templates} are R Markdown files containing a basic skeleton of a document that merges an R-code implementing a model with an explanatory text and results of the model. They provide a convenient way to start developing a model in R. Different templates are available for dynamic box models and 1D reaction-transport models. 
 
 
-\code{Answers} Each exercise comes with a possible answer. You will achieve the best learning outcomes if you solve each exercise *on your own*. Thus, checking the answers too early is *not* recommended. However, if you feel that you are stuck, or if you want to compare your solution to the one developed by us, our solutions are provided and you are welcome to view them.
+\code{Answers}: Each exercise comes with a possible answer. You will achieve the best learning outcomes if you solve each exercise *on your own*. Thus, checking the answers too early is *not* recommended. However, if you feel that you are stuck, or if you want to compare your solution to the one developed by us, our solutions are provided and you are welcome to view them.
 
 All material in this package is designed to help students prepare for the exam.
 }
