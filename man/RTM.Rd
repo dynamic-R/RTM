@@ -23,7 +23,4 @@ RTMreader("?")
 
 # To list available templates:
 RTMtemplate("?")
-
-# To list available answers:
-RTManswer("?")
 }
