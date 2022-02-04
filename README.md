@@ -68,8 +68,8 @@ RTMexercise(2)
 These commands will display the exercise in an HTML format by default. If you want to display the exercise in a PDF format, which is more pleasing to the eye, modify the command as follows:
 
 ```
-RTMexercise("conceptual", type="PDF")
-RTMexercise(2, type="PDF")
+RTMexercise("conceptual", output="PDF")
+RTMexercise(2, output="PDF")
 ```
 
 Note, however, that you will need to have a working installation of LaTeX on your computer to allow this latter feature.
@@ -79,8 +79,8 @@ If you are new to R, it is recommended to first read the "introductionR" exercis
 ```
 RTMexercise("introductionR")
 RTMexercise(1)
-RTMexercise("introductionR", type="PDF")
-RTMexercise(1, type="PDF")
+RTMexercise("introductionR", output="PDF")
+RTMexercise(1, output="PDF")
 ```
 
 ### View extra readers
@@ -94,8 +94,16 @@ RTMreader("?")
 To view a specific reader, for example the reader called "fitting", enter one of the following commands in the R-console:
 
 ```
-RTMreader("fitting", type="PDF")
-RTMreader(4, type="PDF")
+RTMreader("fitting", output="PDF")
+RTMreader(4, output="PDF")
+```
+
+### View answers to exercises
+
+Each exercise comes with a possible answer. You will achieve the best learning outcomes if you solve each exercise *on your own*. Thus, checking the answers too early is *not* recommended. However, if you feel that you are stuck, or if you want to compare your solution to the one developed by us, our solutions are provided and you are welcome to view them. For example, to view the answer to the exercise "ozone", enter the following command in the R-console:
+
+```
+RTManswer("ozone", output="PDF")
 ```
 
 ### More help
@@ -118,4 +126,4 @@ To uninstall the package manually, type the following command in the R-console (
   ```
 
 ---
-Last updates: 2022-01-18
+Last updates: 2022-02-04
