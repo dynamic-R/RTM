@@ -29,16 +29,16 @@ $$Reaction~2:\qquad  CO_2 + 4H_2 \rightarrow CH_4 + 2H_2O$$
 $$Reaction~3:\qquad  CH_4 + 2O_2 \rightarrow CO_2 + 2H_2O$$
 and the additional fluxes $CH_3COOH\_burial$, $CH_3COOH\_input$, $CH4\_emission$, $CH_4\_burial$, $CO_2\_emission$, $CO_2\_burial$, $O_2\_influx$, the mass balance equations can be written as follows:
 
-$$\frac{dCH_3COOH}{dt} = -R_1 - CH_3COOH\_burial + CH_3COOH\_input$$
+$$\frac{dCH_3COOH}{dt} = -2\cdot R_1 - CH_3COOH\_burial + CH_3COOH\_input$$
 $$\frac{dCH_4}{dt} = R_1 + R_2 - R_3 - CH_4\_emission - CH_4\_burial$$
 $$\frac{dCO_2}{dt} = R_1 - R_2 + R_3 - CO_2\_emission - CO_2\_burial$$
-$$\frac{dO_2}{dt} = - 2R_3 + O_2\_influx$$
+$$\frac{dO_2}{dt} = - 2\cdot R_3 + O_2\_influx$$
 Units of the state variables and fluxes are:
 
 * $CH_3COOH$, $CH_4$, $CO_2$: $mol~C~m^{-2}$
 * $O_2$: $mol~O_2~m^{-2}$
 * all carbon fluxes: $mol~C~m^{-2}~d^{-1}$
-* $O_2$ fluxe: $mol~O_2~m^{-2}~d^{-1}$
+* $O_2$ flux: $mol~O_2~m^{-2}~d^{-1}$
 
 ### Model application
 
@@ -77,7 +77,7 @@ $$Nitri:\quad NH_3 + 2\cdot O_2   \rightarrow  HNO_3 + H_2O$$
 aerobic reoxidation:
 $$Reox:\quad X + O_2  \rightarrow XO_2$$
 
-By taking into account influxes and effluxes, we have the following mass balance equations:
+By taking into account net influxes for all state variables, we have the following mass balance equations:
 
 $$\frac{dCorg}{dt} = Org\_Depo - oxicMin - Denitri - anoxicMin$$
 $$\frac{dO_2}{dt} = O_2\_influx - oxicMin - 2 \cdot Nitri - Reox$$
@@ -95,7 +95,7 @@ $$\frac{dXO_2}{dt} = XO_2\_influx - anoxicMin + Reox$$
   
 * Units of the time derivatives and of the process rates and influxes will have an extra $d^{-1}$ after the corresponding $mol~m^{-2}$ part.
 
-* Note that a positive value of *influx* corresponds to the net flux *from* the overlying water *into* the sediment. 
+* Note that each *influx* corresponds to the *net* flux. We use the following sign convention: a *positive* value of the influx corresponds to a net flux of a substance *from* the overlying water *into* the sediment, whereas a negative value corresponds to a net flux from the sediment into the overlying water.
 
 If we denote by $h$ the height of the water column, the mass balance equations for the water column components are:
 $$\frac{dO_{2,wat}}{dt} = - \frac{O_2\_influx}{h}$$

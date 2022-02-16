@@ -59,7 +59,7 @@ Also, we have estimated the storage component to be $1~mmol~m^{-2}~d^{-1}$ for b
 
 Methane ($CH_4$) within marine sediments is distributed in three pools: the hydrate pool (solid), the dissolved pool and the gas phase. 
 
-Dissolved methane is produced from organic matter in the anaerobic part of the sediment (by a process called methanogenesis). Methane is exchanged amongst these three pools, but it can also leave the sediment via ebullition (formation of gas bubbles and their escape due to buoyancy), or via diffusive transport of dissolved $CH_4$ to the overlying ocean water. Especially the gas phase is important for the Earth's warming, as this readily adds to methane in the atmosphere.
+Dissolved methane is produced from organic matter in the anaerobic part of the sediment (by a process called methanogenesis). Methane is exchanged among these three pools, but it can also leave the sediment via ebullition (formation of gas bubbles and their escape due to buoyancy), or via diffusive transport of dissolved $CH_4$ to the overlying ocean water. (Note: we will ignore methane burial into deeper sediment layers in this exercise.) Especially the gas phase is important for the Earth's warming, as this readily adds to methane in the atmosphere. 
 
 Fortunately, there is an important sink of methane in the marine sediments: microbial anaerobic oxidation of methane (AOM), which is the reaction of dissolved methane with sulphate according to the reaction:
 
@@ -90,36 +90,35 @@ The reduced byproducts of this mineralization process, ammonia ($NH_3$), and an 
 
 All dissolved substances are exchanged with the water column. OM is added to the sediment by deposition from the water column. $N_2$, produced by the reaction of organic matter with nitrate, does not react in the sediment and does not need to be considered in the model. Also, the possibility that the unidentified reduced substance $X$ can additionally be re-oxidized by nitrate can be ignored.
 
-The mineralization reactions can be written as:
+The mineralization reactions can be written as (note that you need to know a little about balancing redox reactions in order to understand why the reactions, and specifically their stoichiometry, have the form as written here):
+
+  - *aerobic mineralization*: 
 $$(CH_2O)_1(NH_3)_{NC}(H_3PO_4)_{PC} + O_2  \rightarrow  CO_2 + {NC} \cdot NH_3 + {PC} \cdot H_3PO_4 + H_2O $$ 
-for the *aerobic mineralization*,
-
+  - *denitrification*: 
 $$(CH_2O)_1(NH_3)_{NC}(H_3PO_4)_{PC} + \frac{4}{5}\cdot HNO_3 \rightarrow CO_2 + \frac{2}{5}\cdot N_2 + {NC} \cdot NH_3 + {PC} \cdot H_3PO_4 + \frac75\cdot H_2O$$
-for *denitrification*, and
-
+  - *anoxic mineralization*:
 $$(CH_2O)_1(NH_3)_{NC}(H_3PO_4)_{PC} + XO_2 \rightarrow CO_2 + X + {NC} \cdot NH_3 + {PC} \cdot H_3PO_4 + H_2O$$
-for the *anoxic mineralization*.
 
 The secondary reactions to be considered are: 
-$$NH_3 + 2\cdot O_2   \rightarrow  HNO_3 + H_2O$$
-for *nitrification*, and 
 
+  - *nitrification*:
+$$NH_3 + 2\cdot O_2   \rightarrow  HNO_3 + H_2O$$
+  - *aerobic reoxidation* of the unidentified reduced substances:
 $$X + O_2  \rightarrow XO_2$$
-for the *aerobic reoxidation* of the unidentified reduced substances.
 
 ## Tasks
 
 ###	4.1. Mass balance equations
 
-* Based on the above reactions and the exchanges with the water-column, create the conceptual diagram and mass balance equations for the following sediment state variables:
+* Based on the above reactions and the exchanges with the water-column, create mass balance equations for the following sediment state variables:
 
-  -	Organic matter, Corg
-  -	molecular oxygen, O2
-  -	dissolved inorganic carbon, CO2
-  -	nitrate, HNO3
-  -	ammonia, NH3
-  -	the unidentified reduced substances, X
-  -	the oxidized substance, XO2
+  -	Organic matter, $Corg$
+  -	molecular oxygen, $O_2$
+  -	dissolved inorganic carbon, $CO_2$
+  -	nitrate, $HNO_3$
+  -	ammonia, $NH_3$
+  -	the unidentified reduced substances, $X$
+  -	the oxidized substance, $XO_2$
 
 * What are suitable units for the state variables? 
 * What are the units of the time derivatives (left-hand side of the mass balance equations) and of the rates (terms on the right-hand side of the equations)?
@@ -132,10 +131,10 @@ We are interested in the dynamics of oxygen, nitrate, and ammonium in the overly
 The concentration of the other reduced substances in the sediment are assumed to be 0 (and so the flux from the sediment is also assumed to be 0). 
 
 * Create the mass balance equations for the following water column variables:
-  - Oxygen in the overlying water, O2_wat
-  - Nitrate in the overlying water, HNO3_wat
-  - Ammonia in the overlying water, NH3_wat
-  - Unidentified reduced substances in the overlying water, X_wat
+  - Oxygen in the overlying water, $O_{2,wat}$
+  - Nitrate in the overlying water, $HNO_{3,wat}$
+  - Ammonia in the overlying water, $NH_{3,wat}$
+  - Unidentified reduced substances in the overlying water, $X_{wat}$
 
 * What are suitable units for these water-column state variables? What are the units of their time-derivatives? 
 
