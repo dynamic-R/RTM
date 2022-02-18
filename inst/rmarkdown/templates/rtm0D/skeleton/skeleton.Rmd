@@ -110,6 +110,13 @@ std <- steady(y = yini, parms = pars, func = BODmodel,
 std$y
 ```
 
+Sometimes, it may happen that there are *multiple* steady state solutions to a model (e.g., one with non-zero values, another one with zero values). In this case, the ``steady`` function is unable to "decide" which one to choose and stops with an error. To overcome this error, use the function ``runsteady`` instead to find the steady state solution.
+
+```{r, message=FALSE}
+std <- runsteady(y = yini, parms = pars, func = BODmodel)
+std$y
+```
+
 ## Sensitivity analysis
 
 We perform a sensitivity analysis to find how the steady-state depends on the reaeration rate constant:
