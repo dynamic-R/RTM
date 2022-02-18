@@ -220,7 +220,7 @@ question("What is the value of the equilibrium carbon content in reservoir B?", 
 
 ## More exercises
 
-To apply the knowledge you gained so far, expand the 2-box model from this tutorial towards a more complicated system: the Earth's global carbon cycle. If you are following the modelling course at Utrecht University, this task is part of your **homework assignment** (worth 10% of your final grade).
+To apply the knowledge you gained so far, expand the 2-box model from this tutorial towards a more complicated system: the Earth's global carbon cycle.
 
 Type the following commands in the R console to get the full description of this exercise.
 
@@ -228,6 +228,14 @@ Type the following commands in the R console to get the full description of this
 require(RTM)
 RTMexercise("carbonCycle")
 ```
+
+The global carbon cycle model is a wonderful example of models that study the response of perturbed systems. If you are curious and would like to learn more about perturbed systems, and specifically about how to find the time scales on which they respond --- the so-called *response time* --- you can do so by studying the following extra readers.
+
+```
+RTMreader("perturbation_I", output="PDF")
+RTMreader("perturbation_II", output="PDF")
+```
+
 
 ## References
 

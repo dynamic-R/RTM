@@ -18,11 +18,7 @@ In a seminal work, Sarmiento and Gruber (2002) published a global carbon budget 
 
 In this exercise, you will make a dynamic model of the Earth's global carbon cycle based on this budget. You will then use this model to assess the response of the Earth's carbon cycle to perturbations, tackling the following questions: How, and how fast, does the Earth's carbon cycle respond to perturbations? What is the new steady-state condition? What are the consequences of various carbon reduction scenarios?
 
-\begin{figure}[ht]
-\centering
-\includegraphics[width=5.5in]{Ccycle.png}
-\caption{Earth's global carbon budget. Adapted from: Sinks for anthropogenic carbon. Jorge L. Sarmiento and Nicolas Gruber. Physics Today 55(8), 30 (2002); doi: 10.1063/1.1510279.}
-\end{figure}
+![**Figure 1:** Earth's global carbon budget. Adapted from: Sinks for anthropogenic carbon. Jorge L. Sarmiento and Nicolas Gruber. Physics Today 55(8), 30 (2002); doi: 10.1063/1.1510279.](Ccycle.png){width=70% height=70%}
 
 ## Problem formulation
 
