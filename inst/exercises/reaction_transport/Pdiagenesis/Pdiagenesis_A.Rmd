@@ -27,7 +27,7 @@ Four species are modeled with the following concentrations and boundary conditio
 * $P_{ads}$: Adsorbed phosphorus, [$mol~P~m^{-3}~solid$]
   - zero flux at the upstream boundary (flux.up = 0), 
   - zero-gradient boundary downstream,
-* $H_2PO_4^{-}$: Dissolved phosphate, [$mol~C~m^{-3}~liquid$] 
+* $H_2PO_4^{-}$: Dissolved phosphate, [$mol~P~m^{-3}~liquid$] 
   - imposed concentration upstream (C.up), 
   - zero-gradient boundary downstream.
 
