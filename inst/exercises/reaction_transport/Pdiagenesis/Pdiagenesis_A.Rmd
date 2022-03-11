@@ -118,6 +118,20 @@ parms <- c(
 )
 ```
 
+## Definition and initialisation of state variables
+
+```{r}
+POC.ini   <- rep(0, length = N)      # initial conditions 
+DIC.ini   <- rep(0, length = N)
+PO4.ini   <- rep(0, length = N)
+Pads.ini  <- rep(0, length = N)
+state    <- c(POC.ini, DIC.ini, PO4.ini, Pads.ini)     # note the order!
+# Number of species in the model, and their names
+names <- c("POC", "DIC", "PO4", "Pads")
+nspec <- length(names)
+```
+
+
 ### The model function
 
 ```{r}
@@ -219,28 +233,22 @@ PDiamodel <- function (t, Conc, pars)   # Conc is a long vector
 Three steady-state solutions are calculated, with different adsorption rate constants.
 
 ```{r}
-# Number of species in the model, and their names
-names <- c("POC", "DIC", "PO4", "Pads")
-nspec <- length(names)
-
-# Initial conditions
-Conc  <- runif(nspec*N)  
 
 # three runs with different adsorption rates
 p1 <- p2 <- p3 <- parms  
 
 p1["rPads"]  <- 0      # /day    
-sol1 <- steady.1D (y=Conc, func=PDiamodel, parms=p1, 
+sol1 <- steady.1D (y=state, func=PDiamodel, parms=p1, 
                    nspec=nspec, dimens=N, names=names,
                    pos=TRUE)     
 
 p2["rPads"]  <- 1e-3   # /day   
-sol2 <- steady.1D (y=Conc, func=PDiamodel, parms=p2, 
+sol2 <- steady.1D (y=state, func=PDiamodel, parms=p2, 
                    nspec=nspec, dimens=N, names=names,
                    pos=TRUE) 
 
 p3["rPads"]  <- 5e-3   # /day      
-sol3 <- steady.1D (y=Conc, func=PDiamodel, parms=p3, 
+sol3 <- steady.1D (y=state, func=PDiamodel, parms=p3, 
                    nspec=nspec, dimens=N, names=names,
                    pos=TRUE) 
 ```
