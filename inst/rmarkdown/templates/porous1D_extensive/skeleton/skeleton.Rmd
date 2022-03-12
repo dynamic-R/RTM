@@ -225,7 +225,7 @@ Note that although there is no DIC gradient at the lower boundary (default bound
 toselect <- c("TotalMin", "DIC.SWI.Flux", "DIC.Deep.Flux", 
               "POC.SWI.Flux", "POC.Deep.Flux")
 BUDGET   <- std1[toselect]
-unlist(BUDGET)    # show result
+unlist(BUDGET)    # display BUDGET as a vector with named elements rather than a list
 ```
 
 To verify that our mass balances are correct, we construct the total C budget in the modelled sediment column. We require that, for each state variable, the *difference between fluxes* at the lower and upper boundaries should be **equal** to the *net production rate* integrated along the domain. In other words, what goes *out* at the *lower* boundary minus what comes *in* at the *upper* boundary must be equal to the total *net* production rate *within* the domain! Indeed, the output values confirm this.

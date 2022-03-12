@@ -97,8 +97,8 @@ BOD1D <-function(t, state, pars) {  # state is a long vector
     dBOD.dt   <- tranBOD$dC            - Decay   
 
   # return vector of time-derivatives and ordinary variables as a list     
-  list(c(dO2.dt, dBOD.dt),  # time-derivatives 
-                            # (the same order as state variables!)
+  return(list(c(dO2.dt, dBOD.dt),  # time-derivatives 
+                                   # (the same order as state variables!)
   # additional output:
     
     # process rates along the domain (1D vector)
@@ -118,7 +118,7 @@ BOD1D <-function(t, state, pars) {  # state is a long vector
     BODefflux = tranBOD$flux.down,   # BOD flux OUT of the system downstream, mol/m2/d       
     O2influx  = tranO2$flux.up,      # O2 flux INTO the system upstream,      mol/m2/d
     O2efflux  = tranO2$flux.down)    # O2 flux OUT of the system downstream,  mol/m2/d       
-  })
+  )})
 }
 ```
 
@@ -205,7 +205,7 @@ toselect <- c("TotalDecay", "TotalAeration", # select output for budgetting
               "O2influx",   "O2efflux",      # all values in mol/m2/d
               "BODinflux",  "BODefflux")
 BUDGET <- std[toselect]
-unlist(BUDGET)
+unlist(BUDGET)     # display BUDGET as a vector with named elements rather than a list
 ```
 
 Check mass balances across the modeled domain: for each state variable, the *difference between fluxes* at the lower and upper boundaries should be **equal** to the *net production rate* integrated along the domain.

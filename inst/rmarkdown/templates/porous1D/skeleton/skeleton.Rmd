@@ -204,7 +204,7 @@ Check the fluxes at the domain boundaries (only done for the steady-state soluti
 toselect <- c("TotalMin", "DIC.SWI.Flux", "DIC.Deep.Flux", 
               "POC.SWI.Flux", "POC.Deep.Flux")
 BUDGET   <- std1[toselect]
-unlist(BUDGET)    # show result
+unlist(BUDGET)    # display BUDGET as a vector with named elements rather than a list
 ```
 
 Construct the total C budget in the modeled spatial domain to verify that the mass balances are correct: for each state variable, the *difference between fluxes* at the lower and upper boundaries should be **equal** to the *net production rate* integrated along the domain.
