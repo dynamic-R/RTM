@@ -170,7 +170,7 @@ question(sprintf("What is the relationship between the typical values of the dis
 Continue this tutorial series by learning about reaction-transport modeling in porous media.
 
 ```
-RTMturorial("transportPorous")
+RTMtutorial("transportPorous")
 ```
 
 ## Textbook and Slides

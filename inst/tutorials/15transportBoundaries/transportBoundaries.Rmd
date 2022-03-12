@@ -174,7 +174,7 @@ question(sprintf("Which is a good boundary condition for $SO_4^{2-}$ deep down i
 Finish this tutorial series by learning how to implement 1D reactive-transport models in R.
 
 ```
-RTMturorial("transportR")
+RTMtutorial("transportR")
 ```
 
 ## Textbook and Slides

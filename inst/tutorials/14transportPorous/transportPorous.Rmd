@@ -276,7 +276,7 @@ chl_m2                                                 # mg Chl per m2
 Continue this tutorial series by learning about boundary and initial conditions.
 
 ```
-RTMturorial("transportBoundaries")
+RTMtutorial("transportBoundaries")
 ```
 
 ## Textbook and Slides
