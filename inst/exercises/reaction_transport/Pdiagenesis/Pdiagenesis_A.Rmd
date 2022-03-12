@@ -152,7 +152,7 @@ PDiamodel <- function (t, Conc, pars)   # Conc is a long vector
                         D = biot, v = v)            # mixing (bioturbation) and advection
         
 
-    tran.Pads <- tran.1D(C = Pads, flux.up = 0,     # upper boundary: zero flux 
+    tran.Pads <- tran.1D(C = Pads, flux.up = 0,     # no Pads deposition from the water-column 
                         dx = Grid, VF = porSolid,   # grid and volume fraction (1-por)
                         D = biot, v = v)            # mixing (bioturbation) and advection
   
@@ -239,18 +239,15 @@ p1 <- p2 <- p3 <- parms
 
 p1["rPads"]  <- 0      # /day    
 sol1 <- steady.1D (y=state, func=PDiamodel, parms=p1, 
-                   nspec=nspec, dimens=N, names=names,
-                   pos=TRUE)     
+                   nspec=nspec, dimens=N, names=names, pos=TRUE)     
 
 p2["rPads"]  <- 1e-3   # /day   
 sol2 <- steady.1D (y=state, func=PDiamodel, parms=p2, 
-                   nspec=nspec, dimens=N, names=names,
-                   pos=TRUE) 
+                   nspec=nspec, dimens=N, names=names, pos=TRUE) 
 
 p3["rPads"]  <- 5e-3   # /day      
 sol3 <- steady.1D (y=state, func=PDiamodel, parms=p3, 
-                   nspec=nspec, dimens=N, names=names,
-                   pos=TRUE) 
+                   nspec=nspec, dimens=N, names=names, pos=TRUE) 
 ```
 
 Here, we plot the concentration gradients. They show that the higher the adsorption rate, the more the dissolved phosphate is scavenged into the adsorbed phase, and the lower its concentration at depth.
@@ -260,8 +257,8 @@ plot(sol1, sol2, sol3, xyswap=TRUE, grid = Grid$x.mid, lty=1, lwd=2,
             "molP/m3 Liquid", "molP/m3 Solid"), 
      ylab="depth (m)", mfrow=c(1,4))
 
-legend("bottom", legend=c("0", "1e-4", "5e-4"), title="r.ads [/d]", 
-       lwd=2, lty=1, col=1:3)
+legend("bottom", legend=c(p1["rPads"], p2["rPads"], p3["rPads"]), 
+       title="r.ads [d-1]", lwd=2, lty=1, col=1:3)
 ```
 
 To aid interpretation of the depth profiles of concentrations, we also plot the depth profiles of the process rates. The process rates are best expressed per volume of *bulk* (indicated by the subscript 'B'), as they can be directly compared to each other.
@@ -272,25 +269,26 @@ plot(sol1, sol2, sol3, xyswap=TRUE, grid = Grid$x.mid, lty=1, lwd=2,
      xlab=c("molP/m3 Bulk/d",   "molP/m3 Bulk/d", "molP/m3 Bulk/d"), 
      ylab="depth (m)", mfrow=c(1,3))
 
-legend("bottom", legend=c("0", "1e-4", "5e-4"), title="r.ads [/d]", 
-       lwd=2, lty=1, col=1:3)
+legend("bottom", legend=c(p1["rPads"], p2["rPads"], p3["rPads"]), 
+       title="r.ads [d-1]", lwd=2, lty=1, col=1:3)
 ```
 
 Finally, we also plot the quotient as a function of depth. We expect the value of Q in equilibrium to be equal to the equilibrium constant, which is equal to the ratio between the forward and backward reaction rate constants, $K_{eq}=r_{des}/r_{ads}$.
 
-```{r, fig.width=4, fig.height=3}
+```{r, fig.width=4, fig.height=4, fig.align="center"}
 plot(sol2, sol3, xyswap=TRUE, grid = Grid$x.mid, lty=1, lwd=2,
-     which = c("Quotient"), xlim = c(0,0.05), col=c(2,3),
+     which = c("Quotient"), xlim = c(0,0.05), col=2:3,
      xlab=c("PO4/Pads"), ylab="depth (m)", mfrow=c(1,1))
 abline(v=p2["rPdes"]/p2["rPads"], col=2, lty=2)
 abline(v=p3["rPdes"]/p3["rPads"], col=3, lty=2)
-legend("bottomright", legend=c("0.1","0.02"), title="r.des/r.ads", 
-       lwd=2, lty=1, col=1:2)
+legend("bottomright", 
+       legend=c(p2["rPdes"]/p2["rPads"], p3["rPdes"]/p3["rPads"]), 
+       title="Keq = r.des/r.ads", lwd=2, lty=1, col=2:3)
 ```
 
-We see that the dissolved and adsorbed phases of P are in *disequilibrium* close to the SWI, and *approaching the equilibrium* with depth. (This explains the increasing concentrations of $P_{ads}$ with depth, as a result of the *net* rate of P adsorption being positive.) However, the equilibrium between the dissolved and adsorbed phases is *not* reached within the sediment column of $0.6~m$. This changes if the model is run for the sediment column depth set to $2~m$. (Not shown in this document, but try it to see it for yourself.)
+We see that the dissolved and adsorbed phases of P are in a *disequilibrium* close to the SWI, and *approaching an equilibrium* with depth. (This explains the increasing concentrations of $P_{ads}$ with depth, as a result of the *net* rate of P adsorption being positive.) The equilibrium between the dissolved and adsorbed phases is reached within the sediment column of ``r sprintf("%.2f",Length)`` $m$ for the scenario with $r_{des}=$ ``r sprintf("%.3f",p3["rPads"])`` $d^{-1}$. However, the equilibrium is *not* reached within the sediment column of ``r sprintf("%.2f",Length)`` $m$ for the scenario with $r_{des}=$ ``r sprintf("%.3f",p2["rPads"])`` $d^{-1}$. 
 
-Note, that if the length of the sediment column is changed, the solution will *change*! This is understandable, because by changing the length of the spatial domain, we *also* we change the *boundary conditions*! This highlights the importance of setting the boundary conditions so that they *realistically* represent the *in-situ* conditions of the studied system.
+This latter result changes if the model is run for the sediment column depth set to $1~m$. (Not shown in this document, but try to see it for yourself.) This is understandable because by changing the length of the spatial domain, we *also* we change the *boundary conditions* of the model! This highlights the importance of setting the boundary conditions so that they *realistically* represent the *in-situ* conditions of the studied system.
 
 ## Task 3. Phosphorus Budget
 
@@ -300,16 +298,18 @@ convert  <- 365000   # conversion from mol/m2/d to mmol/m2/year
 toselect <- c("TotalPmin", "TotalPdesorp", "TotalPadsorp", 
               "PO4.SWI.Flux", "PO4.Deep.Flux", "Pads.SWI.Flux", "Pads.Deep.Flux", 
               "POP.SWI.Flux", "POP.Deep.Flux")
-BUDGET  <- data.frame(NoAdsorption = unlist(sol1[toselect]), 
-                      MediumAdsorption = unlist(sol2[toselect]), 
-                      HighAdsorption = unlist(sol3[toselect]) )*convert
 
-# Show results
-knitr:: kable(BUDGET, digit = 2)
+BUDGET  <- data.frame(NoAdsorption     = unlist(sol1[toselect]), 
+                      MediumAdsorption = unlist(sol2[toselect]), 
+                      HighAdsorption   = unlist(sol3[toselect]) )*convert
+
+# show results in a nicely formatted table
+knitr:: kable(BUDGET, digit = 2, caption = "P fluxes in the modeled sediment column. 
+              Values given in $mmol~P~m^{-2}~yr^{-1}$.")
 ```
 
-By integrating the rates over the entire spatial domain, and by considering the fluxes at the upper and lower boundaries, we construct a conceptual diagram for P flow in the modelled sediment column as shown in Figure 1.
+By integrating the rates over the entire spatial domain, and by considering the fluxes at the upper and lower boundaries, we construct a conceptual diagram for P flow in the modeled sediment column as shown in Figure 1.
 
-![Integrated budgets. Numbers to be added from the table above (or below).](Pdynamics.png){width=10cm}
+![Phosphorus budget in the modeled sediment column. Numbers to be added from Table 1.](Pdynamics.png){width=14cm}
 
 

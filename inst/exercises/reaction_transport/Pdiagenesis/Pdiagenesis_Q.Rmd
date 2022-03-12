@@ -10,7 +10,7 @@ output: pdf_document
 
 The dynamics of phosphorus (P) in sediments is complex because it is impacted by biogeochemical and physical processes. Among other processes, phosphate that is released by mineralization of organic matter (biogeochemistry) can adsorb to iron oxides, precipitate as apatite (calcium phosphate mineral), or adsorb to calcium carbonate ($CaCO_3$). Adsorption to iron oxides occurs in the oxic zone, while phosphate is released again when iron oxides are reduced in the anoxic zone of the sediment. The last two processes (authigenic apatite formation and P adsorption to $CaCO_3$) can play an important role in the long-term removal of P. 
 
-In this exercise, you will make a very simple model of P dynamics in sediments. Assume that P is only exchanging between two pools: dissolved phosphate\footnote{Dissolved phosphate has four species: $H_3PO_4$, $H_2PO4^-$, $HPO_4^{2-}$ and $PO_4^{3-}$. The speciation depends on pH. At ambient pH, temperature and salinity assumed in this exercise, $H_2PO_4^-$ is the dominant species.} ($H_2PO_4^{-}$), and the phosphate adsorbed to $CaCO_3$ ($P_{ads}$, solid phase). The other processes involved in P dynamics will be ignored. 
+In this exercise, you will make a very simple model of P dynamics in sediments. Assume that P is only exchanging between two pools: dissolved phosphate\footnote{Dissolved phosphate has four species: $H_3PO_4$, $H_2PO_4^-$, $HPO_4^{2-}$ and $PO_4^{3-}$. The speciation depends on pH. At ambient pH, temperature and salinity assumed in this exercise, $H_2PO_4^-$ is the dominant species.} ($H_2PO_4^{-}$), and the phosphate adsorbed to $CaCO_3$ ($P_{ads}$, solid phase). The other processes involved in P dynamics will be ignored. 
 
 Assuming an *unlimited* availability of $CaCO_3$, consider that adsorption and desorption of phosphate can be represented by the following reversible reaction:
 $$P_{ads} \leftrightarrow H_2 PO_4^{-} + H^+.$$
@@ -21,16 +21,18 @@ $$P_{ads} \leftrightarrow H_2 PO_4^{-} + H^+.$$
 * Bottom water concentration of dissolved phosphate is 0.0005 $mol~P~m^{-3}$. 
 * The sediment accretion velocity equals to $v=0.1~cm~yr^{-1}$. 
 * The bioturbation mixing coefficient is $5~cm^2~yr^{-1}$. 
-* Due to sediment compaction, the sediment porosity $[m^3~liquid~m^{-3}~solid]$ declines with depth from 0.9 at the surface to 0.6 at depth, with a depth attenuation factor of $0.5~cm^{-1}$. Although this variation in porosity influences the advective velocity, we will ignore this in our model.
+* Due to sediment compaction, the sediment porosity $[m^3~liquid~m^{-3}~solid]$ declines *exponentially* with depth from 0.9 at the surface to 0.6 at depth. The coefficient describing the rate of this attenuation is $porcoef = 0.5~cm^{-1}$. Although this variation in porosity influences the advective velocity, we will ignore this in our model.
 
 * Use the R-package *marelac* to estimate the molecular diffusion coefficient of phosphate assuming a temperature of $10~^\circ$C and a salinity of 35. Assume *constant* $pH$ of 7. At this $pH$, temperature and salinity, the most abundant phosphate species is $H_2PO_4^{-}$. The diffusion coefficient needs to be corrected for tortuosity, as explained in the lectures.
 
 For the P dynamics, assume:
 
-* Phosphate is released from the mineralization of organic matter.
+* Dissolved phosphate is released from the mineralization of organic matter.
    - Assume that the rate constant describing the organic matter mineralization is $0.01~d^{-1}$. 
    - The deposition rate of organic carbon is $0.001~mol~C~m^{-2}~d^{-1}$. 
    - The *P:C* ratio in the organic matter is according to Redfield: 1 mole of P per 106 moles of C.
+
+* There is no deposition of adsorbed phosphate from the water-column.
 
 * Phosphate adsorption to $CaCO_3$ is described by first-order kinetics with respect to $H_2PO_4^{-}$ (rate constant $r_{ads}$). This is a reasonable assumption if the concentration of $CaCO_3$ in the sediment is so high that it never becomes limiting. 
    - In the initial model run, set $r_{ads} = 5\times 10^{-4}~d^{-1}$.
@@ -52,7 +54,7 @@ Add P dynamics to the template markdown file for early diagenesis *RTM_porous1D.
    - All depth-integrated rates.
    - The fluxes in and out of the model domain.
    - Depth profiles of the process rates (think about the units in which the results will be best displayed).
-   - Quotient ($Q=[PO_4^{3-}]/[P_{ads}]$), which is a measure of how far from an equilibrium the dissolved and adsorbed phosphate pools are. (Tip: when calculating Q, consider the units of the different P pools and the value of Q that you expect in an equilibrium.)
+   - Quotient ($Q=[H_2 PO_4^{-}]/[P_{ads}]$), which is a measure of how far from an equilibrium the dissolved and adsorbed phosphate pools are. (Tip: when calculating Q, consider the units of the different P pools and the value of Q that you expect in an equilibrium. The latter value is related to the rate constants $r_{ads}$ and $r_{des}$.)
 
 ## Task 2: Model applications
 
@@ -60,7 +62,7 @@ Add P dynamics to the template markdown file for early diagenesis *RTM_porous1D.
 
 * Plot the results and try to understand what happens. Plot in separate R-chunks the depth profiles of concentrations, process rates and the quotient. This will help you better understand and interpret the results. Discuss with the teachers to check your understanding.
 
-* Check the sensitivity of your model to the depth of the sediment column in which you model the P dynamics. That is, run your model with the depth of the sediment column set to $60~cm$ (initial), $100~cm$ and $200~cm$. Try to understand what happens and why. Discuss your ideas with the teachers.
+* Check the sensitivity of your model to the depth of the sediment column in which you model the P dynamics. That is, run your model with the depth of the sediment column set to $60~cm$ (initial), $100~cm$ and $200~cm$ (the easiest way to do this is to simply change the global variable ``Length`` and re-run the model). Try to understand what happens and why. Discuss your ideas with the teachers.
 
 ## Task 3: Phosphorus budget
 
@@ -68,5 +70,5 @@ Add P dynamics to the template markdown file for early diagenesis *RTM_porous1D.
    - the input from the overlying water, 
    - the burial rate, and 
    - the (vertically integrated) conversions between the different P pools. 
-* Convert the units to $\mu mol~P~m^{-2}~yr^{-1}$.
+* Convert the units to $mmol~P~m^{-2}~yr^{-1}$.
 * Discuss your diagram and P budget with the teachers.
