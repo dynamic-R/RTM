@@ -15,7 +15,7 @@ output:
 
 ## Mass balances
 
-Based on the conceptual diagram in Figure 1, the mass balance equations are:
+Based on the conceptual diagram, the mass balance equations are:
 
 $$\frac{dPOC}{dt} = FluxPOC-HydrolysisPOC+BactMortality$$
 $$\frac{dHMWC}{dt} = HydrolysisPOC - HydrolysisHMWC$$
@@ -28,17 +28,17 @@ For the rate expressions, it is important to realise that bacteria are doing ALL
 
 $$HydrolysisPOC  = rPOC \times \frac{POC} {(POC + ksPOC)} \times BACT$$
 $$HydrolysisHMWC  = rHMWC \times \frac{HMWC} {(HMWC + ksHMWC)} \times BACT$$
-$$BactUptake  = rup \times \frac{LMWC} {(LMWC + ksLMWC)} \times BACT$$
+$$BactUptake  = rUptake \times \frac{LMWC} {(LMWC + ksLMWC)} \times BACT$$
 
-Not all LMWC taken up by the bacteria yields new bacterial biomass. Part of this uptake is used to generate the energy required for biomass synthesis, which is done by respiration. This is called "activity respiration", and it is represented by the rate *GrowthRespiration*: 
-$$GrowthRespiration = pResp \times BactUptake$$
+Not all LMWC taken up by the bacteria yields new bacterial biomass, though. Part of this uptake is used to generate the energy required for biomass synthesis, which is done by respiration. This is called "activity respiration", and it is represented by the rate *GrowthRespiration*: 
+$$GrowthRespiration = fLoss \times BactUptake$$
 In addition, there is basal respiration (also called "maintenance respiration"), which provides energy for the basic body functions but does not lead to growth of the bacterial biomass:
-$$BasalRespiration = rBas \times BACT$$
+$$BasalRespiration = rBasal \times BACT$$
 
-The parameter that defines the bacterial mortality has units of $(mol~C~m^{-3})^{-1}~d^{-1}$, while the bacterial mortality should have units of $mol~C~m^{-3}~d^{-1}$. This means that we need to multiply the mortality parameter with a concentration squared to obtain the correct units for the flux. Thus, the rate expression for the mortality is:\footnote{The description of the parameter as a "quadratic mortality ct" also gives this idea away.}
-$$BactMortality = rClos \times BACT^2$$
+The parameter that defines the bacterial mortality has units of $(mol~C~m^{-3})^{-1}~d^{-1}$, while the bacterial mortality should have units of $mol~C~m^{-3}~d^{-1}$. This means that we need to multiply the mortality parameter with a *squared* concentration to obtain the correct units for the flux. Thus, the rate expression for the mortality is:\footnote{The description of the parameter as a "quadratic mortality constant" also gives this idea away.}
+$$BactMortality = rMort \times BACT^2$$
 
-Modelers often use a quadratic mortality for small organisms that grow very fast and whose predator also grows very fast, so that the predator has high concentration if the prey has high concentration and vice versa.
+Modelers often use a quadratic mortality for small organisms that grow very fast and whose predator also grows very fast, so that the predator has a high concentration if the prey has a high concentration and vice versa.
 
 ## R-implementation
 
@@ -52,16 +52,16 @@ state <- c(POC = 100, HMWC = 5, LMWC = 0.15, BACT = 5)
 
 # parameters
 parms <- c(
-  rPOC = 0.75,    # [d-1]
-  rHMWC = 0.5,    # [d-1]
-  rup = 2,        # [d-1]
-  ksPOC = 100,    # [mmolC.m-3]
-  ksHMWC = 5,     # [mmolC.m-3]
-  ksLMWC = 0.5,   # [mmolC.m-3]
-  rbas = 0.1,     # [d-1]
-  ploss = 0.5,    # [-]
-  rclos = 0.05,   # [(mmolC.m-3)-1.d-1]
-  fluxPOC = 0.5   # [mmolC.m-3.d-1]
+  rPOC    = 0.75, # [d-1]
+  rHMWC   = 0.5,  # [d-1]
+  rUptake = 2,    # [d-1]
+  ksPOC   = 100,  # [mmolC m-3]
+  ksHMWC  = 5,    # [mmolC m-3]
+  ksLMWC  = 0.5,  # [mmolC m-3]
+  rBasal  = 0.1,  # [d-1]
+  fLoss   = 0.5,  # [-]
+  rMort   = 0.05, # [(mmolC m-3)-1 d-1]
+  fluxPOC = 0.5   # [mmolC m-3 d-1]
 )
 
 # Model function
@@ -69,12 +69,12 @@ DetBact <- function(t, state, params) {
   with (as.list(c(state, params)), {
 
    # Rate expressions - all in units of [mmolC/m3/day]
-    HydrolysisPOC = rPOC * POC / (POC + ksPOC) * BACT
-    HydrolysisHMWC = rHMWC * HMWC / (HMWC + ksHMWC) * BACT
-    UptakeLMWC = rup * LMWC/(LMWC + ksLMWC) * BACT
-    BasalResp = rbas * BACT
-    ActivityResp = UptakeLMWC * ploss
-    MortBact = rclos * BACT^2
+    HydrolysisPOC  <- rPOC * POC / (POC + ksPOC) * BACT
+    HydrolysisHMWC <- rHMWC * HMWC / (HMWC + ksHMWC) * BACT
+    UptakeLMWC     <- rUptake * LMWC / (LMWC + ksLMWC) * BACT
+    BasalResp      <- rBasal * BACT
+    ActivityResp   <- UptakeLMWC * fLoss
+    MortBact       <- rMort * BACT^2
 
    # Mass balances [molC/m3/day]
     dPOC.dt  <-  fluxPOC - HydrolysisPOC + MortBact
@@ -82,10 +82,9 @@ DetBact <- function(t, state, params) {
     dLMWC.dt <-  HydrolysisHMWC - UptakeLMWC
     dBACT.dt <-  UptakeLMWC - BasalResp - ActivityResp - MortBact
 
-    list(c(dPOC.dt, dHMWC.dt, dLMWC.dt, dBACT.dt),
-         totalC = POC + HMWC + LMWC + BACT)
+    return(list(c(dPOC.dt, dHMWC.dt, dLMWC.dt, dBACT.dt),
+         totalC = POC + HMWC + LMWC + BACT))
   })
-
 }
 ```
 
