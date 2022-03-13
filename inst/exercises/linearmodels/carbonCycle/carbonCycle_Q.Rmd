@@ -4,10 +4,10 @@ author: "Lubos Polerecky and Karline Soetaert"
 subtitle: "Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
 date: "February 2021"
 output:
-  pdf_document:
-    toc: no
   html_document:
     toc: yes
+  pdf_document:
+    toc: no
   word_document:
     toc: yes
 ---
@@ -18,7 +18,9 @@ In a seminal work, Sarmiento and Gruber (2002) published a global carbon budget 
 
 In this exercise, you will make a dynamic model of the Earth's global carbon cycle based on this budget. You will then use this model to assess the response of the Earth's carbon cycle to perturbations, tackling the following questions: How, and how fast, does the Earth's carbon cycle respond to perturbations? What is the new steady-state condition? What are the consequences of various carbon reduction scenarios?
 
-![**Figure 1:** Earth's global carbon budget. Adapted from: Sinks for anthropogenic carbon. Jorge L. Sarmiento and Nicolas Gruber. Physics Today 55(8), 30 (2002); doi: 10.1063/1.1510279.](Ccycle.png){width=70% height=70%}
+```{r fig1, echo=FALSE, fig.align='center', out.width="70%", fig.cap="Earth's global carbon budget. Adapted from: Sinks for anthropogenic carbon. Jorge L. Sarmiento and Nicolas Gruber. Physics Today 55(8), 30 (2002); doi: 10.1063/1.1510279."}
+knitr::include_graphics("Ccycle.png")
+```
 
 ## Problem formulation
 
@@ -43,8 +45,8 @@ Obviously, if this model is run dynamically with the steady-state values as init
 
 Before you embark on the development of the more complex model, implement and apply the simplified 2-compartment model described above. Fluxes are expressed in $Pg~yr^{-1}$, mass in each compartment is expressed in $Pg~C$, the parameter values are
 
-parameter   |  value       unit     |
-------------|-------------|------
+| parameter   |  value   |    unit     |
+|:------------|:-------------|:------|
 $k_{AB}$    | 60/590      |$yr^{-1}$|
 $k_{BA}$    | 60/2300     |$yr^{-1}$|
 

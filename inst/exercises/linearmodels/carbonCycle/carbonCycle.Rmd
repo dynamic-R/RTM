@@ -4,10 +4,10 @@ author: "Lubos Polerecky and Karline Soetaert"
 subtitle: "Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
 date: "February 2021"
 output:
-  pdf_document:
-    toc: no
   html_document:
     toc: yes
+  pdf_document:
+    toc: no
   word_document:
     toc: yes
 ---
@@ -27,3 +27,5 @@ R Core Team (2020). R: A language and environment for statistical computing. R F
 Karline Soetaert, Thomas Petzoldt, R. Woodrow Setzer (2010). Solving Differential Equations in R:
   Package deSolve. Journal of Statistical Software, 33(9), 1--25. URL
   http://www.jstatsoft.org/v33/i09/ DOI 10.18637/jss.v033.i09
+
+Lubos Polerecky and Karline Soetaert (2021). Response of Systems to a Perturbation from an Equilibrium --- Part I & II. ``RTMreader("perturbation_I")`` and ``RTMreader("perturbation_II")``
