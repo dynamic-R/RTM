@@ -4,10 +4,10 @@ author: "Lubos Polerecky and Karline Soetaert"
 subtitle: "Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
 date: "February 2021"
 output:
-  html_document:
-    toc: yes
   pdf_document:
     toc: no
+  html_document:
+    toc: yes
   word_document:
     toc: yes
 ---
