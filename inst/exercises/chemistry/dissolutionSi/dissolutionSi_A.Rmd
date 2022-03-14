@@ -23,11 +23,11 @@ $$
 By substituting this expression into Eq. 1  we obtain
 
 $$
-\frac{dC}{dt} = -k_2 C_s^{2/3} \times (C-C_{eq}), \qquad (4)
+\frac{dC}{dt} = -k_2 \times C_s^{2/3} \times (C-C_{eq}), \qquad (4)
 $$
 
 $$
-\frac{dC_s}{dt} = k_2 C_s^{2/3} \times (C-C_{eq}), \qquad (5)
+\frac{dC_s}{dt} = k_2 \times C_s^{2/3} \times (C-C_{eq}), \qquad (5)
 $$
 
 where the modified rate constant $k_2$ is calculated from the original rate constant $k_p$ according to

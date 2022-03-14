@@ -169,7 +169,7 @@ question("Which of the following differential equations correctly describe mass 
 
 ## Biogeochemical reaction
 
-Consider organic matter (OM) mineralization in a water column. Under anoxic conditions (no $O_2$ available), OM can be mineralized with nitrate ($NO_3^-$) as the electron acceptor (Denitrification). The corresponding stoichiometry of the reaction is given by the equation below, where 16/106 corresponds to the Redfield (molar) ratio of C:N in OM. 
+Consider organic matter (OM) mineralization in a water column. Under anoxic conditions (no $O_2$ available), OM can be mineralized with nitrate ($NO_3^-$) as the electron acceptor (Denitrification). The corresponding stoichiometry of the reaction is given by the equation below, where 16/106 corresponds to the Redfield (molar) ratio of N:C in OM. 
 
 $$
 5CH_2O(NH_3)_{16/106}+4NO_3^-+4H^+ \rightarrow 5CO_2+7H_2O+2N_2+5(NH3)_{16/106}

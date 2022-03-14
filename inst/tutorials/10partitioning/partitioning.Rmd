@@ -242,7 +242,7 @@ To learn more about modelling of partitioning between phases, solve additional e
 
 ```
 require(RTM)
-RTMexercise("partitioning")
+RTMexercise("dissolutionSi")
 ```
 
 ## Textbook and Slides
