@@ -17,7 +17,7 @@ First, we define model parameters and empirical constants.
 ```{r}
 # model parameters
 Ptot     <- 101325      # total pressure (Pa)
-v        <- 0           # wind speed (m h-1)
+wind_v   <- 0           # wind speed (m h-1)
 TK       <- 298         # temperature (K)
 xini     <- 0.002       # initial 18O atom fraction of liquid water
 
@@ -120,7 +120,7 @@ Water18Oexchange <-function(t, state, pars) {
     Pair <- Nair/Vgas * Rgas * TK  # partial pressure of air
     
     # return time-derivatives and ordinary variables as a list
-    list(c(dN18vap.dt, dN16vap.dt, dN18liq.dt, dN16liq.dt, dNair.dt),
+    return(list(c(dN18vap.dt, dN16vap.dt, dN18liq.dt, dN16liq.dt, dNair.dt),
          
          # extra output quantities:
          Nwater = Nvap + Nliq,       # total amount of water (vapor+liquid)
@@ -140,16 +140,16 @@ Water18Oexchange <-function(t, state, pars) {
          x18vap = x18vap,
          x18liq = x18liq,
          delta_Vap_vs_Liq = ((N18vap/N16vap)/(N18liq/N16liq)-1)*1e3 # permil
-      )
+      ))
   })
 }
 ```
 
 ## Model application
 
-We solve the model for two initial values of the relative air humidity: 0 (scenario 1) and 1 (scenario 2). 
+We solve the model for two initial values of the relative air humidity: 0 (scenario 1) and 100% (scenario 2). 
 
-First, we use the above functions to calculate the rate constants and set the initial values of the state variables based on the definition of the problem. Note that in scenario 1, we use a very small initial humidity instead of 0 to avoid problems with division by zero. Additionally, as there is initially no precipitation in this scenario (because $N_{vap,ini}=0$), equations 8 and 9 imply that the amount of water vapor increases in time according to ${}^{18}N_{vap}={}^{18}k_f\cdot x_{liq,ini}\cdot A_{liq}\cdot t$ and ${}^{16}N_{vap}={}^{16}k_f\cdot (1-x_{liq,ini})\cdot A_{liq}\cdot t$ when $t$ is very small. These expressions imply that $x_{vap}$ increases from the initial value of 
+First, we use the above functions to calculate the rate constants and set the initial values of the state variables based on the definition of the problem. Note that in scenario 1, we use a very small initial humidity instead of 0 to avoid problems with division by zero. Additionally, as there is initially no precipitation in this scenario (because $N_{vap,ini}=0$), equations 8 and 9 imply that the amount of water vapor increases in time according to ${}^{18}N_{vap}={}^{18}k_f\cdot x_{liq,ini}\cdot A_{liq}\cdot t$ and ${}^{16}N_{vap}={}^{16}k_f\cdot (1-x_{liq,ini})\cdot A_{liq}\cdot t$ when $t$ is very small. These expressions imply that $x_{vap}$ increases from the *initial value* calculated according to
 $$
 x_{vap,ini} = \frac{{}^{18}k_f\cdot x_{liq,ini}}{{}^{18}k_f\cdot x_{liq,ini}+{}^{16}k_f\cdot (1-x_{liq,ini})}.
 $$
@@ -157,7 +157,7 @@ Thus, for scenario 1, we set ``x18vap`` to this value when calculating the initi
 
 ```{r, message=FALSE}
 # calculate rate constants
-k <- kfbT(TK=TK, delta18O=-10)
+k <- kfbT(TK=TK, delta18O=-10, v=wind_v)
 
 # define model parameters (rate constants + liquid surface area)
 pars <- c(k, Aliq=1)
@@ -289,7 +289,7 @@ Water18Oexchange2 <-function(t, state, pars) {
     Pair <- Nair/Vgas * Rgas * TK  # partial pressure of air
     
     # return time-derivatives and ordinary variables as a list
-    list(c(dN18vap.dt, dN16vap.dt, dN18liq1.dt, dN16liq1.dt, 
+    return(list(c(dN18vap.dt, dN16vap.dt, dN18liq1.dt, dN16liq1.dt, 
            dN18liq2.dt, dN16liq2.dt, dNair.dt),
          
          # extra output quantities:
@@ -314,7 +314,7 @@ Water18Oexchange2 <-function(t, state, pars) {
          x18liq2 = x18liq2,
          delta_Vap_vs_Liq1  = ((N18vap/N16vap)/(N18liq1/N16liq1)-1)  *1e3, # permil
          delta_Liq2_vs_Liq1 = ((N18liq2/N16liq2)/(N18liq1/N16liq1)-1)*1e3  # permil
-      )
+      ))
   })
 }
 ```
@@ -354,7 +354,7 @@ legend("bottomright", title="x18O.ini (liquid 2)", legend=c(xini1,xini2),
 ```
 
 ```{r, fig.height=2.5, fig.width=8}
-plot(out1, out2,
+plot(out1, out2,                                    # note: longer time-scale!
      which=c("N18liq1", "N16liq1", "N18liq2", "N16liq2"),
      xlab="time (hr)", lty=1, las=1, lwd=2, mfrow=c(1,4), ylab="mol")
 legend("bottomright", title="x18O.ini (liquid 2)", legend=c(xini1,xini2), 

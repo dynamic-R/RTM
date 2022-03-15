@@ -8,7 +8,7 @@ header-includes:
   \usepackage{float} 
   \floatplacement{figure}{th}
   \usepackage{siunitx}
-abstract: \noindent There is a continuous exchange of water molecules between liquid water and air due to evaporation and precipitation. Because lighter and heavier water molecules in the gas phase move at different speeds and are bound by slightly different forces within the liquid water, the exchange results in a fractionation of the $H_2{}^{18}O/H_2{}^{16}O$ isotope ratio between water vapor and liquid water. In this reader, we will show how the dynamics of this isotope exchange, and the resulting isotope fractionation, can be modeled in R.
+abstract: \noindent There is a continuous exchange of water molecules between liquid water and air due to evaporation and precipitation. Because isotopically lighter ($H_2{}^{16}O$) and heavier ($H_2{}^{18}O$) water molecules in the gas phase move at different speeds and are bound by slightly different forces within the liquid water, the exchange results in a fractionation of the $H_2{}^{18}O/H_2{}^{16}O$ isotope ratio between water vapor and liquid water. In this reader, we will show how the dynamics of this isotope exchange, and the resulting isotope fractionation, can be modeled in R.
 ---
 
 ```{r child = 'O18exchangeH2O_Q.Rmd'}

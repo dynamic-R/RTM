@@ -38,7 +38,7 @@ First, we define model parameters and empirical constants.
 # model parameters
 Aliq     <- 1           # liquid water area (m2) 
 Ptot     <- 101325      # total pressure (Pa)
-v        <- 0           # wind speed (m h-1)
+wind_v   <- 0           # wind speed (m h-1)
 TK1      <- 293.15      # temperature during first period (K)
 TK2      <- 283.15      # temperature during second period (K)
 
@@ -78,8 +78,8 @@ WaterEvapPrecip <-function(t, state, pars) {
   with (as.list(c(state, pars)),{
     
     # rate constants at the given temperature (TK given in pars)
-    kb <- kbT(TK)
-    kf <- kfT(TK)
+    kb <- kbT(TK, v)
+    kf <- kfT(TK, v)
     
     # volume of the gas phase (air+vapor) at a given Nvap, Nair, TK, and Ptot
     # (Nair given in pars)
@@ -103,7 +103,7 @@ WaterEvapPrecip <-function(t, state, pars) {
     Vtot  <- Vgas + Vliq           # total volume (liquid + gas)
     
     # return time-derivatives and ordinary variables as a list
-    list(c(dNvap.dt, dNliq.dt),
+    return(list(c(dNvap.dt, dNliq.dt),
          
          # extra output:
          # amounts of molecules
@@ -130,9 +130,8 @@ WaterEvapPrecip <-function(t, state, pars) {
          
          # fractions
          xvap = Nvap/(Nvap+Nair), # molar fraction of water vapor in air, Eq. 11
-         #xvap = Pvap/Pext,       # molar fraction of water vapor in air, Eq. 12
          humid = humid            # relative air humidity, (-)
-         )
+         ))
   })
 }
 
@@ -145,7 +144,7 @@ WaterEvapPrecip <-function(t, state, pars) {
 First, we define a function that returns the values of state variables (i.e., initial amounts of water vapor and liquid water molecules) and model parameters (i.e., temperature and amount of air molecules) based on the conditions defined by the problem (i.e., initial total volume, initial volume of the liquid water, initial relative air humidity, and initial temperature).
 
 ```{r}
-find_state_pars <- function(Vtot, Vliq, humid, TK){
+find_state_pars <- function(Vtot, Vliq, humid, TK, v){
   Vgas <- Vtot - Vliq  # volume of the gas phase = Vtotal - Vliquid
 
   # amounts of vapor, liquid, and air in the gas phase
@@ -155,7 +154,7 @@ find_state_pars <- function(Vtot, Vliq, humid, TK){
   
   # output: state variables and parameters
   return( list(SV   = c(Nvap = Nvap, Nliq = Nliq), 
-               pars = c(TK = TK, Nair = Nair)) )
+               pars = c(TK   = TK,   Nair = Nair, v = v)) )
 }
 ```
 
@@ -164,7 +163,7 @@ Now, we use the above function to generate the initial conditions and model para
 ```{r, message=FALSE}
 # initial conditions
 Vtot.ini <- 1; Vliq.ini <- 1e-3; humid.ini <- 0
-ini   <- find_state_pars(Vtot=Vtot.ini, Vliq=Vliq.ini, humid=humid.ini, TK=TK1)
+ini   <- find_state_pars(Vtot=Vtot.ini, Vliq=Vliq.ini, humid=humid.ini, TK=TK1, v=wind_v)
 
 # solve the model over the first half-hour
 outtimes <- seq(from = 0, to = 0.5, length.out = 400) # time in hr
@@ -178,13 +177,14 @@ In the second step, we use the end values of the first model run to calculate th
 
 ```{r}
 # calculate new initial conditions
-SV   <- out1[nrow(out1),]                    # end of the previous run
-ini2 <- find_state_pars(
-           Vtot  = SV[["Vgas"]]*TK2/TK1 +    # gas volume changes (isobaric cooling)
-                   SV[["Vliq"]],             # change in liquid volume neglected
-           Vliq  = SV[["Vliq"]], 
-           humid = SV[["Pvap"]]/Peq_vapor(TK=TK2), 
-           TK    = TK2)
+SV.end <- out1[nrow(out1),]                    # end of the previous run
+ini2   <- find_state_pars(
+           Vtot  = SV.end[["Vgas"]]*TK2/TK1 +  # gas volume changes (isobaric cooling)
+                   SV.end[["Vliq"]],           # change in liquid volume neglected
+           Vliq  = SV.end[["Vliq"]], 
+           humid = SV.end[["Pvap"]]/Peq_vapor(TK=TK2), 
+           TK    = TK2,
+           v     = wind_v)
 
 # solve the model
 out2 <- ode(y = ini2$SV, parms = ini2$pars, func = WaterEvapPrecip, times = outtimes)
@@ -231,7 +231,7 @@ plot(out1, out2,  which=c("Vgas", "Vliq", "Vtot"),
 
 ## Water budgets
 
-Finally, we construct the water budgets by integrating\footnote{We use the ``integrateTrapezoid`` function from the ``oce`` package to perform the integration.} the evaporation and precipitation rates over time, which yields *gross* amounts of evaporated and precipitated water, respectively. We also calculate the net amount of evaporated water as the difference in the gross amounts, which should be equal to the difference in the final and initial amounts of water vapor (it is). We also convert the amounts to volumes of liquid water, which are easier to imagine.
+Finally, we construct the water budgets by integrating\footnote{We use the ``integrateTrapezoid`` function from the ``oce`` package to perform the integration.} the evaporation and precipitation rates over time, which yields *gross* amounts of evaporated and precipitated water, respectively. We also calculate the net amount of evaporated water as the difference in the gross amounts, which should be equal to the difference in the final and initial amounts of water vapor (it is). We also convert the amount of liquid water (in moles) to the volume of liquid water (in $mL$), which is easier to imagine.
 
 ```{r, message=FALSE}
 require(oce)

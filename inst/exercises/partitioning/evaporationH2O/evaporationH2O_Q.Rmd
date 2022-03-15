@@ -4,7 +4,6 @@ subtitle: "Exercises Accompanying the Course Reaction Transport Modelling in the
 author: "Lubos Polerecky, Utrecht University"
 date: "January 2022"
 output: pdf_document
-abstract: \noindent Consider a water body surrounded by air. If the relative humidity of the air is below 100%, water will evaporate. In contrast, if the relative air humidity exceeds 100%, which occurs, for instance, when air with a given water vapor content cools down, water will precipitate from the gas phase to form a liquid. In both cases, the process will continue until an equilibrium is reached, i.e., until the relative humidity reaches 100%. In this reader, we will show how these processes can be modeled in R.
 ---
 
 # Theoretical background
@@ -89,7 +88,7 @@ When dealing with mixtures, properties of individual components in the mixture a
 x_A = N_A / N_{tot}\quad (mol~mol^{-1}).
 \end{equation}
 
-When dealing with gas mixtures, such as atmospheric air, individual components are typically characterized by another quantity: partial pressure. If a mixture behaves as an ideal gas, partial pressures are additive. Thus, partial pressure of an individual component is equal to the product of the total pressure, $P_{tot}$, and the molar fraction of that component: $P_A=x_A\cdot P_{tot}$. Because moist air at typical conditions behaves as an ideal gas, partial pressure of water vapor is calculated as
+When dealing with gas mixtures, such as atmospheric air, individual components are typically characterized by another quantity: *partial pressure*. If a mixture behaves as an ideal gas, partial pressures are *additive*. Thus, partial pressure of an individual component is equal to the product of the total pressure, $P_{tot}$, and the molar fraction of that component: $P_A=x_A\cdot P_{tot}$. Because moist air at typical conditions behaves as an ideal gas, partial pressure of water vapor is calculated as
 \begin{equation}
 \label{eq12}
 P_{vap} = x_{vap}\cdot P_{air},
@@ -126,8 +125,8 @@ Consider a closed container filled with liquid water and moist air (Figure 1). I
 
 * Dissolution in water of air components such as $N_2$ or $O_2$ can be ignored.
 
-* The air and water vapor behave as an ideal gas. Since the total pressure of the gas phase and the temperature of the entire system are kept constant, the evaporation and precipitation processes as well as the isobaric cooling phase will lead to a volume change for the liquid water, the gas phase (air + water vapor), as well as the total volume (liquid + gas phase). Except for the change in volume of the liquid water during cooling, these changes cannot be neglected. You can assume that the walls of the container are flexible to allow for such changes to occur without the need to perform an extra work.
+* The air and water vapor behave as an ideal gas. Since the total pressure of the gas phase and the temperature of the entire system are kept constant, the evaporation and precipitation processes as well as the isobaric cooling phase will lead to a volume change for the liquid water, the gas phase (air + water vapor), as well as the total volume (liquid + gas phase). Except for the change in volume of the liquid water during cooling, these changes cannot be neglected. You can assume that the walls of the container are *flexible* to allow for such changes to occur without the need to perform an extra work.
 
-* To evaporate $N$ moles of water at a constant pressure and temperature, a certain amount of heat is required ($q=N\cdot \Delta\bar{H}_{vap}$). You can assume that this heat is supplied externally such that the pressure and temperature of the system *can* remain constant during the modeled time interval. Similarly, you can assume that the heat produced during precipitation is transferred to the surrounding. The cooling from $20~^\circ C$ to $10~^\circ C$ is also done by transferring heat to the surrounding.
+* To evaporate $N$ moles of water at a constant pressure and temperature, a certain amount of heat is required ($q=N\cdot \Delta\bar{H}_{vap}$). You can assume that this heat is *supplied externally* such that the pressure and temperature of the system *can* remain constant during the modeled time interval. Similarly, you can assume that the heat produced during precipitation is transferred to the surrounding. The cooling from $20~^\circ C$ to $10~^\circ C$ is also done by transferring heat to the surrounding.
 
 * The liquid and gas phases are well mixed (i.e., homogeneous). Thus, you can ignore transport processes and base your model entirely on mass balances (Eqs. 1 and 2) and the ideal gas law (Eq. 5).
