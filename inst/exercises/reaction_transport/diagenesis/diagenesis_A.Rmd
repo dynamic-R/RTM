@@ -22,17 +22,19 @@ Nitri = rNit \cdot \frac{O_2}{O_2+k_{O_2}} \cdot NH_3 \\[5mm]
 Denitri = rMin \cdot \frac{k_{O_2}}{O_2+k_{O_2}} \cdot \frac{NO_3^-}{NO_3^-+k_{NO_3}} \cdot Corg \\[5mm]
 Sred = rMin \cdot \frac{k_{O_2}}{O_2+k_{O_2}} \cdot \frac{k_{NO_3}}{NO_3^-+k_{NO_3}} \cdot \frac{SO_4^{2-}}{SO_4^{2-}+k_{SO_4}} \cdot Corg \\[5mm]
 Sox = rSox \cdot \frac{O_2}{O_2+k_{O_2}} \cdot H_2S \\[5mm]
-CH4gen = rMin \cdot \frac{k_{O_2}}{O_2+k_{O_2}} \cdot \frac{k_{NO_3}}{NO_3^-+k_{NO_3}} \cdot \frac{k_{SO_4}}{SO_4^{2-}+k_{SO_4}} \cdot Corg
+Methanogen = rMin \cdot \frac{k_{O_2}}{O_2+k_{O_2}} \cdot \frac{k_{NO_3}}{NO_3^-+k_{NO_3}} \cdot \frac{k_{SO_4}}{SO_4^{2-}+k_{SO_4}} \cdot Corg
 \end{array}
 $$
 
 Units of the rates:
   
-  * $AeroMin$, $Denitri$, $Sred$ and $CH4gen$ are in $mol~C~m^{-3}_S~d^{-1}$.
+  * $AeroMin$, $Denitri$, $Sred$ and $Methanogen$ are in $mol~C~m^{-3}_S~d^{-1}$.
+  
   * $Nitri$ is in $mol~N~m^{-3}_L~d^{-1}$.
+  
   * $Sox$ is in $mol~S~m^{-3}_L~d^{-1}$.
 
-Note that $AeroMin+Denitri+Sred+CH4gen$ is equal to $rMIN \cdot Corg$, as follows directly from the fact that the sum of the limitation and inhibition terms for a specific substrate is 1. Thus, the *total* mineralisation rate is first-order with respect to $Corg$ and independent of the terminal electron acceptor. The limitation and inhibition terms only dictate the *contributions* of the different oxidants to the overall mineralisation process.
+Note that $AeroMin+Denitri+Sred+Methanogen$ is equal to $rMIN \cdot Corg$, as follows directly from the fact that the sum of the limitation and inhibition terms for a specific substrate is 1. Thus, the *total* mineralisation rate is first-order with respect to $Corg$ and independent of the terminal electron acceptor. The limitation and inhibition terms only dictate the *contributions* of the different oxidants to the overall mineralisation process.
 
 ## Mass balance equations
 
@@ -41,12 +43,12 @@ $$
 \begin{array}{l}
 \frac{\partial Corg}{\partial t} = \frac{1}{1-\phi}\cdot \frac{\partial}{\partial x}\left[(1-\phi)\cdot D_b\cdot \frac{ \partial Corg}{\partial x}\right] 
 -\frac{1}{1-\phi}\cdot \frac{ \partial }{\partial x}\left[(1-\phi)\cdot v\cdot Corg\right]
-- AeroMin - Denitri - Sred - CH4gen \\[4mm]
+- AeroMin - Denitri - Sred - Methanogen \\[4mm]
 \frac{\partial O_2}{\partial t} = \frac{1}{\phi}\cdot \frac{\partial}{\partial x}\left[\phi \cdot D_{O2}\cdot \frac{ \partial O_2}{\partial x}\right]
 -\frac{1}{\phi}\cdot \frac{ \partial }{\partial x}\left[\phi\cdot v\cdot O_2\right] - AeroMin \cdot f_{2L} - 2 \cdot Nitri - 2 \cdot Sox \\[4mm]
 \frac{\partial NH_3}{\partial t} = \frac{1}{\phi}\cdot  \frac{\partial}{\partial x}\left[\phi \cdot D_{NH_3}\cdot  \frac{ \partial NH_3}{\partial x}\right] 
 -\frac{1}{\phi}\cdot \frac{ \partial }{\partial x}\left[\phi\cdot v\cdot NH_3\right]
-+ \frac{16}{106} \cdot  (AeroMin + Denitri + Sred + CH4gen) \cdot  f_{2L} - Nitri \\[4mm]
++ \frac{16}{106} \cdot  (AeroMin + Denitri + Sred + Methanogen) \cdot  f_{2L} - Nitri \\[4mm]
 \frac{\partial NO_3^-}{\partial t} = \frac{1}{\phi} \cdot \frac{\partial}{\partial x}\left[\phi\cdot  D_{NO_3^-}\cdot  \frac{ \partial NO_3^-}{\partial x}\right] 
 -\frac{1}{\phi}\cdot \frac{ \partial }{\partial x}\left[\phi\cdot v\cdot NO_3^-\right]- 0.8 \cdot Denitri + Nitri \\[4mm]
 \frac{\partial SO_4^{2-}}{\partial t} = \frac{1}{\phi}\cdot \frac{\partial}{\partial x}\left[\phi\cdot D_{SO_4^{2-}}\cdot \frac{ \partial SO_4^{2-}}{\partial x}\right] 
@@ -57,10 +59,10 @@ $$
 + 0.5\cdot Sred\cdot f_{2L}- Sox \\[4mm]
 \frac{\partial CO_2}{\partial t} = \frac{1}{\phi} \cdot \frac{\partial}{\partial x}\left[\phi\cdot  D_{CO_2}\cdot  \frac{ \partial CO_2}{\partial x}\right] 
 -\frac{1}{\phi}\cdot \frac{ \partial }{\partial x}\left[\phi\cdot v\cdot CO_2\right]
-+ (OxicMin + Denitri + Sred + 0.5\cdot CH4gen)\cdot f_{2L} \\[4mm]
++ (OxicMin + Denitri + Sred + 0.5\cdot Methanogen)\cdot f_{2L} \\[4mm]
 \frac{\partial CH_4}{\partial t} = \frac{1}{\phi} \cdot \frac{\partial}{\partial x}\left[\phi\cdot  D_{CH_4}\cdot  \frac{ \partial CH_4}{\partial x}\right] 
 -\frac{1}{\phi}\cdot \frac{ \partial }{\partial x}\left[\phi\cdot v\cdot CH_4\right]
-+ 0.5\cdot CH4gen\cdot f_{2L}
++ 0.5\cdot Methanogen\cdot f_{2L}
 \end{array}
 $$
 where $f_{2L}=(1-\phi)/\phi$.
@@ -79,7 +81,7 @@ require(ReacTran)
 Length    <- 0.1   # [m]
 N         <- 500
 
-# grid with an exponentially increasing grid size, first cell 0.05 cm (5e-4m)
+# grid with an exponentially increasing grid size, first cell 0.05 cm (5e-4 m)
 Grid      <- setup.grid.1D(L = Length, N = N, dx.1 = 0.05/100)
 
 # function describing the variation of porosity (volume fraction of LIQUID) with depth
@@ -140,17 +142,17 @@ parms <- c(
 ## Definition and initialisation of state variables
 
 ```{r}
-names    <- c("POC", "CO2", "O2", "NH3", "NO3", "SO4", "H2S", "CH4")
-nspec    <- length(names)
-POC.ini  <- rep(0, length = N)      # initial conditions 
-CO2.ini  <- rep(0, length = N)
-O2.ini   <- rep(0, length = N)
-NH3.ini  <- rep(0, length = N)
-NO3.ini  <- rep(0, length = N)
-SO4.ini  <- rep(0, length = N)
-H2S.ini  <- rep(0, length = N)
-CH4.ini  <- rep(0, length = N)
-state    <- c(POC.ini, CO2.ini, O2.ini, NH3.ini, NO3.ini, SO4.ini, H2S.ini, CH4.ini)
+names     <- c("POC", "CO2", "O2", "NH3", "NO3", "SO4", "H2S", "CH4")
+nspec     <- length(names)
+POC.ini   <- rep(0, length = N)      # initial conditions 
+CO2.ini   <- rep(0, length = N)
+O2.ini    <- rep(0, length = N)
+NH3.ini   <- rep(0, length = N)
+NO3.ini   <- rep(0, length = N)
+SO4.ini   <- rep(0, length = N)
+H2S.ini   <- rep(0, length = N)
+CH4.ini   <- rep(0, length = N)
+state.ini <- c(POC.ini, CO2.ini, O2.ini, NH3.ini, NO3.ini, SO4.ini, H2S.ini, CH4.ini)
 ```
 
 ## Definition of the model function
@@ -161,8 +163,8 @@ Diamodel <- function (t, state, pars)   # state is a LONG vector
   with (as.list(pars),{ 
     
     # unpack state variables
-    POC <- state[     1 :   N ]    # first N elements: POC
-    CO2 <- state[  (N+1):(2*N)]    # next N elements:  CO2
+    POC <- state[(0*N+1):(1*N)]    # first N elements: POC
+    CO2 <- state[(1*N+1):(2*N)]    # next N elements:  CO2
     O2  <- state[(2*N+1):(3*N)]    # next N elements:  O2
     NH3 <- state[(3*N+1):(4*N)]    # next N elements:  NH3
     NO3 <- state[(4*N+1):(5*N)]    # next N elements:  NO3
@@ -183,7 +185,7 @@ Diamodel <- function (t, state, pars)   # state is a LONG vector
                         dx = Grid, VF = porLiquid,   # grid and volume fraction (por)
                         D = diffCO2, v = v_adv)      # diffusive mixing and advection
     
-    tran.O2 <- tran.1D(C = O2, C.up = bwO2,
+    tran.O2  <- tran.1D(C = O2, C.up = bwO2,
                         dx = Grid, VF = porLiquid,
                         D = diffO2, v = v_adv)
     
@@ -213,50 +215,50 @@ Diamodel <- function (t, state, pars)   # state is a LONG vector
     AeroMin      <- rMin *  O2/(O2+kO2)                                     * POC   
     Denitri      <- rMin * kO2/(O2+kO2) *  NO3/(NO3+kNO3)                   * POC   
     SO4reduction <- rMin * kO2/(O2+kO2) * kNO3/(NO3+kNO3) *  SO4/(SO4+kSO4) * POC
-    CH4genesis   <- rMin * kO2/(O2+kO2) * kNO3/(NO3+kNO3) * kSO4/(SO4+kSO4) * POC
+    Methanogen   <- rMin * kO2/(O2+kO2) * kNO3/(NO3+kNO3) * kSO4/(SO4+kSO4) * POC
     
-    Mineralisation  <- AeroMin  + Denitri + SO4reduction + CH4genesis
+    Mineralisation  <- AeroMin  + Denitri + SO4reduction + Methanogen
     
     # [mol/m3 LIQUID/d] (per volume of liquid) 
-    Nitri   <- rNit * O2/(O2+kO2) *NH3     
-    Sox     <- rSox * O2/(O2+kO2) *H2S
+    Nitri   <- rNit * O2/(O2+kO2) * NH3     
+    Sox     <- rSox * O2/(O2+kO2) * H2S
     
     # === mass balances : dC/dt = transport + reactions ===
     
     # solid substances [mol/m3 SOLID/d]  
     dPOC.dt   <- ( tran.POC$dC                                    # transport
-                 - AeroMin - Denitri - SO4reduction - CH4genesis) # reactions, 
+                 - AeroMin - Denitri - SO4reduction - Methanogen) # reactions, 
     
     # dissolved substances  [mol/m3 LIQUID/d]
     poro      <- porLiquid$mid
     f2Liquid  <- (1-poro)/poro  # to convert from /solid to /liquid
     
     dCO2.dt   <- ( tran.CO2$dC
-                   + (AeroMin + Denitri + SO4reduction + 0.5*CH4genesis)*f2Liquid )
+                 + (AeroMin + Denitri + SO4reduction + 0.5*Methanogen)*f2Liquid )
     dO2.dt    <- ( tran.O2$dC - 2*Nitri - 2*Sox - AeroMin*f2Liquid )
     dNH3.dt   <- ( tran.NH3$dC - Nitri 
-                   + 16/106*(AeroMin + Denitri + SO4reduction + CH4genesis)*f2Liquid )  
+                 + 16/106*(AeroMin + Denitri + SO4reduction + Methanogen)*f2Liquid )  
     dNO3.dt   <- ( tran.NO3$dC + Nitri - 4/5*Denitri*f2Liquid )
     dSO4.dt   <- ( tran.SO4$dC - 0.5*SO4reduction*f2Liquid + Sox)
     dH2S.dt   <- ( tran.H2S$dC + 0.5*SO4reduction*f2Liquid - Sox)
-    dCH4.dt   <- ( tran.CH4$dC + 0.5*CH4genesis*f2Liquid)
+    dCH4.dt   <- ( tran.CH4$dC + 0.5*Methanogen*f2Liquid)
 
     # === depth-integrated rates: [mol/m2 BULK/d] 
-    TotalAero   <- sum(AeroMin       *Grid$dx*porSolid$mid)
-    TotalDenit  <- sum(Denitri       *Grid$dx*porSolid$mid)
-    TotalSO4red <- sum(SO4reduction  *Grid$dx*porSolid$mid)
-    TotalCH4gen <- sum(CH4genesis    *Grid$dx*porSolid$mid)
-    TotalMin    <- sum(Mineralisation*Grid$dx*porSolid$mid)
+    TotalAero   <- sum(AeroMin       * Grid$dx * porSolid$mid)
+    TotalDenit  <- sum(Denitri       * Grid$dx * porSolid$mid)
+    TotalSO4red <- sum(SO4reduction  * Grid$dx * porSolid$mid)
+    TotalCH4gen <- sum(Methanogen    * Grid$dx * porSolid$mid)
+    TotalMin    <- sum(Mineralisation* Grid$dx * porSolid$mid)
 
-    TotalNit    <- sum(Nitri         *Grid$dx*porLiquid$mid)
-    TotalSox    <- sum(Sox           *Grid$dx*porLiquid$mid)
+    TotalNit    <- sum(Nitri         * Grid$dx * porLiquid$mid)
+    TotalSox    <- sum(Sox           * Grid$dx * porLiquid$mid)
   
     return(list(c(dPOC.dt, dCO2.dt, dO2.dt, dNH3.dt, dNO3.dt, 
                   dSO4.dt, dH2S.dt, dCH4.dt),  # time-derivatives
           AeroMin        = AeroMin,            # rate profiles
           Denitri        = Denitri,
           SO4reduction   = SO4reduction,
-          CH4genesis     = CH4genesis,
+          Methanogen     = Methanogen,
           Mineralisation = Mineralisation,
           Nitri          = Nitri,
           Sox            = Sox,
@@ -302,18 +304,18 @@ Diamodel <- function (t, state, pars)   # state is a LONG vector
 
 Here, we find steady state solutions of the model for the three POC fluxes.
 ```{r}
-std <- steady.1D (y=state, func=Diamodel, parms=parms, 
+std <- steady.1D (y=state.ini, func=Diamodel, parms=parms, 
                   nspec=nspec, dimens=N, names=names,
                   positive = TRUE)     # to have only positive values! 
 
 p1 <- parms
 p1["depoPOC"]  <- 20e-3 # [mol/m2/d]  POC deposition rate (flux at SWI)
-std1 <- steady.1D (y=state, func=Diamodel, parms=p1, 
+std1 <- steady.1D (y=state.ini, func=Diamodel, parms=p1, 
                   nspec=nspec, dimens=N, names=names, positive = TRUE)
 
 p2 <- parms
 p2["depoPOC"]  <- 200e-3 # [mol/m2/d]  POC deposition rate (flux at SWI)
-std2 <- steady.1D (y=state, func=Diamodel, parms=p2, 
+std2 <- steady.1D (y=state.ini, func=Diamodel, parms=p2, 
                   nspec=nspec, dimens=N, names=names, positive = TRUE)
 ```
 
@@ -329,29 +331,29 @@ plot(std, std1, std2,
 Next, we plot depth profiles of the process rates, all runs in one graph.
 ```{r, fig.width=8, fig.height=8}
 plot(std, std1, std2, 
- which = c("AeroMin","Denitri","SO4reduction","CH4genesis","Mineralisation","Nitri","Sox"),
+ which = c("AeroMin","Denitri","SO4reduction","Methanogen","Mineralisation","Nitri","Sox"),
  grid=Grid$x.mid, xyswap=TRUE, ylab="depth (m)", ylim=c(Length,0), lty=1, lwd=2, las=1,
  xlab=c(rep("molC/m3 Solid/d",5), "molN/m3 Liquid", "molS/m3 Liquid"))
 ```
 
-Finally, we plot depth profiles of all mineralisation rates in one graph, separately for each model run. The graphs show that the organic matter is mineralised by aerobic mineralisation at the very top of the sediment (where $O_2$ is available), then by denitrification in a narrow band (where $NO_3^-$ is available but $O_2$ is depleted), then by sulphate reduction in the deeper sediment (where $SO_4^{2-}$ is available but $O_2$ and $NO_3^-$ are depleted).\footnote{Note that the latter two processes do not occur in the run with the lowest POC deposition flux.} Finally, methanogenesis occurs at depths where $O_2$, $NO_3^-$ and $SO_4^{2-}$ have been depleted and organic matter is still available (only visible in the run with the largest POC deposition flux). The plots thus illustrate the so-called biogeochemical cascade.
+Finally, we plot depth profiles of all mineralisation rates in one graph, separately for each model run. The graphs show that the organic matter is mineralised by aerobic mineralisation at the very top of the sediment (where $O_2$ is available), then by denitrification in a narrow band (where $NO_3^-$ is available but $O_2$ is depleted), then by sulphate reduction in the deeper sediment (where $SO_4^{2-}$ is available but $O_2$ and $NO_3^-$ are depleted).\footnote{Note that the latter two processes do not occur in the run with the lowest POC deposition flux.} Finally, methanogenesis occurs at depths where $O_2$, $NO_3^-$ and $SO_4^{2-}$ have been depleted and organic matter is still available (only visible in the run with the largest POC deposition flux). The plots thus illustrate the so-called *biogeochemical cascade*.
 
-```{r, fig.width=6, fig.height=4}
+```{r, fig.width=8, fig.height=4}
 # all process rates in one graph
 par(mfrow=c(1,3))
 s <- std
-matplot(y=Grid$x.mid, x=cbind(s$AeroMin, s$Denitri, s$SO4reduction, s$CH4genesis), 
+matplot(y=Grid$x.mid, x=cbind(s$AeroMin, s$Denitri, s$SO4reduction, s$Methanogen), 
         type="l", ylim=c(Length,0), col=1:4, lwd=2, lty=1,
         xlab="molC/m3 Solid/d", ylab="depth (m)")
 s <- std1
-matplot(y=Grid$x.mid, x=cbind(s$AeroMin, s$Denitri, s$SO4reduction, s$CH4genesis), 
+matplot(y=Grid$x.mid, x=cbind(s$AeroMin, s$Denitri, s$SO4reduction, s$Methanogen), 
         type="l", ylim=c(Length,0), col=1:4, lwd=2, lty=1,
         xlab="molC/m3 Solid/d", ylab="depth (m)", main="biogeochemical cascade")
 s <- std2
-matplot(y=Grid$x.mid, x=cbind(s$AeroMin, s$Denitri, s$SO4reduction, s$CH4genesis), 
+matplot(y=Grid$x.mid, x=cbind(s$AeroMin, s$Denitri, s$SO4reduction, s$Methanogen), 
         type="l", ylim=c(Length,0), col=1:4, lwd=2, lty=1,
         xlab="molC/m3 Solid/d", ylab="depth (m)")
-legend("bottomright",legend=c("AeroMin", "Denitri", "SO4reduction", "Ch4genesis"),
+legend("bottomright",legend=c("AeroMin", "Denitri", "SO4reduction", "Methanogen"),
        lwd=2, col=1:4, lty=1, bty="n")
 ```
 
@@ -406,7 +408,7 @@ fac <- 365  # to molS/m2/yr
 BUDGET   <- std[toselect]
 BUDGET1  <- std1[toselect]
 BUDGET2  <- std2[toselect]
-SBUDG <- rbind(std=unlist(BUDGET), std1=unlist(BUDGET1), std2=unlist(BUDGET2))*fac
+SBUDG    <- rbind(std=unlist(BUDGET), std1=unlist(BUDGET1), std2=unlist(BUDGET2))*fac
 SBUDG[,"TotalSO4red"] <- SBUDG[,"TotalSO4red"]*0.5  # 0.5 moles of SO4 per mole of C
 knitr::kable(SBUDG, digits = 4)
 ```

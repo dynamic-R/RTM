@@ -18,32 +18,32 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Four species are modeled with the following concentrations and boundary conditions:
 
-* POC: Particulate Organic Carbon, [$mol~C~m^{-3}~solid$]
-  - imposed flux at the upstream boundary (flux.up), 
+* $POC$: Particulate Organic Carbon, [$mol~C~m^{-3}~solid$]
+  - imposed flux at the upstream boundary (``flux.up``), 
   - zero-gradient boundary downstream,
-* DIC: Dissolved Inorganic Carbon, [$mol~C~m^{-3}~liquid$] 
-  - imposed concentration upstream (C.up), 
+* $DIC$: Dissolved Inorganic Carbon, [$mol~C~m^{-3}~liquid$] 
+  - imposed concentration upstream (``C.up``), 
   - zero-gradient boundary downstream,
 * $P_{ads}$: Adsorbed phosphorus, [$mol~P~m^{-3}~solid$]
-  - zero flux at the upstream boundary (flux.up = 0), 
+  - zero flux at the upstream boundary (``flux.up = 0``), 
   - zero-gradient boundary downstream,
 * $H_2PO_4^{-}$: Dissolved phosphate, [$mol~P~m^{-3}~liquid$] 
-  - imposed concentration upstream (C.up), 
+  - imposed concentration upstream (``C.up``), 
   - zero-gradient boundary downstream.
 
 Biogeochemical/physical processes: 
 
-* First-order mineralization of organic matter produces DIC and $H_2PO_4^{-}$.
+* First-order mineralization of organic matter produces $DIC$ and $H_2PO_4^{-}$.
 * Phosphate adsorption and desorption to $CaCO_3$.
 
 What can be ignored:
 
 * $CaCO_3$ is assumed to be present in excess, and therefore does not need to be modeled.
-* pH is assumed to be constant, and therefore does not need to be modelled.
+* $pH$ is assumed to be constant, and therefore does not need to be modeled.
 
 ## Task 1. Model implementation in R
 
-The partial derivatives related to transport are approximated by the function tran.1D from the ReacTran package. The steady-state and dynamic solutions are obtained using functions from the rootSolve and deSolve package. The latter two packages are loaded together with ReacTran. The diffusion coefficients are obtained using the marelac package.
+The partial derivatives related to transport are approximated by the function ``tran.1D`` from the ReacTran package. The steady-state and dynamic solutions are obtained using functions from the rootSolve and deSolve package. The latter two packages are loaded together with ReacTran. The diffusion coefficients are obtained using the marelac package.
 
 ```{r, message = FALSE}
 require(marelac)
@@ -52,7 +52,7 @@ require(ReacTran)
 
 ### The model grid and associated properties
 
-The model domain is divided into a grid of N boxes. The depth of the modeled sediment column is set to $0.6~m$. The grid size is exponentially increasing with depth, to achieve a better accuracy of the results in the sediment region where steep spatial gradients are likely present (here: close to the sediment-water interface).
+The model domain is divided into a grid of $N$ boxes. The depth of the modeled sediment column is set to $0.6~m$. The grid size is exponentially increasing with depth, to achieve a better accuracy of the results in the sediment region where steep spatial gradients are likely present (here: close to the sediment-water interface).
 
 ```{r}
 # grid: 200 boxes, total length = 0.6 m, later increased to 1 or 2 m.
@@ -125,7 +125,7 @@ POC.ini   <- rep(0, length = N)      # initial conditions
 DIC.ini   <- rep(0, length = N)
 PO4.ini   <- rep(0, length = N)
 Pads.ini  <- rep(0, length = N)
-state    <- c(POC.ini, DIC.ini, PO4.ini, Pads.ini)     # note the order!
+state.ini <- c(POC.ini, DIC.ini, PO4.ini, Pads.ini)     # note the order!
 # Number of species in the model, and their names
 names <- c("POC", "DIC", "PO4", "Pads")
 nspec <- length(names)
@@ -135,14 +135,14 @@ nspec <- length(names)
 ### The model function
 
 ```{r}
-PDiamodel <- function (t, Conc, pars)   # Conc is a long vector
+PDiamodel <- function (t, state, pars)   # state is a long vector
 {
   with (as.list(pars),{
     # unpack state variables   
-    POC  <- Conc[     1 :   N ]    # first N elements: POC
-    DIC  <- Conc[(  N+1):(2*N)]    # next N elements: DIC
-    PO4  <- Conc[(2*N+1):(3*N)]    # next N elements: PO4
-    Pads <- Conc[(3*N+1):(4*N)]    # next N elements: adsorbed P
+    POC  <- state[(0*N+1):(1*N)]    # first N elements: POC
+    DIC  <- state[(1*N+1):(2*N)]    # next N elements: DIC
+    PO4  <- state[(2*N+1):(3*N)]    # next N elements: PO4
+    Pads <- state[(3*N+1):(4*N)]    # next N elements: adsorbed P
 
     # transport - note: zero gradient by default at lower boundaries
  
@@ -189,7 +189,7 @@ PDiamodel <- function (t, Conc, pars)   # Conc is a long vector
     dPO4.dt <- ( tran.PO4$dC                            # transport
                  + PCratio*Mineralisation*(1-poro)/poro # [mol/m3 LIQUID/d] !!
                  + Desorption*(1-poro)/poro             # [mol/m3 LIQUID/d] !!
-                 - Adsorption)                          # [mol/m3 LIQUID/d] !!
+                 - Adsorption )                         # [mol/m3 LIQUID/d] !!
 
     # depth-integrated rates: [mol/m2 BULK/d] !!
     TotalMin     <- sum(Mineralisation*Grid$dx * (1-poro))
@@ -208,22 +208,22 @@ PDiamodel <- function (t, Conc, pars)   # Conc is a long vector
           Quotient         = PO4*poro / (Pads*(1-poro)), # corrected for porosity!
           
           # for budgetting
-          TotalMin     = TotalMin,                  # [molC/m2 BULK/d]
-          TotalPmin    = TotalPmin,                 # [molP/m2 BULK/d]
-          TotalPdesorp = TotalPdesorp,
-          TotalPadsorp = TotalPadsorp,
-          DIC.SWI.Flux  = tran.DIC$flux.up,         # [molC/m2 BULK/d]
-          DIC.Deep.Flux = tran.DIC$flux.down,
-          POC.SWI.Flux  = tran.POC$flux.up,         # [molC/m2 BULK/d]
-          POC.Deep.Flux = tran.POC$flux.down,
-          PO4.SWI.Flux  = tran.PO4$flux.up,         # [molP/m2 BULK/d]
-          PO4.Deep.Flux = tran.PO4$flux.down,
-          Pads.SWI.Flux = tran.Pads$flux.up,        # [molP/m2 BULK/d]
-          Pads.Deep.Flux= tran.Pads$flux.down,
-          POC.SWI.Flux  = tran.POC$flux.up,         # [molC/m2 BULK/d]
-          POC.Deep.Flux = tran.POC$flux.down,
-          POP.SWI.Flux  = PCratio*tran.POC$flux.up, # [molP/m2 BULK/d]
-          POP.Deep.Flux = PCratio*tran.POC$flux.down))
+          TotalMin       = TotalMin,                  # [molC/m2 BULK/d]
+          TotalPmin      = TotalPmin,                 # [molP/m2 BULK/d]
+          TotalPdesorp   = TotalPdesorp,
+          TotalPadsorp   = TotalPadsorp,
+          DIC.SWI.Flux   = tran.DIC$flux.up,          # [molC/m2 BULK/d]
+          DIC.Deep.Flux  = tran.DIC$flux.down,
+          POC.SWI.Flux   = tran.POC$flux.up,          # [molC/m2 BULK/d]
+          POC.Deep.Flux  = tran.POC$flux.down,
+          PO4.SWI.Flux   = tran.PO4$flux.up,          # [molP/m2 BULK/d]
+          PO4.Deep.Flux  = tran.PO4$flux.down,
+          Pads.SWI.Flux  = tran.Pads$flux.up,         # [molP/m2 BULK/d]
+          Pads.Deep.Flux = tran.Pads$flux.down,
+          POC.SWI.Flux   = tran.POC$flux.up,          # [molC/m2 BULK/d]
+          POC.Deep.Flux  = tran.POC$flux.down,
+          POP.SWI.Flux   = PCratio*tran.POC$flux.up,  # [molP/m2 BULK/d]
+          POP.Deep.Flux  = PCratio*tran.POC$flux.down))
  })
 }
 ```
@@ -238,15 +238,15 @@ Three steady-state solutions are calculated, with different adsorption rate cons
 p1 <- p2 <- p3 <- parms  
 
 p1["rPads"]  <- 0      # /day    
-sol1 <- steady.1D (y=state, func=PDiamodel, parms=p1, 
+sol1 <- steady.1D (y=state.ini, func=PDiamodel, parms=p1, 
                    nspec=nspec, dimens=N, names=names, pos=TRUE)     
 
 p2["rPads"]  <- 1e-3   # /day   
-sol2 <- steady.1D (y=state, func=PDiamodel, parms=p2, 
+sol2 <- steady.1D (y=state.ini, func=PDiamodel, parms=p2, 
                    nspec=nspec, dimens=N, names=names, pos=TRUE) 
 
 p3["rPads"]  <- 5e-3   # /day      
-sol3 <- steady.1D (y=state, func=PDiamodel, parms=p3, 
+sol3 <- steady.1D (y=state.ini, func=PDiamodel, parms=p3, 
                    nspec=nspec, dimens=N, names=names, pos=TRUE) 
 ```
 

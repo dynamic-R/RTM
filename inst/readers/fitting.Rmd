@@ -56,14 +56,14 @@ diffPO4   <- diffH2PO4 / (1-log(porInt^2))
 
 ```{r}
 # model function
-PDiamodel <- function (t, Conc, pars)   
+PDiamodel <- function (t, state, pars)   
 {
   with (as.list(pars),{
 
-    POC  <- Conc[     1 :   N ]   
-    DIC  <- Conc[(  N+1):(2*N)]   
-    PO4  <- Conc[(2*N+1):(3*N)]   
-    Pads <- Conc[(3*N+1):(4*N)]
+    POC  <- state[     1 :   N ]   
+    DIC  <- state[(  N+1):(2*N)]   
+    PO4  <- state[(2*N+1):(3*N)]   
+    Pads <- state[(3*N+1):(4*N)]
     
     tran.POC <- tran.1D(C = POC, flux.up = depoPOC, 
                         dx = Grid, VF = porSolid,   
@@ -133,7 +133,7 @@ PDiamodel <- function (t, Conc, pars)
 ```{r, echo = TRUE}
 names <- c("POC", "DIC", "PO4", "Pads")
 nspec <- length(names)
-Conc  <- runif(nspec*N)  
+ini   <- runif(nspec*N)  
 
 default.parms <- c(
  biot     = 5e-4/365,      # [m2/d]      bioturbation mixing coefficient
@@ -145,7 +145,7 @@ default.parms <- c(
  PCratio  = 1/106,         # [molP/molC] P:C ratio in Redfield organic matter
  rPads    = 5e-4,          # [/d]        rate constant for P adsorption to CaCO3
  rPdes    = 1e-5           # [/d]        P desorption rate constant
-   )
+)
 ```
 
 # Experimental data
@@ -159,9 +159,9 @@ pD["depoPOC"] <- pD["depoPOC"]*1.2
 pD["biot"]    <- pD["biot"] / 5
 pD["rPdes"]   <- pD["rPdes"] / 5
 
-std <- steady.1D (y=Conc, func=PDiamodel, parms=pD, 
-                   nspec=nspec, dimens=N, names=names,
-                   positive=TRUE)     
+std <- steady.1D (y=ini, func=PDiamodel, parms=pD, 
+                  nspec=nspec, dimens=N, names=names,
+                  positive=TRUE)     
 slice <- c(1, 2, 4, 6, 8, 10, 15, 20)/100   # m where there are "data"
 DIC   <- approx(x=Grid$x.mid, y=std$y[,"DIC"], xout=slice)$y
 PO4   <- approx(x=Grid$x.mid, y=std$y[,"PO4"], xout=slice)$y
@@ -190,7 +190,7 @@ In the first step, it is handy to create a function that runs the model for a gi
 
 ```{r}
 std.fun <- function(pars){
-  std <- steady.1D (y=Conc, func=PDiamodel, parms=pars, nspec=nspec, dimens=N, 
+  std <- steady.1D (y=ini, func=PDiamodel, parms=pars, nspec=nspec, dimens=N, 
                     names=names, positive=TRUE)    
   return(data.frame(x = Grid$x.mid, std$y))
 }
@@ -245,10 +245,10 @@ In the last step of this simple fitting approach, we run the model with the orig
 p <- default.parms
 p[names(PFit$par)] <- PFit$par
 
-Original <- steady.1D(y=Conc, func=PDiamodel, parms=default.parms, 
+Original <- steady.1D(y=ini, func=PDiamodel, parms=default.parms, 
                    nspec=nspec, dimens=N, names=names,
                    positive=TRUE) 
-BestFit  <- steady.1D(y=Conc, func=PDiamodel, parms=p, 
+BestFit  <- steady.1D(y=ini, func=PDiamodel, parms=p, 
                    nspec=nspec, dimens=N, names=names,
                    positive=TRUE) 
 plot(BestFit, Original, xyswap=TRUE, grid=Grid$x.mid, ylim=c(0.25,0),
@@ -334,7 +334,7 @@ pD2 <- default.parms
 pD2["biot"]    <- pD2["biot"]  / 5 # only 2 parameters are changed
 pD2["rPdes"]   <- pD2["rPdes"] / 5 # (and later fitted)
 
-std2 <- steady.1D(y=Conc, func=PDiamodel, parms=pD2, 
+std2 <- steady.1D(y=ini, func=PDiamodel, parms=pD2, 
                   nspec=nspec, dimens=N, names=names,
                   pos=TRUE)     
 # Assume that data are available at more depths and additionally include Pads
@@ -430,7 +430,7 @@ To predict phosphorus fluxes at the model boundaries, we must first define a new
 
 ```{r}
 std.fun2 <- function(pars){
-  std <- steady.1D (y=Conc, func=PDiamodel, parms=pars, nspec=nspec, 
+  std <- steady.1D (y=ini, func=PDiamodel, parms=pars, nspec=nspec, 
                     dimens=N, names=names, positive=TRUE) 
   toselect <- c("PO4.SWI.Flux",  "PO4.Deep.Flux", 
                 "Pads.SWI.Flux", "Pads.Deep.Flux",
