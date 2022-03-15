@@ -1,6 +1,7 @@
 ---
-title: "SIP - simple foodweb"
-author: "LP"
+title: "Isotope exchange in a simple foodweb"
+author: "Lubos Polerecky"
+subtitle: "Work in progress"
 date: "29-11-2021"
 output:
   pdf_document:
