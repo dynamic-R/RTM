@@ -16,18 +16,18 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Introduction
 
-This template file contains a simple one-dimensional reaction-transport model describing the dynamics of molecular oxygen (O$_2$, in $mol~m^{-3}$) and biochemical oxygen demand (BOD, in $mol~m^{-3}$) in an estuary that is in contact with air. 
+This template file contains a simple one-dimensional reaction-transport model describing the dynamics of molecular oxygen ($O_2$, in $mol~m^{-3}$) and biochemical oxygen demand ($BOD$, in $mol~m^{-3}$) in an estuary that is in contact with air. 
 
-The model domain is divided into a grid with N equally sized boxes ($N=100$).
+The model domain is divided into a grid with $N$ equally sized boxes ($N=100$).
 
-Both BOD and O2 are *vectors* with a length of N. They represent the concentrations of the state variables in the *center* of the boxes.
+Both $BOD$ and $O_2$ are *vectors* with a length of $N$. They represent the concentrations of the state variables in the *center* of the boxes.
 
-With regard to the reactions, a simple first-order decay of BOD that is limited by O2 is assumed. This reaction consumes both BOD and O2 with a stoichiometry of 1:1. O2 is additionally exchanged with the atmosphere.
+With regard to the reactions, a simple first-order decay of $BOD$ that is limited by $O_2$ is assumed. This process consumes both $BOD$ and $O_2$ with a stoichiometry of 1:1. $O_2$ is additionally exchanged with the atmosphere.
 
 The species are modeled with the following boundary conditions:
 
-* BOD: imposed flux upstream (*flux.up*), imposed concentration downstream (*C.down*).
-* O2: imposed concentration upstream (*C.up*), zero-gradient downstream (default, need not be specified).
+* $BOD$: imposed flux upstream (*flux.up*), imposed concentration downstream (*C.down*).
+* $O_2$: imposed concentration upstream (*C.up*), zero-gradient downstream (default, need not be specified).
 
 The partial derivatives related to *transport* are approximated with function ``tran.1D()`` from the *ReacTran* package. The steady-state and dynamic solutions are obtained using functions from the *rootSolve* and *deSolve* packages, respectively. The latter two packages are loaded together with *ReacTran*.
 
@@ -67,7 +67,7 @@ pars <- c(
 )
 
 # Model function
-BOD1D <-function(t, state, pars) {  # state is a long vector      
+BOD1D <-function(t, state, pars) {  # state is a long vector
   with (as.list(pars),{
     
   # The vectors of the state variables O2 and BOD are
@@ -76,7 +76,7 @@ BOD1D <-function(t, state, pars) {  # state is a long vector
     BOD <- state[ (1*N+1) : (2*N) ]   # second N elements for BOD
 
   # Transport - tran.1D approximates the spatial derivatives
-    # note: for O2: zero-gradient boundary downstream (default)
+  # note: for O2: zero-gradient boundary downstream (default)
     tranO2  <- tran.1D(C = O2,
                        C.up = O2up,         # imposed conc upstream, 
                        D = D, v = v,        # dispersion, advection 
@@ -97,8 +97,8 @@ BOD1D <-function(t, state, pars) {  # state is a long vector
     dBOD.dt   <- tranBOD$dC            - Decay   
 
   # return vector of time-derivatives and ordinary variables as a list     
-  return(list(c(dO2.dt, dBOD.dt),  # time-derivatives 
-                                   # (the same order as state variables!)
+    return(list(c(dO2.dt, dBOD.dt),  # time-derivatives 
+                                     # (the same order as state variables!!)
   # additional output:
     
     # process rates along the domain (1D vector)
@@ -117,8 +117,8 @@ BOD1D <-function(t, state, pars) {  # state is a long vector
     BODinflux = tranBOD$flux.up,     # BOD flux INTO the system upstream,     mol/m2/d
     BODefflux = tranBOD$flux.down,   # BOD flux OUT of the system downstream, mol/m2/d       
     O2influx  = tranO2$flux.up,      # O2 flux INTO the system upstream,      mol/m2/d
-    O2efflux  = tranO2$flux.down)    # O2 flux OUT of the system downstream,  mol/m2/d       
-  )})
+    O2efflux  = tranO2$flux.down))   # O2 flux OUT of the system downstream,  mol/m2/d
+  })
 }
 ```
 

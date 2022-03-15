@@ -75,7 +75,7 @@ porSolid  <- setup.prop.1D(func=porFun.S, grid=Grid, por.SWI=0.9, por.deep=0.7, 
 
 # Sediment diffusion coefficient for HCO3^-, defined at box interfaces!! (N+1 values)
 diff.DIC  <- diffcoeff(S=35, t=20)$HCO3 * 3600*24  # converted from m2/s to m2/d
-porInt    <- porLiquid$int                         # porosity at the box interfaces            
+porInt    <- porLiquid$int                         # porosity at the box interfaces
 diffDIC   <- diff.DIC/(1-log(porInt^2))            # corrected for tortuosity
 ```
 
@@ -228,7 +228,7 @@ BUDGET   <- std1[toselect]
 unlist(BUDGET)    # display BUDGET as a vector with named elements rather than a list
 ```
 
-To verify that our mass balances are correct, we construct the total C budget in the modelled sediment column. We require that, for each state variable, the *difference between fluxes* at the lower and upper boundaries should be **equal** to the *net production rate* integrated along the domain. In other words, what goes *out* at the *lower* boundary minus what comes *in* at the *upper* boundary must be equal to the total *net* production rate *within* the domain! Indeed, the output values confirm this.
+To verify that our mass balances are correct, we construct the total C budget in the modeled sediment column. We require that, for each state variable, the *difference between fluxes* at the lower and upper boundaries should be **equal** to the *net production rate* integrated along the domain. In other words, what goes *out* at the *lower* boundary minus what comes *in* at the *upper* boundary must be equal to the total *net* production rate *within* the domain! Indeed, the output values confirm this.
 
 ```{r}
 # POC mass balance check

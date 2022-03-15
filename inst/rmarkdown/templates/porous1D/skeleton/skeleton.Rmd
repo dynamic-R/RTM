@@ -188,7 +188,7 @@ Visualise the steady state solutions, including the depth profile of the process
 
 ```{r, fig.width=8, fig.height=3}
 plot(std0, std1, std2, xyswap=TRUE, grid=Grid$x.mid, lty=1, lwd=2,
-     which = c("POC",           "DIC",            "Mineralisation"  ),
+     which = c("POC",           "DIC",            "Mineralisation"),
      xlab  = c("molC/m3 Solid", "molC/m3 Liquid", "molC/m3 Solid/d"), 
      ylab  = "depth (m)", mfrow=c(1,3))
 

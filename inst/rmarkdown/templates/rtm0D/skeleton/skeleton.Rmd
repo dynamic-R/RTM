@@ -53,11 +53,11 @@ BODmodel <-function(t, state, pars) {
     dBOD.dt     <- inputBOD - Decay
 
   # return time-derivatives and ordinary variables as a list     
-    list(c(dO2.dt, dBOD.dt), # vector with derivatives 
+    return(list(c(dO2.dt, dBOD.dt), # vector with derivatives 
                            # (the same order as state variables!)
       # other output: process rates
       Decay    = Decay,
-      Aeration = Aeration)    
+      Aeration = Aeration))    
   })
 }
 ```
