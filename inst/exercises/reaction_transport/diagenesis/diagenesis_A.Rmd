@@ -50,7 +50,7 @@ $$
 -\frac{1}{\phi}\cdot \frac{ \partial }{\partial x}\left[\phi\cdot v\cdot NH_3\right]
 + \frac{16}{106} \cdot  (AeroMin + Denitri + Sred + Methanogen) \cdot  f_{2L} - Nitri \\[4mm]
 \frac{\partial NO_3^-}{\partial t} = \frac{1}{\phi} \cdot \frac{\partial}{\partial x}\left[\phi\cdot  D_{NO_3^-}\cdot  \frac{ \partial NO_3^-}{\partial x}\right] 
--\frac{1}{\phi}\cdot \frac{ \partial }{\partial x}\left[\phi\cdot v\cdot NO_3^-\right]- 0.8 \cdot Denitri + Nitri \\[4mm]
+-\frac{1}{\phi}\cdot \frac{ \partial }{\partial x}\left[\phi\cdot v\cdot NO_3^-\right]- 0.8 \cdot Denitri \cdot f_{2L} + Nitri \\[4mm]
 \frac{\partial SO_4^{2-}}{\partial t} = \frac{1}{\phi}\cdot \frac{\partial}{\partial x}\left[\phi\cdot D_{SO_4^{2-}}\cdot \frac{ \partial SO_4^{2-}}{\partial x}\right] 
 -\frac{1}{\phi}\cdot \frac{ \partial }{\partial x}\left[\phi\cdot v\cdot SO_4^{2-}\right] 
 - 0.5 \cdot Sred\cdot f_{2L} + Sox \\[4mm]
