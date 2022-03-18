@@ -67,8 +67,8 @@ Although organic matter is produced by these processes, we neglect this aspect i
 
 # Process rates
 
-Assuming that aerobic mineralisation is limited by $O_2$ (Michaelis-Menten kinetics, half-saturation parameter $k_{O_2} = 0.001~mol~m^{-3}$) and is first-order with respect to organic carbon (rate constant $rMin = 0.01~d^{-1}$), its rate can be mathematically formulated as\footnote{Note that, for simplicity, we omit the brackets when denoting the concentration of a specific component. Thus, for instance, $Corg$ concentration is denoted as $Corg$ (instead of $[Corg]$), $O_2$ concentration is denoted as $O_2$ (instead of $[O_2])$, etc.}
-$$AeroMin = rMin \cdot \frac{O_2}{O_2+k_{O_2}} \cdot Corg$$
+Assuming that aerobic mineralisation is limited by $O_2$ (Michaelis-Menten kinetics, half-saturation parameter $k_{O_2} = 0.001~mol~m^{-3}$) and is first-order with respect to organic carbon (rate constant $r_{Min} = 0.005~d^{-1}$), its rate can be mathematically formulated as\footnote{Note that, for simplicity, we omit the brackets when denoting the concentration of a specific component. Thus, for instance, $Corg$ concentration is denoted as $Corg$ (instead of $[Corg]$), $O_2$ concentration is denoted as $O_2$ (instead of $[O_2])$, etc.}
+$$AeroMin = r_{Min} \cdot \frac{O_2}{O_2+k_{O_2}} \cdot Corg$$
 Because $Corg$ is a solid substance (units of $mol~C~m^{-3}_S$), the rate is expressed in units of $mol~C~m^{-3}_S~d^{-1}$.
 
 ## Task 1
@@ -78,28 +78,28 @@ Formulate rate expressions for the remaining processes, assuming that
 * Nitrification is 
 
   - limited by $O_2$ (Michaelis-Menten kinetics, with the same half-saturation parameter $k_{O_2} = 0.001~mol~m^{-3}$), 
-  - first-order with respect to ammonia (rate constant $rNit = 10~d^{-1}$).
+  - first-order with respect to ammonia (rate constant $r_{Nit} = 10~d^{-1}$).
 
 * Denitrification is 
 
   - limited by nitrate (Michaelis-Menten kinetics, half-saturation *limitation* parameter $k_{NO3} = 0.0001~mol~N~m^{-3}$), 
-  - first-order with respect to organic carbon (rate constant $rMin = 0.01~d^{-1}$),
+  - first-order with respect to organic carbon (rate constant $r_{Min} = 0.005~d^{-1}$),
   - inhibited by $O_2$ (use the previously defined parameter $k_{O_2}$ as the corresponding half-saturation *inhibition* constant).
 
 * Sulphate reduction is 
 
   - limited by sulphate (Michaelis-Menten kinetics, $k_{SO4} = 0.1~mol~S~m^{-3}$),
-  - first-order with respect to organic carbon (rate constant $rMin = 0.01~d^{-1}$), 
+  - first-order with respect to organic carbon (rate constant $r_{Min} = 0.005~d^{-1}$), 
   - inhibited by both oxygen ($k_{O_2}$) and nitrate ($k_{NO3}$).
 
 * Sulphide oxidation is 
 
   - limited by oxygen (Michaelis-Menten kinetics, $k_{O_2}$), 
-  - first-order with respect to sulphide (rate constant $rSox = 10~d^{-1}$).
+  - first-order with respect to sulphide (rate constant $r_{Sox} = 10~d^{-1}$).
   
 * Methanogenesis is
  
-  - first-order with respect to organic carbon (rate constant $rMin = 0.01~d^{-1}$),
+  - first-order with respect to organic carbon (rate constant $r_{Min} = 0.005~d^{-1}$),
   - inhibited by both oxygen ($k_{O_2}$), nitrate ($k_{NO3}$) and sulphate ($k_{SO4}$).
   
 What are the units of the rates?

@@ -17,12 +17,12 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Rate expressions
 
 $$\begin{array}{l}
-AeroMin = rMin \cdot \frac{O_2}{O_2+k_{O_2}} \cdot Corg \\[5mm]
-Nitri = rNit \cdot \frac{O_2}{O_2+k_{O_2}} \cdot NH_3 \\[5mm]
-Denitri = rMin \cdot \frac{k_{O_2}}{O_2+k_{O_2}} \cdot \frac{NO_3^-}{NO_3^-+k_{NO_3}} \cdot Corg \\[5mm]
-Sred = rMin \cdot \frac{k_{O_2}}{O_2+k_{O_2}} \cdot \frac{k_{NO_3}}{NO_3^-+k_{NO_3}} \cdot \frac{SO_4^{2-}}{SO_4^{2-}+k_{SO_4}} \cdot Corg \\[5mm]
-Sox = rSox \cdot \frac{O_2}{O_2+k_{O_2}} \cdot H_2S \\[5mm]
-Methanogen = rMin \cdot \frac{k_{O_2}}{O_2+k_{O_2}} \cdot \frac{k_{NO_3}}{NO_3^-+k_{NO_3}} \cdot \frac{k_{SO_4}}{SO_4^{2-}+k_{SO_4}} \cdot Corg
+AeroMin = r_{Min} \cdot \frac{O_2}{O_2+k_{O_2}} \cdot Corg \\[5mm]
+Nitri = r_{Nit} \cdot \frac{O_2}{O_2+k_{O_2}} \cdot NH_3 \\[5mm]
+Denitri = r_{Min} \cdot \frac{k_{O_2}}{O_2+k_{O_2}} \cdot \frac{NO_3^-}{NO_3^-+k_{NO_3}} \cdot Corg \\[5mm]
+Sred = r_{Min} \cdot \frac{k_{O_2}}{O_2+k_{O_2}} \cdot \frac{k_{NO_3}}{NO_3^-+k_{NO_3}} \cdot \frac{SO_4^{2-}}{SO_4^{2-}+k_{SO_4}} \cdot Corg \\[5mm]
+Sox = r_{Sox} \cdot \frac{O_2}{O_2+k_{O_2}} \cdot H_2S \\[5mm]
+Methanogen = r_{Min} \cdot \frac{k_{O_2}}{O_2+k_{O_2}} \cdot \frac{k_{NO_3}}{NO_3^-+k_{NO_3}} \cdot \frac{k_{SO_4}}{SO_4^{2-}+k_{SO_4}} \cdot Corg
 \end{array}
 $$
 
