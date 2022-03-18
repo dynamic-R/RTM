@@ -25,7 +25,7 @@ The overall objective of this exercise is to demonstrate how to *approach* model
 
 The key state variable considered in this exercise is organic matter, denoted as $Corg$. Although organic matter is a highly complex and diverse ensemble of molecules, we will represent it in this exercise by a chemical formula $(CH_2O)\,(NH_3)_\mathbf{NC}\,(H_3PO_4)_\mathbf{PC}$, where $\mathbf{NC}=16/106$ and $\mathbf{PC}=1/106$.\footnote{This corresponds to the so-called Redfield organic matter, where the (molar!) $C:N:P$ ratio is equal to $106:16:1$.} This simplification reflects the aim of the model, which is to describe the effects of the processes mentioned above on the *mass balance* and dynamics of $C$, $O$, $N$, and $S$.
 
-Although all processes considered in this exercise are mediated by organisms (e.g., bacteria, archaea, but also more complex organisms), these organisms will *not* be explicitly included in the model. Instead, we will only model the result of their activity, assuming that the organisms are present and actively performing a specific process as long as the required chemical conditions are present. In other words, we will assume that the processes are limited by substrates but *not* by the organisms that mediate them (i.e., the "workers").
+Although all processes considered in this exercise are mediated by organisms (e.g., bacteria, archaea, but also more complex organisms), these organisms will *not* be explicitly included in the model. Instead, we will only model the *result of their activity*, assuming that the organisms are present and actively performing a specific process as long as the required chemical conditions are present. In other words, we will assume that the processes are limited by substrates but *not* by the organisms that mediate them (i.e., the "workers").
 
 On the other hand, we do consider important principles that govern the growth and fitness of organisms involved in the modelled processes. Specifically, we assume that if the amount of free energy gained from a process 'A' is greater than that from a process 'B', the organisms performing the process 'A' will outcompete those performing the process 'B'. Thus, in effect, we will consider that the process 'B' can only become quantitatively important if the conditions become unfavourable for the process 'A'. We will model this by assuming specific limitation and inhibition terms in the expressions for the process rates (as explained in class).
 
@@ -108,8 +108,9 @@ What are the units of the rates?
 
 Assuming the following transport and reaction processes in the system
 
-* transport: molecular diffusion, sediment accretion and mixing by bioturbation,
-* reactions: aerobic mineralisation and nitrification,
+* *transport*: molecular diffusion, sediment accretion (velocity $v=5\times 10^{-6}~m~d^{-1}$) and mixing by bioturbation ($D_{b} = 5\times 10^{-4}~m^2~yr^{-1}$),
+
+* *reactions*: aerobic mineralisation and nitrification,
 
 we can write the following mass balance equations for the solid substance $Corg$ (units of $mol~C~m^{-3}_S$) and the dissolved substances $O_2$, $NO_3^-$, $NH_3$ and $CO_2$ (in units of $mol~m^{-3}_L$):
 
