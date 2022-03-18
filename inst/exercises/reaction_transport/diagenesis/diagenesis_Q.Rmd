@@ -108,7 +108,7 @@ What are the units of the rates?
 
 Assuming the following transport and reaction processes in the system
 
-* *transport*: molecular diffusion, sediment accretion (velocity $v=5\times 10^{-6}~m~d^{-1}$) and mixing by bioturbation ($D_{b} = 5\times 10^{-4}~m^2~yr^{-1}$),
+* *transport*: molecular diffusion (salinity $35$, temperature $20~^\circ C$), sediment accretion (velocity $v=5\times 10^{-6}~m~d^{-1}$) and mixing by bioturbation ($D_{b} = 5\times 10^{-4}~m^2~yr^{-1}$),
 
 * *reactions*: aerobic mineralisation and nitrification,
 
