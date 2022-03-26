@@ -33,10 +33,56 @@ There are no corresponding sections in the textbook.
 
 ## Mineral dissolution - quiz
 
-```{r statements, echo=FALSE}
-msg <- sprintf("The answer is $k_d/k_p$. Tip: if you do not remember whether this would be $k_p/k_d$ or $k_d/k_p$, think about the units. Concentrations are in $mol~m^{-3}$, and this unit is obtained with $k_d/k_p$, not with $k_p/k_d$. (there are two correct answers in the list)")
+There are $N$ spherical amorphous silica particles suspended in a well-mixed volume of water. The change over time in the concentration of dissolved silica is described by the following differential equation:
 
-question(sprintf("The rate constant describing the dissolution of a mineral in water is $k_d = 2~mol~m^{-2}~yr^{-1}$, and the rate constant describing the precipitation of that mineral is $k_p = 5~m~yr^{-1}$. What is the equilibrium concentration of the dissolved mineral in water?"), type = "learnr_checkbox",
+$$
+\frac{dSi}{dt} = -k_p \times \frac {A}{V} \times (Si - Si_{eq})
+$$
+where $Si$ and $Si_{eq}$ are, respectively, the instantaneous and equilibrium concentrations of dissolved silica (both in $mol~Si~m^{-3}$).
+
+```{r rate_constant, echo=FALSE}
+msg <- sprintf("$k_p$ is the rate constant of the backward reaction, i.e., Si precipitation. It describes the amount of Si (moles) that precipitate per unit area of the mineral surface ($m^2$), per unit time ($yr$), and per unit concentration of dissolved silica ($mol~m^{-3}$). Thus, its unit is $mol/m^2/yr/(mol~m^{-3})$, which is equal to $m~yr^{-1}$.")
+
+question(sprintf("What is the meaning and unit of the rate constant $k_p$?"), 
+         type = "learnr_radio",
+ answer(sprintf("$k_p$ is the dissolution rate constant, in $m~yr^{-1}$")),
+ answer(sprintf("$k_p$ is the precipitation rate constant, in $mol~m^{-2}~yr^{-1}$")),
+ answer(sprintf("$k_p$ is the precipitation rate constant, in $m~yr^{-1}$"), correct=TRUE),
+ answer(sprintf("$k_p$ is the dissolution rate constant, in $mol~m^{-2}~yr^{-1}$")),
+ 
+ incorrect=msg,
+ correct=msg)
+```
+
+```{r volume, echo=FALSE}
+msg <- sprintf("$V$ has nothing to do with the volume of the silica particles! $V$ is the volume of the well-mixed *water* in which the silica particles are suspended.")
+
+question(sprintf("What is the meaning and unit of $V$ in the above equation?"), 
+         type = "learnr_radio",
+         answer(sprintf("$V$ is the volume of an *individual* silica particle, in $m^{3}$, calculated from the radius of the individual particle as $V=(4/3)\\pi r^3$.")),
+         answer(sprintf("$V$ is the *total* volume of the silica particles, in $m^{3}$, calculated from the radius of the individual particle as $V=N\\times (4/3)\\pi r^3$.")),
+         answer(sprintf("$V$ is the volume of well-mixed water containing the silica particles, in $m^3$."), correct=TRUE),
+ 
+ incorrect=msg,
+ correct=msg)
+```
+
+```{r area, echo=FALSE}
+msg <- sprintf("$A$ is the *total* area of the silica particles. It corresponds to the overall surface area where the reaction (silica dissolution or precipitation) occurs.")
+
+question(sprintf("What is the meaning and unit of $A$ in the above equation?"), 
+         type = "learnr_radio",
+         answer(sprintf("$A$ is the area of an *individual* silica particle, in $m^{2}$, calculated from the radius of the individual particle as $A=4\\pi r^2$.")),
+         answer(sprintf("$A$ is the *total* area of all silica particles, in $m^{2}$, calculated from the radius of the individual particle as $A=N\\times 4\\pi r^2$."), correct=TRUE),
+
+ incorrect=msg,
+ correct=msg)
+```
+
+```{r eq_conc, echo=FALSE}
+msg <- sprintf("The answer is $k_d/k_p$. Tip: if you do not remember whether the formula should be $k_p/k_d$ or $k_d/k_p$, think about the units. Concentrations are in $mol~m^{-3}$, and this unit is obtained with $k_d/k_p$, not with $k_p/k_d$. Note that there are *two* correct answers in the list! ($M$ stands for $mol~L^{-1}$.)")
+
+question(sprintf("Assume that the rate constant describing the dissolution of a mineral in water is $k_d = 2~mol~m^{-2}~yr^{-1}$, and the rate constant describing the precipitation of that mineral is $k_p = 5~m~yr^{-1}$. What is the equilibrium concentration of the dissolved mineral in water?"), type = "learnr_checkbox",
  answer(sprintf("0.4 $mol~m^{-3}$"), correct=TRUE),
  answer(sprintf("2.5 $mol~m^{-3}$")),
  answer(sprintf("1 $mol~m^{-3}$")),
@@ -47,84 +93,38 @@ question(sprintf("The rate constant describing the dissolution of a mineral in w
  correct=msg)
 ```
 
+
 ## Mineral dissolution - exercise
 
-There are $N$ spherical amorphous silica particles suspended in a well-mixed volume of water $V$. Initially, the silicic acid concentration is $C_{ini}$, and all particles have the same diameter $D_{ini}$. Assume the rate constant for silica dissolution of $k_d = 1~mol~m^{-2}~yr^{-1}$ and for silica precipitation of $k_p = 1.5~m~yr^{-1}$. Silica density is $2200~kg~m^{-3}$, molar weight of silica is $60~g~mol^{-1}$.
+There are $N=800$ spherical amorphous silica particles suspended in a well-mixed water volume of $V=1~L$. Initially, the concentration of the dissolved silica (silicic acid) in the water is $Si_{ini} = 100~\mu M$, and all particles have the same *diameter* $D_{ini}=0.1~mm$. Assume the rate constant for silica dissolution of $k_d = 1~mol~m^{-2}~yr^{-1}$ and for silica precipitation of $k_p = 0.8~m~yr^{-1}$. Bulk silica density is $2200~kg~m^{-3}$, molar weight of silica is $60~g~mol^{-1}$.
 
-The R-code chunk below introduces the values and units of the parameters you will need. 
-
-```{r dSidt-setup, echo=TRUE}
-N    <- 400
-V    <- 1    # L
-Cini <- 100  # umol/L (u stands for 'micro', so 1e-6)
-Dini <- 90   # um
-kd   <- 1    # mol/m2/yr
-kp   <- 1.5  # m/yr
-dens <- 2200 # kg/m3
-MW   <- 60   # g/mol
+```{r dSidt_pars, echo=FALSE}
+N    <- 800    # number of particles, -
+V    <- 1e-3   # volume of water, m3
+Dini <- 0.1e-3 # diameter of an individual particle, m
+kd   <- 1      # dissolution rate constant, mol m-2 yr-1
+kp   <- 0.8    # precipitation rate constant, m yr-1
+Cini <- 100e-3 # initial concentration, mol m-3
+dens <- 2200   # silica density, kg m-3
+MW   <- 60e-3  # molar weight of silica, kg mol-1
+dSi.ini.dt <- -kp * N * 4*pi*(Dini/2)^2 / V * (Cini - kd/kp)
 ```
-
-```{r, echo=TRUE}
-N    <- 400
-V    <- 1    # L
-Cini <- 100  # umol/L (u stands for 'micro', so 1e-6)
-Dini <- 90   # um (micrometer)
-kd   <- 1    # mol/m2/yr
-kp   <- 1.5  # m/yr
-dens <- 2200 # kg/m3
-MW   <- 60   # g/mol
-```
-
-Use R to solve the following question (see tips below):
 
 ```{r dSidt_ini, echo=FALSE}
-question("What is the *initial* rate of increase in the silicic acid concentration (dSi/dt) in the water with the silica particles?", type = "learnr_radio",
- answer(sprintf("%.1f $\\mu mol~L^{-1}~yr^{-1}$", -kd * N * 4*pi*(Dini/2*1e-6)^2 / (V*1e-3) * (Cini - kp/kd*1e3))),
- answer(sprintf("%.1f $nmol~L^{-1}~yr^{-1}$", 1e3* -kp * 1 * 4*pi*(Dini/2*1e-6)^2 / (V*1e-3) * (Cini - kd/kp*1e3))),
- answer(sprintf("%.2f $nmol~L^{-1}~yr^{-1}$", 1e3* -kp * N * 4*pi*(Dini/2*1e-6)^2 / (V) * (Cini - kd/kp*1e3))),
- answer(sprintf("%.2f $\\mu mol~L^{-1}~yr^{-1}$", -kp * N * 4*pi*(Dini/2*1e-6)^2 / (V*1e-3) * (Cini - kd/kp*1e3)), correct=TRUE),
- answer(sprintf("%.1f $\\mu mol~L^{-1}~yr^{-1}$", -kp * N * 4*pi*(Dini*1e-6)^2 / (V*1e-3) * (Cini - kd/kp*1e3))),
- 
- incorrect = sprintf("If you think your formula is correct, double check that you have not made a mistake in unit conversion."),
+question("What is the *initial* rate of increase in the silicic acid concentration (dSi/dt) in the water with the silica particles?", 
+         type = "learnr_checkbox",
+         answer(sprintf("23 $mmol~L^{-1}~yr^{-1}$")),
+         answer(sprintf("23 $\\mu mol~L^{-1}~yr^{-1}$"), correct=TRUE),
+         answer(sprintf("0.092 $mol~m^{-3}~yr^{-1}$")),
+         answer(sprintf("55200 $mol~m^{-3}~yr^{-1}$")),
+         answer(sprintf("27600 $mol~m^{-3}~yr^{-1}$")),
+         answer(sprintf("69 $mol~L^{-1}~yr^{-1}$")),
+         answer(sprintf("69 $mol~m^{-3}~yr^{-1}$")),
+         answer(sprintf("92 $\\mu mol~L^{-1}~yr^{-1}$")),
+         answer(sprintf("0.023 $mol~m^{-3}~yr^{-1}$"), correct=TRUE),
+ incorrect = sprintf("If you think you are using the correct formula, double check that you did not make an error during units conversion. It is recommended that you convert *all* quantities into SI units *before* calculating the final value. Note that the information about the density and molar weight of silica is irrelevant in this exercise. Also note that the *diameter*, not the *radius*, of the silica particles is provided. There are *two* correct answers!"),
  correct = sprintf("Bingo!")
 )
-```
-
-Tips:
-
-* The change in silicic acid concentration over time is described by
-$$
-\frac{dSi}{dt} = -k_p \times \frac {A}{V} \times (Si - Si_{eq})
-$$
-where $Si$ and $Si_{eq}$ is the instantaneous and equilibrium silicic acid concentration, respectively.
-
-* The volume and surface area of a sphere with radius $r$ is given by: $4/3 \times \pi \times r^3$ and $4 \times \pi r^2$.
-
-* Think about the meaning of $A$.
-* Do your calculation in several steps rather than using one (possibly large) formula.
-* Be careful with unit conversions.
-
-
-Type your R-code here:
-
-```{r dSidt, exercise=TRUE, exercise.cap = "Initial rate of increase of Si", exercise.lines = 4}
-# fill in the formula
-dSi.dt <- 
-```
-
-```{r dSidt-hint}
-# This shows the sequence of calculations - replace NA with the correct formula 
-Ceq    <- NA                     # equilibrium concentration (umol/L)
-A      <- NA                     # initial total active surface (m2)
-A.V    <- NA                     # area density (/m)
-dSi.dt <- -kp*A.V*(Cini - Ceq)   # the change in time umol/L/yr
-```
-
-```{r dSidt-solution}
-Ceq    <- kd/kp*1000                # equilibrium concentration (umol/L=mmol/m3)
-A      <- 4*pi*(Dini/2*1e-6)^2 * N  # initial total active surface (m2)
-A.V    <- A/(V*1e-3)                # area density (total surface area per volume) (/m)
-dSi.dt <- -kp*A.V*(Cini - Ceq)      # the change in time umol/L/yr
 ```
 
 ```{r dSidt_t, echo=FALSE}
@@ -142,9 +142,9 @@ question("Which statement is true?", type = "learnr_radio",
 ## Air-water exchange - quiz
 
 ```{r statements2, echo=FALSE}
-msg <- sprintf("This is calculated as $k_p/h\\cdot (O_{2,eq} - 0)$.")
+msg <- sprintf("The correct value is calculated as $k_p/h\\cdot (O_{2,eq} - 0)$.")
 
-question(sprintf("A well-mixed anoxic water column is in contact with the atmosphere. What is the initial rate of increase in the $O_2$ concentration in the water? Piston velocity, $k_p$, is $1~m~d^{-1}$, $O_2$ solubility in the water is $300~\\mu mol~L^{-1}$, water column height, h, is $50~cm$."), type = "learnr_radio",
+question(sprintf("A well-mixed *anoxic* water column is in contact with the atmosphere. What is the initial rate of increase in the $O_2$ concentration in the water? Piston velocity is $k_p = 1~m~d^{-1}$, $O_2$ solubility in the water is $300~\\mu mol~L^{-1}$, water column height is $h=50~cm$."), type = "learnr_radio",
  answer(sprintf("$300~\\mu mol~L^{-1}~d^{-1}$")),
  answer(sprintf("$150~nmol~L^{-1}~d^{-1}$")),
  answer(sprintf("$600~nmol~L^{-1}~d^{-1}$")),
@@ -156,71 +156,38 @@ question(sprintf("A well-mixed anoxic water column is in contact with the atmosp
 
 ## Air-water exchange - exercise
 
-You plan to install in your garden a pond with goldfish. By swimming in the pond, the fish will mix the water in the pond, and by respiration they will decrease the dissolved $O_2$ concentration in the pond. This decrease in dissolved $O_2$ will be compensated by air-water exchange. Assume that goldfish respiration is unaffected if the dissolved $O_2$ concentration does not decrease below 80% of the air saturated value. Additionally assume the piston velocity, ``kp``, of $1~m~d^{-1}$, the area of the pond of $4~m^2$, the average height, ``h``, of the water column of $1~m$, Henry’s constant, ``K0``, for dissolved $O_2$ of $770~L~Atm~mol^{-1}$, molar fraction of $O_2$ in the atmosphere of 21% (``pO2``), atmospheric pressure of $1~Atm$ (``P``), and the average goldfish respiration rate of $400~\mu mol~O_2~fish^{-1}~d^{-1}$ (``Resp``).
+You plan to install in your garden a pond with goldfish. By swimming in the pond, the fish will mix the water in the pond, and by respiration they will decrease the dissolved $O_2$ concentration in the pond. This decrease in dissolved $O_2$ will be compensated by air-water exchange. Assume that goldfish respiration is unaffected if the dissolved $O_2$ concentration does not decrease below 80% of the air saturated value. Additionally assume the piston velocity of $k_p=1~m~d^{-1}$, the area of the pond of $4~m^2$, the average height of the water column of $1~m$, Henry’s constant for dissolved $O_2$ of $K_H=770~L~Atm~mol^{-1}$, molar fraction of $O_2$ in the atmosphere of 21%, the total atmospheric pressure of $1~Atm$, and the average goldfish respiration rate of $400~\mu mol~O_2~fish^{-1}~d^{-1}$.
 
-The R-code chunk below introduces the values and units of the parameters you will need. 
-
-```{r Fish-setup}
-pSat  <- 0.8  # -
-kp    <- 1    # m/d
-h     <- 1    # m
-K0    <- 770  # L atm/mol
-P     <- 1    # atm, total atmospheric pressure
-pO2   <- 0.21 # molar fraction of O2
-Resp  <- 400  # umol/fish/d
-Area  <- 4    # m2
+```{r Fish-setup, echo=FALSE, eval=FALSE}
+pSat  <- 0.8    # -
+kp    <- 1      # m/d
+h     <- 1      # m
+KH    <- 770e-3 # m3 atm/mol
+P     <- 1      # atm, total atmospheric pressure
+pO2   <- 0.21   # molar fraction of O2
+Resp  <- 400e-6 # mol/fish/d
+Area  <- 4      # m2
+# solution (one formula)
+Nmax <- kp*Area * (1-pSat)* P*pO2/KH/Resp
+# solution in parts
+O2sat        <- pO2/KH*P
+airwater     <- kp*(O2sat - pSat*O2sat)
+airwaterTot  <- airwater*Area
+N           <- airwaterTot/Resp
 ```
-
-```{r parunits, echo=TRUE}
-pSat  <- 0.8  # -
-kp    <- 1    # m/d
-h     <- 1    # m
-K0    <- 770  # L atm/mol
-P     <- 1    # atm, total atmospheric pressure
-pO2   <- 0.21 # molar fraction of O2
-Resp  <- 400  # umol/fish/d
-Area  <- 4    # m2
-```
-
-Use R to solve the following question (see hints below):
 
 ```{r Nfish, echo=FALSE}
-question("What is the maximum number of goldfish you can have in the pond so that their respiration will not be affected by the decreased $O_2$ concentrations in the pond? ", type = "learnr_radio",
- answer("25 fish"),
- answer(sprintf("%.0f fish", kp*Area * (1-pSat)* P*pO2/K0*1e3/(Resp*1e-6)), correct=TRUE),
- answer("252 fish"),
- answer(sprintf("%.0f fish", kp*Area * (1-pSat)* P/K0*1e3/(Resp*1e-6))),
- answer(sprintf("%.2f fish", kp*Area * (1-pSat)* P*pO2/K0*1e3/(Resp*1e-3))),
+question("What is the maximum number of goldfish you can have in the pond so that their respiration will not be affected by the decreased $O_2$ concentrations in the pond? ", 
+         type = "learnr_radio",
+         answer("25 fish"), 
+         answer("545 fish", correct=TRUE), 
+         answer("252 fish"),
+         answer("1090 fish"),
+         answer("100 fish"),
 
- incorrect = sprintf("Incorrect answer. If you think your formula is correct, double check that you have not made a mistake in unit conversion."),
+ incorrect = sprintf("Incorrect answer. If you think your formula is correct, double check that you have not made a mistake during units conversion. If you cannot come up with the formula, consider the following hints: (1) At the minimal $O_2$ concentration where the fish respiration is still not affected, the aeration and respiration rates should be equal to each other. (2) Use your knowledge of physical chemistry (Henry's law) to quantify the $O_2$ solubility at the given partial pressure of $O_2$ in the atmosphere. (3) Estimate the total air-water exchange (amount of $O_2$ added to the pond per day, $mol~O_2~d^{-1}$) at the minimal $O_2$ concentration. (4) You know the respiration rate for one fish, so you can easily calculate the total respiration rate by all fish in the pond."),
  correct = sprintf("Bingo!")
 )
-```
-
-Use this R chunk to figure out your answer (N is the number of fish):
-
-```{r Fish, exercise=TRUE, exercise.cap = "Goldfish in a pond"}
-# This shows a possible sequence of calculations
-O2sat       <-                 # saturated oxygen concentration, mmol/m3
-airwater    <-                 # mmol/m2/d - air-water flux
-airwaterTot <-                 # mmol/d - total amount of O2 exchanged per day
-Rmmol       <-                 # mmol/fish/d - fish respiration
-N           <-                 # number of fish    
-```
-
-```{r Fish-hint}
-# - At the minimal oxygen concentration, the aeration rate and respiration rate will be the same.
-#  - Estimate the total air-water exchange (amount of oxygen added to the pond per day) at the minimal oxygen concentration (units mmol/day). 
-#  - You know the respiration rate for one fish. The total respiration for all the fish should equal the total air-water exchange.
-```
-
-```{r Fish-solution}
-O2sat       <- pO2/K0*P *1e6            # umol/L = mmol/m3
-airwater    <- kp*(O2sat - pSat*O2sat)  # mmol/m2/d - air-water flux
-airwaterTot <- airwater*Area            # mmol/d - total amount of O2 exchanged per day
-Rmmol       <- Resp*1e-3                # mmol/fish/d - fish respiration
-N           <- airwaterTot/Rmmol        # number of fish
-N
 ```
 
 And one extra question:
