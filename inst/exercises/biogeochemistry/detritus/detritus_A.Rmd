@@ -48,10 +48,10 @@ Here is the R-code for the model:
 require(deSolve)  # package with solution methods
 
 # state variables, units = mmolC/m3
-state <- c(POC = 100, HMWC = 5, LMWC = 0.15, BACT = 5)
+state.ini <- c(POC = 100, HMWC = 5, LMWC = 0.15, BACT = 5)
 
 # parameters
-parms <- c(
+pars <- c(
   rPOC    = 0.75, # [d-1]
   rHMWC   = 0.5,  # [d-1]
   rUptake = 2,    # [d-1]
@@ -65,8 +65,8 @@ parms <- c(
 )
 
 # Model function
-DetBact <- function(t, state, params) {
-  with (as.list(c(state, params)), {
+DetBact <- function(t, state, parms) {
+  with (as.list(c(state, parms)), {
 
    # Rate expressions - all in units of [mmolC/m3/day]
     HydrolysisPOC  <- rPOC * POC / (POC + ksPOC) * BACT
@@ -95,7 +95,7 @@ And the model solution:
 outtimes <- seq(from = 0, to = 360, length.out = 100)  # run the model for 360 days
 
 # solve this model, using the ode function from deSolve
-out <- ode(y = state, parms = parms, func = DetBact, times = outtimes)  # solution
+out <- ode(y = state.ini, parms = pars, func = DetBact, times = outtimes)  # solution
 
 # visualise output
 plot(out, xlab="time (d)", ylab="mmolC/m3")

@@ -64,10 +64,10 @@ Here is the code specifying the model:
 require(deSolve)  # package with solution methods
 
 # state variables, units = cells/ml (H, I) or virions/ml (V)
-state <- c(H = 100, I = 150, V = 50000)
+state.ini <- c(H = 100, I = 150, V = 50000)
 
 # parameters 
-parms <- c(
+pars <- c(
   lambda = 1,     # [/d] net growth rate constant of healthy algal cells
   delta = 0.55,   # [/d] burst rate constant of infected cells
   beta = 0.00002, # [(virions/ml)^-1 d-1] infection rate constant
@@ -78,8 +78,8 @@ parms <- c(
 )
 
 # Model function
-VirusDynamics <- function(t, state, params) {
-  with (as.list(c(state, params)), {
+VirusDynamics <- function(t, state, parms) {
+  with (as.list(c(state, parms)), {
 
    # Rate expressions
     NetAlgalGrowth <- lambda*H*(1-H/k)  # [cells/ml/d]
@@ -106,7 +106,7 @@ Here are plots of the model solution:
 outtimes <- seq(from = 0, to = 365, length.out = 365*10)  # run for 365 days
 
 # solve this model, using the ode function from deSolve
-out <- ode(y = state, parms = parms, func = VirusDynamics, times = outtimes)
+out <- ode(y = state.ini, parms = pars, func = VirusDynamics, times = outtimes)
 
 plot(out, mfrow = c(3, 3), xlab="time (d)")
 plot(out[,c(4,5)], type = "l", main = "phase-plane view", 

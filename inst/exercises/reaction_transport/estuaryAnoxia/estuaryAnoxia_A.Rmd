@@ -30,7 +30,7 @@ It is not necessary to model the proton ($H^+$) or water ($H_2O$) concentrations
 Note how the vector of state variables is defined in models with transport. From zero-dimensional models (models without transport), we are used to define state variables in a vector with *named* components, for example like this:
 ```{r}
 # state variables in a zero-dimensional models
-state <- c(O2=0.1, NO3=0.3, NH3=0.1)
+state.ini <- c(O2=0.1, NO3=0.3, NH3=0.1)
 ```
 
 This made it easy to refer to the state variables in the model function using the \texttt{with(as.list(...} function. 
@@ -74,8 +74,8 @@ pars <- c(
 )
 
 # Model function
-Scheldt1D <- function(t, state, pars) {   # state is a LONG vector of state variables
-  with(as.list(pars),{
+Scheldt1D <- function(t, state, parms) { # state is a LONG vector of state variables at time t
+  with(as.list(parms),{
 
     # here we "unpack" the vectors of individual state variables from the LONG input vector
     Oxygen  <- state[(0*N+1) : (1*N)] # note parentheses around (0*N+1) and (1*N)!!

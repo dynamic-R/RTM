@@ -4,12 +4,12 @@ author: "Karline Soetaert and Lubos Polerecky, Utrecht University"
 subtitle: "Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
 date: "March 2021"
 output: 
+  pdf_document:
+    toc: no
+  header-includes: \usepackage{float} \floatplacement{figure}{H}
   html_document:
     toc: no
     df_print: paged
-  header-includes: \usepackage{float} \floatplacement{figure}{H}
-  pdf_document:
-    toc: no
 ---
 
 ```{r child = 'detritus_Q.Rmd'}

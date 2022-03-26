@@ -132,8 +132,8 @@ First, we define a function that calculates carbonate alkalinity from the known 
 ```{r}
 solveALK <- function(K1 = 1.422e-06, K2 = 1.082e-09, DIC, pH){
   
-  H <- 10^{-pH}
-  HCO3   <- K1*H /  (H^2 + K1*H + K1*K2) * DIC    # eq 5a
+  H      <- 10^(-pH)
+  HCO3   <- K1*H  / (H^2 + K1*H + K1*K2) * DIC    # eq 5a
   CO3    <- K1*K2 / (H^2 + K1*H + K1*K2) * DIC    # eq 5c
   ALK    <- HCO3 + 2*CO3 - H                      # eq 5d
   
@@ -149,7 +149,7 @@ solveH <- function(K1 = 1.422e-06, K2 = 1.082e-09, DIC, ALK){
   # function whose root has to be sought
   rootFun <- function(H) {
     
-    HCO3    <- K1*H /  (H^2 + K1*H + K1*K2) * DIC   # eq 5a
+    HCO3    <- K1*H  / (H^2 + K1*H + K1*K2) * DIC   # eq 5a
     CO3     <- K1*K2 / (H^2 + K1*H + K1*K2) * DIC   # eq 5c
     ALK.est <- HCO3 + 2*CO3 - H  # right-hand-side of eq. 5d
     
@@ -173,16 +173,16 @@ The model function that implements the model based on the local equilibrium assu
 
 ```{r}
 CO2dissol <- function(t, state, parms) {
-  with (as.list(c(state,parms)), {
+  with (as.list(c(state, parms)), {
 
     # mass balance equations
     dDIC <- RC
     dALK <- 0
 
     # for output
-    H <- solveH(K1 = K1, K2 = K2, DIC = DIC, ALK = ALK)
-    HCO3    <- K1*H /  (H^2 + K1*H + K1*K2) * DIC   # eq 5a
-    CO3     <- K1*K2 / (H^2 + K1*H + K1*K2) * DIC   # eq 5c
+    H    <- solveH(K1 = K1, K2 = K2, DIC = DIC, ALK = ALK)
+    HCO3 <- K1*H  / (H^2 + K1*H + K1*K2) * DIC   # eq 5a
+    CO3  <- K1*K2 / (H^2 + K1*H + K1*K2) * DIC   # eq 5c
     
     return(list(c(dDIC, dALK), 
                 pH = -log10(H), H = H, 
@@ -198,18 +198,18 @@ Now we run the model for 10 days, using the initial conditions given in the task
 ```{r, fig.height=6, fig.width=10}
 require(deSolve)
 
-parms <- c(RC = 0.1e-3,    # [mol/L/day]
-           K1 = 1.422e-06, # [mol/L]
-           K2 = 1.082e-09) # [mol/L]
+pars    <- c(RC = 0.1e-3,    # [mol/L/day]
+             K1 = 1.422e-06, # [mol/L]
+             K2 = 1.082e-09) # [mol/L]
 
 pH.ini  <- 8
 DIC.ini <- 2e-3
 ALK.ini <- solveALK(DIC = DIC.ini, pH = pH.ini)
 
-yini  <- c(DIC = DIC.ini, ALK = ALK.ini)
-times <- seq(from=0, to=10, length.out=100)
+yini    <- c(DIC = DIC.ini, ALK = ALK.ini)
+times   <- seq(from=0, to=10, length.out=100)
 
-out   <- ode(y=yini, times=times, func=CO2dissol, parms=parms)
+out     <- ode(y=yini, times=times, func=CO2dissol, parms=pars)
 
 plot(out, mfrow = c(2,4), las = 1)
 ```

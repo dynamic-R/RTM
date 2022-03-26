@@ -43,7 +43,7 @@ First, we define model parameters and initial conditions:
 
 ```{r}
 # parameters
-parms <- c(
+pars <- c(
  NV   = 8e6      , # [number/m3], density of spherical silica particles (N/V)
  kp   = 1        , # [m/yr],      precipitation rate constant (assumed)
  MW   = 60.08e-3 , # [kg/mol],    silica molar weight
@@ -69,7 +69,7 @@ C.ini  <- 0       # [mol/m3], initial concentration of silicic acid
 r.ini  <- 0.1e-3  # [m],      initial radius of the spherical silica particles
 
 # initial concentration of silica (assuming all spheres have the same radius)
-Cs.ini    <- Cs.ini.fun(parms, r=r.ini)        # [mol/m3]
+Cs.ini    <- Cs.ini.fun(pars, r=r.ini)        # [mol/m3]
 
 state.ini <- c(C=C.ini, Cs=Cs.ini)
 ```
@@ -105,7 +105,7 @@ library(deSolve)
 library(rootSolve)
 
 times <- seq(from=0, to=30, by=0.1)  # time in years
-out1  <- ode(y=state.ini, times=times, func=DissolveSilica, parms=parms)
+out1  <- ode(y=state.ini, times=times, func=DissolveSilica, parms=pars)
 
 plot(out1, mfrow=c(1,4))  # set mfrow to put all figures in one row (and 4 columns)
 ```
@@ -119,7 +119,7 @@ tail(out1, n = 1)
 The steady-state solution:
 
 ```{r}
-std1  <- runsteady(y=state.ini, func=DissolveSilica, parms=parms)
+std1  <- runsteady(y=state.ini, func=DissolveSilica, parms=pars)
 std1$y
 std1$r
 ```
@@ -131,16 +131,16 @@ In this particular example the initial concentration of *total* silica in the wa
 Now we decrease the particle density from $8\times 10^6$ to $5\times 10^6$ and run the model again.
 
 ```{r, fig.height=3, fig.width=10}
-parms2 <- parms
-parms2["NV"] <- 5e6                              # [number/m3]
-Cs.ini       <- Cs.ini.fun(parms2, r=r.ini)      # [mol/m3]
-state2       <- c(C=C.ini, Cs=Cs.ini)
+pars2       <- pars
+pars2["NV"] <- 5e6                          # [number/m3]
+Cs.ini      <- Cs.ini.fun(pars2, r=r.ini)   # [mol/m3]
+state2.ini  <- c(C=C.ini, Cs=Cs.ini)
 
-out2   <- ode(y=state2, times=times, func=DissolveSilica, parms=parms2, 
-              atol=1e-10, rtol=1e-10)   # atol and rtol to increase the precision
+out2        <- ode(y=state2.ini, times=times, func=DissolveSilica, parms=pars2, 
+                   atol=1e-10, rtol=1e-10)  # atol and rtol to increase the precision
 plot(out2, mfrow = c(1,4))
 
-std2  <- runsteady(y=state2, func=DissolveSilica, parms=parms2)
+std2  <- runsteady(y=state2.ini, func=DissolveSilica, parms=pars2)
 std2$y
 std2$r
 ```
@@ -152,14 +152,14 @@ In this scenario the initial concentration of total silica in the water is low (
 In the last scenario, we keep the same particle density but increase the initial silicic acid concentration above solubility. We expect that silica will precipitate.
 
 ```{r, fig.height=3, fig.width=10}
-C.ini  <- 2                        # mol/m3
-state3 <- c(C=C.ini, Cs=Cs.ini)
+C.ini      <- 2                      # mol/m3
+state3.ini <- c(C=C.ini, Cs=Cs.ini)
 
-out3   <- ode(y=state3, times=times, func=DissolveSilica, parms=parms, 
+out3   <- ode(y=state3.ini, times=times, func=DissolveSilica, parms=pars, 
               atol=1e-10, rtol=1e-10)
 plot(out3, mfrow = c(1,4))
 
-std3  <- runsteady(y=state3, func=DissolveSilica, parms=parms)
+std3  <- runsteady(y=state3.ini, func=DissolveSilica, parms=pars)
 std3$y
 std3$r
 ```
@@ -182,11 +182,11 @@ r.out  <- NULL # will add steady-state "r" for each run
 C.out  <- NULL # will add steady-state "C" for each run
 
 for (nv in NV.seq) {
-  parms2       <- parms         # a copy of default parameters
-  parms2["NV"] <- nv            # new NV
-  state <- c(C=0, Cs=Cs.ini.fun(parms2, r=r.ini))   
-  STD   <- runsteady(y=state, func=DissolveSilica, parms=parms2, 
-                     atol=1e-10, rtol=1e-10)
+  pars2       <- pars         # a copy of default parameters
+  pars2["NV"] <- nv            # new NV
+  state.ini   <- c(C=0, Cs=Cs.ini.fun(pars2, r=r.ini))   
+  STD         <- runsteady(y=state.ini, func=DissolveSilica, parms=pars2, 
+                           atol=1e-10,  rtol=1e-10)
   r.out <- c(r.out, STD$r)
   C.out <- c(C.out, STD$y["C"])
 }

@@ -74,9 +74,9 @@ To solve this model numerically, we will assume the following parameter values:
 
 These parameters imply an equilibrium constant of $K_{eq}=0.5\times 10^{-3}~mol~m^{-3}$.
 
-Additionally, we will assume that *total* concentration of species A ($[Atot] = [A] + [AB]$) is $0.070~mol~m^{-3}$, the *total* concentration of species B ($[Btot] = [B] + [AB]$) is $0.06~mol~m^{-3}$, and the *initial* concentration of species (state variable) B is $0.001~mol~m^{-3}$. Using this information, the initial concentrations of the species (state variables) AB and A can easily be calculated as $[AB] = [Btot] - [B]$ and $[A] = [Atot] - [AB]$.
+Additionally, we will assume that *total* concentration of species A ($[A_{tot}] = [A] + [AB]$) is $0.070~mol~m^{-3}$, the *total* concentration of species B ($[B_{tot}] = [B] + [AB]$) is $0.06~mol~m^{-3}$, and the *initial* concentration of species (state variable) B is $0.001~mol~m^{-3}$. Using this information, the initial concentrations of the species (state variables) AB and A can easily be calculated as $[AB] = [B_{tot}] - [B]$ and $[A] = [A_{tot}] - [AB]$.
 
-With that information, we make a model that considers explicitly both the rapid equilibration process and the slower net removal process. That is, we model the dynamics of species A, B and AB based on the mass balance equations (1). We also calculate the *total* concentrations of elements A and B (*Atot* and *Btot*), and the quotient $Q=[A]\cdot[B]/[AB]$, as output variables. As noted above, the quotient is useful because it tells us *how far from equilibrium the system* (described by state variables A, B and AB) *is*. We run the model for 1 millisecond and 10 seconds to illustrate what happens on the time scales of the fast equilibration and slow removal processes.
+With that information, we make a model that considers explicitly both the rapid equilibration process and the slower net removal process. That is, we model the dynamics of species A, B and AB based on the mass balance equations (1). We also calculate the *total* concentrations of elements A and B ($A_{tot}$ and $B_{tot}$), and the quotient $Q=[A]\cdot[B]/[AB]$, as output variables. As noted above, the quotient is useful because it tells us *how far from equilibrium the system* (described by state variables A, B and AB) *is*. We run the model for 1 millisecond and 10 seconds to illustrate what happens on the time scales of the fast equilibration and slow removal processes.
 
 ## R-implementation
 
@@ -89,12 +89,12 @@ library(deSolve)
 The parameter values are in a vector called *parms*. The elements in this vector have a name; we will be able to use this name in the model function.
 
 ```{r}
-parms <- c (kf      = 1000,    # [/s]
-            kb      = 2e6,     # [/mol m3 /s]
-            lambda  = 0.1)     # [/s]
+pars     <- c (kf      = 1000,    # [/s]
+               kb      = 2e6,     # [/mol m3 /s]
+               lambda  = 0.1)     # [/s]
 ```
 
-The initial conditions are calculated based on the values given above. The names of the state variables in the initial condition vector *yini.full* also determine the names that we can use in the model function.
+The initial conditions are calculated based on the values given above. The names of the state variables in the initial condition vector *state.ini.full* also determine the names that we can use in the model function.
 
 ```{r}
 Atot.ini <- 0.070  # [mol/m3] Initial concentration of total A
@@ -102,11 +102,11 @@ Btot.ini <- 0.060  # [mol/m3] Initial concentration of total B
 B.ini    <- 0.001  # [mol/m3] Initial concentration of B (STATE VARIABLE)
 
 # initial concentrations of the STATE VARIABLES
-AB.ini <- Btot.ini - B.ini
-A.ini  <- Atot.ini - AB.ini
+AB.ini   <- Btot.ini - B.ini
+A.ini    <- Atot.ini - AB.ini
 
 # initial conditions of all state variables
-yini.full <- c(A = A.ini, B = B.ini, AB = AB.ini)
+state.ini.full <- c(A = A.ini, B = B.ini, AB = AB.ini)
 ```
 
 Now we define the model function based on the differential equations (1).
@@ -114,7 +114,7 @@ Now we define the model function based on the differential equations (1).
 ```{r}
 
 FullModel <- function(t, state, parms) {
-  with (as.list(c(state,parms)), {
+  with (as.list(c(state, parms)), {
     
   # rate expressions
   
@@ -142,7 +142,7 @@ First, we run the model for 1 ms to illustrate how fast the equilibrium is reach
 
 ```{r, warning = FALSE, message = FALSE, fig.width=10, fig.height=5}
 times     <- seq(from=0, to=1e-3, length.out = 1000)
-out.full  <- ode(y=yini.full, times=times, func=FullModel, parms=parms)
+out.full  <- ode(y=state.ini.full, times=times, func=FullModel, parms=pars)
 plot(out.full, mfrow=c(2,3), ylab="mol/m3", xlab="time (s)")
 ```
 
@@ -150,7 +150,7 @@ Now, we run the model for 10 s to illustrate the effects on the time-scale of th
 
 ```{r, fig.width=10, fig.height=5}
 times     <- seq(from=0, to=10, length.out=1000)
-out.full  <- ode(y=yini.full, times=times, func=FullModel, parms=parms)
+out.full  <- ode(y=state.ini.full, times=times, func=FullModel, parms=pars)
 plot(out.full, mfrow=c(2,3), ylab="mol/m3", xlab="time (s)")
 ```
 
@@ -168,45 +168,45 @@ As explained in class, the local equilibrium condition implies the following mas
 \begin{equation}
 \begin{array}{rcl}
 \displaystyle
-\frac{d[Atot]}{dt} & = & -\lambda \cdot [A] \\[5mm]
+\frac{d[A_{tot}]}{dt} & = & -\lambda \cdot [A] \\[5mm]
 \displaystyle
-\frac{d[Btot]}{dt} & = &  0
+\frac{d[B_{tot}]}{dt} & = &  0
 \end{array}
 \end{equation}
-Additionally, it implies the following relationships between the new and the original state variables:\footnote{From $K_{eq} = \frac{[A] \cdot [B]}{[AB]}$ we derive $[AB] = \frac{[A] \cdot [B]}{K_{eq}}$, which yields $[Atot] = [A] + [AB] = [A] \cdot \left(1 +\frac{[B]}{K_{eq}}\right)$ and $[A] = \frac{K_{eq}}{K_{eq} + [B]} \cdot [Atot].$}
+Additionally, it implies the following relationships between the new and the original state variables:\footnote{From $K_{eq} = \frac{[A] \cdot [B]}{[AB]}$ we derive $[AB] = \frac{[A] \cdot [B]}{K_{eq}}$, which yields $[A_{tot}] = [A] + [AB] = [A] \cdot \left(1 +\frac{[B]}{K_{eq}}\right)$ and $[A] = \frac{K_{eq}}{K_{eq} + [B]} \cdot [A_{tot}].$}
 
 \begin{equation}
-[B] + \frac{[B]}{K_{eq} + [B]} \cdot [Atot] = [Btot]
+[B] + \frac{[B]}{K_{eq} + [B]} \cdot [A_{tot}] = [B_{tot}]
 \end{equation}
 
 \begin{equation}
-[A] = \frac{K_{eq}}{K_{eq} + [B]} \cdot [Atot]
+[A] = \frac{K_{eq}}{K_{eq} + [B]} \cdot [A_{tot}]
 \end{equation}
 
 \begin{equation}
-[AB] = \frac{[B]}{K_{eq} + [B]} \cdot [Atot]
+[AB] = \frac{[B]}{K_{eq} + [B]} \cdot [A_{tot}]
 \end{equation}
 
-It is important to note the meaning of equations 5--8. Equation 6 shows how to calculate the concentration of B for any given concentration of Atot and Btot. Once this concentration is known, the concentrations of A and AB are calculated using equations 7 and 8, respectively. Then, using the concentration of A, the rate of change of Atot can be calculated from equation 5. These steps outline the *approach* of how to model the system under the local equilibrium assumption.
+It is important to note the meaning of equations 5--8. Equation 6 shows how to calculate the concentration of $B$ for any given concentration of $A_{tot}$ and $B_{tot}$. Once this concentration is known, the concentrations of $A$ and $AB$ are calculated using equations 7 and 8, respectively. Then, using the concentration of $A$, the rate of change of $A_{tot}$ can be calculated from equation 5. These steps outline the *approach* of how to model the system under the local equilibrium assumption.
 
 ## Solving for the equilibrium concentration of B
 
-As explained above, finding the concentration of B is the critical step in this approach. This is done by solving for [B] in equation 6. This can be done in two ways: analytically or numerically.
+As explained above, finding the concentration of $B$ is the critical step in this approach. This is done by solving for [B] in equation 6. This can be done in two ways: analytically or numerically.
 
 ### An analytical approach
 
 First, because the equation for finding [B] is not that complicated, it *is* possible to find an *analytical solution*. Indeed, rearranging equation 6 yields a quadratic equation from which [B] can readily be calculated. As shown in class, the solution is
 
 \begin{equation}
-[B] = \frac{1}{2}\left( -\beta + \sqrt{\beta^2 + 4 K_{eq}\cdot [Btot]} \right),
+[B] = \frac{1}{2}\left( -\beta + \sqrt{\beta^2 + 4 K_{eq}\cdot [B_{tot}]} \right),
 \end{equation}
 where
-$$\beta = K_{eq} + [Atot] - [Btot].$$
+$$\beta = K_{eq} + [A_{tot}] - [B_{tot}].$$
 
 ### A numerical approach
 For more complex equilibria, such as those involving more than three chemical species,\footnote{For example, carbonate equilibrium in water involves four species: H$_2$CO$_3$, HCO$_3^-$, CO$_3^{2-}$, and H$^+$.} finding an analytical solution may be *too difficult* or even *impossible*. In this case, *numerical approximation* can be used. For this particular case, we rearrange equation 6 as
 \begin{equation}
-f([B]) = [B] + \frac{[B]}{K_{eq} + [B]} \cdot [Atot] - [Btot] = 0,
+f([B]) = [B] + \frac{[B]}{K_{eq} + [B]} \cdot [A_{tot}] - [B_{tot}] = 0,
 \end{equation}
 which shows that [B] can be found by finding the root\footnote{Root of a function $f(x)$ is a value of $x$ where $f(x)=0$.} of the function $f([B])$ defined on the left-hand side of this equation. In R, this is done using the *uniroot* function, as shown below. 
 
@@ -216,11 +216,11 @@ Now we are ready to implement the model in R. We illustrate both approaches, one
 
 ### An analytical approach
 
-Implementing this approach in R is easier because we have done the necessary work already by solving equation 6 for [B]. In addition to the time-derivatives of the state variables Atot and Btot, we also return the values of A, B, AB and Q as the output.
+Implementing this approach in R is easier because we have done the necessary work already by solving equation 6 for [B]. In addition to the time-derivatives of the state variables $A_{tot}$ and $B_{tot}$, we also return the values of $A$, $B$, $AB$, and $Q$ as the output.
 
 ```{r}
 EqModel_an <- function(t, state, parms) {
-  with (as.list(c(state,parms)), {
+  with (as.list(c(state, parms)), {
     
     # equilibrium constant
     Keq  <- kf/kb
@@ -244,7 +244,7 @@ EqModel_an <- function(t, state, parms) {
 
 ### A numerical approach
 
-To implement this approach, we first define a function *solveB* for finding [B] at equilibrium, i.e., the root of equation 10. Note that, within the scope of function *solveB*, another function is defined (*rootFun*), that implements the function of [B] in equation 10. This function is then used by R's *uniroot*. We need to input suitable *lower* and *upper* boundaries between which the root is sought. We choose 0 and Btot, since [B] cannot be negative or larger than [Btot].
+To implement this approach, we first define a function *solveB* for finding [B] at equilibrium, i.e., the root of equation 10. Note that, within the scope of function *solveB*, another function is defined (*rootFun*), that implements the function of [B] in equation 10. This function is then used by R's *uniroot*. We need to input suitable *lower* and *upper* boundaries between which the root is sought. We choose 0 and $B_{tot}$, since [B] cannot be negative or larger than $[B_{tot}]$.
 
 ```{r}
 solveB <- function(Keq, Atot, Btot){
@@ -260,11 +260,11 @@ solveB <- function(Keq, Atot, Btot){
 }
 ```
 
-The remaining steps are similar as in the analytical approach. The only difference is that instead of calculating B analytically, we use the above function *solveB*.
+The remaining steps are similar as in the analytical approach. The only difference is that instead of calculating $B$ analytically, we use the above function *solveB*.
 
 ```{r}
 EqModel_num <- function(t, state, parms) {
-  with (as.list(c(state,parms)), {
+  with (as.list(c(state, parms)), {
     
     Keq  <- kf/kb
     
@@ -287,9 +287,9 @@ EqModel_num <- function(t, state, parms) {
 Finally, we run both models for 10 seconds.
 
 ```{r}
-yini.eq <- c(Atot = Atot.ini, Btot = Btot.ini)
-out.eq_an  <- ode(y=yini.eq, times=times, func=EqModel_an,  parms=parms)
-out.eq_num <- ode(y=yini.eq, times=times, func=EqModel_num, parms=parms)
+state.ini.eq <- c(Atot = Atot.ini, Btot = Btot.ini)
+out.eq_an    <- ode(y=state.ini.eq, times=times, func=EqModel_an,  parms=pars)
+out.eq_num   <- ode(y=state.ini.eq, times=times, func=EqModel_num, parms=pars)
 ```
 
 # Compare all models
@@ -300,7 +300,7 @@ We output the dynamics of the full model (black), alongside the equilibrium form
 # plotting function
 plot_AB <- function(varname, out1, out2, out3) {
   plot (out1[,"time"], out1[,varname], type="l", main=varname, 
-       ylab="mol/m3", xlab="time (s)", col=1, lty=1, lwd=1)
+        ylab="mol/m3", xlab="time (s)", col=1, lty=1, lwd=1)
   lines(out2[,"time"], out2[,varname],  col=2, lty=2, lwd=2)
   lines(out3[,"time"], out3[,varname],  col=3, lty=3, lwd=4)
   legend("topright", 
@@ -318,7 +318,7 @@ plot_AB("B",    out.full, out.eq_an, out.eq_num)
 plot_AB("AB",   out.full, out.eq_an, out.eq_num)
 ```
 
-The graphs show that in the full model, the initial concentrations of A, B and AB were not at equilibrium (the quotient $Q$ calculated from equation 3 is *not* equal to $K_{eq}$). However, the equilibrium concentration is rapidly reached, as indicated by the quotient Q rapidly reaching $K_{eq}$. The full and approximate models yield indistinguishable results once the equilibrium has been reached. 
+The graphs show that in the full model, the initial concentrations of $A$, $B$ and $AB$ were not at equilibrium (the quotient $Q$ calculated from equation 3 is *not* equal to $K_{eq}$). However, the equilibrium concentration is rapidly reached, as indicated by the quotient $Q$ rapidly reaching $K_{eq}$. The full and approximate models yield indistinguishable results once the equilibrium has been reached. 
 
 ## Benchmarking
 
@@ -332,19 +332,19 @@ times <- seq(from=0, to=10, length.out=100)
 cat("full model: \n")
 print(system.time(
   for (i in 1:100)
-    out.full <- ode(y=yini.full, times=times, func=FullModel, parms=parms)
+    out.full <- ode(y=state.ini.full, times=times, func=FullModel, parms=pars)
   )/100)
 
 cat("analytical: \n")
 print(system.time(
   for (i in 1:100)
-    out.eq_an <- ode(y=yini.eq, times=times, func=EqModel_an, parms=parms)
+    out.eq_an <- ode(y=state.ini.eq, times=times, func=EqModel_an, parms=pars)
   )/100)
 
 cat("numerical:  \n")
 print(system.time(
   for (i in 1:100)
-    out.eq_num <- ode(y=yini.eq, times=times, func=EqModel_num, parms=parms)
+    out.eq_num <- ode(y=state.ini.eq, times=times, func=EqModel_num, parms=pars)
   )/100)
 ```
 
@@ -365,5 +365,5 @@ Write a model that will predict the change of water pH, along with the change of
 
 Assume that the equilibration process $NH_4^+ \leftrightarrow NH_3 + H^+$ is much faster than the degasing (equilibrium constant for this process is approximately $K_{eq} = 5.38\times 10^{-10}\, mol \, L^{-1}$). Thus, you can use the local equilibrium assumption to solve the model. Additionally, assume that degassing of ammonia is the *only* process that affects the water pH. That is, assume that other chemical species, such as dissolved CO$_2$, which would be a strong buffer counter-acting the pH changes induced by ammonia degassing, are *not* present in the water. This last assumption is required to make the model simple and focused on one process: ammonia degassing.
 
-You can start with the R-markdown template file *RTM_0D.Rmd* to implement this model.\footnote{You can obtain this file from Rstudio: File $\rightarrow$ new File $\rightarrow$ Rmarkdown $\rightarrow$ from template $\rightarrow$ RTM\_0D. Save this file under a different name. Do not forget to change the heading of this file.}
+You can start with the R-markdown template file *RTM_0D.Rmd* to implement this model. You can obtain this file from Rstudio: File $\rightarrow$ new File $\rightarrow$ Rmarkdown $\rightarrow$ from template $\rightarrow$ RTM\_0D. Save this file under a different name. Do not forget to change the heading of this file.
 

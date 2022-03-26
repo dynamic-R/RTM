@@ -59,14 +59,14 @@ $$k_{1a} = 10^{-30}~d^{-1},$$
 $$k_{1b} = 1~(\mu mol~photons~m^{-2}~s^{-1})^{-1}~d^{-1}.$$
 
 * Implement this model in R. You can start with the R-markdown template file *RTM_0D.Rmd* to implement this model.\footnote{You can obtain this file from Rstudio: File $\rightarrow$ new File $\rightarrow$ Rmarkdown $\rightarrow$ from template $\rightarrow$ RTM\_0D. Save this file under a different name. Do not forget to change the heading of this file.} Use the following initial conditions:
-     - $[O] = 0$, $[NO] = 1.3\times 10^8$, $[NO2] = 5\times 10^{11}$, $[O3] = 8\times 10^{11}$
+     - $[O] = 0$, $[NO] = 1.3\times 10^8$, $[NO_2] = 5\times 10^{11}$, $[O_3] = 8\times 10^{11}$
      - Do these values match the units assumed in your model?
 
 * Impose a variable light intensity using the following R-snippet:
-```{}
-radiation <- max(0, sin(t*2*pi))*maxrad    # radiation at time t (if t is in days)
-```
-Here, *maxrad* is the maximal radiation at midday. Assume a value of $1200~\mu mol~photons~m^{-2}~s^{-1}$. The *max* statement assures that light intensity does *not* become negative, but is 0 during nighttime. Output the radiation as an ordinary variable.
+    
+    ``radiation <- max(0, sin(t*2*pi))*maxrad    # radiation at time t (if t is in days)``
+
+  Here, *maxrad* is the maximal radiation at midday. Assume a value of $1200~\mu mol~photons~m^{-2}~s^{-1}$. The *max* statement assures that light intensity does *not* become negative, but is 0 during nighttime. Output the radiation as an ordinary variable.
 
 * Run the model for 5 days and interpret the results. 
     - Compare the results calculated with and without the anthropogenic NO emissions.

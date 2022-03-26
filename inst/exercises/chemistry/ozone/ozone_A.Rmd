@@ -48,10 +48,10 @@ This model is implemented and solved in R. We impose variable light intensity th
 require(deSolve)  # package with solution methods
 
 # state variables, units = moles
-state <- c(O = 0, NO = 1.3e8, NO2 = 5e11, O3 = 8e11)  # initial conditions
+state.ini <- c(O = 0, NO = 1.3e8, NO2 = 5e11, O3 = 8e11)  # initial conditions
 
 # parameters: rate coefficients
-parms <- c(
+pars <- c(
   k3     = 1e-11,     # [/(mol/d)] 
   k2     = 1e10,      # [/d]
   k1a    = 1e-30,     # [/d] note: k1 = k1a + k1b*radiation
@@ -61,8 +61,8 @@ parms <- c(
 )
 
 # Model function
-Ozone <- function(t, state, params) {
-  with (as.list(c(state, params)), {
+Ozone <- function(t, state, parms) {
+  with (as.list(c(state, parms)), {
 
   radiation <- max(0, sin(t*2*pi))*maxrad    # radiation at time t (if time in days)
 
@@ -92,11 +92,11 @@ The model is run for 5 days; it is solved using the ode function from package de
 
 outtimes <- seq(from = 0, to = 5, length.out = 300)  # run for 5 days
 
-out <- ode(y = state, parms = parms, func = Ozone, times = outtimes, method = "vode")
+out <- ode(y = state.ini, parms = pars, func = Ozone, times = outtimes, method = "vode")
 
-parms2 <- parms
-parms2["sigma"] <- 0.0
-out2 <- ode(y = state, parms = parms2, func = Ozone, times = outtimes, method = "vode")
+pars2 <- pars
+pars2["sigma"] <- 0.0
+out2 <- ode(y = state.ini, parms = pars2, func = Ozone, times = outtimes, method = "vode")
 
 plot(out, out2, las = 1, lwd=1, lty=1) # las specifies the rotation of axis labels
 plot.new()

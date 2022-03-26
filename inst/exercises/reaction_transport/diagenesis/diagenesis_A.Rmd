@@ -77,12 +77,14 @@ require(ReacTran)
 ### The model grid and associated properties
 
 ```{r}
+# units: time=days, space=meters, amount=moles, concentration=mol/m3
+
 # spatial domain: total length of 0.10 m, 500 boxes
 Length    <- 0.1   # [m]
 N         <- 500
 
-# grid with an exponentially increasing grid size, first cell 0.05 cm (5e-4 m)
-Grid      <- setup.grid.1D(L = Length, N = N, dx.1 = 0.05/100)
+# grid with an exponentially increasing grid size, first cell 0.05 cm (=5e-4 m)
+Grid      <- setup.grid.1D(L = Length, N = N, dx.1 = 0.05e-4)
 
 # function describing the variation of porosity (volume fraction of LIQUID) with depth
 porFun.L  <- function(x, por.SWI, por.deep, porcoef)
@@ -119,7 +121,7 @@ diffH2S   <- diff.H2S/(1-log(porInt^2))
 ## Other model parameters
 
 ```{r}
-parms <- c(
+pars <- c(
  Dbio     = 5e-4/365,   # [m2/d]      bioturbation mixing coefficient
  v_adv    = 5e-6,       # [m/d]       advection velocity = sediment accretion rate
  rMin     = 0.005,      # [/d]        POC mineralisation rate constant
@@ -158,9 +160,9 @@ state.ini <- c(POC.ini, CO2.ini, O2.ini, NH3.ini, NO3.ini, SO4.ini, H2S.ini, CH4
 ## Definition of the model function
 
 ```{r}
-Diamodel <- function (t, state, pars)   # state is a LONG vector
+Diamodel <- function (t, state, parms)   # state is a LONG vector, at time t
 {
-  with (as.list(pars),{ 
+  with (as.list(parms),{ 
     
     # unpack state variables
     POC <- state[(0*N+1):(1*N)]    # first N elements: POC
@@ -304,16 +306,16 @@ Diamodel <- function (t, state, pars)   # state is a LONG vector
 
 Here, we find steady state solutions of the model for the three POC fluxes.
 ```{r}
-std <- steady.1D (y=state.ini, func=Diamodel, parms=parms, 
+std <- steady.1D (y=state.ini, func=Diamodel, parms=pars, 
                   nspec=nspec, dimens=N, names=names,
                   positive = TRUE)     # to have only positive values! 
 
-p1 <- parms
+p1 <- pars
 p1["depoPOC"]  <- 20e-3 # [mol/m2/d]  POC deposition rate (flux at SWI)
 std1 <- steady.1D (y=state.ini, func=Diamodel, parms=p1, 
                   nspec=nspec, dimens=N, names=names, positive = TRUE)
 
-p2 <- parms
+p2 <- pars
 p2["depoPOC"]  <- 200e-3 # [mol/m2/d]  POC deposition rate (flux at SWI)
 std2 <- steady.1D (y=state.ini, func=Diamodel, parms=p2, 
                   nspec=nspec, dimens=N, names=names, positive = TRUE)

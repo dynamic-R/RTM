@@ -18,10 +18,10 @@ In addition to the amounts of P in the soil compartments, crops and weeds, we al
 require(deSolve)  # package with solution methods
 
 # state variables, units = molP/m2
-state <- c(WEED = 0.001, CROP = 0.005, P1 = 0.1, P2 = 0.1, Plost = 0)
+state.ini <- c(WEED = 0.001, CROP = 0.005, P1 = 0.1, P2 = 0.1, Plost = 0)
 
 # parameters
-parms <- c(
+pars <- c(
   Paddition   = 0.9/90,  # [molP/m2/d]  Rate of P supply
   percolation = 0.05,    # [/d]         Rain rate dilution parameter
   ksCrop      = 2e-3,    # [molP/m2]    Monod coefficient for P uptake
@@ -36,8 +36,8 @@ parms <- c(
 )
 
 # Model function
-Crops <- function(t, state, params) {
-  with (as.list(c(state, params)), {
+Crops <- function(t, state, parms) {
+  with (as.list(c(state, parms)), {
 
 	# variables needed for rate expressions
     TotBiom    <- WEED + CROP       # total plant biomass
@@ -89,19 +89,19 @@ To compare the models in a fair way, we assume that the one-time and continuos a
 outtimes <- seq(from = 0, to = 90, length.out = 100)  # run for 3 months
 
 # Continuous P-addition, with weeds
-out <- ode(y = state, parms = parms, func = Crops, times = outtimes)
+out <- ode(y = state.ini, parms = pars, func = Crops, times = outtimes)
 
 # One-time P ferilisation, with weeds
-parms2 <- parms
-parms2["Paddition"] <- 0.0       # No P-addition
-state2 <- state
-state2["P1"] <- 1                # Higher value for P1 at start
-out2 <- ode(y = state2, parms = parms2, func = Crops, times = outtimes)
+pars2              <- pars
+pars2["Paddition"] <- 0.0       # No P-addition
+state2.ini         <- state.ini
+state2.ini["P1"]   <- 1         # Higher value for P1 at start
+out2 <- ode(y = state2.ini, parms = pars2, func = Crops, times = outtimes)
 
 # Continuous P-addition, without weeds
-state3 <- state
-state3["WEED"] <- 0
-out3 <- ode(y = state3, parms = parms, func = Crops, times = outtimes)
+state3.ini         <- state.ini
+state3.ini["WEED"] <- 0
+out3 <- ode(y = state3.ini, parms = pars, func = Crops, times = outtimes)
 
 # visualise it 
 plot(out, out2, out3, lty = 1, lwd = 2, mfrow=c(3,4))

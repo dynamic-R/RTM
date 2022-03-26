@@ -55,12 +55,14 @@ require(ReacTran)
 The model domain is divided into a grid of $N$ boxes. The depth of the modeled sediment column is set to $0.6~m$. The grid size is exponentially increasing with depth, to achieve a better accuracy of the results in the sediment region where steep spatial gradients are likely present (here: close to the sediment-water interface).
 
 ```{r}
+# Note: units are: m, days, mol/m3.
+
 # grid: 200 boxes, total length = 0.6 m, later increased to 1 or 2 m.
 Length <- 0.6   # [m]
 N      <- 200
 
-# grid with an exponentially increasing grid size, starting from 0.1 cm
-Grid <- setup.grid.1D(L = Length, N = N, dx.1 = 0.1e-2)
+# grid with an exponentially increasing grid size, starting from 0.05 cm
+Grid <- setup.grid.1D(L = Length, N = N, dx.1 = 0.05e-2)
 
 # function describing the variation of porosity (volume fraction of liquid) with depth
 porFun.L <- function(x, por.SWI, por.deep, porcoef)
@@ -105,7 +107,7 @@ plot(diffPO4, y = Grid$x.int, type="l", ylim = c(Length,0), ylab = "depth (m)",
 Parameters are expressed in mol, m and day; the input is converted if necessary. We ignore the influence of sediment compaction on the advection velocity.
 
 ```{r}
-parms <- c(
+pars <- c(
  biot     = 5e-4/365,      # [m2/d]      bioturbation mixing coefficient
  v        = 0.1e-2/365,    # [m/d]       sediment advection velocity 
  rMin     = 0.01,          # [/d]        POC mineralisation rate constant
@@ -135,9 +137,9 @@ nspec <- length(names)
 ### The model function
 
 ```{r}
-PDiamodel <- function (t, state, pars)   # state is a long vector
+PDiamodel <- function (t, state, parms)   # state is a long vector, at time t
 {
-  with (as.list(pars),{
+  with (as.list(parms),{
     # unpack state variables   
     POC  <- state[(0*N+1):(1*N)]    # first N elements: POC
     DIC  <- state[(1*N+1):(2*N)]    # next N elements: DIC
@@ -235,7 +237,7 @@ Three steady-state solutions are calculated, with different adsorption rate cons
 ```{r}
 
 # three runs with different adsorption rates
-p1 <- p2 <- p3 <- parms  
+p1 <- p2 <- p3 <- pars  
 
 p1["rPads"]  <- 0      # /day    
 sol1 <- steady.1D (y=state.ini, func=PDiamodel, parms=p1, 

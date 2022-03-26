@@ -40,15 +40,15 @@ state.eq <- c(
 )
 
 # Model parameters
-parms <- with (as.list(state.eq), c(
+pars <- with (as.list(state.eq), c(
   # rate constants, yr-1 (first-order kinetics for all fluxes)
   k1.2 = 60 / M1.ATMOSPHERE,    #  atmosphere -> biosphere, [1/yr]
   k2.1 = 60 / M2.BIOSPHERE  )   #  biosphere  -> atmosphere [1/yr]
 )
 
 # model equations 
-Cmodel_2comp  <- function(t, C, p) {       # 2-compartment carbon model
-  with(as.list (c(C, p)),{
+Cmodel_2comp  <- function(t, state, parms) {  # 2-compartment carbon model
+  with(as.list (c(state, parms)),{
     
     # rate laws (first-order kinetics)
     F1.2 <- k1.2*M1.ATMOSPHERE    # atm  -> bio
@@ -71,7 +71,7 @@ Run the model for 100 years and plot the results.
 ```{r, fig.width = 8, fig.height = 5}
 
 time_seq <- 0:100   # run the model for 100 years
-out1 <- ode(y = state.eq, times = time_seq, func = Cmodel_2comp, parms = parms)
+out1 <- ode(y = state.eq, times = time_seq, func = Cmodel_2comp, parms = pars)
 
 par(oma = c(0,0,2,0)) # for wider margins
 plot (out1, xlab = "years", ylab = "PgC")
@@ -90,12 +90,12 @@ The masses stay constant, hence the model is correctly implemented.
 Cdeforest <- 50
 
 # define new initial state
-state2 <- state.eq
-state2["M1.ATMOSPHERE"] <- state2["M1.ATMOSPHERE"] + Cdeforest
-state2["M2.BIOSPHERE"]  <- state2["M2.BIOSPHERE"]  - Cdeforest
+state2.ini <- state.eq
+state2.ini["M1.ATMOSPHERE"] <- state2.ini["M1.ATMOSPHERE"] + Cdeforest
+state2.ini["M2.BIOSPHERE"]  <- state2.ini["M2.BIOSPHERE"]  - Cdeforest
 
 # Calculate, plot and print the solution, including also the original solution
-out2 <- ode(y = state2, times = time_seq, func = Cmodel_2comp, parms = parms)
+out2 <- ode(y = state2.ini, times = time_seq, func = Cmodel_2comp, parms = pars)
 
 par(oma = c(0,0,2,0))   # for wider margins
 plot(out2, out1, lty = 1, lwd = 2, xlab = "years", ylab = "PgC")
@@ -112,10 +112,10 @@ The system returns to the *original* steady state after about 40 years.
 
 ```{r, fig.width = 8, fig.height = 5}
 FossilFuel <- 10 # Pg C
-state3     <- state.eq    # start from the steady state
-state3["M1.ATMOSPHERE"] <- state3["M1.ATMOSPHERE"] + FossilFuel
+state3.ini     <- state.eq    # start from the steady state
+state3.ini["M1.ATMOSPHERE"] <- state3.ini["M1.ATMOSPHERE"] + FossilFuel
 
-out3 <- ode(y = state3, times = time_seq, func = Cmodel_2comp, parms = parms)
+out3 <- ode(y = state3.ini, times = time_seq, func = Cmodel_2comp, parms = pars)
 
 par(oma = c(0,0,2,0))
 plot(out3, out1, lty = 1, lwd = 2, xlab = "years", ylab = "PgC")
@@ -125,7 +125,7 @@ title(main = "FOSSIL FUEL", outer = TRUE)
 ```
 
 The system reaches an equilibrium after about 40 years. However, in this scenario, the equilibrium values are *different* compared to those in scenario 1. This is because, in scenario 2, carbon was *added* to the system. In the equilibrium, the fluxes $F_{12}$ and $F_{21}$ are *equal*, so that the time-derivative of each state variable is zero. Based on the rate laws used, this yields the relationship $$k_{12}\cdot M1.ATM^* = k_{21}\cdot M2.BIO^* \quad \rightarrow \quad \frac{M1.ATM^*}{M2.BIO^*} = \frac{k_{21}}{k_{12}} = \frac{60}{2300} \cdot \frac{590}{60} =\frac{590}{2300},$$ 
-where * denotes the equilibrium value. We note that the *total* carbon in the system remains *constant*, as follows from the summation of the mass balance equations for both state variables [$d(M1.ATM + dM2.BIO)/dt=0$]. Therefore, the amount of carbon in the system at an equilibrium is *the same* as at the beginning, i.e.,
+where * denotes the equilibrium value. We note that the *total* carbon in the system remains *constant*, as follows from the summation of the mass balance equations for both state variables [$d(M1.ATM + M2.BIO)/dt=0$]. Therefore, the amount of carbon in the system at an equilibrium is *the same* as at the beginning, i.e.,
 $$ M1.ATM^* + M2.BIO^* = 2300 + 10 + 590.$$
 Using the two last equations and some simple algebra, we can calculate the equilibrium amounts of C in both compartments. We obtain values $M1.ATM^* = 592.0415$ and $M2.BIO^* = 2307.958$, which are identical to those obtained by the model, as shown by the command below. 
 ```{r}
@@ -171,7 +171,7 @@ state.eq <- c(
 # Model parameters: 
 #=============================================================================
 
-parms <- with (as.list(state.eq), c(
+pars <- with (as.list(state.eq), c(
 
   # rate constants, yr-1 (first-order kinetics for all natural fluxes)
   k1.2 = 70.2 /M1.ATMOSPHERE,    # atm     -> surfoc (Uptake+weathering)
@@ -205,9 +205,9 @@ parms <- with (as.list(state.eq), c(
 # model function 
 #=============================================================================
 
-Cmodel  <- function(t, C, p) {
+Cmodel  <- function(t, state, parms) {
 
-  with(as.list (c(C, p)),{
+  with(as.list (c(state, parms)),{
     
     # define expressions for all fluxes
     F1.2 <- k1.2*M1.ATMOSPHERE    # atm     -> surfoc   (Uptake+weathering)
@@ -252,7 +252,7 @@ Cmodel  <- function(t, C, p) {
 ```{r, fig.width=6, fig.height=6}
 time_seq <- 0:1000   # run the model for 1000 years
 par(oma = c(0,0,2,0))
-out1 <- ode(y = state.eq, times = time_seq, func = Cmodel, parms = parms)
+out1 <- ode(y = state.eq, times = time_seq, func = Cmodel, parms = pars)
 plot(out1, xlab = "years", ylab = "PgC")
 title(main = "STEADY STATE", outer = TRUE)
 out1[nrow(out1),]
@@ -269,12 +269,12 @@ Cdeforest <- 100      # Pg C transferred from M6.LANDBIOTA to M1.ATMOSPHERE
 time_seq <- 0:1000    # run the model for 1000 years
 
 # new initial state
-state2 <- state.eq
-state2["M1.ATMOSPHERE"] <- state2["M1.ATMOSPHERE"] + Cdeforest
-state2["M6.LANDBIOTA"]  <- state2["M6.LANDBIOTA"]  - Cdeforest
+state2.ini <- state.eq
+state2.ini["M1.ATMOSPHERE"] <- state2.ini["M1.ATMOSPHERE"] + Cdeforest
+state2.ini["M6.LANDBIOTA"]  <- state2.ini["M6.LANDBIOTA"]  - Cdeforest
 
 # Calculate, plot and print the solution, adding the original solution
-out2 <- ode(y = state2, times = time_seq, func = Cmodel, parms = parms)
+out2 <- ode(y = state2.ini, times = time_seq, func = Cmodel, parms = pars)
 par(oma = c(0,0,2,0))
 plot(out2, out1, lty = 1, lwd = 2, xlab = "years", ylab = "PgC")
 plot.new()
@@ -291,22 +291,22 @@ Constant emissions are implemented by changing one model parameter ("bFuel") and
 emission_rate <- 10 # Pg C yr-1
 time_seq <- 0:1000  # run the model for 1000 years
 
-state3 <- state.eq  # initial state corresponds to the stead state
+state3.ini <- state.eq  # initial state corresponds to the stead state
 
 # define new set of model parameters and run the model
-parms3 <- parms
-parms3["bFuel"] <- emission_rate
-out3 <- ode(y = state3, times = time_seq, func = Cmodel, parms = parms3)
+pars3 <- pars
+pars3["bFuel"] <- emission_rate
+out3 <- ode(y = state3.ini, times = time_seq, func = Cmodel, parms = pars3)
 
 # half the emission rate
-parms3b <- parms
-parms3b["bFuel"] <- emission_rate/2
-out3b <- ode(y = state3, times = time_seq, func = Cmodel, parms = parms3b)
+pars3b <- pars
+pars3b["bFuel"] <- emission_rate/2
+out3b <- ode(y = state3.ini, times = time_seq, func = Cmodel, parms = pars3b)
 
 # double the emission rate
-parms3c <- parms
-parms3c["bFuel"] <- emission_rate*2
-out3c <- ode(y = state3, times = time_seq, func = Cmodel, parms = parms3c)
+pars3c <- pars
+pars3c["bFuel"] <- emission_rate*2
+out3c <- ode(y = state3.ini, times = time_seq, func = Cmodel, parms = pars3c)
 
 # display results
 par(oma = c(0,0,2,0))
@@ -352,13 +352,13 @@ Emissions are now linearly increasing with time, starting from 0 and they stop a
 emission_rate         <- 0    # Pg C yr-1
 emission_acceleration <- 0.05 # Pg C yr-2
 
-parms5 <- parms       # new set of model parameters
-parms5["bFuel"] <- emission_rate
-parms5["aFuel"] <- emission_acceleration
-parms5["tmax_input"] <- 200   # emissions stop after 200 years
-state5 <- state.eq
+pars5 <- pars       # new set of model parameters
+pars5["bFuel"] <- emission_rate
+pars5["aFuel"] <- emission_acceleration
+pars5["tmax_input"] <- 200   # emissions stop after 200 years
+state5.ini <- state.eq
 
-out5 <- ode(y = state5, times = time_seq, func = Cmodel, parms = parms5)
+out5 <- ode(y = state5.ini, times = time_seq, func = Cmodel, parms = pars5)
 
 par(oma = c(0,0,2,0))
 plot(out5, out1, lty = 1, lwd = 2, xlab = "years", ylab = "PgC")
@@ -389,9 +389,9 @@ time_seq1M <- c(seq(from=0, to=1000, by=10),              # denser first 1000 ye
                 seq(from=1000, to=1e6, length.out = 5000)) # less dense afterwards
 
 # linearly increasing emission rate until 200 years, then stop
-out5_1M  <- ode(y = state.eq, times = time_seq1M, func = Cmodel, parms = parms5)
+out5_1M  <- ode(y = state.eq, times = time_seq1M, func = Cmodel, parms = pars5)
 # also run the model in steady state
-out_1M <- ode(y = state.eq, times = time_seq1M, func = Cmodel, parms = parms)
+out_1M <- ode(y = state.eq, times = time_seq1M, func = Cmodel, parms = pars)
 
 par(oma = c(0,0,2,0))
 plot(out5_1M, out_1M, log="x", lty = 1, lwd = 2, xlab = "years", ylab = "PgC")
@@ -409,18 +409,18 @@ First, we consider that emissions linearly increased for 200 years and then abru
 
 ```{r, fig.width=8, fig.height=8}
 # start from the status after 200 years of linearly increasing emissions
-state7 <- state.eq + CalcChange(out5, 200)
+state7.ini <- state.eq + CalcChange(out5, 200)
 
 # use the original model parameters (no emissions), but stimulate oceanic 
 # primary productivity (surface->marinebiota) by a factor ppFraction
-parms7 <- parms
+pars7 <- pars
 ppFraction <- 0.24
-parms7["k2.3"]  <- parms["k2.3"]*(1 + ppFraction)   
+pars7["k2.3"]  <- pars["k2.3"]*(1 + ppFraction)   
 
 # mitigation implemented (parms7)
-out7  <- ode(y = state7, times = time_seq, func = Cmodel, parms = parms7)
+out7  <- ode(y = state7.ini, times = time_seq, func = Cmodel, parms = pars7)
 # no mitigation implemented (parms)
-out7a <- ode(y = state7, times = time_seq, func = Cmodel, parms = parms)
+out7a <- ode(y = state7.ini, times = time_seq, func = Cmodel, parms = pars)
 
 par(oma = c(0,0,2,0))
 plot(out7, out7a, out1, lty = 1, lwd = 2, xlab = "years", ylab = "PgC")
@@ -442,15 +442,15 @@ Over 1000 years, this sequestration rate would remove the same amount of C from 
 
 ```{r, fig.width=8, fig.height=8}
 # start from the status after 200 years of linearly increasing emissions
-state8 <- state.eq + CalcChange(out5, 200)
+state8.ini <- state.eq + CalcChange(out5, 200)
 
-parms8 <- parms          # original model parameters
-parms8["Fatm2deep"] <- 1 # sequestration flux 1 PgC yr-1
+pars8 <- pars           # original model parameters
+pars8["Fatm2deep"] <- 1 # sequestration flux 1 PgC yr-1
 
 # mitigation implemented (parms8)
-out8  <- ode(y = state8, times = time_seq, func = Cmodel, parms = parms8)
+out8  <- ode(y = state8.ini, times = time_seq, func = Cmodel, parms = pars8)
 # no mitigation implemented (parms)
-out8a <- ode(y = state8, times = time_seq, func = Cmodel, parms = parms)
+out8a <- ode(y = state8.ini, times = time_seq, func = Cmodel, parms = pars)
 
 par(oma = c(0,0,2,0))
 plot(out8, out7, out8a, out1, lty = 1, lwd = 2, xlab = "years", ylab = "PgC")

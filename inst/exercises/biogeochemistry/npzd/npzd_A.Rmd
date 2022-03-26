@@ -25,10 +25,10 @@ This is often done for small organisms that are predated upon by other small org
 require(deSolve)  # package with solution methods
 
 # state variables, units = molN/m3
-state  <- c(DIN = 0.010, PHYTO = 0.0005, ZOO = 0.0003, DET = 0.005) 
+state.ini  <- c(DIN = 0.010, PHYTO = 0.0005, ZOO = 0.0003, DET = 0.005) 
 
 # parameters
-parms <- c(
+pars <- c(
   depth           = 10,        # [m] depth of the bay
   rUptake         = 1.0,       # [/day]
   ksPAR           = 140,       # [uEinst/m2/s]
@@ -45,8 +45,8 @@ parms <- c(
 # Model formulation
 #=============================================================================
 
-NPZD <- function(t, state, parameters) {
- with(as.list(c(state, parameters)),{
+NPZD <- function(t, state, parms) {
+ with(as.list(c(state, parms)),{
 
     # Forcing function = Light a sine function
     # light = (540+440*sin(2*pi*t/365-1.4)), 50% of light is PAR 
@@ -84,6 +84,6 @@ We run the model for 2 years.
 
 ```{r, fig.height = 6, fig.width = 10}
 outtimes <- seq(from = 0, to = 2*365, length.out = 100)  
-out <- ode(y = state, parms = parms, func = NPZD, times = outtimes)  # solution
+out <- ode(y = state.ini, parms = pars, func = NPZD, times = outtimes)  # solution
 plot(out, mfrow=c(2,3))
 ```

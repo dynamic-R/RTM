@@ -29,9 +29,9 @@ This shows that for a first-order removal process, the *residence time* is the *
 To demonstrate that $\tau = 1/(g+m)$, we use the simple SIR model and calculate $\tau$ by approximating the integrals numerically by sums, where we follow an initial population of 1000 infected individuals, assuming that there are no further infections ($b=0$).
 
 ```{r}
-parms2      <- parms.SIR
-parms2["b"] <- 0
-out2 <- ode(y = state.SIR, times = time.seq, func = SIR, parms = parms2)
+pars2      <- parms.SIR
+pars2["b"] <- 0
+out2 <- ode(y = state.SIR, times = time.seq, func = SIR, parms = pars2)
 # probability of being categorized as "infected" at time point t:
 Prob <- out2[,"I"]/sum(out2[,"I"])
 # average time to be categorized as "infected":

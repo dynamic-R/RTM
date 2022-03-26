@@ -139,7 +139,7 @@ First, we expand the function that calculates alkalinity to include ammonium as 
 solveALK <- function(K1=1.422e-06, K2=1.082e-09, Kn=5.381e-10,
                      DIC, NHx, pH){
   
-  H      <- 10^{-pH}
+  H      <- 10^(-pH)
   HCO3   <- K1*H /  (H^2 + K1*H + K1*K2) * DIC    # eq 5a
   CO3    <- K1*K2 / (H^2 + K1*H + K1*K2) * DIC    # eq 5c
   NH4    <- H / (H + Kn) * NHx                    # eq 5e
@@ -172,7 +172,7 @@ solveH <- function(K1 = 1.422e-06, K2 = 1.082e-09, Kn = 5.381e-10,
 }
 ```
 
-It is always good to test the functions
+It is always good to test the functions.
 
 ```{r}
 (pH  <- -log10(solveH(DIC = 2e-3, NHx = 1e-5, ALK = 2.14e-3)))
@@ -183,10 +183,10 @@ The model function that implements the model based on the local equilibrium assu
 
 ```{r}
 OMMpHmodel <- function(t, state, parms) {
-  with (as.list(c(state,parms)), {
+  with (as.list(c(state, parms)), {
 
     # OMM rate
-    RC <- rC*OM
+    RC   <- rC*OM
     
     # mass balance equations
     dOM  <- -RC
@@ -216,11 +216,11 @@ Now we run the model for 10 days, using the initial conditions given in the task
 ```{r, fig.height=8, fig.width=10}
 require(deSolve)
 
-parms <- c(rC = 0.1,          # [1/day]
-           NC = 16/106,       # molN/molC
-           K1 = 1.422e-06, # mol/L
-           K2 = 1.082e-09, # mol/L
-           Kn = 5.381e-10) # mol/L
+pars <- c(rC = 0.1,          # [1/day]
+          NC = 16/106,       # molN/molC
+          K1 = 1.422e-06, # mol/L
+          K2 = 1.082e-09, # mol/L
+          Kn = 5.381e-10) # mol/L
 
 pH.ini  <- 7.9                   # Hini based on pH
 DIC.ini <- 2000*1e-6             # mol/L
@@ -228,10 +228,10 @@ NHx.ini <- 10*1e-6               # mol/L
 ALK.ini <- solveALK(DIC = DIC.ini, NHx = NHx.ini, pH = pH.ini)
 OM.ini  <- 100*1e-6              # mol/L
 
-yini  <- c(OM=OM.ini, DIC=DIC.ini, NHx=NHx.ini, ALK=ALK.ini)
-times <- seq(from=0, to=10, length.out=100)
+state.ini <- c(OM=OM.ini, DIC=DIC.ini, NHx=NHx.ini, ALK=ALK.ini)
+times     <- seq(from=0, to=10, length.out=100)
 
-out   <- ode(y=yini, times=times, func=OMMpHmodel, parms=parms)
+out   <- ode(y=state.ini, times=times, func=OMMpHmodel, parms=pars)
 
 plot(out, mfrow = c(3,4), las = 1)
 ```
@@ -246,7 +246,7 @@ The model reuses many elements from the model developed in Task 5. We reuse the 
 
 ```{r}
 AmmoniaDegassing2 <- function(t, state, parms) {
-  with (as.list(c(state,parms)), {
+  with (as.list(c(state, parms)), {
 
     # for output
     H <- solveH(K1 = K1, K2 = K2, Kn = Kn, DIC = DIC, NHx = NHx, ALK = ALK)
@@ -276,10 +276,10 @@ We run the model for 20 days using the initial conditions given in the task. We 
 ```{r, fig.height=8, fig.width=10}
 require(deSolve)
 
-parms <- c(lambda = 1,        # [1/day]
-           K1 = 1.422e-06, # mol/L
-           K2 = 1.082e-09, # mol/L
-           Kn = 5.381e-10) # mol/L
+pars <- c(lambda = 1,        # [1/day]
+          K1 = 1.422e-06, # mol/L
+          K2 = 1.082e-09, # mol/L
+          Kn = 5.381e-10) # mol/L
 
 pH.ini  <- 8.0                   # Hini based on pH
 DIC.ini <- 2000*1e-6             # mol/L
@@ -288,13 +288,13 @@ ALK.ini <- solveALK(DIC = DIC.ini, NHx = NHx.ini, pH = pH.ini)
 
 times <- seq(from=0, to=20, length.out=100)
 
-yini  <- c(DIC=DIC.ini, NHx=NHx.ini, ALK = ALK.ini)
-out   <- ode(y=yini, times=times, func=AmmoniaDegassing2, parms=parms)
+state.ini <- c(DIC=DIC.ini, NHx=NHx.ini, ALK = ALK.ini)
+out       <- ode(y=state.ini, times=times, func=AmmoniaDegassing2, parms=pars)
 
 # model without DIC, should give the same result as in Part I
-ALK.ini2 <- solveALK(DIC = 0, NHx = NHx.ini, pH = pH.ini)
-yini2 <- c(DIC=0, NHx=NHx.ini, ALK = ALK.ini2)
-out2   <- ode(y=yini2, times=times, func=AmmoniaDegassing2, parms=parms)
+ALK2.ini   <- solveALK(DIC = 0, NHx = NHx.ini, pH = pH.ini)
+state2.ini <- c(DIC=0, NHx=NHx.ini, ALK = ALK2.ini)
+out2   <- ode(y=state2.ini, times=times, func=AmmoniaDegassing2, parms=pars)
 
 plot(out, out2, mfrow = c(3,4), las = 1, col=1:2, lty=1, lwd=2)
 plot.new()

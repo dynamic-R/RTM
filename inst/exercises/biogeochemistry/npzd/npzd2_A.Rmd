@@ -43,10 +43,10 @@ Note that also the formula to calculate total nitrogen in the system needs to ta
 require(deSolve)  # package with solution methods
 
 # state variables, units = molN/m3 or molN/m2 (BOT_DET)
-state  <- c(DIN = 0.010, PHYTO = 0.0005, ZOO = 0.0003, DET = 0.005, BOT_DET = 0.005) 
+state.ini  <- c(DIN = 0.010, PHYTO = 0.0005, ZOO = 0.0003, DET = 0.005, BOT_DET = 0.005) 
 
 # parameters
-parms <- c(
+pars <- c(
   depth           = 10,        # [m] depth of the bay
   rUptake         = 1.0,       # [/day]
   ksPAR           = 140,       # [uEinst/m2/s]
@@ -65,9 +65,9 @@ parms <- c(
 # Model formulation
 #=============================================================================
 
-NPZD2 <- function(t, state, parameters)
+NPZD2 <- function(t, state, parms)
  {
- with(as.list(c(state, parameters)),{
+ with(as.list(c(state, parms)),{
 
     # Forcing function = Light a sine function
     # light = (540+440*sin(2*pi*t/365-1.4)), 50% of light is PAR 
@@ -112,7 +112,7 @@ We run the model for 2 years.
 outtimes <- seq(from = 0, to = 2*365, length.out = 1000)  
 
 # solve this model, using the ode function from deSolve
-out <- ode(y = state, parms = parms, func = NPZD2, times = outtimes)  # solution
+out <- ode(y = state.ini, parms = pars, func = NPZD2, times = outtimes)  # solution
 
 # visualise output
 plot(out, mfrow=c(2,4))
@@ -121,14 +121,14 @@ plot(out, mfrow=c(2,4))
 Now we compare the amounts of organic matter in the pelagic vs. benthic compartment at the end of the simulation. Note that we multiply the pelagic state variables by *depth* so that the amounts are comparable (all are expressed in $mol~N~m^{-2}$).
 ```{r}
 last <- out[nrow(out),]
-c(pelagic = sum(last[3:5]*parms["depth"]), benthic = last["BOT_DET"])
+c(pelagic = sum(last[3:5]*pars["depth"]), benthic = last["BOT_DET"])
 ```
 
 Now, we visualize the areal concentrations of N ($mol~N~m^{-2}$) for all state variables, to illustrate how N is distributed among the different compartments throughout the year. Additionally, we plot the PHYTOplankton biomass against the ZOOplankton biomass (only for the second year) to show that although they appear to follow each other *closely* when plotted against time, they are *not* linearly proportional to each other. Instead, there is a time delay in the response of the ZOOplankton to the change in the PHYTOplankton, which results in hysteresis-like loops.
 
 ```{r, fig.height=6, fig.width=10}
 out.areal <- out
-out.areal[,2:5] <- out.areal[,2:5] * parms[["depth"]]
+out.areal[,2:5] <- out.areal[,2:5] * pars[["depth"]]
 plot(out.areal, mfrow=c(2,3), which=1:5)
 N <- length(outtimes)
 plot(out.areal[round(N/2):N,"PHYTO"], out.areal[round(N/2):N,"ZOO"], 
