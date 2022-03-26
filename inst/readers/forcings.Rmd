@@ -6,10 +6,6 @@ date: "April 2021"
 output:
   pdf_document: default
   html_document: default
-vignette: >
-  %\VignetteIndexEntry{Forcing functions based on Data in R: accessory material}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{utf8}
 abstract: \noindent Forcing functions play an important role in dynamic models. Here we show how to implement in R a forcing function that is based on a time-series data set rather than an explicit function of time. We illustrate this using the NPZD model, where we impose interpolated time-series measurements of light intensity as the forcing function modulating photosynthetic nitrogen uptake by phytoplankton.
 ---
 
@@ -31,10 +27,10 @@ We start by reproducing the NPZD2 model developed in class. However, instead of 
 require(deSolve)  # package with solution methods
 
 # state variables, units = molN/m3 or molN/m2 (BOT_DET)
-state  <- c(DIN=0.010, PHYTO=0.0005, ZOO=0.0003, DET=0.005, BOT_DET=0.005) 
+state.ini <- c(DIN=0.010, PHYTO=0.0005, ZOO=0.0003, DET=0.005, BOT_DET=0.005) 
 
 # parameters
-parms <- c(
+pars <- c(
   depth              = 10,        # [m] water depth
   rUptake            = 1.0,       # [/day]
   ksPAR              = 140,       # [uEinst/m2/s]
@@ -49,9 +45,9 @@ parms <- c(
 )
 
 # Model formulation; Note the new input argument: function fPAR
-NPZD2 <- function(t, state, parameters, fPAR){
+NPZD2 <- function(t, state, parms, fPAR){
   
-  with(as.list(c(state, parameters)),{
+  with(as.list(c(state, parms)),{
 
   # PAR in the middle of the water depth; extinction coefficient 0.05/m
   # The forcing function is specified by the function fPAR passed as input!
@@ -94,8 +90,8 @@ To solve the model using the \texttt{ode} solver, all we need to do now is to pa
 
 ```{r, fig.align="center", fig.height=5.5, fig.width=8}
 outtimes <- seq(from=0, to=2*365, length.out=1000)  
-out <- ode(y=state, parms=parms, func=NPZD2, times=outtimes, 
-           fPAR=fPARsine)  # we need to pass the light function
+out <- ode(y=state.ini, parms=pars, func=NPZD2, times=outtimes, 
+           fPAR=fPARsine)  # we need to pass the light function as input!
 plot(out, mfrow=c(2,3), lty=1, lwd=1, las=1, col=2,
      which=c("DIN", "PHYTO", "ZOO", "DET", "BOT_DET", "PAR"), 
      ylab=c(rep("molN/m3",times=4), "molN/m2", "W/m2"))
@@ -133,8 +129,8 @@ points(PARdata, col=1, pch=5)
 We can now solve the NPZD2 model again, but now passing the forcing function based on the data (\texttt{fPARdata}) rather than using the sine wave. The results below show that in addition to the rapid fluctuations induced be feedback loops due to interactions among state variables, there are also fluctuations imposed by the rapidly fluctuating light intensities.
 
 ```{r, fig.width=8, fig.height=6}
-outDat <- ode(y=state, parms=parms, func=NPZD2, times=outtimes,
-              fPAR=fPARdata) # now we pass the data-based function
+outDat <- ode(y=state.ini, parms=pars, func=NPZD2, times=outtimes,
+              fPAR=fPARdata) # now we pass the data-based function!
 plot(outDat, out, mfrow=c(2,3), lty=1, lwd=1, las=1,
      which=c("DIN", "PHYTO", "ZOO", "DET", "BOT_DET", "PAR"), 
      ylab=c(rep("molN/m3",times=4), "molN/m2", "W/m2"))

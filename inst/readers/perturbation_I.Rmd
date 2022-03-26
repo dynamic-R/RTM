@@ -6,10 +6,6 @@ date: "April 2021"
 output:
   pdf_document: default
   html_document: default
-vignette: >
-  %\VignetteIndexEntry{Response of Systems to a Perturbation from Equilibrium --- Part I: accessory material}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{utf8}
 abstract: \noindent In many models developed in this course, we have seen that, at some point, the modelled system reached an equilibrium. Here we explain a mathematical approach that allows the analysis of the system's behaviour when it is *perturbed* out of this equilibrium. The approach --- called the perturbation theory --- combines calculus with algebra, and eventually leads to the calculation of the Jacobian matrix and its eigen values and eigen vectors. Here we show how these values can be used to estimate the *characteristic time scales* at which the system responds to the perturbation, and the corresponding *amplitudes* of the response for each state variable. In Part I we develop the theoretical background and derive the most important formulas. In Part II we illustrate the results with hands-on examples.
 ---
 

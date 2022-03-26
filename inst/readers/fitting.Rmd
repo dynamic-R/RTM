@@ -6,10 +6,6 @@ date: "April 2021"
 output:
   pdf_document: default
   html_document: default
-vignette: >
-  %\VignetteIndexEntry{Fitting a 1D Reaction Transport Model to Data in R: accessory material}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{utf8}
 abstract: \noindent Here we show how to fit observed data with a 1D reaction-transport model. We use the phosphorus diagenesis model described in another reader as an example. The fitting methods are quite advanced, and include the use of a Markov Chain Monte Carlo (MCMC) method to estimate the probability distribution of the model parameters, and a sensitivity analysis to quantify the uncertainty surrounding the modelled variables. This reader only describes how these methods are \emph{applied}. The mathematical and numerical details are described in Soetaert and Petzoldt (2010).
 ---
 
@@ -56,9 +52,9 @@ diffPO4   <- diffH2PO4 / (1-log(porInt^2))
 
 ```{r}
 # model function
-PDiamodel <- function (t, state, pars)   
+PDiamodel <- function (t, state, parms)   
 {
-  with (as.list(pars),{
+  with (as.list(parms),{
 
     POC  <- state[     1 :   N ]   
     DIC  <- state[(  N+1):(2*N)]   
@@ -131,11 +127,11 @@ PDiamodel <- function (t, state, pars)
 ```
 
 ```{r, echo = TRUE}
-names <- c("POC", "DIC", "PO4", "Pads")
-nspec <- length(names)
-ini   <- runif(nspec*N)  
+names     <- c("POC", "DIC", "PO4", "Pads")
+nspec     <- length(names)
+state.ini <- runif(nspec*N)  
 
-default.parms <- c(
+default.pars <- c(
  biot     = 5e-4/365,      # [m2/d]      bioturbation mixing coefficient
  v        = 0.1e-2/365,    # [m/d]       sediment advection velocity 
  rMin     = 0.01,          # [/d]        POC mineralisation rate constant
@@ -154,12 +150,12 @@ default.parms <- c(
 # --------------------------------------------------------------------------
 # run the model with different parameters to generate "observations"
 # --------------------------------------------------------------------------
-pD <- default.parms
+pD            <- default.pars
 pD["depoPOC"] <- pD["depoPOC"]*1.2
 pD["biot"]    <- pD["biot"] / 5
 pD["rPdes"]   <- pD["rPdes"] / 5
 
-std <- steady.1D (y=ini, func=PDiamodel, parms=pD, 
+std <- steady.1D (y=state.ini, func=PDiamodel, parms=pD, 
                   nspec=nspec, dimens=N, names=names,
                   positive=TRUE)     
 slice <- c(1, 2, 4, 6, 8, 10, 15, 20)/100   # m where there are "data"
@@ -170,7 +166,7 @@ obs   <- data.frame(DIC=DIC,PO4=PO4)*(1+
 DATA  <- data.frame(x = slice, obs)
 ```
 
-Suppose that we have the following experimental data for the concentrations of DIC and PO4 (mol/m3) at several depths (m) of the sediment:
+Suppose that we have the following experimental data for the concentrations of $DIC$ and $PO_4$ (mol/m3) at several depths (m) of the sediment:
 
 ```{r}
 knitr::kable(DATA, digits = c(4,4,5))
@@ -190,7 +186,7 @@ In the first step, it is handy to create a function that runs the model for a gi
 
 ```{r}
 std.fun <- function(pars){
-  std <- steady.1D (y=ini, func=PDiamodel, parms=pars, nspec=nspec, dimens=N, 
+  std <- steady.1D (y=state.ini, func=PDiamodel, parms=pars, nspec=nspec, dimens=N, 
                     names=names, positive=TRUE)    
   return(data.frame(x = Grid$x.mid, std$y))
 }
@@ -202,11 +198,13 @@ Typically, not all model parameters are tuned to fit the model.\footnote{The FME
 
 ```{r}
 modCost.fun <- function(fitpar, OBS){
-  p                <- default.parms
+  p                <- default.pars
   p[names(fitpar)] <- fitpar
 
   return(modCost(model = std.fun(p), 
-                 obs = OBS, x = "x", weight = "mean"))
+                 obs = OBS, 
+                 weight = "mean", # be careful with this parameter!
+                 x = "x"))
 }
 ```
 
@@ -214,7 +212,7 @@ The function *modCost.fun* returns a list with a lot of output that defines the 
 
 ```{r, message=FALSE, warning=FALSE}
 require(FME)
-mC <- modCost.fun(fitpar=default.parms, OBS=DATA)
+mC <- modCost.fun(fitpar=default.pars, OBS=DATA)
 mC$model   # SSR
 ```
 
@@ -242,13 +240,13 @@ On the one hand, the results show the best estimates of the (fitted) model param
 In the last step of this simple fitting approach, we run the model with the original (\texttt{default.parms}) and best-fit (\texttt{PFit\$par}) parameters and compare the results with the experimental data.
 
 ```{r, fig.height=4, fig.width=8, fig.align="center"}
-p <- default.parms
+p <- default.pars
 p[names(PFit$par)] <- PFit$par
 
-Original <- steady.1D(y=ini, func=PDiamodel, parms=default.parms, 
+Original <- steady.1D(y=state.ini, func=PDiamodel, parms=default.pars, 
                    nspec=nspec, dimens=N, names=names,
                    positive=TRUE) 
-BestFit  <- steady.1D(y=ini, func=PDiamodel, parms=p, 
+BestFit  <- steady.1D(y=state.ini, func=PDiamodel, parms=p, 
                    nspec=nspec, dimens=N, names=names,
                    positive=TRUE) 
 plot(BestFit, Original, xyswap=TRUE, grid=Grid$x.mid, ylim=c(0.25,0),
@@ -270,8 +268,8 @@ Now we use a Bayesian technique, the Markov Chain Monte Carlo (MCMC), to derive 
 Among other things, the MCMC makes use of the cost function (*modCost.fun*) and the best parameter estimates (\texttt{PFit\$par}) from above. Here, we let the *modMCMC* function run 10000 iterations.
 
 ```{r, eval=FALSE}
-Covar   <- SFit$cov.scaled * 2.4^2/3
-s2prior <- SFit$modVariance
+Covar   <- SFit$cov.scaled * 2.4^2/length(PFit$par)
+s2prior <- SFit$modVariance # check ?MCMC for other options
 N.iter  <- 10000
 
 MCMC <- modMCMC(f=modCost.fun, p=PFit$par, lower=pMin, upper=pMax,
@@ -308,7 +306,7 @@ We see that the values of \texttt{depoPOC} and \texttt{biot} are constrained wit
 To illustrate the implications of the conclusion reached above, we perform a sensitivity analysis using the funcion *sensRange*. This function calculates the effect of the parameter uncertainty on the model output. First, we use 100 values of model parameters randomly selected from the distributions determined by the *modMCMC* function and calculate the range of model variables predicted by the model.
 
 ```{r}
-sR <- sensRange(parms=default.parms, parInput=MCMC$par, f=std.fun, 
+sR <- sensRange(parms=default.pars, parInput=MCMC$par, f=std.fun, 
                 num=100)
 ```
 
@@ -330,11 +328,11 @@ One possible aim of gathering data is to constrain parameters of a model and the
 # --------------------------------------------------------------------------
 # Another run to create new (better) "observations"
 # --------------------------------------------------------------------------
-pD2 <- default.parms
+pD2            <- default.pars
 pD2["biot"]    <- pD2["biot"]  / 5 # only 2 parameters are changed
 pD2["rPdes"]   <- pD2["rPdes"] / 5 # (and later fitted)
 
-std2 <- steady.1D(y=ini, func=PDiamodel, parms=pD2, 
+std2 <- steady.1D(y=state.ini, func=PDiamodel, parms=pD2, 
                   nspec=nspec, dimens=N, names=names,
                   pos=TRUE)     
 # Assume that data are available at more depths and additionally include Pads
@@ -373,8 +371,8 @@ PFit2 <- modFit(f = modCost.fun, OBS=DATA2, p=pIni2, lower=pMin2, upper=pMax2)
 Here we skip the steps showing the results of this initial fitting step, and continue directly with the MCMC fitting following the same steps as described above. Note that now we use the output variable \texttt{PFit2} and the data in the variable \texttt{DATA2}.
 
 ```{r, eval=FALSE}
-SFit <- summary(PFit2)
-Covar <- SFit$cov.scaled * 2.4^2/3
+SFit  <- summary(PFit2)
+Covar <- SFit$cov.scaled * 2.4^2/length(PFit2$par)
 s2prior <- SFit$modVariance
 MCMC2 <- modMCMC(f=modCost.fun, p=PFit2$par, lower=pMin2, upper=pMax2,
                 OBS=DATA2, var0=s2prior, jump=Covar, wvar0=1, updatecov=100, 
@@ -412,7 +410,7 @@ In the last step, we calculate model predictions based on the (uncertain) model 
 To predict depth profiles, we run the function *sensRange* with the input argument \texttt{f} set to the function *std.fun*, which was defined above. 
 
 ```{r}
-sR2 <- sensRange(parms=default.parms, parInput = MCMC2$par, f = std.fun, 
+sR2 <- sensRange(parms=default.pars, parInput = MCMC2$par, f = std.fun, 
                 num = 100)
 ```
 
@@ -430,7 +428,7 @@ To predict phosphorus fluxes at the model boundaries, we must first define a new
 
 ```{r}
 std.fun2 <- function(pars){
-  std <- steady.1D (y=ini, func=PDiamodel, parms=pars, nspec=nspec, 
+  std <- steady.1D (y=state.ini, func=PDiamodel, parms=pars, nspec=nspec, 
                     dimens=N, names=names, positive=TRUE) 
   toselect <- c("PO4.SWI.Flux",  "PO4.Deep.Flux", 
                 "Pads.SWI.Flux", "Pads.Deep.Flux",
@@ -442,9 +440,9 @@ std.fun2 <- function(pars){
 We compare the predicted P budgets using the fitted model parameters obtained from the old (\texttt{MCMC\$par}) and new data (\texttt{MCMC2\$par}). Note that because the *std.fun2* function does not output the (independent) mapping variable (e.g., the sediment depth, *x*), we need to set \texttt{map=NULL} when calling the *sensRange* function (see \texttt{?sensRange} for more explanation).
 
 ```{r}
-sR.old <- sensRange(parms=default.parms, parInput=MCMC$par,  f=std.fun2, 
+sR.old <- sensRange(parms=default.pars, parInput=MCMC$par,  f=std.fun2, 
                     num=100, map=NULL)
-sR.new <- sensRange(parms=default.parms, parInput=MCMC2$par, f=std.fun2, 
+sR.new <- sensRange(parms=default.pars, parInput=MCMC2$par, f=std.fun2, 
                     num=100, map=NULL)
 ```
 

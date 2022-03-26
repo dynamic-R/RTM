@@ -20,9 +20,9 @@ knitr::opts_chunk$set(echo = TRUE)
 A detailed description of the ozone model is provided in the *ozone* exercise (enter ``RTMexercise("ozone")`` in the R-console to see the exercise). Here we only reproduce the R-code.
 
 ```{r, message = FALSE}
-state <- c(O = 0, NO = 1.3e8, NO2 = 5e11, O3 = 8e11)  # initial conditions
+state.ini <- c(O = 0, NO = 1.3e8, NO2 = 5e11, O3 = 8e11)  # initial conditions
 
-default.parms <- list(
+default.pars <- list(
   k3     = 1e-11,     # [/(mol/d)] 
   k2     = 1e10,      # [/d]
   k1a    = 1e-30,     # [/d] note: k1 = k1a + k1b*radiation
@@ -31,8 +31,8 @@ default.parms <- list(
   maxrad = 1200       # [microEinst/m2/s] maximal radiation
 )
 
-Ozone <- function(t, state, params) {
-  with (as.list(c(state, params)), {
+Ozone <- function(t, state, parms) {
+  with (as.list(c(state, parms)), {
 
   radiation <- max(0, sin(t*2*pi))*maxrad    # radiation at time t (if time in days)
 
@@ -54,13 +54,14 @@ Ozone <- function(t, state, params) {
 }
 ```
 
-For the web interface, we will create sliders so that we can change the values of the model parameters and see the effect on the model result. It is most instructive if we compare these altered model runs with the default model run. We therefore run the model first with the default parameters:
+For the web interface, we will create sliders so that we can change the values of the model parameters and see the effect on the model result. It is most instructive if we compare these altered model runs with the output of the default model run. We therefore run the model first with the default parameters:
 
 ```{r, message=FALSE}
 require(deSolve)
 
-outtimes <- seq(from = 0, to = 5, length.out = 300)  # run for 5 days
-Default  <- ode(y=state, parms=default.parms, func=Ozone, times=outtimes, method="vode")
+outtimes    <- seq(from = 0, to = 5, length.out = 300)  # run for 5 days
+Default.out <- ode(y=state.ini, parms=default.pars, func=Ozone, 
+                   times=outtimes, method="vode")
 ```
 
 ## The webpage part
@@ -89,19 +90,19 @@ UI.O3 <- shinyUI(pageWithSidebar(      # Define UI (user interface)
   sidebarPanel(
    sliderInput(inputId="k3", 
                label = "log(k3): rate constant of reaction 3 (NO+O3 -> NO2 + O2)",
-               min = -13, max = -9, step = 0.1, value = log10(default.parms$k3)),
+               min = -13, max = -9, step = 0.1, value = log10(default.pars$k3)),
    sliderInput(inputId="k2", 
                label = "log(k2): rate constant of reaction 2 (O+O2 -> O3)",
-               min = 8, max = 12, step = 0.1, value = log10(default.parms$k2)),
+               min = 8, max = 12, step = 0.1, value = log10(default.pars$k2)),
    sliderInput(inputId="k1b", 
                label = "k1b: light-dependency of reaction 1 (NO2 -> NO + O)",
-               min = 0, max = 5, step = 0.01, value = default.parms$k1b),
+               min = 0, max = 5, step = 0.01, value = default.pars$k1b),
    sliderInput(inputId="sigma", 
                label = "log(signa): NO emission rate", 
-               min = 0, max = 12, step = 0.1, value = log10(default.parms$sigma)),
+               min = 0, max = 12, step = 0.1, value = log10(default.pars$sigma)),
    sliderInput(inputId="maxrad", 
                label = "maximal radiation",
-               min = 0, max = 5000, value = default.parms$maxrad),
+               min = 0, max = 5000, value = default.pars$maxrad),
    
    actionButton (inputId="resetButton",
                  label="Reset Parameters"),
@@ -131,22 +132,22 @@ Server.O3 <- shinyServer(function(input, output, session) {
   # the 'reset' button
   # -------------------
   observeEvent(input$resetButton, {
-    updateNumericInput(session, "k3",     value = log10(default.parms$k3))
-    updateNumericInput(session, "k2",     value = log10(default.parms$k2))
-    updateNumericInput(session, "k1b",    value =       default.parms$k1b)
-    updateNumericInput(session, "sigma",  value = log10(default.parms$sigma))
-    updateNumericInput(session, "maxrad", value =       default.parms$maxrad)
+    updateNumericInput(session, "k3",     value = log10(default.pars$k3))
+    updateNumericInput(session, "k2",     value = log10(default.pars$k2))
+    updateNumericInput(session, "k1b",    value =       default.pars$k1b)
+    updateNumericInput(session, "sigma",  value = log10(default.pars$sigma))
+    updateNumericInput(session, "maxrad", value =       default.pars$maxrad)
   })
 
  # Get the model parameters, as defined in the UI 
-  getparms <- reactive( {
-    parms        <- default.parms 
-    parms$k3     <- 10^input$k3
-    parms$k2     <- 10^input$k2   
-    parms$k1b    <- input$k1b     
-    parms$sigma  <- 10^input$sigma  
-    parms$maxrad <- input$maxrad
-    parms
+  getpars <- reactive( {
+    pars        <- default.pars 
+    pars$k3     <- 10^input$k3
+    pars$k2     <- 10^input$k2   
+    pars$k1b    <- input$k1b     
+    pars$sigma  <- 10^input$sigma  
+    pars$maxrad <- input$maxrad
+    pars
   })
 
   # -------------------
@@ -155,11 +156,11 @@ Server.O3 <- shinyServer(function(input, output, session) {
 
   output$PlotOzone <- renderPlot({     # will be visible in the main panel
 
-   parms <- getparms() # Model parameters, as defined in the UI
-   out   <- ode(y=state, parms=parms, func=Ozone, times=outtimes, method="vode")
+   pars <- getpars() # Model parameters, as defined in the UI
+   out  <- ode(y=state.ini, parms=pars, func=Ozone, times=outtimes, method="vode")
 
    if (input$defaultRun) {  # the check box is true
-      plot (out, Default, lwd = 2, las = 1, lty = 1,
+      plot (out, Default.out, lwd = 2, las = 1, lty = 1,
             cex.main = 1.5, cex.axis = 1.25, cex.lab = 1.25)
       plot.new()
       legend("topleft", legend = c("current", "default"), 
@@ -174,8 +175,7 @@ Server.O3 <- shinyServer(function(input, output, session) {
 
 ## Run the web application
 
-To run this app, first run the entire R-code above (e.g., in R-studio, choose Run $\rightarrow$ Run All) and then 
-write the following in the R-console (see screenshot in Figure 1):
+To run this app, first run the entire R-code above (e.g., in R-studio, choose Run $\rightarrow$ Run All) and then write the following in the R-console (see screenshot in Figure 1):
 
 ```{}
 shinyApp(ui = UI.O3, server = Server.O3)
@@ -192,6 +192,7 @@ shinyApp(ui = UI.O3, server = Server.O3)  # to run the shiny app
 You can leave the application by pressing ESC within the console.
 
 ![Screenshot of the ozone model run as a *shiny* application.](OzoneShiny.png){width=14cm}
+
 # References
 
 Winston Chang, Joe Cheng, JJ Allaire, Yihui Xie and Jonathan McPherson (2020). shiny: Web

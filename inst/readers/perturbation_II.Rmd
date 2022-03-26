@@ -6,10 +6,6 @@ date: "April 2021"
 output:
   pdf_document: default
   html_document: default
-vignette: >
-  %\VignetteIndexEntry{Response of Systems to a Perturbation from Equilibrium --- Part II: accessory material}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{utf8}
 abstract: \noindent Here we illustrate how the theoretical analysis explained in Part I helps us gain more insights into the response of the global C cycle to a perturbation. First, we rewrite the differential equations describing the C cycle model using a vector-matrix formalism. Then, we calculate the Jacobian matrix and its eigen-values and eigen-vectors. From these, we then estimate the characteristic *response times* of the system to a perturbation, and the corresponding amounts of C that are *exchanged* within the system on these characteristic time scales. Because the global C cycle model is linear in the state variables, the results of the approach presented here are valid for any magnitude of the perturbation. For non-linear models, the approach can be applied as well, but the results will only be valid for small perturbations around an equilibrium state.
 ---
 
@@ -61,7 +57,7 @@ state.eq <- c(                   # equilibrium carbon contents, [Pg C]
 )
 
 # Model parameters:
-parms <- with (as.list(state.eq), c(
+pars <- with (as.list(state.eq), c(
 
   # rate constants, yr-1 (first-order kinetics for all fluxes)
   r1.2 = 70.2 /M1.ATMOSPH,  # atm     -> surfoc   (Uptake+weathering)
@@ -82,9 +78,9 @@ parms <- with (as.list(state.eq), c(
 )
 
 # Model function:
-Cmodel  <- function(t, C, p) {
+Cmodel  <- function(t, state, parms) {
 
-  with(as.list (c(C, p)),{    # all fluxes in [PgC/yr]
+  with(as.list (c(state, parms)),{    # all fluxes in [PgC/yr]
    F1.2 <- r1.2*M1.ATMOSPH    # atm     -> surfoc   
    F1.6 <- r1.6*M1.ATMOSPH    # atm     -> landbio
    F2.1 <- r2.1*M2.SURFOCE    # surfoc  -> atm
@@ -156,7 +152,7 @@ The structure of the Jacobian matrix gives us an impression about the *interacti
 Based on this result, we can now implement the Jacobian matrix in R. Note that we use the vector of model parameters \texttt{parms} when filling the elements of the matrix.
 
 ```{r}
-J <- with (as.list(parms), 
+J <- with (as.list(pars), 
   matrix(nrow = 7, ncol = 7, byrow = TRUE, data = c(
    -r1.2-r1.6, r2.1,           0,         0,         0,    r6.1,      0,
     r1.2,     -r2.1-r2.3-r2.4, r3.2,      r4.2,      0,    r6.2,      r7.2,
@@ -219,9 +215,9 @@ delta.ini <- matrix(c(100, 0, 0, 0, 0, -100, 0), ncol=1)  # column vector
 gamma.ini <- solve(V) %*% delta.ini          # matrix-vector multiplication
 
 # display delta.ini, t.resp and gamma.ini together
-knitr::kable(data.frame(delta.ini = delta.ini,
-                        responseTime    = round(t.resp,2),
-                        exchangedC = round(gamma.ini,2)))
+knitr::kable(data.frame(delta.ini    = delta.ini,
+                        responseTime = round(t.resp,2),
+                        exchangedC   = round(gamma.ini,2)))
 ```
 
 
@@ -255,9 +251,9 @@ Now, we display the entire matrix \texttt{a} to reveal the complete picture abou
 
 \scriptsize 
 ```{r}
-tab <- data.frame(t.resp, gamma.ini, t(a)) # include transpose of "a"
-names(tab) <- c("timescale","Cexchange", names.short)
-tab        <- rbind(tab, c(NA, NA, rowSums(a)))
+tab           <- data.frame(t.resp, gamma.ini, t(a)) # include transpose of "a"
+names(tab)    <- c("timescale","Cexchange", names.short)
+tab           <- rbind(tab, c(NA, NA, rowSums(a)))
 rownames(tab) <- c(paste("t", 1:7, sep=""),"total")
 
 knitr::kable(round(tab,2))
@@ -347,8 +343,8 @@ Finally, we use both model implementations to show that they indeed produce simi
 ```{r, message = FALSE, fig.width=8, fig.height=4.2}
 # Numerical solution, determined by deSolve:
 require(deSolve)
-state <- state.eq + as.vector(delta.ini) # make delta.ini a row vector
-out   <- ode(y=state, times=tseq, func=Cmodel, parms=parms)
+state.ini <- state.eq + as.vector(delta.ini) # make delta.ini a row vector
+out       <- ode(y=state.ini, times=tseq, func=Cmodel, parms=pars)
 
 # Analytical solution, based on the Jacobian matrix analysis:
 # Add total perturbation to the equilibrium state to calculate 

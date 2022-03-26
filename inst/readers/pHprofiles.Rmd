@@ -6,10 +6,6 @@ date: "April 2021"
 output:
   pdf_document: default
   html_document: default
-vignette: >
-  %\VignetteIndexEntry{Estimating pH in a 1D Reaction Transport Model in R: accessory material}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{utf8}
 abstract: \noindent In two other readers, we have shown how to implement in R (i) a model that can predict the variation of pH in time due to reactions that add/remove chemical species capable of accepting/donating protons, and (ii) a reaction-transport model that can predict the variation of ammonia, nitrate and oxygen along an estuary. Here we combine and expand the two models to illustrate how to implement in R a reaction-transport model that can predict the spatial variation of pH. The overall approach involves two steps. First, the \texttt{ReacTran} package is used to calculate the steady-state distribution of the lump-sum species that include total ammonia ($\Sigma NH_4$), total nitrate ($\Sigma HNO_3$), total dissolved inorganic carbon ($\Sigma CO_2$), and (titration) proton alkalinity ($TA$). Then, based on these profiles, the \texttt{AquaEnv} package is used to calculate the steady-state distribution of pH.
 ---
 
@@ -153,14 +149,13 @@ require(ReacTran)  # package with solution methods
 # model grid
 Length  <- 100000                             # m
 N       <- 100                                # - number of boxes
-dx      <- Length/N                           # m grid size
-x       <- seq(dx/2, by = dx, length.out = N) # m position of cells
+Grid    <- setup.grid.1D(L = Length, N = N)
 Area    <- 20000                              # m2, cross-sectional area 
 day2sec <- 24*3600                            # number of seconds in a day
 
 # state variables; note two new ones!
-SVnames <- c("Oxygen", "Nitrate", "Ammonia", "TA", "DIC")
-state <- rep(0, times = length(SVnames)*N)
+SVnames   <- c("Oxygen", "Nitrate", "Ammonia", "TA", "DIC")
+state.ini <- rep(0, times = length(SVnames)*N)
 
 # model parameters
 Sali <- 35
@@ -193,27 +188,27 @@ Now, we define the model function, which implements the mass-balance equations 1
 
 ```{r}
 # Model function
-Scheldt1D <- function(t, C, pars, 
+Scheldt1D <- function(t, state, parms, 
                 pHCalc = FALSE) { # set to TRUE if pH needs to be estimated
-  with (as.list(pars),{
+  with (as.list(parms),{
 
-    Oxygen  <- C[     1  :    N]
-    Nitrate <- C[  (N+1) : (2*N)] 
-    Ammonia <- C[(2*N+1) : (3*N)]
-    TA      <- C[(3*N+1) : (4*N)]   # Note: extra state variables
-    DIC     <- C[(4*N+1) : (5*N)]   # 
+    Oxygen  <- state[     1  :    N]
+    Nitrate <- state[  (N+1) : (2*N)] 
+    Ammonia <- state[(2*N+1) : (3*N)]
+    TA      <- state[(3*N+1) : (4*N)]   # Note: extra state variables
+    DIC     <- state[(4*N+1) : (5*N)]   # 
     
     # transport terms
     TranOxygen  <- tran.1D(C=Oxygen, C.up=riverO2, C.down=seaO2, 
-                           D=Ddisp, v=v, dx=dx)
+                           D=Ddisp, v=v, dx=Grid)
     TranNitrate <- tran.1D(C=Nitrate, C.up=riverNit, C.down=seaNit,
-                           D=Ddisp, v=v, dx=dx)
+                           D=Ddisp, v=v, dx=Grid)
     TranAmmonia <- tran.1D(C=Ammonia, C.up=riverAmm, C.down=seaAmm,
-                           D=Ddisp, v=v, dx=dx)
+                           D=Ddisp, v=v, dx=Grid)
     TranTA      <- tran.1D(C=TA, C.up=riverTA, C.down=seaTA,
-                           D=Ddisp, v=v, dx=dx)
+                           D=Ddisp, v=v, dx=Grid)
     TranDIC     <- tran.1D(C=DIC, C.up=riverDIC, C.down=seaDIC,
-                           D=Ddisp, v=v, dx=dx)
+                           D=Ddisp, v=v, dx=Grid)
 
     # reactions
     Nitrification <-  rNitri * Ammonia * Oxygen/(Oxygen+ksO2)
@@ -246,10 +241,10 @@ Solving the model for the situation in the 1970s and 2000s is now done in two st
 
 ```{r}
 # model parameters for the 2000s (default)
-Scheldt00 <- steady.1D(y=state, parms=pars, func=Scheldt1D, positive=TRUE,
+Scheldt00 <- steady.1D(y=state.ini, parms=pars, func=Scheldt1D, positive=TRUE,
                 nspec=length(SVnames), dimens=N, names=SVnames, 
                 pHCalc=FALSE)
-Scheldt00$pH <- Scheldt1D(t=0, C=Scheldt00$y, pars, pHCalc=TRUE)$pH
+Scheldt00$pH <- Scheldt1D(t=0, state=Scheldt00$y, pars, pHCalc=TRUE)$pH
 
 # model parameters for the 1970s
 par70 <- pars
@@ -258,18 +253,18 @@ par70["seaNit"]   <- 0.02    # marine nitrate conc
 par70["riverAmm"] <- 0.60    # river ammonium conc
 par70["seaAmm"]   <- 0.02    # marine ammonium conc
 
-Scheldt70 <- steady.1D(y=state, parms=par70, func=Scheldt1D, positive=TRUE,
+Scheldt70 <- steady.1D(y=state.ini, parms=par70, func=Scheldt1D, positive=TRUE,
                   nspec=length(SVnames), dimens=N, names=SVnames,
                   pHCalc=FALSE)
-Scheldt70$pH <- Scheldt1D(t=0, C=Scheldt70$y, pars, pHCalc=TRUE)$pH
+Scheldt70$pH <- Scheldt1D(t=0, state=Scheldt70$y, pars, pHCalc=TRUE)$pH
 ```
 
 Results show quite a dramatic impact of nitrification on pH:
 
 ```{r, fig.width=8, fig.height=5.5}
-plot(Scheldt00, Scheldt70, grid=x/1000, lwd=2, lty=1, 
+plot(Scheldt00, Scheldt70, grid=Grid$x.mid/1000, lwd=2, lty=1, 
      mfrow=c(2,3), ylab="mol/m3", xlab="distance (km)")
-plot(Scheldt00, Scheldt70, grid=x/1000, lwd=2, lty=1, 
+plot(Scheldt00, Scheldt70, grid=Grid$x.mid/1000, lwd=2, lty=1, 
      which="pH", mfrow=NULL, ylab="-", xlab="distance (km)")
 legend("top", legend = c("2000s", "1970s"), lty = 1, col = 1:2)
 ```

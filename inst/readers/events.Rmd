@@ -4,12 +4,8 @@ subtitle: "Reader Accompanying the Course Reaction Transport Modelling in the Hy
 author: "Karline Soetaert and Lubos Polerecky, Utrecht University"
 date: "April 2021"
 output:
-  html_document: default
   pdf_document: default
-vignette: >
-  %\VignetteEncoding{utf8}
-  %\VignetteIndexEntry{Events in Dynamic Models developed in R: accessory material}
-  %\VignetteEngine{knitr::rmarkdown}
+  html_document: default
 abstract: \noindent In dynamic models, an event corresponds to a situation when the value of a state variable is *suddenly* changed. Here we show how events are implemented in dynamic models developed in R. We illustrate this using the Crops and Weed model, where we implement soil fertilisation as discrete events occuring in weekly intervals rather than continuously.
 ---
 
@@ -29,10 +25,10 @@ First, we reproduce the Crops and Weed model implementation. The default model h
 require(deSolve)  # package with solution methods
 
 # state variables, units = molP/m2
-state <- c(WEED=0.001, CROP=0.005, P1=0.1, P2=0.1, Plost=0)
+state.ini <- c(WEED=0.001, CROP=0.005, P1=0.1, P2=0.1, Plost=0)
 
 # parameters
-parms <- c(
+pars <- c(
   Paddition    = 0.9/90,  # [molP/m2/d] Rate of P supply
   rPercolation = 0.05,    # [/d]        Rain rate dilution parameter
   ksCrop       = 2e-3,    # [molP/m2]   Monod coefficient for P uptake
@@ -47,8 +43,8 @@ parms <- c(
 )
 
 # Model function
-Crops <- function(t, state, params) {
-  with (as.list(c(state, params)), {
+Crops <- function(t, state, parms) {
+  with (as.list(c(state, parms)), {
     
     # variables needed for rate expressions
     TotBiom    <- WEED + CROP       # total plant biomass
@@ -110,15 +106,15 @@ First, we run the model with continuous fertilisation using model parameters def
 
 ```{r}
 outtimes <- seq(from=0, to=90, by=0.1)  # run for 3 months
-out <- ode(y=state, parms=parms, func=Crops, times=outtimes)
+out <- ode(y=state.ini, parms=pars, func=Crops, times=outtimes)
 ```
 
 Subsequently, we run the model with the events. First, we set the parameter describing the rate of continuous P-addition to 0. Then, we pass the event information to the ``ode`` solver as the input argument ``events``.
 
 ```{r}
-p2 <- parms
+p2 <- pars
 p2["Paddition"] <- 0
-out2 <- ode(y=state, parms=p2, func=Crops, times=outtimes, 
+out2 <- ode(y=state.ini, parms=p2, func=Crops, times=outtimes, 
             events=list(data=ferilisation.events)) # include events!
 ```
 

@@ -20,7 +20,7 @@ knitr::opts_chunk$set(echo = TRUE)
 A detailed description of the silica dissolution model is provided in the *dissolutionSi* exercise (enter ``RTMexercise("dissolutionSi")`` in the R-console to see the exercise). Here we only reproduce the R-code.
 
 ```{r}
-default.parms <- list(
+default.pars <- list(
  NV   = 8e6      , # [number/m3], density of spherical silica particles (N/V)
  kp   = 1        , # [m/yr],      precipitation rate constant (assumed)
  MW   = 60.08e-3 , # [kg/mol],    silica molar weight
@@ -59,9 +59,9 @@ For the web interface, we will create sliders, so that we can change the values 
 ```{r, message=FALSE}
 require(deSolve)
 
-state  <- InitialCondition.fun(default.parms)  # initial conditions
-times  <- seq(from=0, to=30, by=0.1)           # time in years
-Default <- ode(y=state, times=times, func=DissolveSilica, parms=default.parms)
+state.ini   <- InitialCondition.fun(default.pars)  # initial conditions
+times       <- seq(from=0, to=30, by=0.1)           # time in years
+Default.out <- ode(y=state.ini, times=times, func=DissolveSilica, parms=default.pars)
 ```
 
 ## The webpage part
@@ -90,19 +90,19 @@ UI.Si <- shinyUI(pageWithSidebar(      # Define UI (user interfae)
   sidebarPanel(
    sliderInput(inputId="NV",
                label = "particle density (particles/m3)",
-               min = 1e6, max = 1e8, step = 1e6, value = default.parms$NV),
+               min = 1e6, max = 1e8, step = 1e6, value = default.pars$NV),
    sliderInput(inputId="kp",
                label = "precipitation rate constant (m/yr)",
-               min = 0.1, max = 2, step = 0.01, value = default.parms$kp),
+               min = 0.1, max = 2, step = 0.01, value = default.pars$kp),
    sliderInput(inputId="Ceq",
                label = "dissolved Si equilibrium concentration (mol/m3)",
-               min = 0.1, max = 3, step = 0.01, value = default.parms$Ceq),
+               min = 0.1, max = 3, step = 0.01, value = default.pars$Ceq),
    sliderInput(inputId="Rini",
                label = "initial particle radius (m)",
-               min = 1e-6, max = 0.001, step = 1e-6, value = default.parms$Rini),
+               min = 1e-6, max = 0.001, step = 1e-6, value = default.pars$Rini),
    sliderInput(inputId="Cini", 
                label = "dissolved Si initial concentration (mol/m3)",
-               min = 0, max = 10, step = 0.1, value = default.parms$Cini),
+               min = 0, max = 10, step = 0.1, value = default.pars$Cini),
    
    actionButton (inputId="resetButton",
                  label="Reset Parameters"),
@@ -132,22 +132,22 @@ Server.Si <- shinyServer(function(input, output, session) {
   # the 'reset' button
   # -------------------
   observeEvent(input$resetButton, {
-    updateNumericInput(session, "NV",    value = default.parms$NV)
-    updateNumericInput(session, "kp",    value = default.parms$kp)
-    updateNumericInput(session, "Ceq",   value = default.parms$Ceq)
-    updateNumericInput(session, "Rini",  value = default.parms$Rini)
-    updateNumericInput(session, "Cini",  value = default.parms$Cini)
+    updateNumericInput(session, "NV",    value = default.pars$NV)
+    updateNumericInput(session, "kp",    value = default.pars$kp)
+    updateNumericInput(session, "Ceq",   value = default.pars$Ceq)
+    updateNumericInput(session, "Rini",  value = default.pars$Rini)
+    updateNumericInput(session, "Cini",  value = default.pars$Cini)
   })
 
  # Get the model parameters, as defined in the UI 
-  getparms <- reactive( {
-    parms        <- default.parms 
-    parms$NV     <- input$NV
-    parms$kp     <- input$kp   
-    parms$Ceq    <- input$Ceq     
-    parms$Cini   <- input$Cini  
-    parms$Rini   <- input$Rini  
-    parms
+  getpars <- reactive( {
+    pars        <- default.pars 
+    pars$NV     <- input$NV
+    pars$kp     <- input$kp   
+    pars$Ceq    <- input$Ceq     
+    pars$Cini   <- input$Cini  
+    pars$Rini   <- input$Rini  
+    pars
   })
 
   # -------------------
@@ -156,12 +156,12 @@ Server.Si <- shinyServer(function(input, output, session) {
 
   output$PlotSi <- renderPlot({     # will be visible in the main panel
 
-   parms <- getparms()                    
-   state <- InitialCondition.fun(parms)
-   out   <- ode(y=state, parms=parms, func=DissolveSilica, times=times)
+   pars      <- getpars()
+   state.ini <- InitialCondition.fun(pars)
+   out   <- ode(y=state.ini, parms=pars, func=DissolveSilica, times=times)
 
    if (input$defaultRun) {  # the check box is true
-      plot (out, Default, xlab="time (yr)", 
+      plot (out, Default.out, xlab="time (yr)", 
             main=c("dissolved Si (molSi/m3)", "solid Si (molSi/m3)", 
                    "particle radius (m)", "total Si (molSi/m3)"),
             lwd = 2, las = 1, lty = 1,
