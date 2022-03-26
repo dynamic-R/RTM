@@ -7,33 +7,36 @@ output:
     number_sections: yes
     toc: no
   html_document:
-    toc: no
+    toc: yes
     df_print: paged
 subtitle: Reader Accompanying the Course Reaction Transport Modelling in the Hydrosphere
-abstract: \noindent Once you start working on a code or program with several people,
-  it becomes worthwhile to invest some time into learning about the tools that are
-  available for sharing, editing and tracking changes in such codes. Here, we briefly
-  illustrate how to do this in Rstudio using ``git`` and ``github``.
 ---
+
+# Abstract
+Once you start working on a code or program with several people,  it becomes worthwhile to invest some time into learning about the tools that are  available for sharing, editing and tracking changes in such codes. Here, we briefly illustrate how to do this in Rstudio using ``git`` and ``github``.
 
 # Getting started with git and github
 
 ``Git`` is a free and open source distributed version control system.  To start sharing a code via ``git``, you need to first install it on your computer and then choose it as a version control system manager. Also, you will need to choose a location of the repository where you will store the project files remotely. There are several options, and in this reader we assume ``github`` to be the remote repository.
 
+Note that here we only describe the basics. It is recommended that you check the [__introduction to Git in Rstudio__](https://r-bio.github.io/intro-git-rstudio/) website or search the internet to learn more about ``git`` and *Rstudio*.
+
 ## Install git on your computer
 
-Download ``git`` for your operating system from the [__git website__](https://git-scm.com/downloads) (e.g., ``Git-2.32.0.2-64-bit.exe``, or some newer version, if you are a Microsoft Windows user) and install it. 
+Download ``git`` for your operating system from the ``git`` website (https://git-scm.com/downloads) (e.g., ``Git-2.32.0.2-64-bit.exe``, or some newer version, if you are a Microsoft Windows user) and install it. 
 
 During the installation process, selecting the default option for most questions should be sufficient (unless you know what you are doing), except:
 
   - select *main* when asked about the name for the initial branch of a new repository;
   - choose *none* when asked to *Choose a credential helper*.
   
-If you forget to disable the credential helper, proceed as described [__here__](https://stackoverflow.com/questions/37182847/how-to-disable-git-credential-manager-for-windows).
+If you forget to disable the credential helper, proceed as described on [__this__](https://stackoverflow.com/questions/37182847/how-to-disable-git-credential-manager-for-windows) website.
   
 ## Create a github account and project
 
-These steps are performed in a web-browser. Go to the [__github website__](https://github.com/) and follow the steps described there to *create an account*.
+The steps described in this section are done using a web-browser. 
+
+Go to the ``github`` website (https://github.com/) and follow the steps described there to *create an account*.
 
 Once you have an account, create a *new repository*. Make sure that you set up your repository as *private*, so that only you and a closed circle of invited developers will be able to see it.
 
@@ -41,118 +44,182 @@ Note the URL (web-address) of the repository. In most cases, it will be in the f
 
 ``https://github.com/YOUR_USERNAME/YOUR_PROJECT``
 
-Then, on the github website, choose *Settings* $\rightarrow$ *Collaborators* $\rightarrow$ *Add people* to add developers to the project. 
+Then, on the ``github`` website, choose *Settings* $\rightarrow$ *Collaborators* $\rightarrow$ *Add people* to add developers to the project. 
+
+## Generate a git authentication token
+
+A so-called *git token* is required for authentication when communicating with the ``github`` in *RStudio*. To generate this token, perform the following steps in the web-browser.
+
+1. Log-in to your ``github`` account.
+
+2. Click on your profile icon (top-right corner) and select *Settings* $\rightarrow$ *Developer settings* $\rightarrow$ *Personal access tokens* $\rightarrow$ *Generate new token*.
+
+3. Note a *name* for the token. 
+
+4. Select expiration days (e.g., 90 d).
+
+5. In the *check scopes* section, \color{red}select "repo". \color{black} It is important that you check at least this option, otherwise you will not be able to access the ``github`` repository from *Rstudio* (i.e., you will be getting a 403 error).
+
+5. Click on *generate token*.
+
+After these steps, a new token should appear on the web-site. It will be in a form like ``ghp_masdf8989safdad...`` It is strongly recommended to copy this token and store it safely in a TXT file somewhere on your computer. You will be often needing it as a developer.
 
 # Using git in Rstudio
 
-These steps are performed in *Rstudio*. 
+The steps described in this section are done in *Rstudio*. 
 
-You need to first add the remote project locally to your computer before you can actually work on it. To do this, proceed as follows:
+You need to first add the remote project *locally* to your computer before you can actually work on it. To do this, proceed as follows:
 
 1. Go to the *File* menu and choose *New Project* $\rightarrow$ *Version Control* $\rightarrow$ *Git* $\rightarrow$ *Repository URL*. 
 
-2. Paste the URL of your project (e.g., ``https://github.com/YOUR_USERNAME/YOUR_PROJECT``) in the provided text field. 
+2. Paste the URL of your project (e.g., ``https://github.com/YOUR_USERNAME/YOUR_PROJECT``; see above) in the provided text field. 
 
-3. Choose the local directory on your computer as a working directory. All the project files will be store there. In this step, do not choose a directory where you already have files you are working on. Move these files first to a temporary location.
+3. Choose a directory on your computer as a working directory. All the project files will be store there. In this step, do not choose a directory where you already have files you are working on. Move these files first to a temporary location.
 
-4. Pull project files from the remote repository to the local directory using the ``pull`` arrow in the Git tab.
+Once you set up your project to be developed with ``git`` and associate a local directory with a remote repository, a new tab called *Git* will appear in the top-right panel of *Rstudio* (the same tab where you can view *Environment*, *History*, etc.). Buttons provided in this tab will allow you to quickly perform the most frequent git-related actions, including 
 
-You now have a local copy of the remote repository and are ready to contribute to the project development.
+  - viewing differences between versions of the project files (the *Diff* icon), 
+  - committing changes (the *Commit* icon), 
+  - pulling/pushing changes between the remote repository and the local directory (the blue down-arrow/green up-arrow icons), 
+  - viewing the history of committed changes (the clock icon), 
+  - reverting the files from the latest version to a previous version (the gearwheel icon), 
+  - creating new project branches (the diagram icon), and 
+  - selecting the current branch (the pull-down menu, initially containing the *main* branch). 
 
-Note: if you want to develop an *existing* project for which you do *not* have a developer access, you need to first make a personal copy of the existing project. To do so, go to the repository on github, click *fork*, and start working from there. Although we will not apply this approach during the RTM course, it is good to know about it.
+The *first* action required to start the development of a project is to *pull* the project files from the remote repository to the local directory. This is done by clicking the ``pull`` button.
+
+Note that if you do this for the very first time, you may need to type the following commands in the *Terminal* (available in the lower-left panel of *Rstudio*) to sort out authentication issues:
+
+  - ``git config --global user.name "your_user_name"``
+  - ``git config --global user.email "your_email_address"``
+
+where ``your_user_name`` and ``your_email_address`` are your ``github`` username and email address.
+
+Also note that if you want to develop an *existing* project for which you do *not* have a developer access, you need to first make a *personal* copy of the existing project. To do so, go to the repository on ``github``, click *fork*, and start working from there. Although we will not apply this approach during the RTM course, it is good to know about it.
 
 ## Possible workflow in Rstudio
 
-Once you have set up the project in *Rstudio* to be developed with ``git``, you will find a *Git* tab in the top-right panel of *Rstudio*. In this tab, you will see a number of buttons, including ``commit``, ``pull``, ``push``, and ``New Branch``. Additionally, you will see there a pull-down menu with the different development branches of the project (if multiple branches exist). 
-
-Below, we describe a *possible* workflow of a project development done in parallel by two developers (LP and MM). We will assume that LP is the "master" developer, while MM is a contributor. The roles can be changed, upon agreement among the developers, but this hierarchy is useful to keep to avoid conflicts and confusion during the project development.
+Here, we describe a *possible* workflow of a project development done in parallel by two developers (L and M). We will assume that L is the 'master' developer, while M is a contributor. The roles can be changed, upon agreement among the developers, but having and keeping this master/contributor(s) hierarchy is useful to avoid conflicts and confusion about 'who has done what and when' during the project development.
 
 ### Development stage
 
-1. At the very beginning, both LP and MM should ensure that they have a copy of the *same* remote branch called ``main`` on their computer. To do this, they choose ``main`` from the pull-down menu with the (possibly several) branches of the project, and ``pull`` the code from the remote repository.
+It is assumed that the ``main`` branch of the project is correct and working, and L and M want to develop it further. They want to do it *in parallel*, but they do *not* want to potentially "mess up" a working project. 
 
-2. It is assumed that the ``main`` branch of the project is correct and working, and LP and MM  want to develop it further. They want to do it in parallel, but they do not want to potentially "mess up" the working project. Therefore, it is recommended that both LP and MM first create a *new branch* of the project. This is done by clicking the ``New Branch`` button in the *Git* tab, giving the new branch a name (we assume here the name ``branch_LP1`` for LP and ``branch_MM1`` for MM), and clicking *Create*.
+1. At the very beginning, both L and M should ensure that they have a copy of the *same* remote branch called ``main`` on their computer. To do this, they choose ``main`` from the pull-down menu with the (possibly several) branches of the project and then ``pull`` the code from the remote repository.
 
-3. From this moment, it is important that each developer works on his/her own branch. Thus, LP selects ``branch_LP1``, and MM selects ``branch_MM1``, as the local branch. This is done using the pull-down menu in the Git tab. Once this is done, LP and MM can create new or delete old files, modify the content of existing files, etc.
+2. Next, it is recommended that both L and M create a *new branch* of the project. This is done by clicking the ``New Branch`` button in the *Git* tab, giving the new branch a name (we assume here the names ``branch_L1`` for L and ``branch_M1`` for M, respectively), keeping the default options (unless you have a good reason to choose otherwise), and clicking *Create*.
 
-4. Once they are satisfied with their modifications, they need to *commit* the changes locally. This will make it possible for the modifications to be tracked locally. This is done in the Git tab by first checking the "staged" check-box to next the file(s) that is to be committed (next to the "M" status shown in blue), then selecting ``commit``, typing an informative comment, and finally clicking ``commit``.
+3. From this moment, it is important that \color{red} each developer works on his/her own branch. \color{black} Thus, L selects ``branch_L1``, and M selects ``branch_M1``, as the local branch using the pull-down menu in the Git tab. Then, both L and M can create new or delete old files, modify the content of existing files, etc.
 
-5. Once they are satisfied with their local modifications and want to make them known to the other developer, they need to *push* the changes to the remote repository. This is done by selecting ``push`` in the Git tab and approving the authentication.
+4. When L and M are satisfied with their own modifications, they need to *commit* the changes locally. This will make it possible for the modifications to be *tracked* locally. They do this in the *Git* tab by first checking the "staged" check-box next to the files for which the changes are to be committed (a check-box next to the blue "M" status icon), then clicking on the ``commit`` button. This opens a dialog window where L and M make a final review of the changes, type an informative comment about them, and finally click ``commit``.
 
-6. This step can typically be followed by *pulling* the changes made by the other developer from the remote repository to the local computer. This is done by selecting ``pull`` in the Git tab. To ensure that the remote branches are indeed up-to-date on the local computer, LP should select the branch ``branch_MM1`` from the pull-down menu and click on ``pull``. 
+5. When L and M are satisfied with their local modifications and want to make them known to the other developer, they need to *push* the changes to the remote repository. They do this by clicking the ``push`` button in the *Git* tab and approving the authentication using the dialog windows that pop up. Note that the so-called *git-token* needs to be used as the password (see above to learn how to create a git-token).
 
-After the steps described above, both LP and MM should have the *same* versions of the project on their local computer, including the branches called ``main``, ``branch_LP1``, and ``branch_MM1``. By selecting any of the branch in the pull-down menu, they can access the content of the files in the respective branch.
+6. Subsequently, L and M need to *pull* the project from the remote repository to the local computer to see the changes made by the other developer. They do this by clicking the ``pull`` button in the *Git* tab. To verify that the remote branches are indeed up-to-date on the local computer, L should select the branch ``branch_M1`` from the pull-down menu and click ``pull``, while M should do the same with the branch ``branch_L1``.
+
+After the steps described above, both L and M should have the *same* versions of the project on their local computer, including the branches called ``main``, ``branch_L1``, and ``branch_M1``. By selecting any of the branch in the pull-down menu, they can access the content of the files in the respective branch.
 
 ### Merging of branches
 
-Now, we assume that LP and MM want to *merge* the changes made independently in branches ``branch_LP1`` and ``branch_MM1``, with the aim to get an updated version of the ``main`` branch. We recommend that this is done by the "master" (here LP) to avoid confusion and headaches due to conflicts.
+At some point of the project development, L and M want to *merge* the changes they made independently in branches ``branch_L1`` and ``branch_M1`` so as to arrive at an *updated* version of the ``main`` branch. It is recommended that merging of branches is done by only *one* person in the development team (usually the 'master', here L) to avoid confusion and headaches due to conflicts.
 
-7. LP selects the ``main`` branch in the pull-down menu in the Git tab.
+1. First, L selects the \color{red}``main`` \color{black} branch in the pull-down menu in the *Git* tab.
 
-8. Then, in the *terminal*, LP types
+2. Then, in the *terminal*, L enters the following commands:
 
-``git merge branch_LP1``
+    ``git merge branch_L1``
+    
+    ``git merge branch_M1``
 
-This will merge the modifications made by LP in the branch ``branch_LP1`` to the ``main`` branch.
+The first command will merge the modifications from ``branch_L1`` to the ``main`` branch. The second command should merge the modifications from ``branch_M1`` to the ``main`` branch. However, because the ``main`` branch was modified in the previous step, this action may generate *conflicts*.
 
-9. Then, in the *terminal*, LP types
+If L and M modified *different* lines of the same file, there are *no* reason for conflicts and the merging described above should go smoothly. 
 
-``git merge branch_MM1``
+In contrast, if L and M modified the *same* lines of the same file, there *will* be conflicts, and they need to be *resolved* before continuing with the project development. The files with conflicts will be marked by an orange "U" status (visible in the *Git* tab). The conflicts themselves will appear as text chunks between the character strings ``<<<<<<<<``, ``========``, and ``>>>>>>>`` in the affected files.
 
-This will, in principle, merge the modifications made by MM in the branch ``branch_MM1`` to the ``main`` branch. **BUT**:
+### Resolving conflicts
 
-10a. If LP and MM modified *different* lines of the same file, this merging will go smoothly as there won't be any conflicts.
+To resolve conflicts in a specific file, L and M need to communicate and agree on the final modifications to the file. Then, 
 
-10b. If LP and MM modified the *same* lines of the same file, there will be conflicts that need to be resolved. This is done by opening the files with the conflicts in the editor and looking for text chunks between <<<<<<<<, ========, and >>>>>>>. Here is where the role of the "master" becomes important: he/she needs to select, which parts of the text chunks are to be kept in the ``main`` branch. Once this is decided, the file needs to be *saved* and the changes must be *committed*.
+1. L ensures that the \color{red}``main`` \color{black} branch is selected.
 
-11. Once this is done, LP can ``push`` the *updated* ``main`` branch to the remote repository. Subsequently, MM can ``pull` the *updated* ``main`` branch from the remote repository. Thus, both LP and MM will have the *same* version of the ``main`` branch and can continue as described above (points 1--6).
+2. L opens the affected file in the *Rstudio* editor and modifies the conflicting text chunks accordingly. For example, L modifies the text chunk
+    
+    ``<<<<<<< HEAD``
+    
+    ``# Length of the modeled sediment domain (L)``
+    
+    ``Length <- 100``
+    
+    ``=======``
+    
+    ``# Length of the modeled sediment domain (M)``
+    
+    ``Length <- 500``
+    
+    ``>>>>>>> branch_M1``
 
-### Deleting an old branch
+    as follows:
 
-At some point, it may be desired to *delete* an old branche (e.g., after it has been *merged* with the *main* branch). This will keep your development less confusing. To do this locally, type in the terminal
+    ``# Length of the modeled sediment domain, agreed by L & M``
+    
+    ``Length <- 500``
+    
 
-  ``git branch -d branch_LP1``
+3. L *saves* the affected file(s), *commits* the changes made, and *pushes* the ``main`` branch to the remote repository. 
 
-  or 
+These steps yield an *updated* version of the ``main`` branch on the remote repository. Thus, M can *pull* it from the remote repository, and both L and M can continue with the next development stage starting from a common (identical) version of the ``main`` branch. That is, they follow the same steps as described above (section **Development stage**, points 1--6).
 
-  ``git branch -D branch_LP1``
+### Deleting old branches and pruning
+
+At some point, it may be desired to *delete* an old branch. For example, after a branch has been merged with the ``main`` branch and thus contains outdated modifications, it is a good idea to delete it in order to keep the development less confusing. 
+
+1. To delete the branch ``branch_L1`` stored locally, enter the following command in the terminal:
+
+    ``git branch -d branch_L1``
   
-  To do this remotely, type in the terminal
+2. To delete the branch ``branch_L1`` stored in the remote repository, enter the following command in the terminal:
   
-  ``git push origin --delete branch_LP1``
+    ``git push origin --delete branch_L1``
   
-  Alternatively, you can delete a branch from within the GitHub website. All you need to do is display an overview of all branches and click on the delete icon next to it.
+    Alternatively, this last step can be done on the ``github`` website. All you need to do is display an overview of all branches and click on the delete icon next to it.
 
-### Pruning
+Note that deleting a branch does not remove it from the list of available branches (e.g., visible in the pull-down menu in the *Git* tab). To remove deleted branches from this list, you need to do *pruning*. 
 
-Occasionally, you will need to *prune* to keep things tidy on your computer and on the github repository. This is done by typing in the terminal:
+3. In preparation for pruning, enter the following commands in the terminal to see what will be pruned (locally and in the remote repository, respectively):
 
-  ``git prune -n origin``
+    ``git prune -n origin``
   
-  ``git remote prune -n origin``
+    ``git remote prune -n origin``
   
-  to see what will be *pruned*, and then
+4. Then, enter the following commands in the terminal to prune (locally and in the remote repository, respectively):
   
-  ``git prune origin``
+    ``git prune origin``
   
-  ``git remote prune origin``
+    ``git remote prune origin``
 
-  to actually do the *pruning*. Effectively, this will remove traces of your now-removed branches from the pull-down menu in the *Git* tab in *Rstudio*.
+### Reverting to an older version of a file
 
-These are the basics. Check the [__introduction to Git in Rstudio__](https://r-bio.github.io/intro-git-rstudio/) or search the internet for more information.
+The point of using ``git`` is to be able to *seamlessly revert back* to an earlier version of a file if the latest modifications feel unsatisfying or lead to a dysfunctional R-code. In *Rstudio*, this is done using the following steps:
 
-# Useful tips
+1. Click on the *history* button in the *Git* tab.
 
-* When pushing your local changes to the GitHub repository, you will be asked for your password every time. If you want to modify this behaviour, check the instructions [__here__](https://docs.github.com/en/get-started/getting-started-with-git/caching-your-github-credentials-in-git). For example, to cache the credentials for 2 hours (7200 s), type in the terminal:
+2. In the window that pops up, browse through the history of committed changes and find the version of the file that you want to *revert to*. In this process, you will be helped by the highlighted changes displayed in the lower part of the window and by the comments entered earlier by you when committing changes (this is the reason why these comments should be *informative*, as noted above).
+
+3. Once you identify the file you want to keep, click on ``view file @ <string>`` appearing at the top-right corner of the lower part of the window, where ``<string>`` is a randomly-looking string (e.g., ``se3fsf23w``). This will open that particular file in a new pop-up window.
+
+4. Choose "Save As" and overwrite the file that you do *not* want to keep with this file that you *do* want to keep. 
+
+After these steps, the file gets a "Modified" status (blue "M" in the *Git* tab next to the file). Thus, if you want to keep it, you need to check the ``staged`` check-box next to the file and click on the ``commit`` button to commit the changes. At some point, you will also need to click the ``push`` button to transfer the changes to the remote repository.
+
+# Other useful tips
+
+## Caching authentication credentials
+
+When pushing your local changes to the ``github`` repository, you will be asked for your authentication credentials every time. If you want to modify this behavior, check the instructions [__here__](https://docs.github.com/en/get-started/getting-started-with-git/caching-your-github-credentials-in-git). For example, to cache the credentials for 2 hours (7200 s), enter the following command in the terminal:
 
   ``git config --global credential.helper 'cache --timeout=7200'``
 
-* Check [__this website__](https://github.blog/2020-12-15-token-authentication-requirements-for-git-operations/) for updates in the authentication protocols.
+# Acknowledgements
 
-  To configure ssh authentication for Github, type in the Rstudio terminal:
-```
-git config --global user.name "your_user_name"
-git config --global user.email "your_email_address"
-ssh-keygen -t rsa -C "your_email_address"
-ssh -T git@github.com
-```
+We thank Mingkai Ma for his contributions during the development of this reader.
