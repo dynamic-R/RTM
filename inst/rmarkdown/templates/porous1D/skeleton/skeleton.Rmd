@@ -79,7 +79,7 @@ plot(diffDIC, y = Grid$x.int, type="l", ylim = c(Length,0), ylab = "depth (m)",
 Define model parameters that do *not* vary in space.
 
 ```{r}
-parms <- c(
+pars <- c(
  Dbio     = 5e-4/365,   # [m2/d]        bioturbation mixing coefficient
  v_adv    = 5e-6,       # [m/d]         sediment accretion (=advection) velocity 
  kMin     = 0.005,      # [/d]          POC mineralisation rate constant
@@ -92,11 +92,11 @@ parms <- c(
 ## Definition and initialisation of state variables
 
 ```{r}
-POC.ini  <- rep(0, length = N)      # initial conditions 
-DIC.ini  <- rep(0, length = N)
-state    <- c(POC.ini, DIC.ini)     # note the order!
-names    <- c("POC", "DIC")
-nspec    <- length(names)
+POC.ini   <- rep(0, length = N)      # initial conditions 
+DIC.ini   <- rep(0, length = N)
+state.ini <- c(POC.ini, DIC.ini)     # note the order!
+names     <- c("POC", "DIC")
+nspec     <- length(names)
 ```
 
 ## Definition of the model function
@@ -104,9 +104,9 @@ nspec    <- length(names)
 Define the model function that calculates the *time-derivatives* for each state variable. This includes the implementation of the transport and reaction terms.
 
 ```{r}
-Diamodel <- function (t, state, pars)   # state is a LONG vector
+Diamodel <- function (t, state, parms)   # state is a LONG vector, at time t
 {
-  with (as.list(pars),{ 
+  with (as.list(parms),{ 
     
     # unpack state variables
     POC <- state[ (0*N+1) : (1*N) ]    # first N elements: POC
@@ -164,20 +164,20 @@ Diamodel <- function (t, state, pars)   # state is a LONG vector
 Find a steady-state solution with the function *steady.1D* from the package *rootSolve*.
 
 ```{r}
-p0 <- p1 <- p2 <- parms      # three runs with different POC deposition rates
+p0 <- p1 <- p2 <- pars      # three runs with different POC deposition rates
 
 p0["depoPOC"]  <- 0          # molPOC/m2/day
-std0 <- steady.1D (y=state, func=Diamodel, parms=p0, 
+std0 <- steady.1D (y=state.ini, func=Diamodel, parms=p0, 
                    nspec=nspec, dimens=N, names=names,
                    positive = TRUE)     # to have only positive values! 
 
 p1["depoPOC"]  <- 1e-3       # molPOC/m2/day
-std1 <- steady.1D (y=state, func=Diamodel, parms=p1, 
+std1 <- steady.1D (y=state.ini, func=Diamodel, parms=p1, 
                    nspec=nspec, dimens=N, names=names,
                    positive = TRUE)     
 
 p2["depoPOC"]  <- 2e-3       # molPOC/m2/day
-std2 <- steady.1D (y=state, func=Diamodel, parms=p2, 
+std2 <- steady.1D (y=state.ini, func=Diamodel, parms=p2, 
                    nspec=nspec, dimens=N, names=names,
                    positive = TRUE) 
 ```
@@ -192,8 +192,8 @@ plot(std0, std1, std2, xyswap=TRUE, grid=Grid$x.mid, lty=1, lwd=2,
      xlab  = c("molC/m3 Solid", "molC/m3 Liquid", "molC/m3 Solid/d"), 
      ylab  = "depth (m)", mfrow=c(1,3))
 
-legend("bottomright", legend=c("0", "1e-3", "2e-3"), title="depoPOC (mol/m2/d)",
-       lwd=2, lty=1, col=1:3)
+legend("bottomright", legend=c(p0["depoPOC"], p1["depoPOC"], p2["depoPOC"]), 
+       title="depoPOC (mol/m2/d)", lwd=2, lty=1, col=1:3)
 ```
 
 ### Budget
@@ -225,8 +225,8 @@ Find the dynamic solution using the function *ode.1D* from the package *deSolve*
 
 ```{r}
 times          <- seq(from = 0, to = 2*365, by = 10)
-p2             <- parms
-p2["depoPOC"]  <- parms["depoPOC"]*10         # molPOC/m2/day
+p2             <- pars
+p2["depoPOC"]  <- p2["depoPOC"]*10
 out            <- ode.1D(y=std1$y, func=Diamodel, parms=p2, times = times,
                          nspec=nspec, dimens=N, names=names )
 ```
@@ -235,7 +235,7 @@ out            <- ode.1D(y=std1$y, func=Diamodel, parms=p2, times = times,
 
 Visualise the dynamic solution as an image.
 
-```{r, fig.width=8, fig.height=4}
+```{r, fig.width=8, fig.height=4, fig.align='center'}
 par(mar = c(4,4,4,4))
 image(out, legend = TRUE, grid = Grid$x.mid, ylim = c(Length,0), 
       las = 1, ylab = "depth (m)", xlab="time (d)")
@@ -243,7 +243,7 @@ image(out, legend = TRUE, grid = Grid$x.mid, ylim = c(Length,0),
 
 Display results as lines showing the depth distribution for all time points.
 
-```{r, fig.width=8, fig.height=4}
+```{r, fig.width=8, fig.height=4, fig.align='center'}
 matplot.1D(out, type = "l", grid = Grid$x.mid, 
       col = grey(seq(0.2,0.8,len=length(times))), # This will use a sequence of greys
                                                   # grey(1) = white, grey(0) = black
@@ -253,7 +253,7 @@ matplot.1D(out, type = "l", grid = Grid$x.mid,
 
 Visualise the fluxes at the SWI and in the deep sediment as a function of time.
 
-```{r, fig.width=10, fig.height=3}
+```{r, fig.width=10, fig.height=3, fig.align='center'}
 plot(out, which = c("DIC.SWI.Flux", "DIC.Deep.Flux", 
                     "POC.SWI.Flux", "POC.Deep.Flux"), 
      mfrow=c(1,4), xlab="time (d)", ylab="molC/m2/d")

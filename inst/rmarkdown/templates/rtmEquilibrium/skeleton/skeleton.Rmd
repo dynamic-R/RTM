@@ -19,9 +19,10 @@ knitr::opts_chunk$set(echo = TRUE)
 This template file contains a simple model that assumes a local chemical equilibrium. Specifically, species A, B and AB are assumed to react according to the following fast reversible reaction
 
 $$AB \leftrightarrow A + B.$$
+
 Additionally, species A is assumed to be removed from the system by a slow irreversible process.
 
-The model is rewritten in terms of lump sum species $Btot = [AB] + [B]$ and $Atot = [AB] + [A]$. For more information on the model, see the reader "Local Equilibrium Chemistry in R --- part I: One Equilibrium Reaction". This reader can be viewed using the R-command ``RTMexercise("equilibriumNH3")``.
+The model is rewritten in terms of lump sum species $B_{tot} = [AB] + [B]$ and $A_{tot} = [AB] + [A]$. For more information on the model, see the reader "Local Equilibrium Chemistry in R --- part I: One Equilibrium Reaction". This reader can be viewed using the R-command ``RTMexercise("equilibriumNH3")``.
 
 # Model definition
 
@@ -32,18 +33,18 @@ library(deSolve)  # package with solution methods
 Atot.ini <- 0.070  # [mol/m3] Initial concentration of total A (i.e., A+AB)
 Btot.ini <- 0.060  # [mol/m3] Initial concentration of total B (i.e., B+AB)
 
-yini <- c(Atot = Atot.ini, Btot = Btot.ini)
+state.ini <- c(Atot = Atot.ini, Btot = Btot.ini)
 
 # model parameters
-parms <- c (kf      = 1000,    # [/s]         forward rate constant
-            kb      = 2e6,     # [/mol m3 /s] backward rate constant
-            lambda  = 0.1      # [/s]         rate constant for the first-order removal of A
-                               # note that lambda << kf and lambda << kb*Btot
-                               # (i.e., the local equilibrium assumption is valid)
+pars  <- c (kf     = 1000, # [/s]     forward rate constant
+            kb     = 2e6,  # [/mol m3 /s] backward rate constant
+            lambda = 0.1   # [/s]     rate constant for the slow first-order removal of A
+                            # note that lambda << kf and lambda << kb*Btot
+                            # (i.e., the local equilibrium assumption is valid)
 )
 ```
 
-A function to numerically solve for the concentration of species $B$ based on the concentration of species $Atot$ and $Btot$ (assuming local equilibrium).
+A function to numerically solve for the concentration of species $B$ based on the concentration of species $A_{tot}$ and $B_{tot}$ (assuming local equilibrium).
 
 ```{r}
 solveB <- function(Keq, Atot, Btot){
@@ -63,7 +64,7 @@ The model function calculates the time derivatives determined by the differentia
 
 ```{r}
 EqModel_num <- function(t, state, parms) {
-  with (as.list(c(state,parms)), {
+  with (as.list(c(state, parms)), {
     
     Keq  <- kf/kb
     
@@ -89,7 +90,7 @@ The model is run for 10 seconds.
 
 ```{r}
 times <- seq(from=0, to=10, length.out=1000)
-out   <- ode(y=yini, times=times, func=EqModel_num, parms=parms)
+out   <- ode(y=state.ini, times=times, func=EqModel_num, parms=pars)
 ```
 
 ```{r}

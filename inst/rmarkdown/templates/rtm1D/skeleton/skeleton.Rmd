@@ -29,7 +29,7 @@ The species are modeled with the following boundary conditions:
 * $BOD$: imposed flux upstream (*flux.up*), imposed concentration downstream (*C.down*).
 * $O_2$: imposed concentration upstream (*C.up*), zero-gradient downstream (default, need not be specified).
 
-The partial derivatives related to *transport* are approximated with function ``tran.1D()`` from the *ReacTran* package. The steady-state and dynamic solutions are obtained using functions from the *rootSolve* and *deSolve* packages, respectively. The latter two packages are loaded together with *ReacTran*.
+The partial derivatives related to *transport* are approximated with the function ``tran.1D()`` from the *ReacTran* package. The steady-state and dynamic solutions are obtained using functions from the *rootSolve* and *deSolve* packages, respectively. The latter two packages are loaded together with *ReacTran*.
 
 # Model definition
 
@@ -48,7 +48,7 @@ O2      <- rep(0.1,   times = N)               # [mol/m3]
 BOD     <- rep(0.001, times = N)               # [mol/m3]
 
 # initial state of the system: a vector with all state variables (2*N)
-yini   <- c(O2, BOD)
+state.ini   <- c(O2, BOD)
 
 # names of the modeled state variables
 SVnames <- c("O2", "BOD")
@@ -67,8 +67,8 @@ pars <- c(
 )
 
 # Model function
-BOD1D <-function(t, state, pars) {  # state is a long vector
-  with (as.list(pars),{
+BOD1D <- function(t, state, parms) {  # state is a long vector, at time t
+  with (as.list(parms),{
     
   # The vectors of the state variables O2 and BOD are
   # "extracted" from the LONG vector state passed to the function as input.
@@ -77,7 +77,7 @@ BOD1D <-function(t, state, pars) {  # state is a long vector
 
   # Transport - tran.1D approximates the spatial derivatives
   # note: for O2: zero-gradient boundary downstream (default)
-    tranO2  <- tran.1D(C = O2,
+    tranO2  <- tran.1D(C    = O2,
                        C.up = O2up,         # imposed conc upstream, 
                        D = D, v = v,        # dispersion, advection 
                        dx = Grid)           # Grid
@@ -132,28 +132,28 @@ Model is solved over 100 days with the initial conditions specified above.
 outtimes <- seq(from = 1, to = 100, length.out = 100)   # output times
 
 # ode.1D integrates the 1D model 
-out <- ode.1D(y = yini, parms = pars, func = BOD1D, times = outtimes, 
+out <- ode.1D(y = state.ini, parms = pars, func = BOD1D, times = outtimes, 
               names = SVnames, nspec = length(SVnames), dimens = N)                
 ```
 
 Display the solution as an image, time plot, and lines.
 
-```{r, fig.height = 4, fig.width = 8}
-image(out, grid = Grid$x.mid, ylab = "distance (m)", legend = TRUE)
+```{r, fig.height = 4, fig.width = 8, fig.align='center'}
+image(out, grid = Grid$x.mid, ylab = "distance (m)", xlab = "time (d)", legend = TRUE)
 ```
 
-```{r, fig.height = 4, fig.width = 8}
+```{r, fig.height = 4, fig.width = 8, fig.align='center'}
 # each curve represents the solution at a given time point
 matplot.1D(out, type = "l", lty = 1, 
            col = gray(seq(0.2,0.8,len=length(outtimes))),
-           xlab = "distance (m)", ylab = "mol/m3")
+           xlab = "distance (m)", ylab = c("molO2/m3","molBOD/m3"))
 ```
 
-```{r, fig.height = 6, fig.width = 6}
+```{r, fig.height = 6, fig.width = 6, fig.align='center'}
 # plot selected output variables
 plot(out, which=c("MeanDecay", "MeanAeration", "O2influx", "BODinflux"), 
      mfrow=c(2,2),                  # graph arrangement (2x2)
-     ylab=c("mol/m3/d","mol/m3/d","mol/m2/d","mol/m2/d"))
+     xlab = "time (d)", ylab=c("molBOD/m3/d","molO2/m3/d","molO2/m2/d","molBOD/m2/d"))
 ```
 
 ## Steady-state solution
@@ -162,7 +162,7 @@ Find a steady state solution to the model.
 
 ```{r}
 # find steady state solution
-std <- steady.1D(y = yini, parms = pars, func = BOD1D, 
+std <- steady.1D(y = state.ini, parms = pars, func = BOD1D, 
           positive = TRUE,               # to ensure that the solution is positive
           names = SVnames, nspec = length(SVnames), dimens = N,
           atol = 1e-10, rtol = 1e-10)    # to increase the precision of the solution
@@ -177,7 +177,7 @@ A second run without aeration.
 p2 <- pars              # copy of parameter vector
 p2["kAeration"] <- 0    # set reaeration rate constant to 0
 
-std2 <- steady.1D(y = yini, parms = p2, func = BOD1D, 
+std2 <- steady.1D(y = state.ini, parms = p2, func = BOD1D, 
           positive = TRUE,               # to ensure that the solution is positive
           names = SVnames, nspec = length(SVnames), dimens = N,
           atol = 1e-10, rtol = 1e-10)    # to increase the precision of the solution
@@ -185,17 +185,17 @@ std2 <- steady.1D(y = yini, parms = p2, func = BOD1D,
 
 Display results.
 
-```{r, fig.height = 4, fig.width = 8}
+```{r, fig.height = 4, fig.width = 8, fig.align='center'}
 plot(std, std2, grid = Grid$x.mid,  # plot ONLY state variables (default)
-     ylab = "mol/m3", xlab = "distance (m)")
+     ylab = c("molO2/m3","molBOD/m3"), xlab = "distance (m)")
 ```
 
-```{r, fig.height = 6, fig.width = 6}
+```{r, fig.height = 6, fig.width = 6, fig.align='center'}
 plot(std, std2, grid = Grid$x.mid, 
      which=c("O2", "BOD",           # plot state variables 
              "Decay", "Aeration"),  # AND process rates
      mfrow=c(2,2),                  # graph arrangement (2x2)
-     ylab =c("mol/m3","mol/m3","mol/m3/d", "mol/m3/d"), xlab = "distance (m)") 
+     ylab =c("molO2/m3","molBOD/m3","molBOD/m3/d", "molO2/m3/d"), xlab = "distance (m)") 
 ```
 
 ## Budgetting of the steady-state model

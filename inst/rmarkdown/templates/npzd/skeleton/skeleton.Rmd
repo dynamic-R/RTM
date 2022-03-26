@@ -21,10 +21,10 @@ This template file is a simple R Markdown file that can be used to implement the
 require(deSolve)   
 
 # state variables
-state  <- c(DIN = 0.0015, PHYTO = 0.0005, ZOO = 0.0003, DET = 0.005) 
+state.ini  <- c(DIN = 0.0015, PHYTO = 0.0005, ZOO = 0.0003, DET = 0.005) 
 
 # parameters
-parms <- c(
+pars <- c(
   depth              = 10,        # [m] depth of the bay
   rUptake            = 1.0,       # [/day]
   ksPAR              = 140,       # [uEinst/m2/s]
@@ -38,8 +38,8 @@ parms <- c(
 
 # Model function
 
-NPZD <- function(t, state, parameters) {
-  with(as.list(c(state, parameters)),{
+NPZD <- function(t, state, parms) {
+  with(as.list(c(state, parms)),{
 
   # Forcing function
     # Light is a sine function
@@ -81,7 +81,7 @@ NPZD <- function(t, state, parameters) {
 outtimes <- seq(from = 0, to = 2*365, length.out = 100)  # run the model for 2 years
 
 # solve this model, using the ode function from deSolve
-out <- ode(y = state, parms = parms, func = NPZD, times = outtimes)  # solution
+out <- ode(y = state.ini, parms = pars, func = NPZD, times = outtimes)  # solution
 
 # visualise output
 plot(out)

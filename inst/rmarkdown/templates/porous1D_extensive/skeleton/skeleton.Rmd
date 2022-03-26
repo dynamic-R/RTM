@@ -22,16 +22,16 @@ The model domain is divided into a grid of $N$ boxes. Rather than having equally
 
 Two species (*POC* and *DIC*) are modeled with the following boundary conditions:
 
-* POC: particulate organic carbon, [mol POC/m3 solid]
+* POC: particulate organic carbon, [$mol~POC~m^{-3}~solid$]
   - imposed flux at the upstream boundary (flux.up), 
   - zero-gradient at the downstream boundary,
-* DIC: dissolved inorganic carbon, [mol DIC/m3 liquid] 
+* DIC: dissolved inorganic carbon, [$mol~DIC~m^{-3}~liquid$] 
   - imposed concentration at the upstream boundary (C.up), 
   - zero-gradient at the downstream boundary.
 
 The biogeochemical process is the first-order mineralization of POC to DIC, with a stoichiometry of 1:1 (i.e., POC $\rightarrow$ DIC).
 
-Units: length in $m$, time in $d$, concentrations in $mol~m^{-3}$, fluxes in $mol~m^{-2}~d^{-1}$. 
+Units: length in $m$, time in $d$, concentrations in $mol~m^{-3}$ (solid or liquid), fluxes in $mol~m^{-2}~d^{-1}$. 
 
 Due to sediment compaction, porosity ($[m^3~liquid~m^{-3}~bulk]$) decreases exponentially with depth from 0.9 at the sediment-water interface to 0.7 in the deep sediment, with a depth attenuation factor of $100~m^{-1}$. Salinity is $S=35$, temperature is $t=20~^\circ$C.
 
@@ -96,7 +96,7 @@ plot(diffDIC, y = Grid$x.int, type="l", ylim = c(Length,0), ylab = "depth (m)",
 Next, we specify the model parameters that do *not* vary with depth in the sediment. Note that although the variation of porosity with depth in the sediment influences the advective velocity, we will ignore this in our model.
 
 ```{r}
-parms <- c(
+pars <- c(
   Dbio     = 5e-4/365, # [m2/d]        bioturbation mixing coefficient
   v_adv    = 5e-6,     # [m/d]         sediment accretion (=advection) velocity 
   kMin     = 0.005,    # [/d]          POC mineralisation rate constant
@@ -109,11 +109,11 @@ parms <- c(
 ## Definition and initialisation of state variables
 
 ```{r}
-POC.ini  <- rep(0, length = N)      # initial conditions 
-DIC.ini  <- rep(0, length = N)
-state    <- c(POC.ini, DIC.ini)     # note the order
-names    <- c("POC", "DIC")
-nspec    <- length(names)
+POC.ini   <- rep(0, length = N)      # initial conditions 
+DIC.ini   <- rep(0, length = N)
+state.ini <- c(POC.ini, DIC.ini)     # note the order
+names     <- c("POC", "DIC")
+nspec     <- length(names)
 ```
 
 ## Definition of the model function
@@ -121,9 +121,9 @@ nspec    <- length(names)
 Next, we define the model function that calculates the *time-derivatives*. In the model function, both POC and DIC are vectors, representing concentrations in the *middle* of the grid boxes (*N* values each). The state variable vector (*state*) is first "split" into these two components, and their transport are estimated using the *tran.1D* function. Note that the concentrations are expressed in *moles per volume fraction*; thus the units depend on whether the state variable is a solute or a solid! Also note the *correction for porosity and stoichiometry* when calculating the *reaction rates* for each state variable! The return value from this function contains the vector with the time-derivatives, and ordinary output variables that will be useful later on, packed in a list.
 
 ```{r}
-Diamodel <- function (t, state, pars)   # state is a LONG vector
+Diamodel <- function (t, state, parms)   # state is a LONG vector, at time t
 {
-  with (as.list(pars),{ 
+  with (as.list(parms),{ 
     
     # unpack state variables
     POC <- state[ (0*N+1) : (1*N) ]    # first N elements: POC
@@ -184,20 +184,20 @@ Finding a steady-state solution is done with the function *steady.1D* from the p
 In this example, three steady-state solutions are calculated, each corresponding to a different organic matter deposition rate.
 
 ```{r}
-p0 <- p1 <- p2 <- parms      # three runs with different POC deposition rates
+p0 <- p1 <- p2 <- pars      # three runs with different POC deposition rates
 
 p0["depoPOC"]  <- 0          # molPOC/m2/day
-std0 <- steady.1D (y=state, func=Diamodel, parms=p0, 
+std0 <- steady.1D (y=state.ini, func=Diamodel, parms=p0, 
                    nspec=nspec, dimens=N, names=names,
                    positive = TRUE)     # to have only positive values! 
 
 p1["depoPOC"]  <- 1e-3       # molPOC/m2/day
-std1 <- steady.1D (y=state, func=Diamodel, parms=p1, 
+std1 <- steady.1D (y=state.ini, func=Diamodel, parms=p1, 
                    nspec=nspec, dimens=N, names=names,
                    positive = TRUE)     
 
 p2["depoPOC"]  <- 2e-3       # molPOC/m2/day
-std2 <- steady.1D (y=state, func=Diamodel, parms=p2, 
+std2 <- steady.1D (y=state.ini, func=Diamodel, parms=p2, 
                    nspec=nspec, dimens=N, names=names,
                    positive = TRUE) 
 ```
@@ -212,8 +212,8 @@ plot(std0, std1, std2, xyswap=TRUE, grid=Grid$x.mid, lty=1, lwd=2,
      xlab  = c("molC/m3 Solid", "molC/m3 Liquid", "molC/m3 Solid/d"), 
      ylab  = "depth (m)", mfrow=c(1,3))
 
-legend("bottomright", legend=c("0", "1e-3", "2e-3"), title="depoPOC (mol/m2/d)",
-       lwd=2, lty=1, col=1:3)
+legend("bottomright", legend=c(p0["depoPOC"], p1["depoPOC"], p2["depoPOC"]), 
+       title="depoPOC (mol/m2/d)", lwd=2, lty=1, col=1:3)
 ```
 
 ### Budget
@@ -244,12 +244,12 @@ c(flux_difference =  BUDGET$DIC.Deep.Flux - BUDGET$DIC.SWI.Flux,
 
 The model can be run dynamically with the function *ode.1D* from the package *deSolve*. This requires a good set of initial conditions. 
 
-We use the steady-state solution found above for the POC deposition flux of $1\times 10^{-3}~mol~m^{-2}~d^{-1}$ (*std1*). We then increase the deposition rate 10-fold and run the model for 2 years.
+We use the steady-state solution found above for the POC deposition flux of `r p1["depoPOC"]` $mol~C~m^{-2}~d^{-1}$ (*std1*). We then increase the deposition rate 10-fold and run the model for 2 years.
 
 ```{r}
 times          <- seq(from = 0, to = 2*365, by = 10)
-p2             <- parms
-p2["depoPOC"]  <- parms["depoPOC"]*10         # molPOC/m2/day
+p2             <- pars
+p2["depoPOC"]  <- p2["depoPOC"]*10
 out            <- ode.1D(y=std1$y, func=Diamodel, parms=p2, times = times,
                          nspec=nspec, dimens=N, names=names )
 ```
@@ -270,23 +270,23 @@ times <- attributes(POC)$time
 
 We can now plot the profile of POC at a certain time (day) or the times-series of POC at a particular location (depth).
 
-```{r, fig.width=4, fig.height=3.5}
-day <- 20 # specified as index(!) of the time vector --> real time = times[day]
-POC_t <- POC[day,]
+```{r, fig.width=4, fig.height=3.5, fig.align='center'}
+day   <- 20 # specified as index(!) of the time vector --> real time = times[day]
+POC_t <- POC[day, ]
 plot(y=Grid$x.mid, x=POC_t, ylim=c(0.10,0), type="l", ylab="depth (m)",
      xlab="molPOC/m3 solid", main = paste("POC profile at day", times[day]))
 ```
 
 ```{r, fig.width=4, fig.height=3.5, fig.align='center'}
 depth <- 20 # specified as index(!) of the depth vector --> real depth = Grid$x.mid[depth]
-POC_x <- POC[,depth]
+POC_x <- POC[ ,depth]
 plot(x=times, y=POC_x, type = "l", ylab="molPOC/m3 solid", xlab="time (d)",
      main=paste("POC dynamics at ",format(Grid$x.mid[depth],digits=2),"m"))
 ```
 
 Plot output as an image.
 
-```{r, fig.width=8, fig.height=4}
+```{r, fig.width=8, fig.height=4, fig.align='center'}
 par(mar = c(4,4,4,4))
 image(out, legend = TRUE, grid = Grid$x.mid, ylim = c(Length,0), 
       las = 1, ylab = "depth (m)", xlab="time (d)")
@@ -294,7 +294,7 @@ image(out, legend = TRUE, grid = Grid$x.mid, ylim = c(Length,0),
 
 Plot output as lines showing the depth distribution for all time points.
 
-```{r, fig.width=8, fig.height=4}
+```{r, fig.width=8, fig.height=4, fig.align='center'}
 matplot.1D(out, type = "l", grid = Grid$x.mid, 
       col = grey(seq(0.2,0.8,len=length(times))), # This will use a sequence of greys
                                                   # grey(1) = white, grey(0) = black
@@ -304,7 +304,7 @@ matplot.1D(out, type = "l", grid = Grid$x.mid,
 
 We also plot the fluxes at the SWI and in the deep sediment as a function of time. The POC flux at the SWI should be constant, as specified by the boundary condition at the SWI.
 
-```{r, fig.width=10, fig.height=3}
+```{r, fig.width=10, fig.height=3, fig.align='center'}
 plot(out, which = c("DIC.SWI.Flux", "DIC.Deep.Flux", 
                     "POC.SWI.Flux", "POC.Deep.Flux"), 
      mfrow=c(1,4), # modify the plot arrangement (1 row, 4 columns)
