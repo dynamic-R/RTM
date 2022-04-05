@@ -1,0 +1,153 @@
+---
+title: "Modelling carbon flow during culturing of an aerobic methanotroph"
+author: "Lubos Polerecky"
+subtitle: "Based on data from Paul Bodelier"
+date: "05-04-2022"
+output:
+  pdf_document:
+    toc: no
+  word_document:
+    toc: no
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+d <- c(F, F, T)
+```
+
+# Data set L+`r paste(which(d))`
+
+```{r, echo=FALSE, eval=d[3]}
+# experimental data, set3
+t.exp <- c(0, 22, 94, 166, 262, 358, 430, 526)
+CH4.exp <- c(23.66, 23.48, 21.22, 19.77, 16.41, 14.58, 13.43, 10.87)
+CO2.exp <- c(2.96, 3.74, 11.86, 15.38, 17.68, 20.69, 23.54, 24.17)
+xCO2.exp <- c(NA, 9.46, 10.40, 13.81, 16.32, 17.62, 18.24, 18.91)*1e-2
+DATA <- data.frame(time = t.exp, CH4 = CH4.exp, CO2 = CO2.exp, xCO2 = xCO2.exp)
+```
+
+```{r, echo=FALSE, eval=d[1]}
+# experimental data, set1
+t.exp <- c(0, 22, 94, 166, 262, 358, 430, 526)
+CH4.exp <- c(22.18, 21.74, 20.08, 18.46, 14.08, 11.31, 10.20, 8.91)
+CO2.exp <- c(2.95, 4.51, 10.10, 12.10, 13.03, 14.04, 17.35, 17.95)
+xCO2.exp <- c(NA, 12.90, 17.65, 21.60, 24.83, 26.26, 27.21, 28.10)*1e-2
+DATA <- data.frame(time = t.exp, CH4 = CH4.exp, CO2 = CO2.exp, xCO2 = xCO2.exp)
+```
+
+```{r, eval=d[3], echo=d[3]}
+# default model parameters
+pars <- c(
+  CH4.ini =        23.65,     # all values in umol/bottle
+  CO2.ini =        2.96,
+  Cdead.ini =      11.63-2.96,
+  Clive.ini =      1,
+  rMO =            0.0245,    # CH4 removal rate (umol/bottle/h),
+  kMin =           3*3/530,   # mineralization of dead biomass (/h)
+  eff =            0,         # assimilation efficiency
+  xCH4.src =       0.278,
+  xCdead.src =     0.13,
+  xCO2.ini =       0.01,
+  xClive.ini =     0.01
+)
+# sensitivity analysis
+p0 <- p1 <- p2 <- p3 <- pars
+p1["Cdead.ini"] <- 0
+p1["xCH4.src"]  <- 0.23
+p2["eff"]       <- 0.7
+p2["xCH4.src"]  <- 0.5
+p3["xCH4.src"]  <- 0.5
+```
+
+```{r, eval=d[1], echo=d[1]}
+# default model parameters
+pars <- c(
+  CH4.ini = 22.18,        # all values in umol/bottle
+  CO2.ini = 2.95,
+  Cdead.ini = 1.15*8.69-2.95,
+  Clive.ini = 1,
+  rMO = 0.0274,           # CH4 removal rate (umol/bottle/h),
+  kMin = 3*3/530,         # mineralization of dead biomass (/h)
+  eff = 0.45,                # assimilation efficiency
+  xCH4.src = 0.5, #0.41,
+  xCdead.src = 0.2, #0.23,
+  xCO2.ini = 0.01,
+  xClive.ini = 0.01
+)
+# sensitivity analysis
+p0 <- p1 <- p2 <- p3 <- pars
+p1["Cdead.ini"] <- 0
+p1["xCH4.src"] <- 0.4
+p2["eff"] <- 0.0
+p2["xCH4.src"] <- 0.38
+p3["xCH4.src"] <- 0.4
+p3["xCdead.src"] <- 0.26
+```
+
+```{r, echo=FALSE}
+# Model function
+C13model <-function(t, state, parms) { 
+  with (as.list(c(state, parms)),{
+ 
+  xCH4   <- CH4_C13/CH4
+  xCO2   <- CO2_C13/CO2
+  xCdead <- Cdead_C13/Cdead
+  xClive <- Clive_C13/Clive
+
+  rMin  <- kMin*Cdead # mineralization of dead Corg
+
+  # total C balances
+  dCH4.dt    <- -rMO
+  dCO2.dt    <- (1-eff)*rMO + rMin
+  dCdead.dt  <- -rMin
+  dClive.dt  <- eff*rMO
+  
+  # 13C balances
+  dCH4_C13.dt    <- -rMO * xCH4.src
+  dCO2_C13.dt    <- (1-eff)*rMO * xCH4.src + rMin * xCdead.src
+  dCdead_C13.dt  <- -rMin * xCdead.src
+  dClive_C13.dt  <- eff*rMO * xCH4.src
+  
+  list(
+    c(dCH4.dt,   dCH4_C13.dt,   dCO2.dt,   dCO2_C13.dt, 
+      dCdead.dt, dCdead_C13.dt, dClive.dt, dClive_C13.dt),
+    xCH4 = xCH4, xCO2 = xCO2, xCdead = xCdead, xClive = xClive
+      )
+  })
+}
+
+# function to calculate initial state from the model parameters
+state.ini <- function(parms){
+  with(as.list(parms), {
+  c(CH4 = CH4.ini, CH4_C13 = CH4.ini*xCH4.src,
+    CO2 = CO2.ini, CO2_C13 = CO2.ini*xCO2.ini,
+    Cdead = Cdead.ini, Cdead_C13 = Cdead.ini*xCdead.src,
+   Clive = Clive.ini, Clive_C13 = Clive.ini*xClive.ini
+  )})
+}
+```
+
+```{r, echo=FALSE, message=FALSE}
+# solve the model
+require(deSolve)
+outtimes <- seq(from = 0, to = 530, length.out = 100)
+out0 <- ode(y = state.ini(p0), parms = p0, func = C13model, times = outtimes)
+out1 <- ode(y = state.ini(p1), parms = p1, func = C13model, times = outtimes)
+out2 <- ode(y = state.ini(p2), parms = p2, func = C13model, times = outtimes)
+out3 <- ode(y = state.ini(p3), parms = p3, func = C13model, times = outtimes)
+```
+
+```{r, eval=FALSE, echo=FALSE, fig.height = 6, fig.width = 8, fig.align='center'}
+# display complete output (for debugging)
+plot(out0, out1, out2, out3,
+     which = c("CH4", "CO2", "Cdead", "Clive",
+               "CH4_C13", "CO2_C13", "Cdead_C13", "Clive_C13",
+               "xCH4", "xCO2", "xCdead", "xClive"),
+     xlab="time (h)", lty=1, lwd=c(1,2,1,2), mfrow=c(3,4))
+```
+
+```{r, fig.height = 3, fig.width = 8, fig.align='center', echo=FALSE}
+# display exp. data and model predictions
+plot(out0, out1, out2, out3, obs=DATA, mfrow=c(1,3), lty=c(1,2,1,2), lwd=c(1,2,1,2))
+legend("topleft", legend=0:3, lty=c(1,2,1,2), lwd=c(1,2,1,2), col=1:4)
+```
