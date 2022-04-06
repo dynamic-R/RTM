@@ -12,43 +12,43 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-d <- c(F, F, T)
+d <- c(T, F, F)
 ```
 
 # Data set L+`r paste(which(d))`
 
 ```{r, echo=FALSE, eval=d[3]}
 # experimental data, set3
-t.exp <- c(0, 22, 94, 166, 262, 358, 430, 526)
-CH4.exp <- c(23.66, 23.48, 21.22, 19.77, 16.41, 14.58, 13.43, 10.87)
-CO2.exp <- c(2.96, 3.74, 11.86, 15.38, 17.68, 20.69, 23.54, 24.17)
+t.exp    <- c(0, 22, 94, 166, 262, 358, 430, 526)
+CH4.exp  <- c(23.66, 23.48, 21.22, 19.77, 16.41, 14.58, 13.43, 10.87)
+CO2.exp  <- c(2.96, 3.74, 11.86, 15.38, 17.68, 20.69, 23.54, 24.17)
 xCO2.exp <- c(NA, 9.46, 10.40, 13.81, 16.32, 17.62, 18.24, 18.91)*1e-2
-DATA <- data.frame(time = t.exp, CH4 = CH4.exp, CO2 = CO2.exp, xCO2 = xCO2.exp)
+DATA     <- data.frame(time = t.exp, CH4 = CH4.exp, CO2 = CO2.exp, xCO2 = xCO2.exp)
 ```
 
 ```{r, echo=FALSE, eval=d[1]}
 # experimental data, set1
-t.exp <- c(0, 22, 94, 166, 262, 358, 430, 526)
-CH4.exp <- c(22.18, 21.74, 20.08, 18.46, 14.08, 11.31, 10.20, 8.91)
-CO2.exp <- c(2.95, 4.51, 10.10, 12.10, 13.03, 14.04, 17.35, 17.95)
+t.exp    <- c(0, 22, 94, 166, 262, 358, 430, 526)
+CH4.exp  <- c(22.18, 21.74, 20.08, 18.46, 14.08, 11.31, 10.20, 8.91)
+CO2.exp  <- c(2.95, 4.51, 10.10, 12.10, 13.03, 14.04, 17.35, 17.95)
 xCO2.exp <- c(NA, 12.90, 17.65, 21.60, 24.83, 26.26, 27.21, 28.10)*1e-2
-DATA <- data.frame(time = t.exp, CH4 = CH4.exp, CO2 = CO2.exp, xCO2 = xCO2.exp)
+DATA     <- data.frame(time = t.exp, CH4 = CH4.exp, CO2 = CO2.exp, xCO2 = xCO2.exp)
 ```
 
 ```{r, eval=d[3], echo=d[3]}
 # default model parameters
 pars <- c(
-  CH4.ini =        23.65,     # all values in umol/bottle
-  CO2.ini =        2.96,
-  Cdead.ini =      11.63-2.96,
-  Clive.ini =      1,
-  rMO =            0.0245,    # CH4 removal rate (umol/bottle/h),
-  kMin =           3*3/530,   # mineralization of dead biomass (/h)
-  eff =            0,         # assimilation efficiency
-  xCH4.src =       0.278,
-  xCdead.src =     0.13,
-  xCO2.ini =       0.01,
-  xClive.ini =     0.01
+  CH4.ini    = 23.65,     # all values in umol/bottle
+  CO2.ini    = 2.96,
+  Cdead.ini  = 11.63-2.96,
+  Clive.ini  = 1,         # arbitrary
+  rMO        = 0.0245,    # CH4 removal rate (umol/bottle/h),
+  kMin       = 3*3/530,   # mineralization of dead biomass (/h)
+  eff        = 0,         # assimilation efficiency
+  xCH4.src   = 0.278,
+  xCdead.src = 0.13,
+  xCO2.ini   = 0.01,
+  xClive.ini = 0.01
 )
 # sensitivity analysis
 p0 <- p1 <- p2 <- p3 <- pars
@@ -62,25 +62,25 @@ p3["xCH4.src"]  <- 0.5
 ```{r, eval=d[1], echo=d[1]}
 # default model parameters
 pars <- c(
-  CH4.ini = 22.18,        # all values in umol/bottle
-  CO2.ini = 2.95,
-  Cdead.ini = 1.15*8.69-2.95,
-  Clive.ini = 1,
-  rMO = 0.0274,           # CH4 removal rate (umol/bottle/h),
-  kMin = 3*3/530,         # mineralization of dead biomass (/h)
-  eff = 0.45,                # assimilation efficiency
-  xCH4.src = 0.5, #0.41,
-  xCdead.src = 0.2, #0.23,
-  xCO2.ini = 0.01,
+  CH4.ini    = 22.18,   # all values in umol/bottle
+  CO2.ini    = 2.95,
+  Cdead.ini  = 1.15*8.69-2.95,
+  Clive.ini  = 1,
+  rMO        = 0.0274,  # CH4 removal rate (umol/bottle/h),
+  kMin       = 3*3/530, # mineralization of dead biomass (/h)
+  eff        = 0.45,    # assimilation efficiency
+  xCH4.src   = 0.5,     #0.41,
+  xCdead.src = 0.2,     #0.23,
+  xCO2.ini   = 0.01,
   xClive.ini = 0.01
 )
 # sensitivity analysis
 p0 <- p1 <- p2 <- p3 <- pars
-p1["Cdead.ini"] <- 0
-p1["xCH4.src"] <- 0.4
-p2["eff"] <- 0.0
-p2["xCH4.src"] <- 0.38
-p3["xCH4.src"] <- 0.4
+p1["Cdead.ini"]  <- 0
+p1["xCH4.src"]   <- 0.4
+p2["eff"]        <- 0.0
+p2["xCH4.src"]   <- 0.38
+p3["xCH4.src"]   <- 0.4
 p3["xCdead.src"] <- 0.26
 ```
 
@@ -116,13 +116,13 @@ C13model <-function(t, state, parms) {
   })
 }
 
-# function to calculate initial state from the model parameters
+# calculate initial state from the model parameters
 state.ini <- function(parms){
   with(as.list(parms), {
-  c(CH4 = CH4.ini, CH4_C13 = CH4.ini*xCH4.src,
-    CO2 = CO2.ini, CO2_C13 = CO2.ini*xCO2.ini,
+  c(CH4   = CH4.ini,   CH4_C13   = CH4.ini*xCH4.src,
+    CO2   = CO2.ini,   CO2_C13   = CO2.ini*xCO2.ini,
     Cdead = Cdead.ini, Cdead_C13 = Cdead.ini*xCdead.src,
-   Clive = Clive.ini, Clive_C13 = Clive.ini*xClive.ini
+    Clive = Clive.ini, Clive_C13 = Clive.ini*xClive.ini
   )})
 }
 ```
