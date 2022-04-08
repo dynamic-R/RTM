@@ -275,3 +275,22 @@ RTMtemplate <- function(x = c("?", "rtm0D", "rtm1D", "porous1D", "porous1D_exten
       
   }
 }
+
+RTMreport <- function(dest_folder = path.expand("~")){
+  # remove folder separator from the end of the dest_folder, if required
+  if (substr(dest_folder,nchar(dest_folder),nchar(dest_folder)) == .Platform$file.sep)
+    dest_folder <- substr(dest_folder, 1, nchar(dest_folder)-1)
+  # construct path to the report_template folder in the RTM package
+  report_template_folder <- paste0(system.file(package = 'RTM'),
+                                   .Platform$file.sep,
+                                   "report_template")
+  # copy the content to the destination folder
+  cat(paste("Copying",report_template_folder,"to",dest_folder,"..."))
+  file.copy(from=report_template_folder, to = dest_folder, recursive = TRUE)
+  cat(paste(" Done\n"))
+  # open the report_main.Rmd master file
+  report_main <- paste0(dest_folder, .Platform$file.sep, "report_template",
+                        .Platform$file.sep, "report_main.Rmd")
+  file.edit(report_main, editor="internal")
+  cat(paste("File", report_main, "is now open in the editor."))
+}
