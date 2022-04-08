@@ -1,0 +1,31 @@
+---
+title: 'Group project report'
+subtitle: "A template for a more structured writing of the group project report"
+author: "Authors"
+date: "April 2022"
+output: 
+  pdf_document:
+    toc: yes
+    number_sections: true
+  header-includes: 
+    \usepackage{float} 
+    \floatplacement{figure}{ht} 
+linestretch: 1.1
+abstract: \noindent You can include a short abstract here. It should summarize the overall aim and key findings of your project.
+---
+
+```{r child = 'introduction.Rmd'}
+```
+
+```{r child = 'methods.Rmd'}
+```
+
+```{r child = 'results.Rmd'}
+```
+
+```{r child = 'discussion.Rmd'}
+```
+
+```{r child = 'references.Rmd'}
+```
+
