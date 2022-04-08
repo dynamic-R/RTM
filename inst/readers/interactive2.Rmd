@@ -1,26 +1,24 @@
 ---
-title: 'Interactive Applications in R'
+title: 'Interactive Applications in R --- The silica dissolution model (0D)'
 subtitle: "Reader Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
 author: "Lubos Polerecky and Karline Soetaert, Utrecht University"
 date: "March 2021"
 output:
   pdf_document: default
   html_document: default
-abstract: \noindent Here we illustrate how to use the R-package *shiny* (Chang et al., 2020) to make interactive (web-based) reaction-transport models in R. Among other things, the approach allows you to quickly explore how the model output changes as a function of the input parameters. We use the silica dissolution model as an example.
+abstract: \noindent Here we illustrate how to use the R-package *shiny* (Chang et al., 2020) to make interactive (web-based) reaction-transport models in R. Among other things, the approach allows you to quickly explore how the model output changes as a function of the input parameters. We use the *zero-dimensional* silica dissolution model as an example.
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Silica dissolution model
-
-## Model implementation in R
+# Model implementation in R
 
 A detailed description of the silica dissolution model is provided in the *dissolutionSi* exercise (enter ``RTMexercise("dissolutionSi")`` in the R-console to see the exercise). Here we only reproduce the R-code.
 
 ```{r}
-default.pars <- list(
+default.pars <- c(
  NV   = 8e6      , # [number/m3], density of spherical silica particles (N/V)
  kp   = 1        , # [m/yr],      precipitation rate constant (assumed)
  MW   = 60.08e-3 , # [kg/mol],    silica molar weight
@@ -54,21 +52,21 @@ InitialCondition.fun <- function(parms)  # initial concentrations
 
 ```
 
-For the web interface, we will create sliders, so that we can change the values of some model parameters and initial conditions, and see the effect on the model result. It is most instructive if we compare these altered model runs with the default model run. We therefore run the model first with the default parameters:
+The web interface will contain sliders allowing us to change the values of some of the model parameters and see the effect on the model result. It is most instructive if we compare these altered model runs with the output of the default model run. We therefore run the model first with the default parameters.
 
 ```{r, message=FALSE}
 require(deSolve)
 
-state.ini   <- InitialCondition.fun(default.pars)  # initial conditions
+state.ini   <- InitialCondition.fun(default.pars)   # initial conditions
 times       <- seq(from=0, to=30, by=0.1)           # time in years
 Default.out <- ode(y=state.ini, times=times, func=DissolveSilica, parms=default.pars)
 ```
 
-## The webpage part
+# The web interface part
 
-The code for interactive applications consists of a user interface (UI) and a server.
+The code for interactive applications consists of a graphical user interface (UI) and a server.
 
-### The user interface
+## The graphical user interface
 
 We choose a main page with a side bar as the layout for this webpage (``pageWithSidebar``). 
 
@@ -77,7 +75,7 @@ We choose a main page with a side bar as the layout for this webpage (``pageWith
    - sliders that can be moved to change the value of model parameters or initial conditions (``sliderInput``). Note that each slider has a name that will be accessed in the server function. Here we choose the name of the parameter or state variable as the slider name.
    - a check box that, if checked, will cause the default run to be plotted together with the current model output; its name is *defaultRun* (``checkboxInput``).
    - a button that, when clicked, will reset the default parameter values; its name is *resetButton* (``actionButton``).
-* The main panel contains the plot of the model run. Note that the name *PlotSi* is used in the server function.
+* The main panel contains the plot of the model run. Note that the name ``PlotSi`` is used in the server function.
 
 ```{r, message=FALSE}
 require(shiny)
@@ -90,19 +88,19 @@ UI.Si <- shinyUI(pageWithSidebar(      # Define UI (user interfae)
   sidebarPanel(
    sliderInput(inputId="NV",
                label = "particle density (particles/m3)",
-               min = 1e6, max = 1e8, step = 1e6, value = default.pars$NV),
+               min = 1e6, max = 1e8, step = 1e6, value = default.pars["NV"]),
    sliderInput(inputId="kp",
                label = "precipitation rate constant (m/yr)",
-               min = 0.1, max = 2, step = 0.01, value = default.pars$kp),
+               min = 0.1, max = 2, step = 0.01, value = default.pars["kp"]),
    sliderInput(inputId="Ceq",
                label = "dissolved Si equilibrium concentration (mol/m3)",
-               min = 0.1, max = 3, step = 0.01, value = default.pars$Ceq),
+               min = 0.1, max = 3, step = 0.01, value = default.pars["Ceq"]),
    sliderInput(inputId="Rini",
                label = "initial particle radius (m)",
-               min = 1e-6, max = 0.001, step = 1e-6, value = default.pars$Rini),
+               min = 1e-6, max = 0.001, step = 1e-6, value = default.pars["Rini"]),
    sliderInput(inputId="Cini", 
                label = "dissolved Si initial concentration (mol/m3)",
-               min = 0, max = 10, step = 0.1, value = default.pars$Cini),
+               min = 0, max = 10, step = 0.1, value = default.pars["Cini"]),
    
    actionButton (inputId="resetButton",
                  label="Reset Parameters"),
@@ -117,7 +115,7 @@ UI.Si <- shinyUI(pageWithSidebar(      # Define UI (user interfae)
 ))
 ```
 
-### The server
+## The server
 
 In the server, we write the code that is executed when an UI object (slider, button, check box, etc.) changes its status. In this implementation, 
 
@@ -132,22 +130,23 @@ Server.Si <- shinyServer(function(input, output, session) {
   # the 'reset' button
   # -------------------
   observeEvent(input$resetButton, {
-    updateNumericInput(session, "NV",    value = default.pars$NV)
-    updateNumericInput(session, "kp",    value = default.pars$kp)
-    updateNumericInput(session, "Ceq",   value = default.pars$Ceq)
-    updateNumericInput(session, "Rini",  value = default.pars$Rini)
-    updateNumericInput(session, "Cini",  value = default.pars$Cini)
+    def.pars.list <- as.list(default.pars) # we must convert default.pars to a list!
+    updateNumericInput(session, "NV",    value = def.pars.list$NV)
+    updateNumericInput(session, "kp",    value = def.pars.list$kp)
+    updateNumericInput(session, "Ceq",   value = def.pars.list$Ceq)
+    updateNumericInput(session, "Rini",  value = def.pars.list$Rini)
+    updateNumericInput(session, "Cini",  value = def.pars.list$Cini)
   })
 
- # Get the model parameters, as defined in the UI 
+  # Get the model parameters, as defined in the UI.
   getpars <- reactive( {
-    pars        <- default.pars 
-    pars$NV     <- input$NV
+    pars        <- as.list(default.pars) # default.pars is a VECTOR!!
+    pars$NV     <- input$NV              # input is a LIST!!
     pars$kp     <- input$kp   
     pars$Ceq    <- input$Ceq     
     pars$Cini   <- input$Cini  
     pars$Rini   <- input$Rini  
-    pars
+    return(unlist(pars))                 # convert output to a VECTOR
   })
 
   # -------------------
@@ -156,32 +155,45 @@ Server.Si <- shinyServer(function(input, output, session) {
 
   output$PlotSi <- renderPlot({     # will be visible in the main panel
 
-   pars      <- getpars()
-   state.ini <- InitialCondition.fun(pars)
-   out   <- ode(y=state.ini, parms=pars, func=DissolveSilica, times=times)
+   pars      <- getpars()                  # update model parameter first
+   state.ini <- InitialCondition.fun(pars) # calculate initial state based on the model parameters
+   out       <- ode(y=state.ini, parms=pars, func=DissolveSilica, times=times)
 
    if (input$defaultRun) {  # the check box is true
       plot (out, Default.out, xlab="time (yr)", 
             main=c("dissolved Si (molSi/m3)", "solid Si (molSi/m3)", 
                    "particle radius (m)", "total Si (molSi/m3)"),
-            lwd = 2, las = 1, lty = 1,
+            lwd = 2, las = 1, lty = 1, mfrow=c(2,3),
             cex.main = 1.5, cex.axis = 1.25, cex.lab = 1.25)
-      legend("right", legend = c("current", "default"), 
+      plot.new()
+      legend("topleft", legend = c("current", "default"), 
              cex = 1.5, col = 1:2, lty = 1)
     } else  
       plot (out, xlab="time (yr)", 
             main=c("dissolved Si (molSi/m3)", "solid Si (molSi/m3)", 
                    "particle radius (m)", "total Si (molSi/m3)"),
-            lwd = 2, las = 1, lty = 1,
+            lwd = 2, las = 1, lty = 1, mfrow=c(2,3),
             cex.main = 1.5, cex.axis = 1.25, cex.lab = 1.25)  
-   })                             # end ouput$plot
+   })  # end ouput$plot
 
 })     # end of the definition of shinyServer
 ```
 
-## Run the web application
+### Beware of important details 
 
-To run this app, first run the entire R-code above (e.g., in R-studio, choose Run $\rightarrow$ Run All) and then write the following in the R-console (see screenshot in Figure 1):
+Here, we emphasize a few subtle but important details to be aware of when defining ``shinyServer``.
+
+* In the ``updateNumericInput`` function, which is used within the ``observeEvent`` function, the value passed to the input parameter ``value`` must be an element of a **list**. If this were not the case, resetting to default parameter values would not work (this is true at least in the version 1.7.1 of shiny). Because our default parameters are stored in a **vector** (``default.pars``), we convert this vector into a list (``def.pars.list``) just before we use it. 
+
+* Similarly, the variable ``input`` inside the ``reactive`` function is a **list**. Therefore, we first convert the vector of our model parameters to a list (called ``pars``), then update the values based on the ``input`` (using the ``$`` syntax), and finally output the result as a vector (using ``unlist(par)``). 
+
+Note that we would *not* need to consider these issues if the model parameters were defined as a *list* from the start (i.e., by defining ``default.pars <- list(...)`` rather than ``default.pars <- c(...)``). However, we do not want to break this habit here and thus continue using model parameters as a *vector*.
+
+Another issue is the legend. Typically, we use ``plot.new()`` just after we plot the model results and just before we display the legend. Here, we rely on the fact that the implementation of the ``plot`` function in the ``deSolve`` package sets the arrangement (``mfrow``) of the plots optimally. For example, if the model output contains 5 variables, the default plot arrangement will be ``mfrow=c(2,3)``. In this case, there will be an *empty space* for a new plot, and it is this empty space where a legend will be placed by the function ``legend``. That is, everything will work as expected. However, if the model output only contained, for example, 4 variables, the default plot arrangement would be ``mfrow=c(2,2)``, implying that there would be *no* empty space within the default plot arrangement for a new plot. In this case, issuing the command ``plot.new()`` would *delete* the graphs plotted by the previous ``plot`` command, and only the plot with the legend would remain. To overcome this undesirable behavior, we *force* the ``mfrow`` value in the ``plot`` function to a value that leaves that required empty space for the legend. Specifically, we set ``mfrow=c(2,3)`` although we only want to plot 4 output variables.
+
+# Run the web application
+
+To run the model as a shiny app (see screenshot in Figure 1), first run the entire R-code above (e.g., in R-studio, choose Run $\rightarrow$ Run All) and then enter the following command in the R-console:
 
 ```{}
 shinyApp(ui = UI.Si, server = Server.Si)
