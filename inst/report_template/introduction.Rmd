@@ -7,4 +7,4 @@ output: pdf_document
 
 # Introduction
 
-The report starts with an introduction, which should explain the broader context of the project and define project aims. Ultimately, it should serve as a *motivation* for the work presented in the subsequent sections.
+A report starts with an introduction, which should explain the broader context of the project and define project aims. Ultimately, it should serve as a *motivation* for the work presented in the subsequent sections.

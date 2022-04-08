@@ -11,7 +11,7 @@ output:
     \usepackage{float} 
     \floatplacement{figure}{ht} 
 linestretch: 1.1
-abstract: \noindent You can include a short abstract here. It should summarize the overall aim and key findings of your project.
+abstract: \noindent The files in the folder ``report_template`` are offerred as a quick way to start writing a report for the group project in the RTM course. Their main aim is to kick-start a more structured writing process, where you can focus more on adding new content rather than spending too much time on figuring out how to achieve certain type-setting effects in R-markdown. You can use and modify the files as you wish. It is recommended that you first edit and knit each component of the report individually. Subsequently, you can knit the "master" file ``report_main.Rmd`` to produce the complete version of the report. If you are new to R-markdown, reading and modifying the template files will also help you learn useful tips.
 ---
 
 ```{r child = 'introduction.Rmd'}

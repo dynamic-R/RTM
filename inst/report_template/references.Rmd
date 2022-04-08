@@ -7,7 +7,7 @@ output: pdf_document
 
 # Acknowledgements
 
-It is always a good idea to acknowledge help of others. 
+It is always a good idea to acknowledge the help of others. 
 
 # Author's contributions
 

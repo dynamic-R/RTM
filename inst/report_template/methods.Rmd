@@ -13,20 +13,30 @@ The Methods section describes the "how". It should explain
 * key assumptions (rate expressions, boundary conditions);
 * model implementation in R (model parameters & state variables, model function).
 
-## Equations
+## Including external figures
+
+If you want to include an external figure in the report (e.g., stored in a file ``NitBudget.png``), you can do so using the following markdown sentence:
+
+``![This is an external figure.](NitBudget.png){width=70%}``
+
+![This is an external figure.](NitBudget.png){width=70%}
+
+The result will look as shown in Figure 1.
+
+## Including equations
 
 When writing chemical or mathematical equations, you can use \LaTeX\ commands within the Rmd file. For example:
 
-* Displayed chemical equation (without a label):
+* Displayed chemical equation without a label:
 $$CH_2O + O_2 \rightarrow CO_2 + H_2O$$
 
-* Displayed chemical equation (with a label):
+* Displayed chemical equation with a label:
 \begin{equation}
 \label{eq:miner}
 CH_2O + O_2 \rightarrow CO_2 + H_2O
 \end{equation}
 
-* Displayed mathematical equation (with a label):
+* Displayed mathematical equation with a label:
 \begin{equation}
 \label{eq1}
 \frac{\partial O_2}{\partial t} = Transport(O_2) + R_{aeration} - R_{miner}
@@ -35,7 +45,9 @@ The label can then be used to reference Eq. \ref{eq1} and Eq. \ref{eq:miner} eve
 
 ## Model implementation in R
 
-In this section you will show, and explain, how you implemented the model in R. As an example, here we include the implementation of the BOD model (available in the ``RTM_1D`` template).
+It is a good idea to include the full R-code of your model. If the model is complex, it may also be worthwhile to explain the key components of the model implementation. 
+
+As an example, here we include the implementation of the BOD model (available in the ``RTM_1D`` template).
 
 ```{r, warning=FALSE, message=FALSE}
 require(ReacTran)
@@ -128,7 +140,7 @@ BOD1D <- function(t, state, parms) {  # state is a long vector, at time t
 
 ## Modeled scenarios
 
-In this section you can also include the *calculation* (not yet plotting) of model outputs for specific model scenarios. 
+After showing the R-code implementing the model, it is useful to explain the details of specific modeled scenarios or other types of analyses performed with the model (e.g., sensitivity analysis, fitting, or budgetting). The results can be calculated but not yet displayed (they will be displayed in the Results section). 
 
 For example, here we find a steady-state solution for the default model parameters.
 
@@ -148,7 +160,7 @@ std2 <- steady.1D(y = state.ini, parms = p2, func = BOD1D,
           atol = 1e-10, rtol = 1e-10)
 ```
 
-We also generate the content of tables. We do not display them just yet, but we wait until the Results section.
+Here, we construct the $O_2$ and $BOD$ budget for the modeled domain and store it in a format (a ``data.frame``) that can be displayed as a nice table in the Results section.
 
 ```{r}
 toselect <- c("TotalDecay", "TotalAeration", "BODinflux", "BODefflux",
