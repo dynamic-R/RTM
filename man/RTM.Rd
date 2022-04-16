@@ -25,5 +25,5 @@ RTMreader("?")
 RTMtemplate("?")
 
 # To copy report templates to a destination_folder:
-RTMreport(dest_folder = destination_folder)
+RTMreport(dest_folder = path_to_destination_folder)
 }

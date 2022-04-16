@@ -13,7 +13,7 @@ RTMtutorial(x = c("?", "introduction", "why", "conceptual", "massbalance",
                "partitioning", "ecology", "transportProcesses", "transportFluxes", 
                "transportPorous", "transportBoundaries", "transportR"), 
             output = c("tutorial", "RMD"))
-    
+            
 RTMexercise(x = c("?", "introductionR", "conceptual", "massbalance_chemistry",     
                "massbalance_ecology", "carbonCycle", "ozone", "dissolutionSi",              
                "equilibriumNH3", "equilibriumHCO3", "equilibriumOMD", "detritus",           
@@ -24,20 +24,21 @@ RTMexercise(x = c("?", "introductionR", "conceptual", "massbalance_chemistry",
                "biogeochemistry", "epidemiology", "ecology", 
                "individualbased", "reaction_transport"),            
             output = c("HTML", "PDF", "RMD", "WORD"))
-
+            
 RTManswer(x, output = c("HTML", "PDF", "RMD", "WORD"))
 
 RTMreader(x = c("?", "events", "forcings", "observations", 
                "fitting", "visualisation", "pHprofiles", 
                "perturbation_I", "perturbation_II", 
                "interactive", "interactive2", "interactive_1D",
-               "numericalR", "numericalR", git_sharing_code"),
-            output = c("HTML", "PDF", "RMD", "WORD"))      
+               "numericalR", "git_sharing_code"),
+            output = c("HTML", "PDF", "RMD", "WORD"))
 
 RTMtemplate(x = c("?", "rtm0D", "rtm1D", "porous1D", "porous1D_extensive", 
                   "rtmEquilibrium", "npzd", "rmarkdown_small"))
                   
-RTMreport(dest_folder = path.expand("~"))
+RTMreport(dest_folder = path_to_destination_folder)
+
 }
 
 \arguments{
