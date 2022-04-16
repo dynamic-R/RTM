@@ -8,7 +8,7 @@ Tutors: Lubos Polerecky and Karline Soetaert
 
 The package contains tutorials, exercises, extra readers, and Rmd template files for writing reaction-transport models. 
 
-Available functions: \link{RTMtutorial}, RTMexercise, RTMreader, RTMtemplate, RTManswer
+Available functions: \link{RTMtutorial}, RTMexercise, RTMreader, RTMtemplate, RTManswer, RTMreport
 }
 
 \examples{
@@ -23,4 +23,7 @@ RTMreader("?")
 
 # To list available templates:
 RTMtemplate("?")
+
+# To copy report templates to a destination_folder:
+RTMreport(dest_folder = destination_folder)
 }
