@@ -291,6 +291,6 @@ RTMreport <- function(dest_folder = path.expand("~")){
   # open the report_main.Rmd master file
   report_main <- paste0(dest_folder, .Platform$file.sep, "report_template",
                         .Platform$file.sep, "report_main.Rmd")
-  file.edit(report_main, editor="internal")
-  cat(paste("File", report_main, "is now open in the editor."))
+  file.edit(report_main)
+  cat(paste("You can start writing the report by editing", report_main, "or any of the children files."))
 }
