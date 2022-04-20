@@ -12,7 +12,7 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-d <- c(F, T, F)
+d <- c(T, T, T)
 ```
 
 # Data set L+`r paste(which(d))`
@@ -163,36 +163,7 @@ state.ini <- function(parms){
 ```
 
 ```{r, echo=FALSE, message=FALSE}
-# solve the model
 require(deSolve)
-outtimes <- seq(from = 0, to = 530, length.out = 100)
-out0 <- ode(y = state.ini(p0), parms = p0, func = C13model, times = outtimes)
-out1 <- ode(y = state.ini(p1), parms = p1, func = C13model, times = outtimes)
-out2 <- ode(y = state.ini(p2), parms = p2, func = C13model, times = outtimes)
-out3 <- ode(y = state.ini(p3), parms = p3, func = C13model, times = outtimes)
-```
-
-```{r, eval=FALSE, echo=FALSE, fig.height = 6, fig.width = 8, fig.align='center'}
-# display complete output (for debugging)
-plot(out0, out1, out2, out3,
-     which = c("CH4", "CO2", "Cdead", "Clive",
-               "CH4_C13", "CO2_C13", "Cdead_C13", "Clive_C13",
-               "xCH4", "xCO2", "xCdead", "xClive"),
-     xlab="time (h)", lty=1, lwd=c(1,2,1,2), mfrow=c(3,4))
-```
-
-```{r, fig.height = 3, fig.width = 8, fig.align='center', echo=FALSE}
-# display exp. data and model predictions
-plot(out0, out1, out2, out3, 
-     # obs = list(DATA1, DATA2, DATA3), 
-     # obspar = list(pch=16, col=1:3),
-     obs = DATA,
-     obspar = list(pch=16, col=which(d)),
-     mfrow=c(1,3), lty=c(1,2,1,2), lwd=c(1,2,1,2))
-legend("bottomright", legend=0:3, lty=c(1,2,1,2), lwd=c(1,2,1,2), col=1:4)
-```
-
-```{r, echo=FALSE, message=FALSE}
 outtimes <- seq(from = 0, to = 530, length.out = 100)
 out1 <- ode(y = state.ini(pars1), parms = pars1, func = C13model, times = outtimes)
 out2 <- ode(y = state.ini(pars2), parms = pars2, func = C13model, times = outtimes)
@@ -204,6 +175,6 @@ out3 <- ode(y = state.ini(pars3), parms = pars3, func = C13model, times = outtim
 plot(out1, out2, out3, 
      obs = list(DATA1, DATA2, DATA3), 
      obspar = list(pch=16, col=1:3),
-     mfrow=c(1,3), lty=1, lwd=2)
-legend("bottomright", legend=0:3, lty=1, lwd=2, col=1:3)
+     mfrow=c(1,3), lty=1, lwd=1)
+legend("bottomright", legend=1:3, lty=1, lwd=2, col=1:3)
 ```
