@@ -103,8 +103,8 @@ pars <- c(
   rMO        = 0.0274,  # CH4 removal rate (umol/bottle/h),
   kMin       = 3*3/530, # mineralization of dead biomass (/h)
   eff        = 0.45,    # assimilation efficiency
-  xCH4.src   = 0.5,     #0.41,
-  xCdead.src = 0.2,     #0.23,
+  xCH4.src   = 0.41,     #0.41,
+  xCdead.src = 0.25,     #0.23,
   xCO2.ini   = 0.01,
   xClive.ini = 0.01
 )
@@ -168,13 +168,19 @@ outtimes <- seq(from = 0, to = 530, length.out = 100)
 out1 <- ode(y = state.ini(pars1), parms = pars1, func = C13model, times = outtimes)
 out2 <- ode(y = state.ini(pars2), parms = pars2, func = C13model, times = outtimes)
 out3 <- ode(y = state.ini(pars3), parms = pars3, func = C13model, times = outtimes)
+pars1_50 <- pars1; pars1_50["xCH4.src"] <- 0.5
+pars2_50 <- pars2; pars2_50["xCH4.src"] <- 0.5
+pars3_50 <- pars3; pars3_50["xCH4.src"] <- 0.5
+out1_50 <- ode(y = state.ini(pars1_50), parms = pars1_50, func = C13model, times = outtimes)
+out2_50 <- ode(y = state.ini(pars2_50), parms = pars2_50, func = C13model, times = outtimes)
+out3_50 <- ode(y = state.ini(pars3_50), parms = pars3_50, func = C13model, times = outtimes)
 ```
 
 ```{r, fig.height = 3, fig.width = 8, fig.align='center', echo=FALSE}
 # display exp. data and model predictions
-plot(out1, out2, out3, 
+plot(out1, out2, out3, out1_50, out2_50, out3_50,
      obs = list(DATA1, DATA2, DATA3), 
      obspar = list(pch=16, col=1:3),
-     mfrow=c(1,3), lty=1, lwd=1)
+     mfrow=c(1,3), lty=c(1,1,1,2,2,2), col=c(1,2,3,1,2,3), lwd=1)
 legend("bottomright", legend=1:3, lty=1, lwd=2, col=1:3)
 ```
