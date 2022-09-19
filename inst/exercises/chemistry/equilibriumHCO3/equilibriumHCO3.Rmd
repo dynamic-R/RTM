@@ -1,14 +1,14 @@
 ---
 title: |
-  | Local Equilibrium Chemistry in R --- part II:
   | Two Equilibrium Reactions
+  | Local Equilibrium Chemistry in R --- part II:
 subtitle: "Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
 author: "Lubos Polerecky and Karline Soetaert, Utrecht University"
 date: "February 2021"
 output:
+  html_document: default
   pdf_document:
     number_sections: true
-  html_document: default
 ---
 
 ```{r child = 'equilibriumHCO3_Q.Rmd'}
