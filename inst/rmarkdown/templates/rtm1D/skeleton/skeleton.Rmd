@@ -129,7 +129,7 @@ BOD1D <- function(t, state, parms) {  # state is a long vector, at time t
 Model is solved over 100 days with the initial conditions specified above.
 
 ```{r}
-outtimes <- seq(from = 1, to = 100, length.out = 100)   # output times
+outtimes <- seq(from = 0, to = 100, length.out = 100)   # output times
 
 # ode.1D integrates the 1D model 
 out <- ode.1D(y = state.ini, parms = pars, func = BOD1D, times = outtimes, 
