@@ -156,7 +156,7 @@ question(sprintf("Which is a good boundary condition for $POM$ deep down in the 
 ```
 
 ```{r earlydia4, echo = FALSE}
-msg <- "In models of sediment diagenesis, we typically impose the zero-gradient boundary condition at the lower boundary (deep in the sediment) for solutes as well. However, fixed concentrations or fluxes are sometimes imposed, e.g., if there has been a historic build-up of solutes at depth or if there is upwards seapage of solutes."
+msg <- "In models of sediment diagenesis, we typically impose the zero-gradient boundary condition at the lower boundary (deep in the sediment) for solutes as well. However, fixed concentrations or fluxes are sometimes imposed, e.g., if there has been a historic build-up of solutes at depth or if there is upwards seapage of solutes. Thus, answers B, C, and D are correct."
 
 question(sprintf("Which is a good boundary condition for $SO_4^{2-}$ deep down in the sediment ($x\\rightarrow \\infty$)?"), type = "learnr_checkbox",
  answer(sprintf("No boundary condition needed.")),
