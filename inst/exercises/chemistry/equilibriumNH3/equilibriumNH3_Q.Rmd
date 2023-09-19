@@ -52,7 +52,7 @@ As shown in class, the mass balance equations for the concentrations of A, B and
 \end{equation}
 where the rates for the forward and backward reactions are $R_f = k_f \cdot [AB]$ and $R_b = k_b \cdot [A] \cdot [B]$, respectively.
 
-If the rate of the slow removal process is zero ($\lambda=0$), the system will reach an equilibrium. By definition, equilibrium corresponds to the situation where state variables do not change in time, i.e., all time derivatives are equal to zero. This occurs when the rates of the forward and backward reactions are equal, i.e., $R_f=R_b$. Using the rate laws, this equality yields
+If the rate of the slow removal process is zero ($\lambda=0$), the system will reach an equilibrium. By definition, equilibrium corresponds to the situation where state variables do not change over time, i.e., all time derivatives are equal to zero. This occurs when the rates of the forward and backward reactions are equal, i.e., $R_f=R_b$. Using the rate laws, this equality yields
 \begin{equation}
 K_{eq}\equiv \frac{k_f}{k_b} = \frac{[A]_{eq}\cdot[B]_{eq}}{[AB]_{eq}}.
 \end{equation}
@@ -363,7 +363,7 @@ Consider a water body with an initial pH of 8 ($pH = -log([H^+])$, where $[H^+]$
 
 Write a model that will predict the change of water pH, along with the change of [$NH_x$], as a function of time due to ammonia (NH$_3$) degassing. 
 
-Assume that the equilibration process $NH_4^+ \leftrightarrow NH_3 + H^+$ is much faster than the degasing (equilibrium constant for this process is approximately $K_{eq} = 5.38\times 10^{-10}\, mol \, L^{-1}$). Thus, you can use the local equilibrium assumption to solve the model. Additionally, assume that degassing of ammonia is the *only* process that affects the water pH. That is, assume that other chemical species, such as dissolved CO$_2$, which would be a strong buffer counter-acting the pH changes induced by ammonia degassing, are *not* present in the water. This last assumption is required to make the model simple and focused on one process: ammonia degassing.
+Assume that the equilibration process $NH_4^+ \leftrightarrow NH_3 + H^+$ is much faster than the degasing (equilibrium constant for this process is approximately $K_{eq} = 5.38\times 10^{-10}\, mol \, L^{-1}$). Thus, you can use the local equilibrium assumption to solve the model. Additionally, assume that degassing of ammonia is the *only* process that affects the water pH. That is, neglect water dissociation itself\footnote{Dissociation of water, $H_2O \rightarrow H^+ + OH^-$, obviously also affects the pH, but we will ignore this process in this exercise.} and assume that other chemical species, such as dissolved CO$_2$, which would be a strong buffer counter-acting the pH changes induced by ammonia degassing, are *not* present in the water. These last assumptions are required to make the model simple and focused on one process: ammonia degassing.
 
 You can start with the R-markdown template file *RTM_0D.Rmd* to implement this model. You can obtain this file from Rstudio: File $\rightarrow$ new File $\rightarrow$ Rmarkdown $\rightarrow$ from template $\rightarrow$ RTM\_0D. Save this file under a different name. Do not forget to change the heading of this file.
 
