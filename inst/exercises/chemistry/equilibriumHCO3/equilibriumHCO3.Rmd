@@ -14,7 +14,6 @@ output:
 ```{r child = 'equilibriumHCO3_Q.Rmd'}
 ```
 
-\newpage
 ```{r child = 'equilibriumHCO3_A.Rmd'}
 ```
 
