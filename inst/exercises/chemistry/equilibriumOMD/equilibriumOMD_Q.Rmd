@@ -13,7 +13,7 @@ output:
 
 # Aim
 
-In part I and II of the Reader "Local equilibrium chemistry in R", we have shown how to approach pH modeling in scenarios where proton dynamics is affected by 1 and 3 fast reversible reactions, respectively. The reactions corresponded to dissociation of ammonium and carbonic acid and self-ionization of water. Here, we will combine what we have learned there to show how to approach pH modeling when all of these reversible reactions occur within the system at the same time. An important step will be the generalization of the concept of alkalinity to include contributions from all charged species (carbonate, bicarbonate, ammonium, hydroxide, and protons). We will illustrate the model by studying pH dynamics in water induced by organic matter degradation. Additionally, we will revisit the ammonia degassing model originally developed in part I of the Reader to account for the pH buffering provided by the dissolved carbonate species in the system.
+In part I and II of the Reader "Local equilibrium chemistry in R", we have shown how to approach pH modeling in scenarios where proton dynamics is affected by 1 and 3 fast reversible reactions, respectively. The reactions corresponded to dissociation of ammonium and carbonic acid and self-ionization of water. Here, we will combine what we have learned there to show how to approach pH modeling when all of these reversible reactions occur within the system at the same time. An important step will be the generalization of the concept of alkalinity to include contributions from all charged species (carbonate, bicarbonate, ammonium, hydroxide, and protons). We will illustrate the model by studying pH dynamics in water induced by organic matter degradation. Additionally, we will revisit the ammonia degassing model originally developed in part I of the Reader to illustrate the pH buffering provided by the dissolved carbonate species in the system.
 
 # Approach
 
@@ -39,7 +39,7 @@ Assume that the rates of the slow processes are zero ($R_C=R_N=0$). Using the ma
 
 * derive relationships between the equilibrium concentrations of the state variables. Hint: consider that the time-derivatives of the state variables are zero when the system is in an equilibrium.
 
-You should arrive at *five* equations that relate the equilibrium concentrations of [$H_2CO_3$], [$HCO_3^-$], [$CO_3^{2-}$], $[NH_4^+]$, $[NH_3]$, $[OH^-]$, and [$H^+$]. To simplify the relationships, define the ratios between the forward and backward rate constants as the so-called dissociation constants: $K_1 = k_{1f}/k_{1b}$, $K_2 = k_{2f}/k_{2b}$, $K_n = k_{3f}/k_{3b}$, and $K_w' = k_{4f}/k_{4b}$. 
+You should arrive at *four* equations that relate the equilibrium concentrations of [$H_2CO_3$], [$HCO_3^-$], [$CO_3^{2-}$], $[NH_4^+]$, $[NH_3]$, $[OH^-]$, and [$H^+$]. To simplify the relationships, define the ratios between the forward and backward rate constants as the so-called dissociation constants: $K_1 = k_{1f}/k_{1b}$, $K_2 = k_{2f}/k_{2b}$, $K_n = k_{3f}/k_{3b}$, and $K_w' = k_{4f}/k_{4b}$. 
 
 ## Task 3: Lump-sum species
 
@@ -59,11 +59,11 @@ Assume that the system is in an equilibrium, and that the concentrations $[DIC]$
 * derive expressions for $[H_2CO_3]$, $[HCO_3^-]$, $[CO_3^{2-}]$, $[NH_4^+]$, $[NH_3]$, and $[OH^-]$ as a function of $[DIC]$, $[NH_x]$, and $[H^+]$.
 * find a relationship between $[ALK]$, $[DIC]$, $[NH_x]$, and $[H^+]$ from which one of the four state variables can be calculated provided that the other three are known.
 
-This task has been solved in parts I and II of the Reader. Nevertheless, it is useful to revise the steps and check the formulas again. 
+A similar task has been solved in parts I and II of the Reader. Nevertheless, it is useful to revise the steps and check the formulas again. 
 
 ## Task 5: Application to organic matter mineralization
 
-A possible process that adds $H_2CO_3$ and $NH_3$ to the system is the *oxic mineralization* of organic matter (OM). Assume that the stoichiometry of this process is
+A possible process that adds $H_2CO_3$ and $NH_3$ to the system is the *oxic mineralization* of organic matter (OM), where OM is represented by the chemical formula $CH_2O(NH_3)_{NC}$. Assume that the stoichiometry of this process is
 $$
 \quad CH_2O(NH_3)_{NC} + O_2 \rightarrow H_2CO_3 + {NC} \cdot NH_3
 $$ 
@@ -72,11 +72,10 @@ $$
 
 Use the following assumptions:
 
-* OM mineralisation proceeds according to the first-order kinetics with respect to OM. Thus, consider the rates $R_C = r_C\cdot [OM]$ and $R_N = NC\cdot R_C$, where $r_C$ is the rate constant ($s^{-1}$) and $[OM]$ is the OM concentration ($mol~C~L^{-1}$). 
+* OM mineralisation proceeds according to the first-order kinetics with respect to OM. Thus, consider the rates $R_C = r_C\cdot [OM]$ and $R_N = NC\cdot R_C$, where $r_C$ is the rate constant ($s^{-1}$) and $[OM]$ is the OM concentration ($mol~C~L^{-1}$). Assume values of $r_C=0.1~d^{-1}$ and $NC=16/106$, the latter corresponding to the Redfield ratio of N:C in organic matter.
 * OM mineralisation is a slow process relative to the reversible reactions 1--4. Thus, you can apply the "local equilibrium assumption".
 
-Solve the model for 10 days using the following model parameters:
-For a temperature of 25 $^\circ$C, salinity 0 and pressure of 1 bar, assume the following values, as calculated using the R-package *AquaEnv* (Hofmann et al., 2010):
+Solve the model for 10 days. For a temperature of 25 $^\circ$C, salinity 0 and pressure of 1 bar, assume the following values of the equilibrium constants, as calculated using the R-package *AquaEnv* (Hofmann et al., 2010):
 
 ```{r, message=FALSE, echo=FALSE}
 require(AquaEnv)
@@ -85,14 +84,14 @@ require(AquaEnv)
 a     <- aquaenv(S=0, t=25, k1k2="millero")
 rho   <- a$density  # density, g/L
 MW    <- 18.0153    # molar weight, g/mol
-cH2O  <- rho/MW     # concentration, mol/L
+cHxO  <- rho/MW     # total H2O concentration, mol/L
 
 # dissociation constants (converted from mol/kg-soln -> mol/L)
 K1       <- a$K_CO2  * 1e-3 * rho   # mol/L
 K2       <- a$K_HCO3 * 1e-3 * rho   # mol/L
 Kn       <- a$K_NH4  * 1e-3 * rho   # mol/L
 KW       <- a$K_W    * 1e-6 * rho^2 # (mol/L)^2
-KW.prime <- KW       / cH2O         # mol/L
+KW.prime <- KW       / cHxO         # mol/L
 
 # process properties
 rC <- 0.1    # d-1
@@ -100,24 +99,29 @@ NC <- 16/106 # molN/molC
 ```
 
 ```{r, echo=FALSE}
-knitr::kable(cbind(c("$r_C$", "$NC$", "$K_1$", "$K_2$", "$K_n$", "$K_w'$", "$K_w$"),
-                   format(c(rC, NC, K1, K2, Kn, KW.prime, KW),digits=3),
-                   c("$d^{-1}$", "$molN~(molC)^{-1}$", "$mol~L^{-1}$", 
-                     "$mol~L^{-1}$", "$mol~L^{-1}$", "$mol~L^{-1}$",
-                     "$mol^2~L^{-2}$")))
+knitr::kable(cbind(c("$K_1$", "$K_2$", "$K_n$", "$K_w'$", "$K_w$"),
+                   format(c(K1, K2, Kn, KW.prime, KW),digits=3),
+                   c(rep("$mol~L^{-1}$",4), "$mol^2~L^{-2}$")))
 ```
 
-For the initial concentrations you are given the following data (in $\mu mol~L^{-1}$ solution):
+For the initial values, assume the following data:
 
-|       | Value        | Unit           |
-| ----- |:------------:| --------------:|
-| $[OM]$    | 100          | $\mu mol~L^{-1}$         |
-| pH    | 7.9          | -       | 
-| $[DIC]$ | 2000           | $\mu mol~L^{-1}$       | 
-| $[NH_x]$   | 10          | $\mu mol~L^{-1}$      | 
+```{r, echo=FALSE}
+knitr::kable(cbind(c("$pH$", "$[OM]$", "$[DIC]$", "$[NH_x]$", "$[H_xO]$"),
+                   format(c(7.9, 100, 2000, 10, cHxO), digits=2),
+                   c("--", rep("$\\mu mol~L^{-1}$",3), "$mol~L^{-1}$")))
+```
 
 ## Task 6: Application to ammonia degassing
 
-* Modify your ammonia degassing model developed in part I of this Reader so that it will include DIC in addition to NHx.
+The model developed in Task 6 should be equivalent to the ammonia degassing model developed in part I of this Reader in the limit of $DIC\rightarrow 0$ and $H_xO \rightarrow 0$.
 
-Solve the model for 20 days using the following model parameters and initial conditions: $\lambda = 1~d^{-1}$, $pH=8$, $[DIC] = 2000~\mu mol~L^{-1}$,  $[NH_x] = 1000~\mu mol~L^{-1}$. Verify that you get the same result as in Part I if you run the model with $[DIC] = 0$.
+* Check that this is true by comparing the results of the two models.
+
+In this comparison, assume the ammonia degassing rate constant of $\lambda = 1~d^{-1}$, initial $pH=8$, and initial $[NH_x] = 1~mmol~L^{-1}$. 
+
+After this comparison, 
+
+* apply the model to study the magnitude of changes in water pH associated with ammonia degassing at different $DIC$ concentrations (0, $1~mmol~L^{-1}$, and $2~mmol~L^{-1}$).
+
+This application will illustrate the pH buffering role of $DIC$ in natural waters.

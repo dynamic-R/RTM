@@ -20,7 +20,7 @@ Assuming that the forward and backward reactions are elementary, we can use the 
 $$
 \begin{array}{rclr}
 \displaystyle
-\frac{d[H_2CO_3]}{dt} & = & R_1 + R_C & \qquad (1a)\\[5mm]
+\frac{d[H_2CO_3]}{dt} & = & R_1 + \color{red}{R_C} & \qquad (1a)\\[5mm]
 \displaystyle
 \frac{d[HCO_3^-]}{dt} & = & -R_1 + R_2 & \qquad (1b) \\[5mm]
 \displaystyle
