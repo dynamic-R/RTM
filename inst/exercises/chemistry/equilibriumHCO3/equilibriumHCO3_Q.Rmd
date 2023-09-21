@@ -19,7 +19,7 @@ vignette: >
   \usepackage[utf8]{inputenc}
 ```
 
-# Problem and aim
+# Aim
 
 In part I of the Reader "Local equilibrium chemistry in R", we have shown how to model situations where *one* fast reversible reaction involving *three* chemical species --- ammonium ($NH_4^+$), ammonia ($NH_3$) and protons ($H^+$) --- is coupled to a slow irreversible process that affects (adds or removes) one of the species ($NH_3$). We have seen that if we are only interested in modelling the dynamics due to the slow process, we can significantly simplify the model by reformulating it in terms of new state variables --- so-called "lump-sum species". For the fast equilibration reaction $NH_4^+ \leftrightarrow NH_3 + H^+$, these new lump-sum species were the total ammonia, $NH_x = NH_3 + NH_4^+$, and the total positive charge, $H_x = NH_4^+ + H^+$.
 
@@ -31,7 +31,7 @@ $$ Reaction~3: \quad H_2O \leftrightarrow OH^- + H^+$$
 
 We will therefore consider a system of *six* chemical species --- carbonic acid ($H_2CO_3$), bicarbonate ($HCO_3^-$), carbonate ($CO_3^{2-}$), water ($H_2O$), hydroxide ($OH^-$), and protons ($H^+$) --- all of them coupled via the fast reversible reactions 1--3. The aim here is to model how this coupling affects the dynamics of pH if one of the components, specifically $H_2CO_3$, is added to/removed from the system at a rate that is much slower than the rate of the reversible reactions.\footnote{This process could be, for example, the addition of $H_2CO_3$ due to the exchange with atmospheric CO$_2$ or due to the mineralization of organic matter. Note that each of these processes is already a two-step process: the addition of CO$_2$ to water, which is a slow irreversible process, followed by a chemical reaction $CO_2 + H_2O \leftrightarrow H_2CO_3$, which is a fast reversible process. However, because the rate of the overall process is limited by the rate of the slow process, we can consider the net effect of these two processes to be a slow addition of $H_2CO_3$. Depending on the perspective, and given the reactions 1 and 2, one can also consider it as a slow addition of $HCO_3^- + H^+$ or $CO_3^{2-} + 2H^+$. However, here we will consider $H_2CO_3$ as the added species because the ultimate source is the $CO_2$ molecule from the atmosphere or mineralized organic matter.} 
 
-The overall approach will be analogous to that developed in Part I, although the mathematical treatment will be more challenging due to the greater number of species (6 instead of 3) and reactions (3 instead of 1) involved. Specifically, since we are only interested in modelling the dynamics due to the slow process, we can significantly simplify the model by reformulating it in terms of "lump-sum" species. We will show that for the fast equilibration reactions 1--3, these new lump-sum species are the total dissolved inorganic carbon, $DIC = H_2CO_3  + HCO_3^- + CO_3^{2-}$, alkalinity (representing the total excess negative charge), $ALK = HCO_3^- + 2\cdot CO_3^{2-} + OH^- - H^+$, and the total hydroxide, $H_2O_{tot} = H_2O + OH^-$. 
+The overall approach will be analogous to that developed in Part I, although the mathematical treatment will be more challenging due to the greater number of species (6 instead of 3) and reactions (3 instead of 1) involved. Specifically, since we are only interested in modelling the dynamics due to the slow process, we can significantly simplify the model by reformulating it in terms of "lump-sum" species. We will show that for the fast equilibration reactions 1--3, these new lump-sum species are the total dissolved inorganic carbon, $DIC = H_2CO_3  + HCO_3^- + CO_3^{2-}$, alkalinity (representing the total excess negative charge), $ALK = HCO_3^- + 2\cdot CO_3^{2-} + OH^- - H^+$, and the total hydroxide, $H_xO = H_2O + OH^-$. 
 
 Ultimately, we will illustrate here how pH modelling is gradually developed when the number of fast acid-base reactions is increased from 1 (as in Part I) to 3. Once this is understood, one can further expand the approach to any number of acid-base reactions.
 
@@ -81,10 +81,10 @@ knitr::kable(cbind(c("$K_1$", "$K_2$", "$K_w$", "$K_w'$", "density", "concentrat
 * Show that if you define the lump-sum species according to 
 $$DIC = H_2CO_3  + HCO_3^- + CO_3^{2-},$$
 $$ALK = HCO_3^- + 2\cdot CO_3^{2-} + OH^- - H^+,$$ 
-$$H_2O_{tot} = H_2O + OH^-,$$
+$$H_xO = H_2O + OH^-,$$
 their time derivatives are only affected by the slow process but *not* by the reversible reactions 1--3. 
 
-Note that these new state variables correspond to the *total concentration of dissolved inorganic carbon* (DIC), the *excess concentration of negatively charged species* (ALK), and the *total hydroxide concentration* ($H_2O_{tot}$) in the system. 
+Note that these new state variables correspond to the *total concentration of dissolved inorganic carbon* (DIC), the *excess concentration of negatively charged species* (ALK), and the *total hydroxide concentration* ($H_xO$) in the system. 
 
 ## Task 4: From lump-sum species to original species
 
