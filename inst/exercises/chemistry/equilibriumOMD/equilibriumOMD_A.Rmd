@@ -20,7 +20,7 @@ Assuming that the forward and backward reactions are elementary, we can use the 
 $$
 \begin{array}{rclr}
 \displaystyle
-\frac{d[H_2CO_3]}{dt} & = & R_1 + R_C & \qquad (1a)\\[5mm]
+\frac{d[H_2CO_3]}{dt} & = & R_1 + \color{red}{R_C} & \qquad (1a)\\[5mm]
 \displaystyle
 \frac{d[HCO_3^-]}{dt} & = & -R_1 + R_2 & \qquad (1b) \\[5mm]
 \displaystyle
@@ -28,9 +28,13 @@ $$
 \displaystyle
 \frac{d[NH_4^+]}{dt} & = & R_3 & \qquad (1d) \\[5mm]
 \displaystyle
-\frac{d[NH_3]}{dt} & = & -R_3 + R_N & \qquad (1e) \\[5mm]
+\frac{d[NH_3]}{dt} & = & -R_3 + \color{red}{R_N} & \qquad (1e) \\[5mm]
 \displaystyle
-\frac{d[H^+]}{dt} & = & -R_1 - R_2 - R_3 & \qquad (1f)
+\frac{d[H_2O]}{dt} & = & R_4 & \qquad (1f) \\[5mm]
+\displaystyle
+\frac{d[H^+]}{dt} & = & -R_1 - R_2 - R_3 - R_4 & \qquad (1g) \\[5mm]
+\displaystyle
+\frac{d[OH^-]}{dt} & = & -R_4 & \qquad (1h) \\[5mm]
 \end{array}
 $$
 
@@ -51,6 +55,11 @@ R_3 = - k_{3f} \cdot [NH_4^{+}] + k_{3b} \cdot [NH_3] \cdot [H^+]
 \qquad\hspace{2cm} (2c)
 $$
 
+$$
+R_4 = - k_{4f} \cdot [H_2O] + k_{4b} \cdot [OH^-] \cdot [H^+] 
+\qquad\hspace{2cm} (2d)
+$$
+
 ## Task 2: Equilibrium conditions
 
 In an equilibrium, the time derivative of each species in the system is zero. Based on equations 1a and 2a, we obtain $R_1=0$, which yields the relationship
@@ -65,15 +74,21 @@ $$
 K_{2}  = \frac{ [CO_3^{2-}] \cdot [H^+] }{[HCO_3^-]}. 
 \qquad\hspace{2cm} (3b)
 $$
-
-Finally, based on equation 1d and 2c, we obtain $R_3=0$, which yields the relationship
+Based on equation 1d and 2c, we obtain $R_3=0$, which yields the relationship
 
 $$
 K_{n}  = \frac{ [NH_3] \cdot [H^+] }{[NH_4^+]}. 
 \qquad\hspace{2cm} (3c)
 $$
 
-Here, we defined the dissociation constants $K_1$, $K_2$ and $K_n$ as $K_1 = k_{1f}/k_{1b}$, $K_2 = k_{2f}/k_{2b}$, and $K_n = k_{3f}/k_{3b}$. If these relationships are true, then the time derivatives in equations 1b, 1e and 1f are zero. This means that these three equations do *not* provide any *extra* information for the equilibrium concentrations.
+Finally, based on equation 1f and 2d, we obtain $R_4=0$, which yields the relationship
+
+$$
+K_{w}'  = \frac{ [OH^-] \cdot [H^+] }{[H_2O]}. 
+\qquad\hspace{2cm} (3d)
+$$
+
+Here, we defined the dissociation constants $K_1$, $K_2$, $K_n$, $K_w'$ according to $K_1 = k_{1f}/k_{1b}$, $K_2 = k_{2f}/k_{2b}$, $K_n = k_{3f}/k_{3b}$, and $K_w' = k_{4f}/k_{4b}$. If these relationships are true, then the time derivatives in equations 1b--h are zero. This means that these four equations do *not* provide any *extra* information for the equilibrium concentrations.
 
 ## Task 3: Lump-sum species
 
@@ -89,11 +104,17 @@ $$
 \frac{d[NH_x]}{dt} = R_N \qquad\hspace{2cm} (4b)
 $$
 
-Finally, by summing previous equations as (1b) + $2\times$(1c) $-$ (1d) $-$ (1f), we obtain
+Similarly, by summing equation 1f and 1h, we obtain
+
+$$
+\frac{d[H_xO]}{dt} = 0 \qquad\hspace{2cm} (4c)
+$$
+
+Finally, by summing previous equations as (1b) + $2\times$(1c) + (1h) $-$ (1d) $-$ (1g), we obtain
 $$
 \frac{d[ALK]}{dt} = 0 \qquad\hspace{2cm} (4c)
 $$
-These equations show that DIC is *added* at a rate of the *slow process* with rate $R_C$, $NH_x$ is *added* at a rate of the *slow process* $R_N$, while ALK is *conserved* (not changing in time). Specifically, *none* of the lump-sum species DIC, $NH_x$ and ALK is affected by the fast equilibration reactions.
+These equations show that DIC is *added* at a rate of the *slow process* with rate $R_C$, $NH_x$ is *added* at a rate of the *slow process* $R_N$, while $H_xO$ and ALK are *conserved* (not changing over time). Specifically, *none* of the lump-sum species DIC, $NH_x$, $H_xO$, and ALK is affected by the fast reversible reactions.
 
 ## Task 4: From lump-sum species to the original species
 
@@ -122,37 +143,42 @@ $$
 [NH_4^+] = \frac{[H^+]}{K_n + [H^+]} [NH_x] \qquad\hspace{2cm} (5e)
 $$
 
-Once the concentrations $[HCO_3^-]$, $[CO_3^{2-}]$, $[NH_4^+]$, and $[H^+]$ are known, the alkalinity can be calculated from the definition,
 $$
-[ALK] = [HCO_3^-] + 2\cdot [CO_3^{2-}] - [NH_4^+] - [H^+]
-\qquad\hspace{2cm} (5f)
+[OH^-] \approx \frac{K_w}{[H^+]} \qquad\hspace{2cm} (5f)
 $$
-Because $[HCO_3^-]$ and $[CO_3^{2-}]$ depend on $[DIC]$ and $[H^+]$ (see 5a and 5c), and $[NH_4^+]$ depends on $[NH_x]$ and $[H^+]$, \bf equation 5f provides an intimate relationship between $[ALK]$, $[DIC]$, $[NH_x]$, and $[H^+]$ \rm when the system is in an equilibrium. Using this relationship, one can calculate any of the species provided that the other three species are known. Because equation 5f is highly non-linear, these calculations are done numerically.
+
+Once the concentrations $[HCO_3^-]$, $[CO_3^{2-}]$, $[NH_4^+]$, $[OH^-]$, and $[H^+]$ are known, the alkalinity can be calculated from the definition,
+$$
+[ALK] = [HCO_3^-] + 2\cdot [CO_3^{2-}] + [OH^-] - [NH_4^+] - [H^+]
+\qquad\hspace{2cm} (5g)
+$$
+Because $[HCO_3^-]$ and $[CO_3^{2-}]$ depend on $[DIC]$ and $[H^+]$ (see 5a and 5c), $[NH_4^+]$ depends on $[NH_x]$ and $[H^+]$, and $[OH^-]$ depends on $[H^+]$, \bf equation 5g provides an intimate relationship between $[ALK]$, $[DIC]$, $[NH_x]$, and $[H^+]$ \rm when the system is in an equilibrium. Using this relationship, one can calculate any of the species provided that the other *three* species are known. Because equation 5g is highly non-linear, these calculations are done numerically.
 
 ## Task 5: Application to organic matter mineralization
 
 ### R implementation
 
-First, we expand the function that calculates alkalinity to include ammonium as the additionally input (equation 5f).
+First, we expand the function that calculates alkalinity to include ammonium as the additional input (equation 5g).
 
 ```{r}
-solveALK <- function(K1=1.422e-06, K2=1.082e-09, Kn=5.381e-10,
+solveALK <- function(K1=4.44e-07, K2=4.67e-11, Kn=5.68e-10, Kw=9.91e-15,
                      DIC, NHx, pH){
   
   H      <- 10^(-pH)
   HCO3   <- K1*H /  (H^2 + K1*H + K1*K2) * DIC    # eq 5a
   CO3    <- K1*K2 / (H^2 + K1*H + K1*K2) * DIC    # eq 5c
   NH4    <- H / (H + Kn) * NHx                    # eq 5e
-  ALK    <- HCO3 + 2*CO3 - NH4 - H                # eq 5f
+  OH     <- Kw / H                                # eq 5f
+  ALK    <- HCO3 + 2*CO3 + OH - NH4 - H           # eq 5g
   
   return(ALK)
 }
 ```
 
-Then, we update the function that calculates $[H^+]$ from the known alkalinity, DIC and NHx concentration (equation 5f). This is done by finding a root of a function defined as the left-hand-side minus the right-hand-side of equation 5f.
+Then, we update the function that calculates $[H^+]$ from the known alkalinity, DIC and NHx concentrations (equation 5g). This is done by finding a root of a function defined as the left-hand-side minus the right-hand-side of equation 5g.
 
 ```{r}
-solveH <- function(K1 = 1.422e-06, K2 = 1.082e-09, Kn = 5.381e-10,
+solveH <- function(K1 = 4.44e-07, K2 = 4.67e-11, Kn = 5.68e-10, Kw = 9.91e-15,
                    DIC, NHx, ALK){
   
   # function whose root has to be sought
@@ -161,7 +187,8 @@ solveH <- function(K1 = 1.422e-06, K2 = 1.082e-09, Kn = 5.381e-10,
     HCO3    <- K1*H /  (H^2 + K1*H + K1*K2) * DIC   # eq 5a
     CO3     <- K1*K2 / (H^2 + K1*H + K1*K2) * DIC   # eq 5c
     NH4     <- H / (H + Kn) * NHx                   # eq 5e
-    ALK.est <- HCO3 + 2*CO3 - NH4 - H # right-hand-side of eq. 5d
+    OH      <- Kw / H                               # eq 5f
+    ALK.est <- HCO3 + 2*CO3 + OH - NH4 - H # right-hand-side of eq. 5g
     
     return(ALK.est - ALK)
   }
@@ -175,11 +202,11 @@ solveH <- function(K1 = 1.422e-06, K2 = 1.082e-09, Kn = 5.381e-10,
 It is always good to test the functions.
 
 ```{r}
-(pH  <- -log10(solveH(DIC = 2e-3, NHx = 1e-5, ALK = 2.14e-3)))
-(ALK <- solveALK(DIC = 2e-3, NHx = 1e-5, pH = 7.923034))
+(pH.new <- -log10(solveH(DIC = 2e-3, NHx = 1e-5, ALK = 2.14e-3)))
+(ALK    <- solveALK(DIC = 2e-3, NHx = 1e-5, pH = pH.new))
 ```
 
-The model function that implements the model based on the local equilibrium assumption is defined below. Note that the equilibrium constants (dissociation constants) are in $mol~L^{-1}$, so all species should be in this unit!
+The model function that implements the model based on the local equilibrium assumption is defined below. Note that the equilibrium constants (dissociation constants) are in $mol~L^{-1}$, so all species must be in this unit, too!
 
 ```{r}
 OMMpHmodel <- function(t, state, parms) {
@@ -192,16 +219,17 @@ OMMpHmodel <- function(t, state, parms) {
     dOM  <- -RC
     dDIC <-  RC
     dNHx <-  RC*NC
-    dALK <- 0
+    dALK <-  0
 
     # for output
-    H <- solveH(K1 = K1, K2 = K2, Kn = Kn, DIC = DIC, NHx = NHx, ALK = ALK)
+    H <- solveH(K1 = K1, K2 = K2, Kn = Kn, Kw = Kw, DIC = DIC, NHx = NHx, ALK = ALK)
     HCO3    <- K1*H /  (H^2 + K1*H + K1*K2) * DIC   # eq 5a
     CO3     <- K1*K2 / (H^2 + K1*H + K1*K2) * DIC   # eq 5c
     NH4     <- H / (H + Kn) * NHx                   # eq 5e
+    OH      <- Kw / H                               # eq 5f
     
     return(list(c(dOM, dDIC, dNHx, dALK), 
-                pH = -log10(H), H = H, 
+                pH = -log10(H), H = H, OH = OH,
                 H2CO3 = DIC - HCO3 - CO3,
                 HCO3 = HCO3,
                 CO3  = CO3,
@@ -218,15 +246,16 @@ require(deSolve)
 
 pars <- c(rC = 0.1,          # [1/day]
           NC = 16/106,       # molN/molC
-          K1 = 1.422e-06, # mol/L
-          K2 = 1.082e-09, # mol/L
-          Kn = 5.381e-10) # mol/L
+          K1 = 4.44e-07,     # mol/L
+          K2 = 4.67e-11,     # mol/L
+          Kn = 5.68e-10,     # mol/L
+          Kw = 9.91e-15)     # mol2/L2
 
-pH.ini  <- 7.9                   # Hini based on pH
-DIC.ini <- 2000*1e-6             # mol/L
-NHx.ini <- 10*1e-6               # mol/L
+pH.ini  <- 7.9               # H.ini based on pH
+DIC.ini <- 2000*1e-6         # mol/L
+NHx.ini <- 10*1e-6           # mol/L
 ALK.ini <- solveALK(DIC = DIC.ini, NHx = NHx.ini, pH = pH.ini)
-OM.ini  <- 100*1e-6              # mol/L
+OM.ini  <- 100*1e-6          # mol/L
 
 state.ini <- c(OM=OM.ini, DIC=DIC.ini, NHx=NHx.ini, ALK=ALK.ini)
 times     <- seq(from=0, to=10, length.out=100)
