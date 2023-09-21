@@ -277,7 +277,29 @@ plot(out, mfrow = c(4,4), las = 1)
 
 We see that as a result of the mineralization of about 60 $\mu mol~L^{-1}$ of organic matter over the period of 10 days, pH decreased from 7.9 to about 7.63. As expected, $ALK$ and $H_xO$ are conserved and changes in the concentration of $H_2O$ are negligible due to vastly larger concentrations of water compared to all the other species in the system.
 
-## Task 6: Application to ammonia degassing
+## Task 6: Does the formulation of slow reversible processes matter?
+
+If the stoichiometry of OM mineralization is represented by the reaction
+$$
+\quad CH_2O(NH_3)_{NC} + O_2 \rightarrow HCO_3^- + H^- + {NC} \cdot NH_3,
+$$
+the mass balance equations 1c--g do not change while equations 1a, 1b, and 1h change in the following way:
+
+$$
+\begin{array}{rclr}
+\displaystyle
+\frac{d[H_2CO_3]}{dt} & = & R_1  & \qquad (1a')\\[5mm]
+\displaystyle
+\frac{d[HCO_3^-]}{dt} & = & -R_1 + R_2 + \color{red}{R_C}& \qquad (1b') \\[5mm]
+\displaystyle
+\frac{d[H^+]}{dt} & = & -R_1 - R_2 - R_3 - R_4 + \color{red}{R_C} & \qquad (1h') \\[5mm]
+\end{array}
+$$
+This change, however has *no* effect on the differential equations for the lump-sum variables $DIC$, $NH_x$, $H_xO$, and $ALK$, as can easily be verified by following the same derivation steps as those leading to equations 4a--d. This can also be shown more easily: although $R_C$ adds $HCO3^-$ instead of $H_2CO_3$, these two species are both included in the $DIC$ pool, thus summing them up yields the same result for the time-derivative of $DIC$. Similarly, although the process *increases* $ALK$ at a rate $R_C$ due to the addition of $HCO3^-$, it also *decreases* $ALK$ at the same rate $R_C$ due to the addition of $H^+$, as follows from the *negative* sign in front of $[H^+]$ in the definition of $ALK$.
+
+This result has important implications: the specific "chemical" formulation of the slow reversible process has *no effect* on the dynamics of the lump-sum variables, as long as the chemical reactions are correctly balanced in terms of the elements and charges and the local equilibrium conditions can be assumed. 
+
+## Task 7: Application to ammonia degassing
 
 ### R implementation
 
@@ -338,19 +360,17 @@ state.ini2 <- c(OM=OM.ini, DIC=0, NHx=NHx.ini, HxO=0, ALK=ALK.ini)
 out2 <- ode(y=state.ini2, times=times, func=OMMpHmodel, parms=pars2)
 ```
 
-Thus, we expect the obtain the same results, at least for the state variables that are common for both models. This is indeed the case, as illustrated in the following graphs.
+Thus, we expect the obtain the same results, at least for the state variables that are common for both models. This is indeed the case when we plot the results.
 
-```{r, fig.width=10, fig.height=3, echo=FALSE}
-out1.modif <- out2
-sel.vars    <- c("NHx", "NH4", "NH3", "pH")
-out1.modif[,sel.vars] <- out1[,sel.vars]
-plot(out1.modif, out2, which=sel.vars,
-     mfrow = c(1,4), xlab="time (d)", lwd=2, col=1:2, lty=1:2)
+```{r, fig.width=10, fig.height=2.5}
+plot(out2, obs=out1, which=c("NHx", "NH4", "NH3", "pH"), 
+     mfrow = c(1,4), lwd=2, lty=1, col=1,
+     obspar = list(lty=2,lwd=2,col=2,type="l"))
 ```
 
 Now that we have verified that the \texttt{OMMpHmodel} can be used for solving the ammonia degassing problem, too, we can illustrate the buffering role of $DIC$ in natural waters. We will use the same initial conditions and the ammonia degassing rate constant as above and perform the calculations for $DIC$ concentrations of 0, 1, and $2~mmol~L^{-1}$.
 
-```{r, fig.height=12, fig.width=10}
+```{r}
 # without DIC (but with ammonia and water!)
 ALK.ini3   <- solveALK(DIC=0, NHx=NHx.ini, HxO=HxO.ini, pH=pH.ini)
 state.ini3 <- c(OM=OM.ini, DIC=0, NHx=NHx.ini, HxO=HxO.ini, ALK=ALK.ini3)
@@ -365,12 +385,22 @@ out4       <- ode(y=state.ini4, times=times, func=OMMpHmodel, parms=pars2)
 ALK.ini5   <- solveALK(DIC=2e-3, NHx=NHx.ini, HxO=HxO.ini, pH=pH.ini)
 state.ini5 <- c(OM=OM.ini, DIC=2e-3, NHx=NHx.ini, HxO=HxO.ini, ALK=ALK.ini5)
 out5       <- ode(y=state.ini5, times=times, func=OMMpHmodel, parms=pars2)
+```
 
+```{r, fig.height=5.5, fig.width=10, echo=FALSE}
 # plot results
 plot(out3, out4, out5, 
-     which=c("pH", "H", "OH", "HxO", "DIC", "ALK", 
-             "NHx", "NH4", "NH3", "H2CO3", "HCO3", "CO3"),
-     mfrow = c(4,3), las = 1, col=1:3, lty=1:3, lwd=2)
+     which=c("pH", "H", "OH", "HxO", "DIC", "ALK"),
+     mfrow = c(2,3), las = 1, col=1:3, lty=1:3, lwd=2)
+legend("topright", legend = c("DIC=0", "DIC=1 mmol/L", "DIC=2 mmol/L"), bty="n",
+       col = 1:3, lwd = 2, lty = 1:3)
+```
+
+```{r, fig.height=5.5, fig.width=10, echo=FALSE}
+# plot results
+plot(out3, out4, out5, 
+     which=c("NHx", "NH4", "NH3", "H2CO3", "HCO3", "CO3"),
+     mfrow = c(2,3), las = 1, col=1:3, lty=1:3, lwd=2)
 legend("topright", legend = c("DIC=0", "DIC=1 mmol/L", "DIC=2 mmol/L"), bty="n",
        col = 1:3, lwd = 2, lty = 1:3)
 ```
