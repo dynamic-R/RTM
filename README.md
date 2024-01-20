@@ -1,6 +1,8 @@
 # RTM
 
-<center><img src="man/figures/RTMlogo.png" width="300"></center>
+<p align="center">
+  <img src="man/figures/RTMlogo.png" width="300">
+</p>
 
 **RTM** is an R-package that explains the basics of Reaction-Transport Modelling in **R**. It is used as a teaching material in the following courses:
 
@@ -17,7 +19,7 @@ Before installing the *RTM* package, you need to first install the following R-p
 * *learnr* (required for creating an interactive learning environment);
 * *devtools* (required for a seamless installation of the RTM package from this github repository). 
 
-Once the above packages have been installed, type the following command in the R-console to install the *RTM* package:
+Once the above packages have been installed, enter the following command in the R-console to install the *RTM* package:
 
 ```
 devtools::install_github("dynamic-R/RTM", depend=TRUE)
@@ -32,7 +34,9 @@ That's it! After this step, you should be able to use the package as described b
 
 It is assumed that you use *Rstudio* to work in R. If you have installed the *RTM* package while running *Rstudio*, **restart** *Rstudio* and the tutorial will show up in the tab "Tutorial" (top-right panel of *Rstudio*). Select a tutorial and start it.
 
-<center><img src="inst/exercises/R/introductionR/images/Rstudio_tutorial.png"></center>
+<p align="center">
+<img src="inst/exercises/R/introductionR/images/Rstudio_tutorial.png">
+</p>
 
 To see the list of all tutorials, enter the following command in the R-console:
 
