@@ -1,0 +1,10 @@
+---
+title: "Discussion"
+author: "Authors"
+date: "4/8/2022"
+output: pdf_document
+---
+
+# Discussion
+
+The Discussion section should tie the results into a coherent story. Specifically, it should explain what the results *mean*, clarify to what extent the project aims were reached, provide ideas for future work, etc.

@@ -15,7 +15,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Consider a closed container filled with water and air (Figure 1). The volume and amount of water in the liquid phase are $V_{liq}$ ($m^3$) and $N_{liq}$ ($mol$), respectively. The gas phase has a volume $V_{gas}$ and contains a mixture of air (amount $N_{air}$) and water vapor (amount $N_{vap}$). The liquid water can evaporate to form water vapor, and vice versa, water vapor can precipitate to form liquid water. These processes occur across the liquid-gas boundary (area $A_{liq}$). 
 
-![Gas-tight container filled with liquid water and moist air.](liquid_vapor.pdf){width=30%}
+```{r}
+#![Gas-tight container filled with liquid water and moist air.](liquid_vapor.pdf){width=30%}
+```
 
 In the first approximation, precipitation is assumed to be described by first-order kinetics, i.e., the rate is linearly proportional to $N_{vap}$ (more specifically to the concentration of water vapor molecules, $N_{vap}/V_{gas}$), whereas evaporation is assumed to follow zero-order kinetics, i.e., the rate is independent of $N_{vap}$ (as long as the liquid water is present). Additionally, because the exchange of water molecules occurs at the interface between the liquid and gas phase, both rates are assumed to be proportional to $A_{liq}$. Thus, the change over time in the number of water vapor molecules above the liquid is described by the following differential equation:
 \begin{equation}

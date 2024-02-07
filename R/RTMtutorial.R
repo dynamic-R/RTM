@@ -202,7 +202,8 @@ RTMreader <- function(x = c("?", "events",
                             "perturbation_I",
                             "perturbation_II",
                             "interactive", 
-                            "interactive2", 
+                            "interactive2",
+                            "interactive_1D",
                             "numericalR", 
                             "git_sharing_code"), 
                       output = c("HTML", "PDF", "RMD", "WORD")) {
@@ -220,8 +221,9 @@ RTMreader <- function(x = c("?", "events",
       "Estimating pH in a 1D reaction-transport model in R",
       "Response of systems to a perturbation from equilibrium - Part I", 
       "Response of systems to a perturbation from equilibrium - Part II", 
-      "Developing interactive applications in R - example 1", 
-      "Developing interactive applications in R - example 2", 
+      "Developing interactive 0D models in R - example 1", 
+      "Developing interactive 0D models in R - example 2",
+      "Developing interactive 1D models in R",
       "Numerical methods used for reaction-transport modelling in R", 
       "Sharing code with the world via Git in RStudio"
       ))
@@ -272,4 +274,25 @@ RTMtemplate <- function(x = c("?", "rtm0D", "rtm1D", "porous1D", "porous1D_exten
     openRmdFile (file, output = "RMD")
       
   }
+}
+
+RTMreport <- function(dest_folder = path.expand("~")){
+  # remove folder separator from the end of the dest_folder, if required
+  if (substr(dest_folder,nchar(dest_folder),nchar(dest_folder)) == .Platform$file.sep)
+    dest_folder <- substr(dest_folder, 1, nchar(dest_folder)-1)
+  # construct path to the report_template folder in the RTM package
+  report_template_folder <- paste0(system.file(package = 'RTM'),
+                                   .Platform$file.sep,
+                                   "report_template")
+  # copy the content to the destination folder
+  cat(paste("Copying",report_template_folder,"to",dest_folder,"..."))
+  file.copy(from=report_template_folder, to = dest_folder, recursive = TRUE)
+  cat(paste(" Done\n"))
+  # open the report_main.Rmd master file
+  report_main <- paste0(dest_folder, .Platform$file.sep, "report_template",
+                        .Platform$file.sep, "report_main.Rmd")
+  cat(paste("You can start writing the report by editing", report_main, "or any of the children files.\n"))
+  cat(paste("Attempting to open", report_main, "in Rstudio's editor.\n"))
+  cat(paste("Use File -> Open File... (Ctrl+O) from the main menu if this does not work.\n"))
+  file.edit(report_main)
 }

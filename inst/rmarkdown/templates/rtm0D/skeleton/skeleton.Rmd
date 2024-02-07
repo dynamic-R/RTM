@@ -73,7 +73,7 @@ We run the model dynamically over 100 days, using two different values of the re
 ```{r, message=FALSE}
 require(deSolve)  # package with integration methods
 
-outtimes <- seq(from = 1, to = 100, length.out = 100) # vector of output times
+outtimes <- seq(from = 0, to = 100, length.out = 100) # vector of output times
 
 # ode integrates the model
 out <- ode(y = state.ini, parms = pars, func = BODmodel, times = outtimes)                

@@ -112,7 +112,7 @@ dSi.ini.dt <- -kp * N * 4*pi*(Dini/2)^2 / V * (Cini - kd/kp)
 
 ```{r dSidt_ini, echo=FALSE}
 question("What is the *initial* rate of increase in the silicic acid concentration (dSi/dt) in the water with the silica particles?", 
-         type = "learnr_checkbox",
+         type = "learnr_radio",
          answer(sprintf("23 $mmol~L^{-1}~yr^{-1}$")),
          answer(sprintf("23 $\\mu mol~L^{-1}~yr^{-1}$"), correct=TRUE),
          answer(sprintf("0.092 $mol~m^{-3}~yr^{-1}$")),
@@ -121,7 +121,6 @@ question("What is the *initial* rate of increase in the silicic acid concentrati
          answer(sprintf("69 $mol~L^{-1}~yr^{-1}$")),
          answer(sprintf("69 $mol~m^{-3}~yr^{-1}$")),
          answer(sprintf("92 $\\mu mol~L^{-1}~yr^{-1}$")),
-         answer(sprintf("0.023 $mol~m^{-3}~yr^{-1}$"), correct=TRUE),
  incorrect = sprintf("If you think you are using the correct formula, double check that you did not make an error during units conversion. It is recommended that you convert *all* quantities into SI units *before* calculating the final value. Note that the information about the density and molar weight of silica is irrelevant in this exercise. Also note that the *diameter*, not the *radius*, of the silica particles is provided. There are *two* correct answers!"),
  correct = sprintf("Bingo!")
 )

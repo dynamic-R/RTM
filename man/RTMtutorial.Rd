@@ -4,6 +4,7 @@
 \alias{RTManswer}
 \alias{RTMreader}
 \alias{RTMtemplate}
+\alias{RTMreport}
 \title{Reaction Transport Modelling: tutorials, exercises, extra readers, templates}
 
 \usage{
@@ -12,7 +13,7 @@ RTMtutorial(x = c("?", "introduction", "why", "conceptual", "massbalance",
                "partitioning", "ecology", "transportProcesses", "transportFluxes", 
                "transportPorous", "transportBoundaries", "transportR"), 
             output = c("tutorial", "RMD"))
-    
+            
 RTMexercise(x = c("?", "introductionR", "conceptual", "massbalance_chemistry",     
                "massbalance_ecology", "carbonCycle", "ozone", "dissolutionSi",              
                "equilibriumNH3", "equilibriumHCO3", "equilibriumOMD", "detritus",           
@@ -23,25 +24,31 @@ RTMexercise(x = c("?", "introductionR", "conceptual", "massbalance_chemistry",
                "biogeochemistry", "epidemiology", "ecology", 
                "individualbased", "reaction_transport"),            
             output = c("HTML", "PDF", "RMD", "WORD"))
-
+            
 RTManswer(x, output = c("HTML", "PDF", "RMD", "WORD"))
 
-RTMreader  (x = c("?", "events", "forcings", "observations", 
+RTMreader(x = c("?", "events", "forcings", "observations", 
                "fitting", "visualisation", "pHprofiles", 
                "perturbation_I", "perturbation_II", 
-               "interactive", "interactive2", "numericalR", "git_sharing_code"),
-            output = c("HTML", "PDF", "RMD", "WORD"))      
+               "interactive", "interactive2", "interactive_1D",
+               "numericalR", "git_sharing_code"),
+            output = c("HTML", "PDF", "RMD", "WORD"))
 
 RTMtemplate(x = c("?", "rtm0D", "rtm1D", "porous1D", "porous1D_extensive", 
                   "rtmEquilibrium", "npzd", "rmarkdown_small"))
+                  
+RTMreport(dest_folder = path_to_destination_folder)
 
 }
+
 \arguments{
   \item{x }{the name, or the identification number, of the tutorial, exercise, or reader. If \code{x="?"} (the default), a list of tutorials, exercises, or readers is displayed, including a short description.
   }
   \item{output }{ format of the output in which the exercise or reader should be displayed (HTML by default). You need to have LaTeX installed if you want to generate PDF output. See note below for RTMtutorial.
   }
   \item{type }{ the type of the exercise; only used when \code{x="?"}.
+  }
+  \item{dest_folder }{ destination folder where the report template files will be copied.
   }
 }
 
@@ -52,8 +59,7 @@ RTMtemplate(x = c("?", "rtm0D", "rtm1D", "porous1D", "porous1D_extensive",
 
 \code{Readers} contain accessory material. They are not mandatory for the course, but they provide useful information that helps students expand their knowledge of modelling and programming in R. For example, they explain how to visualize data, fit data, develop interactive applications, etc. 
 
-\code{Templates} are R Markdown files containing a basic skeleton of a document that merges an R-code implementing a model with an explanatory text and results of the model. They provide a convenient way to start developing a model in R. Different templates are available for dynamic box models and 1D reaction-transport models. 
-
+\code{Templates} are R Markdown files containing a basic skeleton of a document that merges an R-code implementing a model with an explanatory text and results of the model. They provide a convenient way to start developing a model in R. Different templates are available for dynamic box models and 1D reaction-transport models. Templates that can be used for writing a report are also available.
 
 \code{Answers}: Each exercise comes with a possible answer. You will achieve the best learning outcomes if you solve each exercise *on your own*. Thus, checking the answers too early is *not* recommended. However, if you feel that you are stuck, or if you want to compare your solution to the one developed by us, our solutions are provided and you are welcome to view them.
 

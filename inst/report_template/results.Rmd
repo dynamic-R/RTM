@@ -1,0 +1,56 @@
+---
+title: "Results"
+author: "Authors"
+date: "4/8/2022"
+output: pdf_document
+---
+
+# Results
+
+The Results section should summarize your key findings. They should be supported by graphs and/or tables.
+
+## Including variables generated in Methods
+
+The file ``methods.Rmd`` needs to be knitted first to ensure that the variables generated there will be known when independently knitting the file ``results.Rmd``. However, this not necessary if the master file ``report_main.Rmd`` is knitted, because both ``methods.Rmd`` and ``results.Rmd`` are set as ``child`` in that file. This conditional knitting of the ``methods.Rmd`` file can be achieved by including the following R-chunk at the beginning of the ``results.Rmd`` file.
+
+```
+{r, message=FALSE, echo=FALSE, eval=!knitr::opts_knit$get("child")}
+res <- knitr::knit_child('methods.Rmd', quiet = TRUE)
+```
+
+```{r, message=FALSE, echo=FALSE, eval=!knitr::opts_knit$get("child")}
+res <- knitr::knit_child('methods.Rmd', quiet = TRUE)
+```
+
+## Plotting graphs
+
+It is recommended to plot one figure at a time using *one* R-chunk. In this way, the figure caption can be individually specified (using ``fig.cap=...``). Also, the size of the figure can be individually optimized. It is a matter of trial and error to find the optimal ``fig.height`` and ``fig.width`` for each figure (plot).
+
+Note that if you specify ``fig.cap=...``, the figure will become a *floating* object and will have a reference number. How this floating object is placed within your final document can be prioritized in the yaml header of your Rmd file. Here, we use
+```
+    \usepackage{float} 
+    \floatplacement{figure}{ht}
+```
+which means that the first preference is to place the figure in the same place where the figure is generated (``h``, meaning *here*), while the second preference is to place the figure at the top of the next page (``t``, meaning *top*). These are \LaTeX-specific "tricks".
+
+Note that there is *no need* to display the R-code that is used to generate the graphs, as this code is typically quite long but not overly informative. This is achieved by using the ``echo=FALSE`` flag in the corresponding R-chunk. 
+
+This is done in the following R-chunk. The code itself is not displayed, but the corresponding figure is generated (see Figure 2).
+
+```{r, echo=FALSE, fig.height=6, fig.width=6, fig.align='center', fig.cap="A comparison of model outputs for a default scenario and for a scenario without aeration."}
+plot(std, std2, grid = Grid$x.mid, 
+     which=c("O2", "BOD", "Decay", "Aeration"),
+     mfrow=c(2,2), xlab = "distance (m)",
+     ylab =c("molO2/m3","molBOD/m3","molBOD/m3/d", "molO2/m3/d"))
+legend("topright", legend=c("default","no aeration"),
+       lty=1:2, col=1:2, bty = "n" ) # bty="n" removes the frame around the legend
+```
+
+## Reporting values in tables
+
+Tables generated in the Methods section can be nicely typset using the ``kable`` function from the ``knitr`` package.
+
+```{r}
+knitr::kable(BUDGET, digits = 2, caption = "Budgets for the different model scenarios.")
+```
+

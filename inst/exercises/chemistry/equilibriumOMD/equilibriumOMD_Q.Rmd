@@ -11,24 +11,27 @@ output:
   html_document: default
 ---
 
-# Problem
-In part I and II of the Reader "Local equilibrium chemistry in R", we have shown how to model pH dynamics in a rather simple solution: water that only contains dissolved ammonia or dissolved carbonate. The task here is to show how to model pH dynamics in a more complex solution, namely water that contains dissolved ammonia as well as dissolved carbonate. An important step will be the generalization of the concept of alkalinity to include contributions from both the carbonate and ammonium ions. We illustrate the model by studying pH dynamics in water induced by organic matter degradation. Additionally, we revisit the ammonia degassing model originally developed in Part I of the Reader.
+# Aim
+
+In part I and II of the Reader "Local equilibrium chemistry in R", we have shown how to approach pH modeling in scenarios where proton dynamics is affected by 1 and 3 fast reversible reactions, respectively. The reactions corresponded to dissociation of ammonium and carbonic acid and self-ionization of water. Here, we will combine what we have learned there to show how to approach pH modeling when all of these reversible reactions occur within the system at the same time. An important step will be the generalization of the concept of alkalinity to include contributions from all charged species (carbonate, bicarbonate, ammonium, hydroxide, and protons). We will illustrate the model by studying pH dynamics in water induced by organic matter degradation. Additionally, we will revisit the ammonia degassing model originally developed in part I of the Reader to illustrate the pH buffering provided by the dissolved carbonate species in the system.
 
 # Approach
+
 The aproach followed in this Reader is based on a set of tasks that you should be able to solve on your own if you have understood the material presented in parts I and II of the Reader. Most of the derivations and R-coding ideas presented in parts I and II will be directly reused here. We encourage you to try first to solve the tasks on your own. If you feel you are stuck, you can look up the solutions provided at the end of this document.
 
 # Model formulation
-We consider here *three* fast reversible reactions:
+We consider here *four* fast reversible reactions:
 
 $$Reaction~1: \qquad H_2CO_3\leftrightarrow HCO_3^- + H^+$$
 $$Reaction~2: \qquad HCO_3^- \leftrightarrow CO_3^{2-} + H^+$$
 $$Reaction~3: \qquad NH_4^+\leftrightarrow NH_3 + H^+$$
+$$Reaction~4: \qquad H_2O \leftrightarrow OH^- + H^+$$
 
-Additionally, we consider *two slow irreversible processes*, one that adds $H_2CO_3$ to the system at a rate $R_C$, and one that adds $NH_3$ to the system at a rate $R_N$. We assume that the forward and backward reactions 1, 2 and 3 are *elementary reactions*. We denote the corresponding rate constants as $k_{if}$ (units of $s^{-1}$) and $k_{ib}$ (units of $(mol~L^{-1})^{-1}~s^{-1}$) for the reaction i, where $i=1,2,3$. 
+Additionally, we consider *two slow irreversible processes*, one that adds $H_2CO_3$ to the system at a rate $R_C$, and one that adds $NH_3$ to the system at a rate $R_N$. We assume that the forward and backward reactions 1--4 are *elementary reactions*. We denote the corresponding rate constants as $k_{if}$ (units of $s^{-1}$) and $k_{ib}$ (units of $(mol~L^{-1})^{-1}~s^{-1}$) for the reaction i, where $i=1, \dots ,4$. 
 
 ## Task 1: Mass balance equations
 
-* Formulate the mass balance equations considering the reactions 1, 2, 3, and the processes with rate $R_C$ and $R_N$. You should arrive at 6 differential equations for the following six state variables: $[H_2CO_3]$, $[HCO_3^-]$, $[CO_3^{2-}]$, $[NH_4^+]$, $[NH_3]$, and $[H^+]$. 
+* Formulate the mass balance equations considering the reactions 1--4 and the processes with rate $R_C$ and $R_N$. You should arrive at 8 differential equations for the following 8 state variables: $[H_2CO_3]$, $[HCO_3^-]$, $[CO_3^{2-}]$, $[NH_4^+]$, $[NH_3]$, $[H_2O]$, $[OH^-]$, and $[H^+]$. 
 
 ## Task 2: Equilibrium conditions
 
@@ -36,26 +39,31 @@ Assume that the rates of the slow processes are zero ($R_C=R_N=0$). Using the ma
 
 * derive relationships between the equilibrium concentrations of the state variables. Hint: consider that the time-derivatives of the state variables are zero when the system is in an equilibrium.
 
-You should arrive at *three* equations that relate the equilibrium concentrations of [$H_2CO_3$], [$HCO_3^-$], [$CO_3^{2-}$], $[NH_4^+]$, $[NH_3]$, and [$H^+$]. To simplify the relationships, define the ratios between the forward and backward rate constants as the so-called dissociation constants: $K_1 = k_{1f}/k_{1b}$, $K_2 = k_{2f}/k_{2b}$, and $K_n = k_{3f}/k_{3b}$. For a temperature of 25 $^\circ$C, salinity 35 and pressure of 1 bar, their values are approximately $K_1 = 1.422\times 10^{-6}~mol~L^{-1}$, $K_2=1.082\times 10^{-9}~mol~L^{-1}$, and $K_n = 5.381\times 10^{-10}~mol~L^{-1}$. The values for these constants at other conditions can be calculated using R-packages *seacarb* (Gattuso et al., 2020) and *AquaEnv* (Hofmann et al., 2010).
+You should arrive at *four* equations that relate the equilibrium concentrations of [$H_2CO_3$], [$HCO_3^-$], [$CO_3^{2-}$], $[NH_4^+]$, $[NH_3]$, $[OH^-]$, and [$H^+$]. To simplify the relationships, define the ratios between the forward and backward rate constants as the so-called dissociation constants: $K_1 = k_{1f}/k_{1b}$, $K_2 = k_{2f}/k_{2b}$, $K_n = k_{3f}/k_{3b}$, and $K_w' = k_{4f}/k_{4b}$. 
 
 ## Task 3: Lump-sum species
 
-* Show that if you define the lump-sum species as $$DIC = H_2CO_3  + HCO_3^- + CO_3^{2-},$$ $$NH_x = NH_4^+ + NH_3$$ and $$ALK = HCO_3^- + 2\cdot CO_3^{2-} - NH_4^+ - H^+,$$ their time derivatives are only affected by the slow processes (rates $R_C$ and $R_N$) but *not* by the reversible reactions 1, 2 and 3. 
+* Show that if you define the lump-sum species as 
+$$DIC = H_2CO_3  + HCO_3^- + CO_3^{2-},$$
+$$NH_x = NH_4^+ + NH_3,$$ 
+$$H_xO = H_2O + OH^-,$$
+$$ALK = HCO_3^- + 2\cdot CO_3^{2-} + OH^- - NH_4^+ - H^+,$$ 
+their time derivatives are only affected by the slow processes (rates $R_C$ and $R_N$) but *not* by the reversible reactions 1--4. 
 
-Note that these new state variables correspond to the *total concentration of dissolved inorganic carbon* (DIC), *total concentration of dissolved ammonia* ($NH_x$), and the *excess concentration of negatively charged species* (ALK) in the system. Also note that ALK introduced here is the *generalization* of the carbonate alkalinity introduced in part II of the Reader. This generalization can proceed further to include other rapidly dissociating chemical species in the system (e.g., water, borate, silicate, phosphate, etc.), and ultimately result in the so-called *total alkalinity*. However, we will limit our analysis here to the contributions from carbonate and ammonia. Hereafter, we will refer to ALK simply as the *alkalinity*.
+Note that these new state variables correspond to the *total concentration of dissolved inorganic carbon* (DIC), *total concentration of dissolved ammonia* ($NH_x$), *total concentration of hydroxide* ($H_xO$), and the *excess concentration of negatively charged species* (ALK) in the system. Also note that ALK introduced here is further *generalization* of the alkalinity introduced in part II of the Reader. This generalization can proceed further to include other rapidly dissociating chemical species in the system,\footnote{For example, alkalinity of seawater needs to include species such as borate, silicate, phosphate, etc.} and ultimately results in the so-called *total alkalinity*. However, we will limit our analysis here to the contributions from carbonate, ammonia, and water.
 
 ## Task 4: From lump-sum species to original species
 
-Assume that the system is in an equilibrium, and that the concentrations $[DIC]$, $NH_x$, $[ALK]$ and $[H^+]$ are *known*. Note that $pH = -\log{[H^+]}$, where $[H^+]$ is expressed in $mol~L^{-1}$ of solution. Using the equilibrium relationships found in Task 2, 
+Assume that the system is in an equilibrium, and that the concentrations $[DIC]$, $[NH_x]$, $[ALK]$ and $[H^+]$ are *known*. Note that $pH = -\log{[H^+]}$, where $[H^+]$ is expressed in $mol~L^{-1}$ of solution. Using the equilibrium relationships found in Task 2, 
 
-* derive expressions for $[H_2CO_3]$, $[HCO_3^-]$, $[CO_3^{2-}]$, $[NH_4^+]$, and $[NH_3]$ as a function of $[DIC]$, $[NH_x]$ and $[H^+]$.
+* derive expressions for $[H_2CO_3]$, $[HCO_3^-]$, $[CO_3^{2-}]$, $[NH_4^+]$, $[NH_3]$, and $[OH^-]$ as a function of $[DIC]$, $[NH_x]$, and $[H^+]$.
 * find a relationship between $[ALK]$, $[DIC]$, $[NH_x]$, and $[H^+]$ from which one of the four state variables can be calculated provided that the other three are known.
 
-This task has been solved in parts I and II of the Reader. Nevertheless, it is useful to revise the steps and check the formulas again. 
+A similar task has been solved in parts I and II of the Reader. Nevertheless, it is useful to revise the steps and check the formulas again. 
 
 ## Task 5: Application to organic matter mineralization
 
-A possible process that adds $H_2CO_3$ and $NH_3$ to the system is the *aerobic mineralization* of organic matter (OM). Assume that the stoichiometry of this process is
+A possible process that adds $H_2CO_3$ and $NH_3$ to the system is the *oxic mineralization* of organic matter (OM), where OM is represented by the chemical formula $CH_2O(NH_3)_{NC}$. Assume that the stoichiometry of this process is
 $$
 \quad CH_2O(NH_3)_{NC} + O_2 \rightarrow H_2CO_3 + {NC} \cdot NH_3
 $$ 
@@ -64,30 +72,66 @@ $$
 
 Use the following assumptions:
 
-* OM mineralisation proceeds according to the first-order kinetics with respect to OM. Thus, consider the rates $R_C = r_C\cdot [OM]$ and $R_N = NC\cdot R_C$, where $r_C$ is the rate constant ($s^{-1}$) and $[OM]$ is the OM concentration ($mol~C~L^{-1}$). 
-* OM mineralisation is a slow process relative to the reversible reactions 1, 2, and 3. Thus, you can apply the "local equilibrium assumption".
+* OM mineralisation proceeds according to the first-order kinetics with respect to OM. Thus, consider the rates $R_C = r_C\cdot [OM]$ and $R_N = NC\cdot R_C$, where $r_C$ is the rate constant ($s^{-1}$) and $[OM]$ is the OM concentration ($mol~C~L^{-1}$). Assume values of $r_C=0.1~d^{-1}$ and $NC=16/106$, the latter corresponding to the Redfield ratio of N:C in organic matter.
+* OM mineralisation is a slow process relative to the reversible reactions 1--4. Thus, you can apply the "local equilibrium assumption".
 
-Solve the model for 10 days using the following model parameters:
+Solve the model for 10 days. For a temperature of 25 $^\circ$C, salinity 0 and pressure of 1 bar, assume the following values of the equilibrium constants, as calculated using the R-package *AquaEnv* (Hofmann et al., 2010):
 
-|    | Value         | Unit  |
-| -- |:-------------:| -----:|
-| $r_C$  |     0.1      | $d^{-1}$          |
-| NC | 16/106       |$molN~(molC)^{-1}$ |
-| $K_1$ | 1.423e-06 | $mol~L^{-1}$     |
-| $K_2$ | 1.082e-09 | $mol~L^{-1}$     |
-| $K_n$ | 5.381e-10 | $mol~L^{-1}$     |
+```{r, message=FALSE, echo=FALSE}
+require(AquaEnv)
 
-For the initial concentrations you are given the following data (in $\mu mol~L^{-1}$ solution):
+# water properties
+a     <- aquaenv(S=0, t=25, k1k2="millero")
+rho   <- a$density  # density, g/L
+MW    <- 18.0153    # molar weight, g/mol
+cHxO  <- rho/MW     # total H2O concentration, mol/L
 
-|       | Value        | Unit           |
-| ----- |:------------:| --------------:|
-| $[OM]$    | 100          | $\mu mol~L^{-1}$         |
-| pH    | 7.9          | -       | 
-| $[DIC]$ | 2000           | $\mu mol~L^{-1}$       | 
-| $[NH_x]$   | 10          | $\mu mol~L^{-1}$      | 
+# dissociation constants (converted from mol/kg-soln -> mol/L)
+K1       <- a$K_CO2  * 1e-3 * rho   # mol/L
+K2       <- a$K_HCO3 * 1e-3 * rho   # mol/L
+Kn       <- a$K_NH4  * 1e-3 * rho   # mol/L
+KW       <- a$K_W    * 1e-6 * rho^2 # (mol/L)^2
+KW.prime <- KW       / cHxO         # mol/L
 
-## Task 6: Application to ammonia degassing
+# process properties
+rC <- 0.1    # d-1
+NC <- 16/106 # molN/molC
+```
 
-* Modify your ammonia degassing model developed in part I of this Reader so that it will include DIC in addition to NHx.
+```{r, echo=FALSE}
+knitr::kable(cbind(c("$K_1$", "$K_2$", "$K_n$", "$K_w'$", "$K_w$"),
+                   format(c(K1, K2, Kn, KW.prime, KW),digits=3),
+                   c(rep("$mol~L^{-1}$",4), "$mol^2~L^{-2}$")))
+```
 
-Solve the model for 20 days using the following model parameters and initial conditions: $\lambda = 1~d^{-1}$, $pH=8$, $[DIC] = 2000~\mu mol~L^{-1}$,  $[NH_x] = 1000~\mu mol~L^{-1}$. Verify that you get the same result as in Part I if you run the model with $[DIC] = 0$.
+For the initial values, assume the following data:
+
+```{r, echo=FALSE}
+knitr::kable(cbind(c("$pH$", "$[OM]$", "$[DIC]$", "$[NH_x]$", "$[H_xO]$"),
+                   format(c(7.9, 100, 2000, 10, cHxO), digits=2),
+                   c("--", rep("$\\mu mol~L^{-1}$",3), "$mol~L^{-1}$")))
+```
+
+## Task 6: Does the formulation of slow reversible processes matter?
+
+In the literature, processes such as OM mineralization are often formulated in different ways, depending on the preference or perspective. For example, the stoichiometry of OM mineralization can be represented by the following reaction
+$$
+\quad CH_2O(NH_3)_{NC} + O_2 \rightarrow HCO_3^- + H^- + {NC} \cdot NH_3.
+$$
+instead of the one above.
+
+* Show that this alternative formulation does *not* affect the mass balance equations for the lump-sum variables $DIC$, $ALK$, $NH_x$, and $H_xO$.
+
+## Task 7: Application to ammonia degassing
+
+The model developed in Task 5 should be equivalent to the ammonia degassing model developed in part I of this Reader in the limit of $DIC\rightarrow 0$ and $H_xO \rightarrow 0$.
+
+* Check that this is true by comparing the results of the two models.
+
+In this comparison, assume the ammonia degassing rate constant of $\lambda = 1~d^{-1}$, initial $pH=8$, and initial $[NH_x] = 1~mmol~L^{-1}$. 
+
+After this comparison, 
+
+* apply the model to study the magnitude of changes in water pH associated with ammonia degassing at different $DIC$ concentrations (0, $1~mmol~L^{-1}$, and $2~mmol~L^{-1}$).
+
+This application will illustrate the pH buffering role of $DIC$ in natural waters.

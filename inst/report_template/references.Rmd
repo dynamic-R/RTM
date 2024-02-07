@@ -1,0 +1,24 @@
+---
+title: "references"
+author: "Authors"
+date: "4/8/2022"
+output: pdf_document
+---
+
+# Acknowledgements
+
+It is always a good idea to acknowledge the help of others. 
+
+# Author's contributions
+
+We also require that you list specific contributions of each author.
+
+# References
+
+Lubos Polerecky, Dries Bonte, and Karline Soetaert (2021). RTM: learning environment for reaction-transport modelling in R. https://github.com/dynamic-R/RTM
+
+R Core Team (2020). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria. URL https://www.R-project.org/.
+  
+Soetaert Karline (2009).  rootSolve: Nonlinear root finding, equilibrium and steady-state analysis of ordinary differential equations.  R-package version 1.6
+  
+Soetaert, Karline and Meysman, Filip, (2012). Reactive transport in aquatic ecosystems: Rapid model prototyping in the open source software R Environmental Modelling & Software, 32, 49-60.

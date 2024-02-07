@@ -1,14 +1,14 @@
 Package: RTM
 Type: Package
 Title: Reaction Transport Modelling: Course Tutorials and Exercises
-Version: 0.2.0
+Version: 0.3.0
 Author: Karline Soetaert <karline.soetaert@nioz.nl>,
         Lubos Polerecky <l.polerecky@uu.nl>,
         Dries Bonte <dries.bonte@ugent.be>
 Maintainer: Karline Soetaert <karline.soetaert@nioz.nl>
 Depends: R (>= 3.5.0), learnr, ReacTran, deSolve, rootSolve, plot3D
 Suggests: knitr, rmarkdown, FME, marelac
-Description: Tutorials, exercises, readers, and templates for use in 
+Description: Tutorials, exercises, readers, answers, and templates for use in 
              reaction-transport and environmental modelling courses.
 License: GPL (>=3.0)
 VignetteBuilder: knitr
