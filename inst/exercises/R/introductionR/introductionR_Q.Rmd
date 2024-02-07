@@ -150,7 +150,7 @@ knitr::kable(RTM:::RTMexercise("?"))
 ```
 Then, choose an exercise you want to solve (e.g., ``diagenesis``) and generate the corresponding PDF file by entering the following command in the R-console:
 ```
-RTMexercise("diagenesis", type="PDF")
+RTMexercise("diagenesis", output="PDF")
 ```
 If you want to export the exercise in a HTML or DOC format, change the value of the parameter ``type`` to ``HTML`` or ``DOC``, respectively.
 
