@@ -81,7 +81,7 @@ A farmer wants to optimise his harvest of lettuce. He should decide whether to f
 
 The problem he has is that the field of lettuce is invaded by a weed that grows slower than the lettuce, but has a much deeper root system. While roots of lettuce penetrate 7 cm deep into the soil, the roots of the weed penetrate up to a depth of 14 cm.
 
-Once the fertilizer is added to the soil, it percolates, due to the rain, from the upper 7 cm to the deeper soil layer at a rate of 0.5% per day.
+Once the fertilizer is added to the soil, it percolates, due to the rain, from the upper 7 cm to the deeper soil layer, as well as from the deeper soil layer (7--14 cm) to the soil below 14 cm, at a rate of 5% per day.
 
 ## Tasks
 

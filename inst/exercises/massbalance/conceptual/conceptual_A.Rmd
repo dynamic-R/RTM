@@ -1,9 +1,11 @@
 ---
 title: "Conceptual Diagram - ANSWERS"
-subtitle: "Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
 author: "Lubos Polerecky and Karline Soetaert, Utrecht University"
 date: "June 2021"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
+subtitle: Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere
 ---
 
 ```{r setupA, include=FALSE}
