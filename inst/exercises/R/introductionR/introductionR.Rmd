@@ -17,7 +17,8 @@ output:
     \floatplacement{figure}{ht}
   word_document: default
   html_document: default
-abstract: \noindent This short reader introduces you to the programming tools that we will use in the *Reaction-Transport Modelling* class. It shows you how to merge text, programming code, and the results of this code in one document. The programming language we use is *R*, the text is written in *R Markdown*, and the documents are created by *knit*. The reader also explains the basics about the teaching material we will use in the course. This material is bundled in an *R*-package *RTM*. We recommend that you recreate the examples provided in this document and then solve the exercises. In this way you will start gradually building your knowledge of *R* and *R Markdown*, which will help you understand more efficiently the material covered in the course.
+urlcolor: blue
+abstract: \noindent This short reader introduces you to the programming tools that we will use in the *Reaction-Transport Modelling* class. It shows you how to merge text, programming code, and the results of this code in one document. The programming language we use is *R*, the text is written in *markdown*, and the documents are created by *knit*. The reader also explains the basics about the teaching material we will use in the course. This material is bundled in an *R*-package *RTM*. We recommend that you recreate the examples provided in this document and then solve the exercises. In this way you will start gradually building your knowledge of *R* and *markdown*, which will help you understand more efficiently the material covered in the course.
 ---
 
 ```{r child = 'introductionR_Q.Rmd'}

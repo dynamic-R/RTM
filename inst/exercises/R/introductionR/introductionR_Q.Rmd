@@ -12,11 +12,12 @@ output:
     number_sections: true
     toc: true
   header-includes: 
-    \usepackage{float} 
-    \floatplacement{figure}{ht}
+    - \usepackage{float} 
+    - \floatplacement{figure}{ht}
   word_document: default
   html_document: default
-abstract: \noindent This short reader introduces you to the teaching and programming tools that we will use in the *Reaction-Transport Modelling* class. Sections 1 and 2 explain how to install the required programs and packages It will show you how to merge text, programming code, and the results of this code in one document. The programming language we use is R, the text is written in *R Markdown*, and the creation of the documents is done by *knitr*. We recommend that you recreate the examples provided in this document and then solve the exercises. In this way you will start gradually building your knowledge of R and *R Markdown*, which will help you understand more efficiently the material covered in the course.
+urlcolor: blue
+abstract: \noindent This short reader introduces you to the teaching and programming tools that we will use in the *Reaction-Transport Modelling* class. Sections 1 and 2 explain how to install the required programs and packages It will show you how to merge text, programming code, and the results of this code in one document. The programming language we use is R, the text is written in *markdown*, and the creation of the documents is done by *knitr*. We recommend that you recreate the examples provided in this document and then solve the exercises. In this way you will start gradually building your knowledge of R and *markdown*, which will help you understand more efficiently the material covered in the course.
 ---
 
 ```{r , include=FALSE}
@@ -42,7 +43,7 @@ First, install the *base* R (e.g., installation file ``R-4.1.0-win.exe`` or some
   
 ## Rstudio
 
-To execute R code in a nice and comprehensive environment, we will use *Rstudio*.  Go to \url{http://rstudio.org}, choose *Download*, choose *Rstudio Desktop Free*, download the installation package for your system (e.g., ``RStudio-1.4.1717.exe``), and install it.
+To execute R code in a nice and comprehensive environment, we will use *Rstudio*.  Go to \url{http://rstudio.org}, choose *Download*, choose *Rstudio Desktop Free*, download the installation package for your system (e.g., ``RStudio-1.4.1717.exe`` or some later version), and install it.
 
 Open *Rstudio* and test whether you can compile an R-package from source, as described in the instructions for installing *Rtools* (see above).
 
@@ -68,7 +69,7 @@ In this course, we will use several packages. We recommend that you install them
 
 * ``devtools`` --- This package allows you to develop R packages. We will use it to install the R package ``RTM`` from the github repository. 
 
-* ``RTM`` --- This package contains much of the teaching material for the course. This package is currently available from a Github repository ``dynamic-R/RTM`` (\url{https://github.com/dynamic-R/RTM}). You can install it by typing the following command in the R-console:
+* ``RTM`` --- This package contains much of the teaching material for the course. This package is currently available from a Github repository ``dynamic-R/RTM`` (\url{https://github.com/dynamic-R/RTM}). You can install it by entering the following command in the R-console:
 
   ```devtools::install_github("dynamic-R/RTM", depend=TRUE)```
 
@@ -76,32 +77,38 @@ In this course, we will use several packages. We recommend that you install them
 
 ## LaTeX distribution
 
-We will use the typesetting program \LaTeX\ to produce beautifully typeset documents. This program is extremely powerful and versatile, and it is widely used especially by people who want to write equations in their documents. In this course we will use it to convert documents written in R Markdown into PDF.
-To install \LaTeX, go to \url{https://miktex.org/}, choose *Download*, download the installation file (e.g., ``basic-miktex-21.6-x64.exe``), and install it.\footnote{The MacTex distribution (\url{https://tug.org/mactex/}) is recommended for Mac-OS users, the TexLive distribution is recommended for Linux users. Follow the installation instructions on the respective websites.} During the installation process, select *yes* when asked *Install missing packages on-the-fly*. It is handy to check for updates just after the installation has finished, to be sure that all \LaTeX\ packages are up-to-date. 
-
-Restart *Rstudio* if it was running before \LaTeX\ installation.
+We will use the typesetting program \LaTeX\ to produce beautifully typeset documents. This program is extremely powerful and versatile, and it is widely used especially by people who want to write equations in their documents. In this course we will use it to convert documents written in *markdown* into PDF.
+To install \LaTeX, go to \url{https://miktex.org/}, choose *Download*, download the installation file (e.g., ``basic-miktex-21.6-x64.exe``), and install it.\footnote{The MacTex distribution (\url{https://tug.org/mactex/}) is recommended for Mac-OS users, the TexLive distribution is recommended for Linux users. Follow the installation instructions on the respective websites.} During the installation process, select *yes* when asked *Install missing packages on-the-fly*. Also, run the *MikTeX console* from the star menu just after the installation has finished, select *check updates*, and update any packages suggested by this check. At the end, restart *Rstudio* if it was running before \LaTeX\ installation.
 
 ## Check whether everything is working 
 
-To check whether everything is working at this point, open *Rstudio*, and create a new R Markdown file. This is done from the menu by selecting File $\rightarrow$ New file $\rightarrow$ R Markdown $\rightarrow$ Document. Type the title, your name in the author box, check the ``PDF`` checkbox, and click *Ok*. If everything goes as expected, your *Rstudio* session should look similar as shown in Figure 1.
+To check whether everything is working at this point, open *Rstudio*, and create a new R Markdown file. This is done from the menu by selecting File $\rightarrow$ New file $\rightarrow$ R Markdown $\rightarrow$ Document. Type the title, your name in the author box, check the ``PDF`` checkbox, and click *Ok*. If everything goes as expected, your *Rstudio* session should look similar as shown in Figure 1. 
 
 ![Screenshot of Rstudio with the default Rmd file.](images/Rstudio.png){width=98%}
 
-The top-left panel contains the editor, where you will write your text and R-code. In the top-right panel, you can view several things, including the "Environment" (which shows values of your R-variables) and "Tutorials". The bottom-left panel contains the R-console, where you can type R-commands, and the R Markdown console, where you can see the progress of your Rmd file compilation (see next). Finally, the bottom-right panel allows you to manage your R-packages, view help files, or see plots.
+The top-left panel contains the editor, where you will write your text and R-code. In the top-right panel, you can view several things, including the *Environment* (which shows values of your R-variables) and *Tutorials*. The bottom-left panel contains the *R-console*, where you can type R-commands, and the *R Markdown console*, where you can see the progress of your Rmd file compilation (see next). Finally, the bottom-right panel allows you to manage your R-packages, view help files, or see plots.
 
-Once you create a new Rmd file, it is best to first save it under a name of your choice (e.g., ``test1.Rmd``). Then, after you are satisfied with its content, click on the *Knit* button in the top part of the editor panel (useful short-cut: press ``Ctrl+Shift+K``). This will start a compilation process, which will convert the Rmd file into a nicely typeset document in one of three possible formats: PDF, DOC, or HTML (Figure 2).
+Once you create a new Rmd file, it is best to first save it under a name of your choice (e.g., ``test1.Rmd``). Then, after you are satisfied with its content, click on the *Knit* button in the top part of the editor panel (useful short-cut: press ``Ctrl+Shift+K``). This will start a compilation process, which will convert the Rmd file into a nicely typeset document in one of three possible formats: PDF, DOC, or HTML (Figure 2). Read the following section if you experience problems during compilation of your Rmd file into PDF.
 
 ![Nicely formatted output produced from the Rmd file. Left: PDF, viewed in SumatraPDF. Middle: DOC, viewed in Microsoft Word. Right: HTML, viewed in Firefox.](images/Rmd_pdf_html_doc.png)
 
-Note that if you are converting the Rmd file into PDF for the very first time, the compilation may take a while. This is because *MikTeX* is installing extra \LaTeX\ packages, which are likely missing on your computer as they have not been installed by default during the installation process.\footnote{This assumes that you have selected \emph{yes} when asked \emph{Install missing packages on-the-fly} during \emph{MikTeX} installation. If you forgot to do that, you need to stop the \emph{knitting} process by clicking the red stop button, and go to the folder of your \texttt{test1.Rmd} file. There should be a file called \texttt{test1.tex}. Open it in the native \TeX\ editor that comes with the \emph{MikTeX} distribution (most likely \texttt{TeXworks}), and compile it with pdf\LaTeX\ from there. In this process, you should be prompted to install missing \LaTeX\ packages.} Be patient and wait until the compilation process is finished.\footnote{At the time of writing this reader, it took about two minutes until the first-time \emph{knitting} and \LaTeX\ compilation were complete.} If everything goes well, you should find a file ``test1.pdf`` in the same folder as the ``test1.Rmd``. You can open it in any PDF reader.\footnote{Note that \emph{Acrobat Reader}, which is a commonly used PDF reader, may not be the best choice. This is because the PDF file is \emph{locked} for writing when open by \emph{Acrobat Reader}. This means that if you want to re-knit your Rmd file to a PDF file, you may end up with a writing error rather than an updated PDF file. To avoid this, you will need to close the PDF file in \emph{Acrobat Reader} before clicking the \emph{knit} button in \emph{Rstudio}. We recommend a better solution: use a PDF viewer that does \emph{not} lock the viewed PDF file. One such program is called \emph{SumatraPDF}, which can be downloaded from \url{http://www.sumatrapdfreader.org}.} After the lengthy first-time compilation, the subsequent compilations will only take a few seconds.
+### Possible issues
+
+Note that if you are converting the Rmd file (e.g., \texttt{test1.Rmd}) into PDF for the very first time, the compilation may take a while or it may not work at all. This is because some packages required by the knitting process are missing and need to be installed on your system. Try the following steps to debug this issue.
+
+If you have selected \emph{yes} when asked \emph{Install missing packages on-the-fly} during \emph{MikTeX} installation, the compilation into PDF should finish at some point; you only need to be patient.
+
+If, however, you did not select \emph{yes}, you need to stop the knitting process by clicking the red stop button and fix things *manually*. To do this, open your file browser and navigate to the folder where you saved the \texttt{test1.Rmd} file. If the knitting of the file \texttt{test1.Rmd} did not succeed, this folder should contain a file called \texttt{test1.tex}. Open it in the native \TeX\ editor that comes with the \emph{MikTeX} distribution (most likely \texttt{TeXworks}) and compile it with pdf\LaTeX\ from there.\footnote{To do this, select pdf\LaTeX\ in the drop-down menu at the top and click on the green arrow.} In this process, you should be prompted to install missing \LaTeX\ packages. Be patient and wait until the missing packages are installed and the compilation process is finished.\footnote{At the time of writing this Reader, it took about 2 min until the first-time knitting and \LaTeX\ compilation were complete.} It may happen that errors due to missing files such as ``geometry.sty`` or ``fancyvrb.sty`` occur. Under such circumstances, run the *MikTeX console* and install these packages from there. 
+
+After completing the debugging steps above, everything should work well and you should find a file ``test1.pdf`` in the same folder as the file ``test1.Rmd``. You can view it in any PDF reader. Note, however, that \emph{Acrobat Reader}, which is a commonly used PDF viewer and may be set as the default PDF viewer on your system, may *not* be the best choice. This is because the PDF file is \emph{locked} for writing when it is open by \emph{Acrobat Reader}. This means that if you want to re-knit your Rmd file into a PDF file, you may end up with a writing error rather than an updated PDF file. To avoid this error, you will need to *close* the PDF file in \emph{Acrobat Reader} before clicking the \emph{knit} button in \emph{Rstudio}. We recommend a better solution, though: use a PDF viewer that does \emph{not} lock the viewed PDF file. One such program is called \emph{SumatraPDF}, which can be downloaded from \url{http://www.sumatrapdfreader.org}. Others include \emph{Chrome} or \emph{Edge}. 
 
 # Learning reaction-transport modelling using the package RTM
 
-Now that you have installed the required software, you can proceed by studying other material prepared for the reaction-transport modelling course. This material is put together in the R-package call *RTM*. You can install this package in *Rstudio* by entering in the R-console:
+Now that you have installed the required software, you can proceed by studying other material prepared for the reaction-transport modelling course. This material is put together in the R-package called *RTM*. You can install this package in *Rstudio* by entering in the R-console:
 
 ```devtools::install_github("dynamic-R/RTM", depend=TRUE)```
 
-The RTM package contains *tutorials*, *exercises* and extra *readers*. This division reflects the main course activities, as described in the following.
+The RTM package contains *tutorials*, *exercises* and extra *readers*. This division reflects the main course activities, as described in this section.
 
 ## RTM tutorials
 
@@ -129,8 +136,6 @@ RTMtutorial("conceptual")
 ```
 Note that the tutorials are sorted from basics to intermediate and advanced topics. By studying the tutorials in the same order, you will be able to build up your knowledge of modelling in R in a gradual way. We will adhere to the same order during the course.
 
-\newpage
-
 ## RTM exercises
 
 Each tutorial comes with a set of *exercises*, which contain more complicated problems that you should be able to solve once you have learned the basics from the tutorial. These exercises will be solved *during the class*. This means that you will be able to consult your questions, ideas, and solutions with the lecturers in a direct and interactive way. 
@@ -152,7 +157,7 @@ Then, choose an exercise you want to solve (e.g., ``diagenesis``) and generate t
 ```
 RTMexercise("diagenesis", output="PDF")
 ```
-If you want to export the exercise in a HTML or DOC format, change the value of the parameter ``type`` to ``HTML`` or ``DOC``, respectively.
+If you want to export the exercise in a HTML or DOC format, change the value of the parameter ``output`` to ``HTML`` or ``DOC``, respectively.
 
 ## RTM readers
 
@@ -169,7 +174,7 @@ knitr::kable(RTM:::RTMreader("?"))
 
 To generate a PDF file of the reader (e.g., ``visualisation``), enter the following command in the R-console:
 ```
-RTMreader("visualisation", type="PDF")
+RTMreader("visualisation", output="PDF")
 ```
 
 # Scientific programming practice
@@ -224,9 +229,9 @@ There are several parts in the *R Markdown* document:
 * The title section (called *yaml header*) is between the two '- - -' sections at the start of the document. Here you can give a title, specify the author, include a date, abstract, etc.
 * Headings are defined with ``#``, or ``##``, or ``###`` for first, second and third level headings, respectively.
 * Text sections can include many features. For instance, lists are created by using an asterisk (``*``) for bullets and numbers such as ``1``, ``2``, etc., for numbered lists. Figures, tables, equations can be added as well, and so on.
-* The R-code is embedded between the $`\,`\,`\{r\}$ and $`\,`\,`$ symbols. These are so-called code-chunks. In the top-right position of each code-chunk you will find three symbols (two of them are marked with an orange circle in Figure 6). Pressing the middle symbol will run all code-chunks above, while the right symbol will run the current code-chunk. If you move with the cursor to a specific line within the code-chunk and press ``Ctrl+Enter``, the code on that line will be executed. If there is any output, it will be displayed in the console.
+* The R-code is embedded between the symbols $`\,`\,`\{r\}$ and $`\,`\,`$. These are called R-code chunks, or R-chunks for short, and they can be inserted using the shortcut \texttt{Ctrl+Alt+I}. In the top-right position of each R-chunk, you will find three symbols (two of them are marked with an orange circle in Figure 6). Pressing the middle symbol will run all R-chunks above (shortcut: \texttt{Ctrl+Alt+Shift+P}), while the right symbol will run the current R-chunk (shortcut: \texttt{Ctrl+Shift+Enter}). If you move with the cursor to a specific line within the R-chunk and press \texttt{Ctrl+Enter}, the code on that line will be executed. If there is any output, it will be displayed in the R-console.
 
-Finally, the *Knit* button (encircled in blue in Figure 6) will execute the *R Markdown* document and generate the document on the right. This final document contains both the R-code and the results. It fully documents the analysis.
+Finally, the *Knit* button (encircled in blue in Figure 6) will compile the *R Markdown* document and generate the document on the right. This final document contains both the R-code and the results. It fully documents the analysis.
 
 ## Getting started with R Markdown
 
@@ -989,7 +994,7 @@ out <- ode(y = state.ini, times = time.seq, func = model, parms = pars)
 The output is stored in a matrix, called ``out``. All we need to do now is to plot this model output. Before we do so, we can have a look at the top few rows of the output matrix:
 
 ```{r}
-head(out)
+head(out,4)
 ```
 
 The data are arranged in three columns: first the time, then values of the state variables ``A`` and ``B`` at each time point, followed by the output variable called ``sum``. 
