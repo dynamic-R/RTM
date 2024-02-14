@@ -134,9 +134,9 @@ question("Which of the following differential equations correctly describe mass 
 msg <- "F12, the sinking of detritus, is expressed in $mol~N/m^2/day$ (you will see later why). Thus you need to divide by the height of the water column to convert the flow of N to $mol~N/m^3/day$."
 
 question("Which of the following differential equations correctly describe mass balances for the DETRITUS state variable?", type = "learnr_checkbox",
- answer("$\\frac{d[DETRITUS]}{dt} = F2 + F6 - F5 + F7 + F8 - F9 - F12$", correct=FALSE),
- answer("$\\frac{d[DETRITUS]}{dt} = F2 + F6 - F5 + F7 + F8 - F9 - F12\\cdot h$", correct=FALSE),
- answer("$\\frac{d[DETRITUS]}{dt} = F2 + F6 - F5 + F7 + F8 - F9 - F12/h$", correct=TRUE),
+ answer("$\\frac{d[DETRITUS]}{dt} = F3 + F6 - F5 + F7 + F8 - F9 - F12$", correct=FALSE),
+ answer("$\\frac{d[DETRITUS]}{dt} = F3 + F6 - F5 + F7 + F8 - F9 - F12\\cdot h$", correct=FALSE),
+ answer("$\\frac{d[DETRITUS]}{dt} = F3 + F6 - F5 + F7 + F8 - F9 - F12/h$", correct=TRUE),
  
  incorrect=msg, 
  correct=msg)
