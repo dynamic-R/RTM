@@ -27,9 +27,9 @@ There are no corresponding sections in the textbook.
 
 ## Two-box model
 
-Figure below shows a conceptual diagram of a two-compartment system in a **steady state**, where carbon (C) flows between the compartments A and B. The carbon fluxes are described by first-order kinetics with respect to the C content in the source compartment. The corresponding values of X, Y and Z are $X=500$ (Pg C), $Y=2500$ (Pg C), and $Z=50$ (Pg C yr$^{-1}$).
+Figure below shows a conceptual diagram of a two-reservoir system in a **steady state**, where carbon (C) flows between the reservoirs A and B. The carbon fluxes are described by **first-order kinetics** with respect to the C content in the source reservoir The corresponding values of X, Y and Z are X = 500 Pg C, Y = 2500 Pg C, and Z = 50  Pg C yr$^{-1}$.
 
-![](images/TwoBox.png){width=14cm}
+![](images/TwoBox.png){width=12cm}
 
 The R chunk below sets the values of these variables/parameters.
 
@@ -79,17 +79,138 @@ question("What is the value of the rate constant $r_{BA}$?", type = "learnr_radi
 )
 ```
 
+## Residence time
+
+**Residence time** is defined as the amount of material in the reservoir divided by the total rate of outflow of the material. 
+
+Thus, for carbon in the reservoirs $A$ and $B$, the corresponding residence times are calculated according to $$\tau_A = \frac{A}{F_{AB}}$$ 
+$$\tau_B = \frac{B}{F_{BA}}$$
+Because in our case the rates of outflow are proportional to the size of the source reservoir, i.e., $F_{AB} = r_{AB}\cdot A$ and $F_{BA} = r_{BA} \cdot B$, we have
+
+$$ \tau_A = \frac{A}{r_{AB}\cdot A} = \frac{1}{r_{AB}} $$
+$$ \tau_B = \frac{B}{r_{BA}\cdot B} = \frac{1}{r_{BA}} $$
+That is, residence times are equal to the *inverse* of the rate constants describing the outflow.
+
+Use R to estimate the **residence time** of carbon in the reservoirs $A$ and $B$. Use the same values of X, Y and Z as before.
+
+```{r tab-setup}
+X <- 500
+Y <- 2500
+Z <- 50
+```
+
+```{r tab, exercise=TRUE}
+# fill in the formulas
+tA <- 
+print(tA)
+tB <- 
+print(tB)
+```
+
+```{r ta-solution, echo=FALSE}
+question("What is the residence time of carbon in the reservoir $A$, $\\tau_{A}$? (Note: 'dot' is used as a decimal separator)",
+         type = "learnr_radio",
+ answer(sprintf("%.2f $yr$", X/Y)),
+ answer(sprintf("%.1f $yr$", X/Z), correct=TRUE),
+ answer(sprintf("%.2f $yr$", Z/X))
+)
+```
+
+```{r tb-solution, echo=FALSE}
+question("What is the residence time of carbon in the reservoir $B$, $\\tau_{B}$?", type = "learnr_radio",
+ answer(sprintf("%.2f $yr$", Y/Z), correct=TRUE),
+ answer(sprintf("%.1f $yr$", Z/X)),
+ answer(sprintf("%.2f $yr$", Z/Y))
+)
+```
+
+## Equilibrium
+
+![](images/TwoBox.png){width=12cm}
+
+For a system comprising reservoirs $A$ and $B$ (see figure above), the mass balances are expressed by the following set of *coupled* differential equations:
+
+$$\frac{dA}{dt} = -r_{AB}\cdot A + r_{BA}\cdot B$$
+$$\frac{dB}{dt} = r_{AB}\cdot A - r_{BA}\cdot B$$
+
+By summing these two equations, we obtain
+$$\frac{d(A+B)}{dt} = 0 $$
+This last differential equation represents the **conservation** of carbon in the system. Specifically, because the system is closed, the *total* amount of carbon in the system does *not* change over time and is equal to the initial value:
+$$ A(t) + B(t) = A_{ini}+B_{ini}\qquad\qquad [1]$$
+where $A_{ini}$ and $B_{ini}$ denote the corresponding initial values of $A$ and $B$.
+
+**Equilibrium** (or **steady state**) is defined as a state of a system where state variables do *not* vary over time, i.e., all time-derivatives are equal to zero. 
+
+By setting $dA/dt = 0$ and $dB/dt=0$, the above set of differential equations is transformed to a set of algebraic equations:
+
+$$0 = -r_{AB}\cdot A_{eq} + r_{BA}\cdot B_{eq}$$
+$$0 = r_{AB}\cdot A_{eq} - r_{BA}\cdot B_{eq}$$
+where $A_{eq}$ and $B_{eq}$ denote the size of the reservoirs $A$ and $B$ in equilibrium. 
+
+Note that these two equations are identical and provide the following relationship between the equilibrium values:
+
+$$r_{AB}\cdot A_{eq} = r_{BA}\cdot B_{eq}\qquad\qquad [2]$$
+
+The equilibrium values $A_{eq}$ and $B_{eq}$ can relatively easily be calculated. Specifically, because equation [1] is valid at any time point $t$, it is also valid when the system is in equilibrium. Thus, we have 
+$$A_{eq}+B_{eq} = A_{ini} + B_{ini}\qquad\qquad [3]$$
+By solving for $B_{eq}$ in Eq. [2] and substituting the result to Eq. [3], we obtain
+$$ A_{eq} = \frac{r_{BA}}{r_{AB}+r_{BA}}\cdot (A_{ini} + B_{ini}) \qquad\qquad [4a]$$
+Similarly, by solving for $A_{eq}$ in Eq. [2] and substituting the result to Eq. [3], we obtain
+$$ B_{eq} = \frac{r_{AB}}{r_{AB}+r_{BA}}\cdot (A_{ini} + B_{ini}) \qquad\qquad [4b]$$
+
+Assume that the system comprising reservoirs $A$ and $B$ has been **perturbed** from the steady state by adding $100~Pg~C$ from an *external* source to the reservoir $A$, while the reservoir $B$ remained unchanged. This perturbation did not affect the rate laws nor the rate constants. After some time, the system returned to a new steady state (new equilibrium). Before the perturbation, the amounts of carbon in reservoirs $A$ and $B$ were equal to $X$ and $Y$, respectively.
+
+Use R to estimate the new **equilibrium** values $A_{eq}$ and $B_{eq}$. As before, use the following values of X, Y and Z.
+
+```{r eq-setup}
+X <- 500
+Y <- 2500
+Z <- 50
+```
+
+```{r eq, exercise=TRUE}
+A.eq    <-     # enter formula
+B.eq    <-     # enter formula
+c(A.eq=A.eq, B.eq=B.eq)
+```
+
+```{r eq-solution1, echo=FALSE}
+msg <- "$A_{eq}$ is calculated using equation [4a] and considering that the initial carbon content in the perturbed system is $A_{ini}+B_{ini}=X+Y+100$."
+
+question("What is the value of the equilibrium carbon content in reservoir A?", type = "learnr_radio",
+ answer(sprintf("%.3f $Pg~C$", Y/(X+Y)*(X+Y+100))),
+ answer(sprintf("%.3f $Pg~C$", X/(X+Y)*(X+Y+100)), correct=TRUE),
+ answer(sprintf("%.2f $Pg~C$", X/(X+Y)*(X+Y+80))),
+ 
+ incorrect = paste("Incorrect.", msg),
+ correct = paste("Correct.", msg) 
+)
+```
+
+```{r eq-solution2, echo=FALSE}
+msg <- "$B_{eq}$ is calculated using equation [4b] and considering that the initial carbon content in the perturbed system is $A_{ini}+B_{ini}=X+Y+100$."
+
+question("What is the value of the equilibrium carbon content in reservoir B?", type = "learnr_radio",
+ answer(sprintf("%.3f $Pg~C$", Y/(X+Y)*(X+Y+100)), correct=TRUE),
+ answer(sprintf("%.3f $Pg~C$", X/(X+Y)*(X+Y+100))),
+ answer(sprintf("%.2f $Pg~C$", Y/(X+Y)*(X+Y+80))),
+ 
+ incorrect = paste("Incorrect.", msg),
+ correct = paste("Correct.", msg)
+         )
+```
+
 ## Implementation in R
 
-Based on the reader that has introduced you to solving dynamic models in R, it should be rather easy for you to understand the following R-code that implements the two-box model above in R.
+Based on the reader that has introduced you to solving dynamic models in R (see Sec. 8 in the reader), it should be relatively easy for you to understand the following R-code. The code allows you to predict the dynamics of carbon in reservoirs $A$ and $B$ under various scenarios. 
 
-Modify the R-code to implement two types of perturbation of the system: 
+Modify this R-code to implement two types of perturbation of the system: 
 
-* **Deforestation**, which is modeled by assuming that $100~Pg~C$ was instantaneously moved from the reservoir B (biosphere) to the reservoir A (atmosphere).
+* **Deforestation**, which is modeled by assuming that $100~Pg~C$ was instantaneously moved from the reservoir $B$ (biosphere) to the reservoir $A$ (atmosphere).
 
-* **Burning of fossil fuels**, which is modeled by assuming that $100~Pg~C$ was instantaneously added to the reservoir A (atmosphere) from an external reservoir (fossil fuels) that is not part of the model, whereas the initial size of B remained unchanged.
+* **Burning of fossil fuels**, which is modeled by assuming that $100~Pg~C$ was instantaneously added to the reservoir $A$ (atmosphere) from an external reservoir (fossil fuels) that is not part of the model, whereas the initial size of $B$ remained unchanged.
 
-Note that after some time the system reaches a steady state. Think how this steady state depends on the type of perturbation.
+Verify that after some time, the system reaches a steady state, and that the steady state values $A_{eq}$ and $B_{eq}$ agree with those calculated earlier in this tutorial. 
 
 ```{r model2box-setup}
 X <- 500
@@ -97,7 +218,7 @@ Y <- 2500
 Z <- 50
 ```
 
-```{r model2box, exercise=TRUE, echo=FALSE, exercise.lines = 22}
+```{r model2box, exercise=TRUE, echo=FALSE, exercise.lines = 23}
 require(deSolve)
 
 model2box <- function(t, s, p){  # model function
@@ -119,203 +240,8 @@ t.seq <- seq(from=0, to=100, by=1)    # time sequence
 out1 <- ode(y=state.ini1, time=t.seq, func=model2box, parms=pars)
 out2 <- ode(y=state.ini2, time=t.seq, func=model2box, parms=pars)
 
-plot(out1,out2, lwd=2, mfrow=c(1,3))  # plot solutions
-```
-
-## Residence time, response time, and equilibrium - theory
-
-In this section, which will be somewhat theoretical, we will explain important concepts including **residence time**, **response time**, and **equilibrium**. 
-
-You will need some basic knowledge of calculus to clearly understand the derivations and arguments below. If you do not have such knowledge, do not worry; just read on to see how much you can understand. Alternatively, you can skip the derivations and read only the key results at the bottom of this tab (section Conclusive remarks).
-
-We will analyze here in greater detail the model depicted by the conceptual diagram below.
-
-![](images/TwoBox.png){width=8cm}
-
-### Uncoupled compartments
-
-First, we assume that the two compartments $A$ and $B$ in the model above are *not* coupled. That is, we assume that carbon only flows *out* of $A$ (with an efflux $F_{AB}$) and *out* of $B$ (with an efflux $F_{BA}$) and there is *no feedback*. 
-
-Due to the lack of feedback from $B$, the dynamics of the carbon content in $A$ is described by the following differential equation (DE):
-$$ \frac{dA}{dt} = -r_{AB}\cdot A $$
-The solution to this DE is an exponential function of time:
-$$ A(t) = A_{ini}\cdot e^{-r_{AB}\cdot t} \qquad\qquad [1]$$
-where $A_{ini}$ is the initial value of $A$. The validity of this statement can be directly verified by calculating the time-derivative of $A(t)$, using the chain rule and other rules of calculus.
-
-The solution in Eq. [1] can be rewritten according to
-$$ A(t) = A_{ini}\cdot e^{-t/\tau_{A}} \qquad\qquad [2]$$
-where the parameter $\tau_A$ is defined according to
-$$ \tau_{A} \equiv \frac{1}{r_{AB}} \qquad\qquad [3]$$
-
-Because this parameter is equal to the amount of carbon in $A$ (e.g., [$Pg~C$]) divided by the efflux (e.g., [$Pg~C~yr^{-1}$]), we call it the **residence time** of carbon in the compartment $A$. 
-
-Equation [2] shows that $\tau_A$ can also be interpreted as a time interval over which the amount of carbon in the compartment $A$ decreases from the initial value of $A_{ini}$ by a factor of $e^{-1}\approx 0.37$ as a result of the efflux $F_{AB} = r_{AB}\cdot A$. Note that at $t=3\cdot \tau_A$, the amount of carbon in $A$ decreases by a factor of $e^{-3}\approx 0.05$, i.e., to about 5% of the initial value.
-
-Similarly, in the absence of a feedback from $A$, the dynamics of the carbon content in $B$ is described by
-$$ \frac{dB}{dt} = -r_{BA}\cdot B $$
-By solving this DE, we obtain that the carbon content in $B$ decreases exponentially over time according to
-$$ B(t) = B_{ini}\cdot e^{-t/\tau_{B}}, \qquad\qquad [4]$$
-where 
-$$\tau_{B} \equiv \frac{1}{r_{BA}}\qquad\qquad [5]$$
-is the **residence time** of carbon in the compartment $B$.
-
-### Coupled compartments
-
-Now, we assume that the two compartments $A$ and $B$ in the model above *are* coupled. In this case, the dynamics of carbon in $A$ and $B$ are described by a set of *coupled* differential equations:
-
-$$\frac{dA}{dt} = -r_{AB}\cdot A + r_{BA}\cdot B \qquad\qquad [6a]$$
-$$\frac{dB}{dt} = r_{AB}\cdot A - r_{BA}\cdot B \qquad\qquad [6b]$$
-
-From calculus we know that the solution to these differential equations has the following form: 
-$$A(t)=A_{eq} + \Delta A\cdot e^{-r\cdot t}\qquad\qquad [7a]$$
-$$B(t) = B_{eq} + \Delta B\cdot e^{-r\cdot t}\qquad\qquad [7b]$$
-We can verify this by direct substitution, as shown in the following. Along the way, we will identify relevant relationships between the parameters $A_{eq}$, $B_{eq}$, $r$, $\Delta A$, and $\Delta B$.
-
-First, we calculate the time-derivative of $A$ and substitute the result together with expressions [7a-b] to equation [6a]. We obtain:
-$$-r\cdot \Delta A\cdot e^{-r\cdot t} = -r_{AB}\cdot A_{eq} - r_{AB}\cdot \Delta A\cdot e^{-r\cdot t} + r_{BA}\cdot B_{eq} + r_{BA}\cdot \Delta B\cdot e^{-r\cdot t} \qquad\qquad [8]
-$$
-
-Second, because the previous equation [8] must be valid for *any* time $t$, the terms with and without $t$ must be equal to each other on both sides of this equation. Specifically, for terms without $t$, we have:
-$$0 = - r_{AB}\cdot A_{eq} + r_{BA}\cdot B_{eq} \qquad\qquad [9a]$$
-and for terms with $t$, we have
-$$-r\cdot \Delta A\cdot e^{-r\cdot t} = - r_{AB}\cdot \Delta A\cdot e^{-r\cdot t} + r_{BA}\cdot \Delta B\cdot e^{-r\cdot t}\qquad\qquad [9b]$$
-
-Third, the *total* carbon content in $A$ and $B$ is *constant*, as follows from the fact that the time derivative of $A+B$ is equal to zero:
-$$\frac{d(A+B)}{dt} = [Eq. 6a] + [Eq. 6b] = 0 $$
-We denote this constant using the initial amounts of carbon in $A$ and $B$, i.e.,
-$$A(t) + B(t) = A_{ini} + B_{ini}\qquad\qquad [10]$$
-
-By combining equations [7a-b] and [10], we obtain
-$$ A_{eq}+B_{eq} = A_{ini}+B_{ini} \qquad\qquad [11a]$$
-$$ \Delta B = -\Delta A\qquad \qquad [11b]$$
-
-Forth, by combining equations [9b] and [11b], we obtain 
-$$r = r_{AB} + r_{BA} \qquad [11b] $$
-
-### Conclusive remarks
-
-1. The above analysis shows that the temporal variation of the carbon content in $A$ and $B$ is described by the *same* exponential function. Specifically, it can be written according to (see Eqs. [7a-b] and [11b])
-$$A(t)=A_{eq} + \Delta A\cdot e^{-t/\tau_{AB}}\qquad\qquad [12a]$$
-$$B(t) = B_{eq} - \Delta A\cdot e^{-t/\tau_{AB}}\qquad\qquad [12b]$$
-
-2. The parameter $\tau_{AB}$ is called the **response time** of the system and is calculated according to (see Eqs. [7a-b] and [11b])
-$$
-\tau_{AB} \equiv \frac{1}{r} = \frac{1}{r_{AB} + r_{BA}}\qquad\qquad [13]
-$$
-
-3. When $t$ is very large ($t\gg \tau_{AB}$), the values of $A$ and $B$ approach $A_{eq}$ and $B_{eq}$, respectively. We call these values **equilibrium values**. Equation [9a] shows that the equilibrium values are related according to
-$$r_{AB}\cdot A_{eq} = r_{BA}\cdot B_{eq}\qquad\qquad [14]$$
-
-4. Relationship [11a], which we reproduce here as Eq. [15],
-$$ A_{eq}+B_{eq} = A_{ini}+B_{ini} \qquad\qquad [15]$$
-represent the **conservation of carbon in the system**.
-
-5. By combining equations [14] and [15] and solving for $A_{eq}$ and $B_{eq}$, we obtain (we encourage you to verify this by yourself):
-$$ A_{eq} = \frac{r_{BA}}{r_{AB}+r_{BA}}\cdot (A_{ini} + B_{ini}) \qquad\qquad [16a]$$
-$$ B_{eq} = \frac{r_{AB}}{r_{AB}+r_{BA}}\cdot (A_{ini} + B_{ini}) \qquad\qquad [16b]$$
-These relationships allow us to calculate the equilibrium values $A_{eq}$ and $B_{eq}$ from the initial *total* carbon content in the two-compartment system and the corresponding rate constants $r_{AB}$ and $r_{BA}$.
-
-
-## Residence time, response time, and equilibrium - questions
-
-Use R to estimate the **residence time** of carbon in the reservoir $A$ ($\tau_{A}$) and $B$ ($\tau_{B}$) using the values of X, Y and Z given earlier in this tutorial.
-
-```{r tab-setup}
-X <- 500
-Y <- 2500
-Z <- 50
-```
-
-```{r tab, exercise=TRUE}
-# fill in the formulas
-tA <- 
-print(tA)
-tB <- 
-print(tB)
-```
-
-<div id="tab-hint">
-**Hint:** Residence time is the amount of material in the reservoir ($[Pg~C]$) divided by the outflow ($[Pg~C~yr^{-1}]$).
-</div>
-
-```{r ta-solution1, echo=FALSE}
-question("What is the value of the residence time $\\tau_{A}$? (Note: 'dot' is used as a decimal separator)",
-         type = "learnr_radio",
- answer(sprintf("%.3f $yr$", X/Y)),
- answer(sprintf("%.3f $yr$", X/Z), correct=TRUE),
- answer(sprintf("%.2f $yr$", Z/X))
-)
-```
-
-```{r tb-solution1, echo=FALSE}
-question("What is the value of the residence time $\\tau_{B}$?", type = "learnr_radio",
- answer(sprintf("%.3f $yr$", Y/Z), correct=TRUE),
- answer(sprintf("%.3f $yr$", Z/X)),
- answer(sprintf("%.2f $yr$", Z/Y))
-)
-```
-
-To challenge yourself, try to solve the following questions.
-
-The system has been **perturbed** from the steady state by adding 100 Pg C from an *external* source to $A$. This perturbation did not affect the rate laws nor the rate constants. After some time, the system returned to a new steady state (new equilibrium).
-
-Quantify the **response time** of the system ($\tau_{AB}$), and the amounts of carbon in both reservoirs in this new equilibrium ($A_{eq}$ and $B_{eq}$). Use the values of X, Y and Z defined earlier to calculate $\tau_{AB}$, $A_{eq}$ and $B_{eq}$. Use the R-code from the earlier part of this tutorial to verify that your calculated values agree with those predicted by the numerical model.
-
-```{r Tab-setup}
-X <- 500
-Y <- 2500
-Z <- 50
-```
-
-```{r Tab, exercise=TRUE}
-tau.AB  <-     # enter formula
-A.eq    <-     # enter formula
-B.eq    <-     # enter formula
-c(tau.AB=tau.AB, A.eq=A.eq, B.eq=B.eq)
-```
-
-<div id="Tab-hint">
-**Hint:** Check the theory explained earlier in this tutorial, especially equations [13-16]. 
-</div>
-
-```{r Tab-solution1, echo=FALSE}
-msg <- "The response time is calculated using equation [13] derived in the earlier part of this tutorial."
-
-
-question("What is the value of the response time $\\tau_{AB}$?", type = "learnr_radio",
- answer(sprintf("%.3f $yr$", 1/(Z/X + 0*Z/Y))),
- answer(sprintf("%.3f $yr$", 1/(0*Z/X + Z/Y))),
- answer(sprintf("%.2f $yr$", 1/(Z/X + Z/Y)), correct=TRUE),
- 
- incorrect=paste("Incorrect.", msg),
- correct=paste("Correct.", msg)
-)
-```
-
-```{r Tab-solution2, echo=FALSE}
-msg <- "$A_{eq}$ is calculated using equation [16a] in this tutorial and taking into account that the initial carbon content in the perturbed system is $A_{ini}+B_{ini}=X+Y+100$."
-
-question("What is the value of the equilibrium carbon content in reservoir A?", type = "learnr_radio",
- answer(sprintf("%.3f $Pg~C$", Y/(X+Y)*(X+Y+100))),
- answer(sprintf("%.3f $Pg~C$", X/(X+Y)*(X+Y+100)), correct=TRUE),
- answer(sprintf("%.2f $Pg~C$", X/(X+Y)*(X+Y+80))),
- 
- incorrect = paste("Incorrect.", msg),
- correct = paste("Correct.", msg) 
-)
-```
-
-```{r Tab-solution3, echo=FALSE}
-msg <- "$B_{eq}$ is calculated using equation [16b] in this tutorial and taking into account that the initial carbon content in the perturbed system is $A_{ini}+B_{ini}=X+Y+100$."
-
-question("What is the value of the equilibrium carbon content in reservoir B?", type = "learnr_radio",
- answer(sprintf("%.3f $Pg~C$", Y/(X+Y)*(X+Y+100)), correct=TRUE),
- answer(sprintf("%.3f $Pg~C$", X/(X+Y)*(X+Y+100))),
- answer(sprintf("%.2f $Pg~C$", Y/(X+Y)*(X+Y+80))),
- 
- incorrect = paste("Incorrect.", msg),
- correct = paste("Correct.", msg)
-         )
+plot(out1, out2, lwd=2, mfrow=c(1,3))  # plot solutions
+tail(out2, n=3) # see the equilibrium values
 ```
 
 ## More exercises
@@ -331,7 +257,7 @@ RTMexercise("carbonCycle")
 
 ### Extra challenging
 
-The global carbon cycle model is a wonderful example of models that study the response of perturbed systems. If you are curious and would like to learn more about perturbed systems, and specifically about a method that allows you to find the characteristic time scales of their response, you can do so by studying the following extra readers. Note that the topics covered in these readers are extra challenging and require somewhat advanced knowledge of calculus and algebra.
+The global carbon cycle model is a wonderful example of models that study the response of perturbed systems. If you are curious and would like to learn more about perturbed systems, and specifically about a method that allows you to find the characteristic time scales of their response, you can do so by studying the following readers. Note that the topics covered in these readers are extra challenging and require somewhat advanced knowledge of calculus and algebra.
 
 ```
 RTMreader("perturbation_I", output="PDF")
