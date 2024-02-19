@@ -63,8 +63,8 @@ print(rBA)
 msg <- sprintf("The rate constant $r_{AB}$ relates to the total flux $F_{AB}$ as : $r_{AB}=F_{AB}/A$; the steady-state value of $F_{AB}$ and $A$ are given by $Z=50$ and $X=500$ respectively, so the answer is: $r_{AB}= Z/X$")
 
 question("What is the value of the rate constant $r_{AB}$? (Note: 'dot' is used as a decimal separator)", type = "learnr_radio",
- answer(sprintf("%.3f $yr^{-1}$", Z/Y)),
- answer(sprintf("%.3f $yr^{-1}$", X/Z)),
+ answer(sprintf("%.2f $yr^{-1}$", Z/Y)),
+ answer(sprintf("%.1f $yr^{-1}$", X/Z)),
  answer(sprintf("%.2f $yr^{-1}$", Z/X), correct=TRUE),
  incorrect = msg,   
  correct = msg
@@ -73,8 +73,8 @@ question("What is the value of the rate constant $r_{AB}$? (Note: 'dot' is used 
 
 ```{r rba-solution1, echo=FALSE}
 question("What is the value of the rate constant $r_{BA}$?", type = "learnr_radio",
- answer(sprintf("%.3f $yr^{-1}$", Z/Y), correct=TRUE),
- answer(sprintf("%.3f $yr^{-1}$", X/Z)),
+ answer(sprintf("%.2f $yr^{-1}$", Z/Y), correct=TRUE),
+ answer(sprintf("%.1f $yr^{-1}$", X/Z)),
  answer(sprintf("%.2f $yr^{-1}$", X/Y))
 )
 ```
