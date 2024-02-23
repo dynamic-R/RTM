@@ -58,14 +58,17 @@ question("Reactions whose rate is described by Michaelis-Menten kinetics are", t
 ## Enzymatic parameter
 
 ```{r enzPar, echo=FALSE}
-
-question(sprintf("What is the name of the parameter $K_A$ in the Michaelis-Menten rate expression $\\frac{[A]}{[A]+K_A}$?"), type = "learnr_checkbox",
+msg0 <- "There are three correct answers. Different names of $K_A$ are used depending on the context or research field."
+question(sprintf("What is the name of the parameter $K_A$ in the Michaelis-Menten rate expression $\\frac{[A]}{[A]+K_A}$? (Note: multiple answers are correct.)"), 
+         type = "learnr_checkbox",
  answer("Enzyme affinity to the rate-limiting substrate A", correct = TRUE),
  answer("Equilibrium concentration", correct = FALSE),
  answer("Half-saturation concentration", correct = TRUE),
  answer("Rate constant", correct = FALSE),
  answer("Solubility concentration"),
- answer("Affinity concentration",  correct = TRUE)
+ answer("Affinity concentration",  correct = TRUE),
+ incorrect = paste("Incorrect. ", msg0),
+ correct = paste("Correct!")
 )
 ```
 
@@ -96,7 +99,7 @@ plot(x=A,y=atan(A/20)/(pi/2), main="Arc-tan", ylab="", xlab="[A]", type="l", lwd
 ## Michaelis-Menten use
 
 ```{r enzUse, echo=FALSE}
-msg <- "When [A] is very small ($[A]\\ll K_A$), the Michaelis-Menten rate expression can be approximated as $\\frac{[A]}{[A]+K_A}\\approx \\frac{[A]}{K_A} = \\frac{1}{K_A}\\cdot [A] \\equiv r\\cdot [A]$, which is first-order in [A]."
+msg <- "When [A] is very small ( $ [A] << K_A $ ), the Michaelis-Menten rate expression can be approximated according to $\\frac{[A]}{[A]+K_A}\\approx \\frac{[A]}{K_A} = \\frac{1}{K_A}\\cdot [A]$, which is first-order in [A]."
 question("Michaelis-Menten kinetics is approximated by first-order kinetics when the substrate concentration is", type = "learnr_radio",
  answer("around the affinity concentration"),
  answer("much lower than the affinity concentration", correct = TRUE),
@@ -108,7 +111,7 @@ question("Michaelis-Menten kinetics is approximated by first-order kinetics when
 ```
 
 ```{r enzUse2, echo=FALSE}
-msg <- "When [A] is very large ($[A]\\gg K_A$), the Michaelis-Menten rate expression can be approximated as $\\frac{[A]}{[A]+K_A} \\approx \\frac{[A]}{[A]} \\equiv 1$, which is zero-order in [A]."
+msg <- "When [A] is very large ($[A] >> K_A$), the Michaelis-Menten rate expression can be approximated as $\\frac{[A]}{[A]+K_A} \\approx \\frac{[A]}{[A]} \\equiv 1$, which is zero-order in [A]."
 
 question("Michaelis-Menten kinetics is approximated by zero-order kinetics when the substrate concentration is", type = "learnr_radio",
  answer("around the affinity concentration"),
