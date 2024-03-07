@@ -1,11 +1,14 @@
 ---
-title: 'Anoxia in the Scheldt estuary'
-subtitle: "Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
+title: "Anoxia in the Scheldt estuary"
 author: "Karline Soetaert and Lubos Polerecky, Utrecht University"
 date: "March 2021"
-output: 
+output:
+  html_document:
+    toc: false
+    df_print: paged
   pdf_document:
-    toc: no 
+    toc: false
+subtitle: Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere
 ---
 
 ```{r child = 'estuaryAnoxia_Q.Rmd'}

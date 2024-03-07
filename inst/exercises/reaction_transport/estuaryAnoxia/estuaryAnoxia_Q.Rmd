@@ -1,11 +1,14 @@
 ---
-title: 'Anoxia in the Scheldt estuary'
-subtitle: "Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
+title: "Anoxia in the Scheldt estuary"
 author: "Karline Soetaert and Lubos Polerecky, Utrecht University"
 date: "March 2021"
-output: 
+output:
+  html_document:
+    toc: false
+    df_print: paged
   pdf_document:
-    toc: no 
+    toc: false
+subtitle: Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere
 ---
 
 # Problem formulation
@@ -18,7 +21,7 @@ In this exercise, you will investigate this by means of a biogeochemical model o
 
 Regarding *reactions*, assume that the dominant pathway of oxygen consumption in the Scheldt is the nitrification process (oxidation of ammonia to nitrate), which consumes 2 moles of oxygen per mole of ammonia: 
 $$NH_3 + 2 O_2 \rightarrow NO_3^- + H^+ + H_2O.$$
-Although this process can happen abiotically, its rate is much greater if it is mediated by bacteria, which can use it to gain energy for growth.\footnote{In fact, the overall process is a two-step process. The first step is ammonia oxidation to nitrite, mediated by one type of bacteria, and the second step is nitrite oxidation to nitrate, mediated by another type of bacteria. We will, however, neglect this aspect in our model.} Another important reaction is the exchange of oxygen across the air-water interface (re-aeration). 
+Although this process can happen abiotically, its rate is much greater if it is mediated by bacteria, which can use it to gain energy for growth. [**Note:** In fact, the overall process is a two-step process. The first step is ammonia oxidation to nitrite, mediated by one type of bacteria, and the second step is nitrite oxidation to nitrate, mediated by another type of bacteria. We will, however, neglect this aspect in our model.] Another important reaction is the exchange of oxygen across the air-water interface (re-aeration). 
 
 Regarding *transport*, oxygen, nitrate and ammonia are transported by the river flow (advection) and are mixed by the tides (tidal dispersion). 
 
@@ -33,13 +36,14 @@ Regarding *transport*, oxygen, nitrate and ammonia are transported by the river 
 * The rate of nitrification is modelled as follows:
 $$ Nitrification = r_{nit} \cdot [NH_3] \cdot \frac{[O_2]}{[O_2]+k_{sO2}},$$
 where the nitrification rate constant is $r_{nit} = 0.10~d^{-1}$, and the half-saturation concentration is $k_{sO2} = 0.001~mol~O_2~m^{-3}$.
-Note that this rate expression only considers $O_2$ in the Michaelis-Menten term, indicating that $O_2$ is the rate-limiting substrate. Although nitrification is a microbially mediated process (see above), there is no "worker" (i.e., bacteria) in the rate expression. In this expression, we assume that the concentration of $NH_3$ is a *proxy* for the bacterial concentration---the more ammonia is available, the more bacteria is present, and therefore the faster the rate of nitrification will be. This substitution of the "worker" by the "resource" is a common assumption that we employ in biogeochemical models. Specifically, we assume that the "workers" are "adjusting" themselves to match the concentration of the resourse that is (presumably) always present, and this adjustment is so rapid that we do *not* need to model the worker explicitly. This is similar to the local equilibrium assumption that we employed in models of chemical reactions comprising a fast equilibration reaction coupled to a slower process. Essentially, we assume that the "worker" is in a local "equilibrium" with the available resource (here $NH_3$).
+Note that this rate expression only considers $O_2$ in the Michaelis-Menten term, indicating that $O_2$ is the rate-limiting substrate. 
+**Also note** that although nitrification is a microbially mediated process (see above), there is no "worker" (i.e., bacteria) in the rate expression. In this expression, we assume that the concentration of $NH_3$ is a *proxy* for the bacterial concentration---the more ammonia is available, the more bacteria is present, and therefore the faster the rate of nitrification will be. This substitution of the "worker" by the "resource" is a common assumption that we employ in biogeochemical models. Specifically, we assume that the "workers" are "adjusting" themselves to match the concentration of the resourse that is (presumably) always present, and this adjustment is so rapid that we do *not* need to model the worker explicitly. This is similar to the local equilibrium assumption that we employed in models of chemical reactions comprising a fast equilibration reaction coupled to a slower process. Essentially, we assume that the "worker" is in a local "equilibrium" with the available resource (here $NH_3$).
 
 * The oxygen exchange with the atmosphere (aeration) is driven by the "distance" from the equilibrium. Thus, the aeration rate ($mol~O_2~m^{-3}~d^{-1}$) is expressed as 
 $$Aeration = - \frac{v_d}{d} \cdot ([O_2] - O_{2,sat}).$$
 This expression assumes that the aeration flux is *instantaneously* homogenized over the entire water depth ($d$). Assume a value of $v_d = 1~m~d^{-1}$ for the rate constant (called 'piston-velocity'), and $O_{2,sat} = 0.3~mol~O_2~m^{-3}$ for the equilibrium concentration of dissolved oxygen in water (called 'solubility'). 
 
-* The model is completely specified only if we prescribe what happens at the boundaries with the outside world (i.e., the boundary conditions). For the estuary, the outside world is the river (distance $x = 0$) and the sea (distance $x = 100~km$).  In the current situation, the concentrations of oxygen, nitrate and ammonia in the river are 0.1, 0.3 and $0.1~mol~N~m^{-3}$, respectively. At the sea boundary, they are 0.3, 0.05 and $0.010~mol~m^{-3}$, respectively.
+* The model is completely specified only if we prescribe what happens at the boundaries with the outside world (i.e., the boundary conditions). For the estuary, the outside world is the river (distance $x = 0$) and the sea (distance $x = 100~km$).  In the current situation, the concentrations of oxygen, nitrate and ammonia in the river are $0.1$, $0.3$ and $0.1~mol~N~m^{-3}$, respectively. At the sea boundary, they are $0.3$, $0.05$ and $0.010~mol~m^{-3}$, respectively. [**Note:** When both advective and dispersion modes of transport are important in the reaction-transport model, the differential equations that are to be solved are *second-order* (i.e., they contain up to the second derivative of functions we are searching for). This means that there must be *two* boundary conditions for each state variable to be able to find a unique solution to the differential equations. In this case, we use *fixed concentrations* at the upper and lower boundaries of the modelled domain, but there could be others. Check help for the ``tran.1D`` function to learn more about boundary conditions in ``ReacTran`` models.]
 
 # Tasks
 
@@ -49,12 +53,15 @@ This expression assumes that the aeration flux is *instantaneously* homogenized 
 
 ## Model implementation
 
-* Implement the model, using the R-markdown file RTM_1D.Rmd as a template.\footnote{You can obtain this file from Rstudio: File $\rightarrow$ new File $\rightarrow$ Rmarkdown $\rightarrow$ from template $\rightarrow$ RTM\_1D. Save this file under a different name. Do not forget to change the heading of this file.}
+* Implement the model, using the R-markdown file RTM_1D.Rmd as a template. [**Note:** You can obtain this file from Rstudio: File $\rightarrow$ new File $\rightarrow$ Rmarkdown $\rightarrow$ from template $\rightarrow$ RTM\_1D. Save this file under a different name. Do not forget to change the heading of this file.]
 
    - Ensure that the parameters have the correct units. You have a mix of units and they need to be made consistent.
+   
    - Also think about the units of the transport parameters. Check the function tran.1D from the ReacTran package to find these units.
 
-*	Find a steady-state solution to the model, using the function steady.1D from the R-package rootSolve (Soetaert, 2009). You will need to specify that the state variables should be positive.\footnote{The function steady.1D estimates the root of the model function via an iterative technique. Often several roots may exist, of which some can also comprise negative values. While this can make sense mathematically, we do not accept such results when modeling concentrations. Thus, by setting the input parameter "positive = TRUE", we ensure that a solution with only positive values is found.}
+*	Find a steady-state solution to the model, using the function steady.1D from the R-package rootSolve (Soetaert, 2009). You will need to specify that the state variables should be positive. [**Note:** The function steady.1D estimates the root of the model function via an iterative technique. Often several roots may exist, of which some can also comprise negative values. While this can make sense mathematically, we do not accept such results when modeling concentrations. Thus, by setting the input parameter ``positive = TRUE``, we ensure that a solution with only positive values is found.]
+
+* Because in this exercise you do not need to find a dynamic solution, you can delete the part in the template file where such solution is found and plotted.
 
 ## Comparison of the 1970s and current situation
 
@@ -67,23 +74,24 @@ The previous simulation corresponded to a scenario where the condition in the es
 Do not forget to store the output in a different variable.
 
 * Plot the results from the two model runs in one graph.
-    - What is the minimal oxygen concentration in both scenarios? (Tip: the function steady.1D returns a list that contains a matrix called "y" that contains the state variables, and the ordinary variables.)
+    - What is the minimal oxygen concentration in both scenarios? (**Tip:** the function ``steady.1D`` returns a list that contains a matrix called ``y`` that contains the state variables, and the ordinary variables.)
 
 ## Creating budgets
 
 * Make a budget of nitrate, ammonia and oxygen for the entire estuary and for the two modelled periods. 
-    - You will do this by integrating all rates over the estuarine length, and taking into account the estuarine cross-sectional surface area. 
+    - You will do this by integrating all process rates over the estuarine length and by using the fluxes at the upper and lower boundaries of the modelled domain. Additionally, you will also need to account for the estuarine cross-sectional surface area. **Tip:** Since the process rates are expressed per volume, you can perform this integration by multiplying the rate in each grid cell with the volume of the grid cell and then summing these values up, e.g., ``IntegratedRate = sum(Rate * Area * Grid$dx)``. Similarly, when calculating the rates of import and export through the domain boundaries, you need to multiply the fluxes obtained from the ``tran.1D`` function with the cross-sectional area, e.g., ``exportNO3 = tranNO3$flux.down * Area``.
     - Output the integrated rates in $Mmol~yr^{-1}$ ($10^6~mol~yr^{-1}$). 
-    - Draw a conceptual diagram that represents the flows of nitrogen and oxygen in the entire estuary, including the import and export. (Tip: in this diagram, the boxes will represent the pools of nitrogen and oxygen in the entire estuary.)
+    - Draw a conceptual diagram that represents the flows of nitrogen and oxygen in the entire estuary, including the import and export. **Tip:** in this diagram, the boxes will represent the pools of nitrogen and oxygen in the entire estuary.
     - Add the budget rates next to each arrow. If your model is consistent, then the rates in and out of one compartment should add to 0.
 
 ## The impact of ammonia reduction in inflowing waters --- sensitivity analysis
 
 Previous model runs demonstrated that the oxygen concentration in the estuary is a function of the ammonia concentration in the inflowing water. The *minimal* oxygen concentration in the estuary is especially important, as this value determines whether organisms will be able to survive or not. As the removal of ammonia is a costly process, it is worthwhile to use the model to determine the maximal ammonia concentration that still keeps oxygen concentrations above a certain threshold. Here is how to do this.
 
-* Write an R-function, called *Sens*, that estimates the minimal oxygen concentration as a function of the upstream ammonia concentration. 
-    - The R-function should have the upstream ammonia concentration as an input argument, put this value in the model parameters, solve for the steady-state (using rootSolve function steady.1D; see above), and finally return the minimal oxygen concentration in the steady-state solution.
+* Write an R-function, called ``Sens``, that estimates the minimal oxygen concentration as a function of the upstream ammonia concentration. 
+
+    - The R-function should have the upstream ammonia concentration as an input argument, put this value in the model parameters, solve for the steady-state (using rootSolve function ``steady.1D``; see above), and finally return the minimal oxygen concentration in the steady-state solution.
     
-* Now create a sequence of $NH_3$ concentrations ranging from 0 to $0.8~mol~N~m^{-3}$ (call this sequence NH3_vect). For each of these values, call the R-function Sens and store the results in a vector called O2_vect. (Hint: use a *for* loop here. When doing so, it is convenient to initially define a NULL object called O2_vect, and then for each $NH_3$ value, concatenate to this the corresponding minimal $O_2$ concentration).
+* Now create a sequence of $NH_3$ concentrations ranging from $0$ to $0.8~mol~N~m^{-3}$ (call this sequence ``NH3_vect``). For each of these values, call the R-function ``Sens`` and store the results in a vector called ``O2_vect``. **Hint:** use a *for loop* here. When doing so, it is convenient to initially define a NULL object called ``O2_vect``, and then for each $NH_3$ value, concatenate to this the corresponding minimal $O_2$ concentration.
 
 * Plot the minimal oxygen concentration in the estuary as a function of the upstream ammonia concentration.
