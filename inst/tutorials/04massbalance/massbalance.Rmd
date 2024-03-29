@@ -317,6 +317,8 @@ question("What is the unit of the parameter $\\sigma$ ?", type = "learnr_radio",
 
 ## More exercises
 
+If you finished this tutorial but some of your answers were incorrect, you are encouraged to do the quiz again. You can do this by clicking on <span style="color:red">**Start Over**</span> at the bottom of the menu to the left.
+
 More exercises on creating mass balance equations can be found in the R-package RTM. Type the following commands in the R console to see these exercises:
 
 ```

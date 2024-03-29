@@ -265,6 +265,8 @@ plot(std, grid=Grid$x.mid, xyswap=TRUE, lty=1, las=1,
 
 ## More exercises
 
+If you finished this tutorial but some of your answers were incorrect, you are encouraged to do the quiz again. You can do this by clicking on <span style="color:red">**Start Over**</span> at the bottom of the menu to the left.
+
 To learn more about 1D reaction-transport modeling in R, try to solve the following exercises.
 
 ```

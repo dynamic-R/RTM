@@ -246,6 +246,8 @@ tail(out2, n=3) # see the equilibrium values
 
 ## More exercises
 
+If you finished this tutorial but some of your answers were incorrect, you are encouraged to do the quiz again. You can do this by clicking on <span style="color:red">**Start Over**</span> at the bottom of the menu to the left.
+
 To apply the knowledge you gained so far, expand the 2-box model from this tutorial towards a more complicated system: the Earth's global carbon cycle comprising 7 reservoirs.
 
 Enter the following commands in the R console to get the full description of this exercise.

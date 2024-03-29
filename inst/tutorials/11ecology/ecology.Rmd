@@ -442,6 +442,8 @@ plot(out, mfrow=c(1,4))
 
 ## More exercises
 
+If you finished this tutorial but some of your answers were incorrect, you are encouraged to do the quiz again. You can do this by clicking on <span style="color:red">**Start Over**</span> at the bottom of the menu to the left.
+
 To learn more about modeling of ecological interactions, solve additional exercises available in the R-package RTM. 
 
 ```

@@ -410,6 +410,8 @@ question("Which of the following mass balance equations correctly account for th
 
 ## More exercises
 
+If you finished this tutorial but some of your answers were incorrect, you are encouraged to do the quiz again. You can do this by clicking on <span style="color:red">**Start Over**</span> at the bottom of the menu to the left.
+
 To learn more about modelling of chemical reactions --- and specifically of chemical reactions under the *local equilibrium* condition --- try to solve additional exercises available in the R-package RTM. To display these exercises, type one of the following commands in the R-console:
 
 ```

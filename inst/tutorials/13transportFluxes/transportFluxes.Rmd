@@ -171,6 +171,8 @@ question(sprintf("What is the relationship between the typical values of the dis
 
 ## Learn more
 
+If you finished this tutorial but some of your answers were incorrect, you are encouraged to do the quiz again. You can do this by clicking on <span style="color:red">**Start Over**</span> at the bottom of the menu to the left.
+
 Continue this tutorial series by learning about reaction-transport modeling in porous media.
 
 ```

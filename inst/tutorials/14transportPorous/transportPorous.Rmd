@@ -285,6 +285,8 @@ chl_m2                                                 # mg Chl per m2
 
 ## Learn more
 
+If you finished this tutorial but some of your answers were incorrect, you are encouraged to do the quiz again. You can do this by clicking on <span style="color:red">**Start Over**</span> at the bottom of the menu to the left.
+
 Continue this tutorial series by learning about boundary and initial conditions.
 
 ```
