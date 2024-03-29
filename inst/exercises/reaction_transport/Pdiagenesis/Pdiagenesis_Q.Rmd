@@ -21,7 +21,7 @@ $$P_{ads} \leftrightarrow H_2 PO_4^{-} + H^+.$$
 * Bottom water concentration of dissolved phosphate is 0.0005 $mol~P~m^{-3}$. 
 * The sediment accretion velocity equals to $v=0.1~cm~yr^{-1}$. 
 * The bioturbation mixing coefficient is $5~cm^2~yr^{-1}$. 
-* Due to sediment compaction, the sediment porosity $[m^3~liquid~m^{-3}~solid]$ declines *exponentially* with depth from 0.9 at the surface to 0.6 at depth. The coefficient describing the rate of this attenuation is $porcoef = 0.5~cm^{-1}$. Although this variation in porosity influences the advective velocity, we will ignore this in our model.
+* Due to sediment compaction, the sediment porosity $[m^3~liquid~m^{-3}~bulk]$ declines *exponentially* with depth from 0.9 at the surface to 0.6 at depth. The coefficient describing the rate of this attenuation is $porcoef = 0.5~cm^{-1}$. Although this variation in porosity influences the advective velocity, we will ignore this in our model.
 
 * Use the R-package *marelac* to estimate the molecular diffusion coefficient of phosphate assuming a temperature of $20~^\circ$C and a salinity of 35. Assume *constant* $pH$ of 7. At this $pH$, temperature and salinity, the most abundant phosphate species is $H_2PO_4^{-}$. The diffusion coefficient needs to be corrected for tortuosity, as explained in the lectures.
 
