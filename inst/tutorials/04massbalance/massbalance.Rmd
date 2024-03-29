@@ -172,14 +172,14 @@ question("Which of the following differential equations correctly describe mass 
 Consider organic matter (OM) mineralization in a water column. Under anoxic conditions (no $O_2$ available), OM can be mineralized with nitrate ($NO_3^-$) as the electron acceptor (Denitrification). The corresponding stoichiometry of the reaction is given by the equation below, where 16/106 corresponds to the Redfield (molar) ratio of N:C in OM. 
 
 $$
-5CH_2O(NH_3)_{16/106}+4NO_3^-+4H^+ \rightarrow 5CO_2+7H_2O+2N_2+5(NH3)_{16/106}
+5CH_2O(NH_3)_{16/106}+4NO_3^-+4H^+ \rightarrow 5CO_2+7H_2O+2N_2+5(NH_3)_{16/106}
 $$
 
 * Assume that the rate of OM mineralization is $R$, in units of $mol~C~m^{-3}~h^{-1}$.
 * Concentrations of OM and $CO_2$ are in $mol~C~m^{-3}$, concentrations of nitrate and ammonia are in $mol~N~m^{-3}$, and the concentration of dissolved $N_2$ gas is in $mol~N_2~m^{-3}$, where $m^3$ refers to the cubic meter of water column. Assume that OM mineralization is the only process in the system.
 
 ```{r Denitrification, echo=FALSE}
-msg <- sprintf("As $R$ is expressed in $mol~C~m^{-3}~h^{-1}$, it is simplest to rewrite the chemical reaction for *one* mole of C reacting, i.e.: $CH_2O(NH_3)_{16/106}+4/5\\cdot NO_3^- + 4/5\\cdot H^+ \\rightarrow CO_2 + 7/5\\cdot H_2O + 2/5\\cdot N_2 + (NH3)_{16/106}$. This will make the mass balances clearer.")
+msg <- sprintf("As $R$ is expressed in $mol~C~m^{-3}~h^{-1}$, it is simplest to rewrite the chemical reaction for *one* mole of C reacting, i.e.: $CH_2O(NH_3)_{16/106}+\\frac{4}{5}\\cdot NO_3^- + \\frac{4}{5}\\cdot H^+ \\rightarrow CO_2 + \\frac{7}{5}\\cdot H_2O + \\frac{2}{5}\\cdot N_2 + (NH3)_{16/106}$. This will make the mass balances clearer.")
 
 question("Which of the following differential equations correctly describe mass balances for the system?", type = "learnr_checkbox",
  answer("$\\frac{d[OM]}{dt} = -5\\cdot R$", correct=FALSE),
@@ -195,30 +195,31 @@ question("Which of the following differential equations correctly describe mass 
 ```
 
 $$
-5CH_2O(NH_3)_{16/106}+4NO_3^-+4H^+ \rightarrow 5CO_2+7H_2O+2N_2+5(NH3)_{16/106}
+5CH_2O(NH_3)_{16/106}+4NO_3^-+4H^+ \rightarrow 5CO_2+7H_2O+2N_2+5(NH_3)_{16/106}
 $$
   
 ```{r Denitrification2, echo=FALSE}
-msg <- sprintf("As $R$ is expressed in $mol~C~m^{-3}~h^{-1}$, it is simplest to rewrite the chemical reaction for *one* mole of C reacting, i.e.: $CH_2O(NH_3)_{16/106}+4/5\\cdot NO_3^-+4/5\\cdot H^+ \\rightarrow CO_2+7/5\\cdot H_2O+2/5\\cdot N_2+(NH3)_{16/106}$. Then, then the mass balances are clearer.")
+msg <- sprintf("As $R$ is expressed in $mol\\,C\\,m^{-3}\\,h^{-1}$, it is simplest to rewrite the chemical reaction for *one* mole of C reacting, i.e.: $CH_2O(NH_3)_{16/106}+\\frac{4}{5}\\cdot NO_3^-+\\frac{4}{5}\\cdot H^+ \\rightarrow CO_2+\\frac{7}{5}\\cdot H_2O+\\frac{2}{5}\\cdot N_2+(NH_3)_{16/106}$. Then, the mass balances are clearer.")
 
-question(sprintf("Which of the following differential equations correctly describe mass balances for the system?  $R$ has units of $mol~C~m^{-3}~h^{-1}$."), type = "learnr_checkbox",
- answer("$\\frac{d[NO3]}{dt} = -4\\cdot R$", correct=FALSE),
- answer("$\\frac{d[NO3]}{dt} = 4\\cdot R$", correct=FALSE),
- answer("$\\frac{d[NO3]}{dt} = -\\frac{4}{5}\\cdot R$", correct=TRUE),
- answer("$\\frac{d[NO3]}{dt} = -\\frac{5}{4}\\cdot R$", correct=FALSE),
- answer("$\\frac{d[NH3]}{dt} = -5\\cdot R$", correct=FALSE),
- answer("$\\frac{d[NH3]}{dt} = 5\\cdot R$", correct=FALSE),
- answer("$\\frac{d[NH3]}{dt} = \\frac{16}{106}\\cdot R$", correct=TRUE),
- answer("$\\frac{d[NH3]}{dt} = -\\frac{16}{106}\\cdot R$", correct=FALSE),
- answer("$\\frac{d[NH3]}{dt} = 5\\cdot \\frac{16}{106}\\cdot R$", correct=FALSE),
- answer("$\\frac{d[NH3]}{dt} = -\\frac{106}{16}\\cdot R$", correct=FALSE),
- answer("$\\frac{d[N2]}{dt} = 2\\cdot R$", correct=FALSE),
- answer("$\\frac{d[N2]}{dt} = \\frac{2}{5}\\cdot R$", correct=TRUE),
- answer("$\\frac{d[N2]}{dt} = \\frac{4}{5}\\cdot R$", correct=FALSE),
- answer("$\\frac{d[N2]}{dt} = 4\\cdot R$", correct=FALSE),
- answer("$\\frac{d[N2]}{dt} = R$", correct=FALSE),
- answer("$\\frac{d[N2]}{dt} = \\frac{1}{2}\\cdot R$", correct=FALSE),
+question(sprintf("Which of the following differential equations correctly describe mass balances for the system?  $R$ has units of $mol\\,C\\,m^{-3}\\,h^{-1}$."), type = "learnr_checkbox",
+ answer("$\\frac{d[NO_3]}{dt} = -4\\cdot R$", correct=FALSE),
+ answer("$\\frac{d[NO_3]}{dt} = 4\\cdot R$", correct=FALSE),
+ answer("$\\frac{d[NO_3]}{dt} = -\\frac{4}{5}\\cdot R$", correct=TRUE),
+ answer("$\\frac{d[NO_3]}{dt} = -\\frac{5}{4}\\cdot R$", correct=FALSE),
+ answer("$\\frac{d[NH_3]}{dt} = -5\\cdot R$", correct=FALSE),
+ answer("$\\frac{d[NH_3]}{dt} = 5\\cdot R$", correct=FALSE),
+ answer("$\\frac{d[NH_3]}{dt} = \\frac{16}{106}\\cdot R$", correct=TRUE),
+ answer("$\\frac{d[NH_3]}{dt} = -\\frac{16}{106}\\cdot R$", correct=FALSE),
+ answer("$\\frac{d[NH_3]}{dt} = 5\\cdot \\frac{16}{106}\\cdot R$", correct=FALSE),
+ answer("$\\frac{d[NH_3]}{dt} = -\\frac{106}{16}\\cdot R$", correct=FALSE),
+ answer("$\\frac{d[N_2]}{dt} = 2\\cdot R$", correct=FALSE),
+ answer("$\\frac{d[N_2]}{dt} = \\frac{2}{5}\\cdot R$", correct=TRUE),
+ answer("$\\frac{d[N_2]}{dt} = \\frac{4}{5}\\cdot R$", correct=FALSE),
+ answer("$\\frac{d[N_2]}{dt} = 4\\cdot R$", correct=FALSE),
+ answer("$\\frac{d[N_2]}{dt} = R$", correct=FALSE),
+ answer("$\\frac{d[N_2]}{dt} = \\frac{1}{2}\\cdot R$", correct=FALSE),
  
+ allow_retry = TRUE,
  incorrect=msg,
  correct=msg)
 ```

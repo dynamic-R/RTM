@@ -100,6 +100,7 @@ question("Which processes are we NOT going to cover in this course?", type = "le
  answer("Cryptocurrency transactions", correct=TRUE),
  answer("Viral outbreaks", correct=FALSE),
  
+ allow_retry = TRUE,
  incorrect=msg,
  correct=msg
 )
@@ -120,6 +121,7 @@ question("Which systems are we going to study in this course?", type = "learnr_c
  answer("Aquatic sediments", correct=TRUE),
  answer("Surface of planets in our Solar system", correct=FALSE),
  
+ allow_retry = TRUE,
  incorrect=msg,
  correct=msg)
 ```

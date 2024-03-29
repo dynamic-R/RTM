@@ -58,7 +58,8 @@ $$
 question("In the differential equation above, the term on the left hand side describes:", type = "learnr_checkbox",
  answer(sprintf("the substance concentration")),
  answer(sprintf("the substance concentration gradient (in space)")),
- answer(sprintf("the rate of change (in time) in the substance concentration"), correct = TRUE)
+ answer(sprintf("the rate of change (in time) in the substance concentration"), correct = TRUE),
+ allow_retry = TRUE
 )  
 ```
 
@@ -72,6 +73,7 @@ question("In the differential equation above, the first term on the right hand s
  answer(sprintf("the flux gradient due to advective transport")),
  answer(sprintf("the flux gradient due to diffusive transport"), correct = TRUE),
  
+ allow_retry = TRUE,
  correct=msg,
  incorrect=msg)
 ```
@@ -85,6 +87,7 @@ question("In the differential equation above, the second term on the right hand 
  answer(sprintf("the flux gradient due to dispersive transport")),
  answer(sprintf("the flux gradient due to advective transport"), correct = TRUE),
 
+ allow_retry = TRUE,
  correct=msg,
  incorrect=msg)
 ```
@@ -96,7 +99,8 @@ question("In water-saturated porous media such as sediments, porosity is defined
  answer("volume of liquid divided by volume of solid"),
  answer("volume of liquid divided by bulk volume", correct = TRUE),
  answer("volume of solid divided by volume of liquid"),
- answer("volume of solid divided by bulk volume")
+ answer("volume of solid divided by bulk volume"),
+ allow_retry = TRUE
 )  
 ```
 
@@ -108,7 +112,8 @@ question("In water-saturated porous media such as sediments, solid volume fracti
  answer("volume of liquid divided by bulk volume"),
  answer("volume of solid divided by volume of liquid"),
  answer("volume of solid divided by bulk volume", correct = TRUE),
- answer("one minus porosity", correct = TRUE)  
+ answer("one minus porosity", correct = TRUE),
+ allow_retry = TRUE
 )  
 ```
 
@@ -123,6 +128,7 @@ question("In porous media, the effective diffusion coefficient of solutes is [. 
  answer("smaller", correct=TRUE),
  answer("greater"),
   
+ allow_retry = TRUE,
  incorrect=msg,
  correct=msg)
 ```
@@ -130,14 +136,16 @@ question("In porous media, the effective diffusion coefficient of solutes is [. 
 ## Reaction-transport in porous media I
 
 ```{r rteqpor, echo=FALSE}
-msg <- sprintf("The mass balance equation is derived for the *bulk* concentration, $\\phi C$ (on the left hand side). However, the diffusive transport is driven by the concentration gradient in the *liquid* phase, hence $-D \\frac{ \\partial C}{\\partial x}$ is the diffusive flux in the liquid phase. To convert the diffusive flux from the liquid phase to the bulk phase, we need to multiply it with the porosity: $J=-\\phi D \\frac{ \\partial C}{\\partial x}$. Substituting this expression to the flux gradient term in the general mass balance equation yields the diffusive term in the form $\\frac{\\partial }{\\partial x}\\left(\\phi D \\frac{ \\partial C}{\\partial x}\\right)$. Because the reaction rate is expressed per volume of porewater, it also needs to be multiplied with porosity to express it per volume of the bulk.")
+msg <- sprintf("The mass balance equation is derived for the *bulk* concentration, $\\phi\\cdot C$ (on the left hand side). However, the diffusive transport is driven by the concentration gradient in the *liquid* phase, hence $-D\\cdot \\frac{ \\partial C}{\\partial x}$ is the diffusive flux in the liquid phase. To convert the diffusive flux from the liquid phase to the bulk phase, we need to multiply it with the porosity: $J=-\\phi\\cdot D\\cdot \\frac{ \\partial C}{\\partial x}$. Substituting this expression to the flux gradient term in the general mass balance equation yields the diffusive term in the form $\\frac{\\partial }{\\partial x}\\left(\\phi\\cdot D \\cdot\\frac{ \\partial C}{\\partial x}\\right)$. Because the reaction rate is expressed per volume of porewater, it also needs to be multiplied with porosity to express it per volume of the bulk.")
   
-question(sprintf("Which of the following equations correctly describes the reaction-diffusion equation of a dissolved substance S with a porewater concentration $C$ (in $mol~S~m^{-3}_{L}$) in a water-saturated porous medium with porosity $\\phi$? The reaction rate $R$ is in the units of $mol~S~m^{-3}_{L}~s^{-1}$."), type = "learnr_checkbox",
- answer(sprintf("$\\frac{\\partial \\phi C}{\\partial t} =  \\frac{\\partial}{\\partial x}(\\phi D \\frac{ \\partial C}{\\partial x}) + \\phi R$"), correct=TRUE),
- answer(sprintf("$\\frac{\\partial \\phi C}{\\partial t} =  \\frac{\\partial}{\\partial x}(D \\frac{ \\partial (\\phi C)}{\\partial x}) + \\phi R$")),
- answer(sprintf("$\\frac{\\partial C}{\\partial t} =  \\frac{\\partial}{\\partial x}(\\phi D \\frac{ \\partial C}{\\partial x}) + \\phi R$")),
- answer(sprintf("$\\frac{\\partial \\phi C}{\\partial t} =  \\frac{\\partial}{\\partial x}(D \\frac{ \\partial C}{\\partial x}) + R$")),
+question("Which of the following equations correctly describes the reaction-diffusion equation of a dissolved substance S with a porewater concentration $C$ (in $mol\\,S\\,m_L^{-3}$) in a water-saturated porous medium with porosity $\\phi$? The reaction rate $R$ is in the units of $mol\\,S\\,m^{-3}_{L}\\,s^{-1}$.", 
+         type = "learnr_checkbox",
+ answer(sprintf("$\\frac{\\partial (\\phi\\cdot C)}{\\partial t} =  \\frac{\\partial}{\\partial x}(\\phi\\cdot D\\cdot \\frac{ \\partial C}{\\partial x}) + \\phi\\cdot R$"), correct=TRUE),
+ answer(sprintf("$\\frac{\\partial (\\phi\\cdot C)}{\\partial t} =  \\frac{\\partial}{\\partial x}(D\\cdot \\frac{ \\partial (\\phi\\cdot C)}{\\partial x}) + \\phi\\cdot R$")),
+ answer(sprintf("$\\frac{\\partial C}{\\partial t} =  \\frac{\\partial}{\\partial x}(\\phi\\cdot D\\cdot \\frac{ \\partial C}{\\partial x}) + \\phi\\cdot R$")),
+ answer(sprintf("$\\frac{\\partial (\\phi\\cdot C)}{\\partial t} =  \\frac{\\partial}{\\partial x}(D\\cdot \\frac{ \\partial C}{\\partial x}) + R$")),
  
+ allow_retry = TRUE,
  incorrect=msg,  
  correct=msg)  
 ```
@@ -145,24 +153,26 @@ question(sprintf("Which of the following equations correctly describes the react
 ## Reaction-transport in porous media II
 
 ```{r rteqpor2, echo=FALSE}
-question(sprintf("The form of the reaction-diffusion equation in porous media is often written as $$\\frac{\\partial C}{\\partial t} = \\frac{1}{\\phi_x}  \\frac{\\partial}{\\partial x}\\left(\\phi_x D \\frac{ \\partial C}{\\partial x}\\right) + R,$$ where $C$ denotes the porewater concentration of a dissolved subtance S (in $mol~S~m^{-3}_{L}$). What does this formulation assume?"), type = "learnr_checkbox",
+question(sprintf("The form of the reaction-diffusion equation in porous media is often written as $$\\frac{\\partial C}{\\partial t} = \\frac{1}{\\phi_x} \\cdot \\frac{\\partial}{\\partial x}\\left(\\phi_x\\cdot D\\cdot \\frac{ \\partial C}{\\partial x}\\right) + R,$$ where $C$ denotes the porewater concentration of a dissolved subtance S (in $mol\\,S\\,m^{-3}_{L}$). What does this formulation assume?"), type = "learnr_checkbox",
  answer("That the porosity is constant in time but variable in space", correct=TRUE),
  answer("That the porosity is constant in space AND in time"),
  answer("That the porosity is variable in space AND in time"),
- answer("That the reaction rate $R$ is expressed in the units of $mol~S~m^{-3}_{bulk}~s^{-1}$."),
- answer("That the reaction rate $R$ is expressed in the units of $mol~S~m^{-3}_{L}~s^{-1}$.", correct=TRUE)
+ answer("That the reaction rate $R$ is expressed in the units of $mol\\,S\\,m^{-3}_{bulk}\\,s^{-1}$."),
+ answer("That the reaction rate $R$ is expressed in the units of $mol\\,S\\,m^{-3}_{L}\\,s^{-1}$.", correct=TRUE),
+ allow_retry = TRUE
 )  
 ```
 
 ## True or False
 
 ```{r rteqpor3, echo=FALSE}
-msg <- sprintf("To calculate the flux across the sediment-water interface in the units of mol per $m^2$ of *total* surface per time, we definitely need porosity: $J=-\\phi D(\\partial C/\\partial x)$.")
+msg <- sprintf("To calculate the flux across the sediment-water interface in the units of mol per $m^2$ of *total* surface per time, we definitely need porosity: $J=-\\phi\\cdot D\\cdot(\\partial C/\\partial x)$.")
 
-question(sprintf("When sediment porosity is constant in time AND in space, the following equation fully determines the reaction-free diffusion model in a water-saturated sediment: $$\\frac{\\partial C}{\\partial t} = \\frac{\\partial}{\\partial x}\\left(D \\frac{ \\partial C}{\\partial x}\\right),$$ where $D$ is the effective (i.e., corrected for tortuosity) diffusion coeffient. Since there is no porosity in the equation, we do not need to know porosity at all."), type = "learnr_checkbox",
+question(sprintf("When sediment porosity is constant in time AND in space, the following equation fully determines the reaction-free diffusion model in a water-saturated sediment: $$\\frac{\\partial C}{\\partial t} = \\frac{\\partial}{\\partial x}\\left(D\\cdot \\frac{ \\partial C}{\\partial x}\\right),$$ where $D$ is the effective (i.e., corrected for tortuosity) diffusion coeffient. Since there is no porosity in the equation, we do not need to know porosity at all."), type = "learnr_checkbox",
  answer("This is true as porosity does not play a role at all.", correct=FALSE),
  answer("This is not true if we want to quantify the flux across the sediment-water interface.", correct=TRUE),
  
+ allow_retry = TRUE,
  incorrect=msg,
  correct=msg)  
 ```
@@ -170,9 +180,9 @@ question(sprintf("When sediment porosity is constant in time AND in space, the f
 ## Porosity conversions
 
 ```{r porconv1, echo = FALSE}
-msg <- sprintf("The unit of $\\phi \\cdot C_L$ is $(m^3_L/m^3_b) \\cdot mol~m^{-3}_L$. This is equal to $mol~m^{-3}_b$, the units of $C_b$. Similarly for $(1-\\phi)\\cdot C_S$.")
+msg <- sprintf("The unit of $\\phi \\cdot C_L$ is $(m^3_L/m^3_b) \\cdot mol~m^{-3}_L$. This is equal to $mol\\,m^{-3}_b$, the units of $C_b$. Similarly for $(1-\\phi)\\cdot C_S$.")
 
-question(sprintf("Select correct formulas for converting between concentrations per bulk volume ($C_b$), per volume of liquid ($C_L$), and per volume of solid ($C_S$). Porosity is denoted by $\\phi$."),
+question("Select correct formulas for converting between concentrations per bulk volume $(C_b)$, per volume of liquid $(C_L)$, and per volume of solid $(C_S)$. Porosity is denoted by $\\phi$.",
  answer(sprintf("$C_b = \\phi \\cdot C_L$"), correct=TRUE),
  answer(sprintf("$C_L = \\phi \\cdot C_b$")),
  answer(sprintf("$C_b = (1-\\phi) \\cdot C_L$")),
@@ -182,6 +192,7 @@ question(sprintf("Select correct formulas for converting between concentrations 
  answer(sprintf("$C_b = (1-\\phi) \\cdot C_S$"), correct=TRUE),
  answer(sprintf("$C_S = (1-\\phi) \\cdot C_b$")),
 
+ allow_retry = TRUE,
  incorrect=msg,
  correct=msg)
 ```
@@ -201,19 +212,20 @@ $$
 The rate of sulphate reduction, $R_{sr}$ is expressed in $mol~C~m^{-3}_S~d^{-1}$.
 
 ```{r porconv2, echo = FALSE}
-msg <- sprintf("First, you need to convert from $m^{-3}_S$ to $m^{-3}_L$, which is done by the factor $(1-\\phi)/\\phi$. Additionally, you need to convert from $mol~C$ to $mol~S$, where you need to consider that only 0.5 moles of $SO_4^{-2}$ are consumed per mole of $C$ respired.")
+msg <- sprintf("First, you need to convert from $m^{-3}_S$ to $m^{-3}_L$, which is done by the factor $(1-\\phi)/\\phi$. Additionally, you need to convert from $mol\\,C$ to $mol\\,S$, where you need to consider that only 0.5 moles of $SO_4^{-2}$ are consumed per mole of $C$ respired.")
 
 question(sprintf("Which is the correct expression for the rate of $SO_4^{2-}$ removal by sulphate reduction?"),
- answer(sprintf("$R_{SO_4^{2-}} = R_{sr} \\times (1-\\phi) / \\phi$")),
- answer(sprintf("$R_{SO_4^{2-}} = 0.5 \\times R_{sr} \\times (1-\\phi) / \\phi$"), correct=TRUE),
- answer(sprintf("$R_{SO_4^{2-}} = 2 \\times R_{sr} \\times (1-\\phi) / \\phi$"), correct=FALSE),
- answer(sprintf("$R_{SO_4^{2-}} = R_{sr} \\times \\phi/(1-\\phi)$"), correct=FALSE),
- answer(sprintf("$R_{SO_4^{2-}} = 0.5 \\times R_{sr} \\times \\phi/(1-\\phi)$"), correct=FALSE),
- answer(sprintf("$R_{SO_4^{2-}} = 2 \\times R_{sr} \\times \\phi/(1-\\phi)$"), correct=FALSE),
+ answer(sprintf("$R_{SO_4^{2-}} = R_{sr} \\cdot (1-\\phi) / \\phi$")),
+ answer(sprintf("$R_{SO_4^{2-}} = 0.5 \\cdot R_{sr} \\cdot (1-\\phi) / \\phi$"), correct=TRUE),
+ answer(sprintf("$R_{SO_4^{2-}} = 2 \\cdot R_{sr} \\cdot (1-\\phi) / \\phi$"), correct=FALSE),
+ answer(sprintf("$R_{SO_4^{2-}} = R_{sr} \\cdot \\phi/(1-\\phi)$"), correct=FALSE),
+ answer(sprintf("$R_{SO_4^{2-}} = 0.5 \\cdot R_{sr} \\cdot \\phi/(1-\\phi)$"), correct=FALSE),
+ answer(sprintf("$R_{SO_4^{2-}} = 2 \\cdot R_{sr} \\cdot \\phi/(1-\\phi)$"), correct=FALSE),
  answer(sprintf("$R_{SO_4^{2-}} = R_{sr}$")),
- answer(sprintf("$R_{SO_4^{2-}} = 0.5 \\times R_{sr}$")),
- answer(sprintf("$R_{SO_4^{2-}} = 2 \\times R_{sr}$")),
+ answer(sprintf("$R_{SO_4^{2-}} = 0.5 \\cdot R_{sr}$")),
+ answer(sprintf("$R_{SO_4^{2-}} = 2 \\cdot R_{sr}$")),
  
+ allow_retry = TRUE,
  incorrect=msg,
  correct=msg)
 ```

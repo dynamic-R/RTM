@@ -66,6 +66,7 @@ question("Which of the following statements is true?", type = "learnr_checkbox",
  answer(sprintf("$C$ denotes the volume of the medium, in $m^3$")),
  answer(sprintf("$C$ denotes the concentration gradient of a substance in the medium, in $mol~m^{-4}$")),
 
+ allow_retry = TRUE,
  incorrect=msg,
  correct=msg)
 ```
@@ -96,6 +97,7 @@ question("Which of the following statements is true?", type = "learnr_checkbox",
  answer(sprintf("$\\frac{\\partial C}{\\partial x}$ is the concentration gradient in the medium, in $mol~m^{-2}$")),
  answer(sprintf("$\\frac{\\partial C}{\\partial x}$ is the concentration gradient in the medium, in $mol~m^{-4}$"), correct=TRUE),
 
+ allow_retry = TRUE,
  incorrect=msg,
  correct=msg)
 ```
@@ -108,7 +110,8 @@ question("Which of the following statements is true?", type = "learnr_checkbox",
  answer(sprintf("In molecular diffusion transport goes against the concentration gradient (hence the negative sign)")),
  answer(sprintf("In molecular diffusion net transport goes against the concentration gradient (hence the negative sign)"), correct=TRUE),
  answer("Advective transport is due to a *directional* movement of particles, whereas diffusive transport is due to a *random* movement of particles.", correct = TRUE),  
- answer("Advective transport is due to a *random* movement of particles, whereas diffusive transport is due to a *directional* movement of particles.")
+ answer("Advective transport is due to a *random* movement of particles, whereas diffusive transport is due to a *directional* movement of particles."),
+ allow_retry = TRUE
 )
 ```
 
@@ -157,11 +160,12 @@ question("Bioturbation can be described as a diffusion-like process on time scal
 ## Scales of impact
 
 ```{r scaling, echo=FALSE}
-question(sprintf("What is the relationship between the typical values of the dispersion coefficient ($D_{disp}$), the molecular diffusion coefficient ($D_{mol}$), and the bioturbation mixing coefficient ($D_{bio}$)?"), type = "learnr_checkbox",
+question(sprintf("What is the relationship between the typical values of the dispersion coefficient $(D_{disp})$, the molecular diffusion coefficient $(D_{mol})$, and the bioturbation mixing coefficient $(D_{bio})$?"), type = "learnr_checkbox",
  answer(sprintf("$D_{disp} \\gg D_{bio} \\gg D_{mol}$")),
  answer(sprintf("$D_{disp} \\ll D_{bio} \\ll D_{mol}$")),
  answer(sprintf("$D_{disp} \\ll D_{mol} \\ll D_{bio}$")),
- answer(sprintf("$D_{disp} \\gg D_{mol} \\gg D_{bio}$"), correct = TRUE)
+ answer(sprintf("$D_{disp} \\gg D_{mol} \\gg D_{bio}$"), correct = TRUE),
+ allow_retry = TRUE
 )
 ```
 

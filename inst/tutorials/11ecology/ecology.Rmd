@@ -55,22 +55,22 @@ In a population comprising individuals that are *susceptible* to a virus and ind
 Suppose that the *probability* that a susceptible person meets an infected person, whereby this encounter leads to the susceptible person becoming infected, is described by a parameter $b$ (in units of $ind^{-1}~d^{-1}$).  The amounts of susceptible and infected individuals in the population are denoted by $S$ and $I$, respectively.
 
 ```{r infection_rate, echo=FALSE}
-msg <- "To become infected, a susceptible person needs to 'collide' with *one* infected person. Therefore, the infection rate is *first-order* with respect to the infected and susceptible persons, i.e., $InfectionRate = b\\times S\\times I$. The proportionality constant, $b$, describes the probability (expressed per individual per day) that a susceptible person meets an infected person and their encounter results in the susceptible person becoming infected."
+msg <- "To become infected, a susceptible person needs to 'collide' with *one* infected person. Therefore, the infection rate is *first-order* with respect to the infected and susceptible persons, i.e., $InfectionRate = b\\cdot S\\cdot I$. The proportionality constant, $b$, describes the probability (expressed per individual per day) that a susceptible person meets an infected person and their encounter results in the susceptible person becoming infected."
 
 question(sprintf("What is a suitable expression for the infection rate?"), type = "learnr_checkbox",
- answer(sprintf("$InfectionRate = b \\times (S+I)$"), correct=FALSE),
- answer(sprintf("$InfectionRate = b \\times S$"), correct=FALSE),
- answer(sprintf("$InfectionRate = b \\times I$"), correct=FALSE),
- answer(sprintf("$InfectionRate = b \\times S \\times I$"), correct=TRUE),
- answer(sprintf("$InfectionRate = S \\times \\frac{I}{I+b}$"), correct=FALSE),
- answer(sprintf("$InfectionRate = b \\times I^2 \\times S$"), correct=FALSE),
+ answer(sprintf("$InfectionRate = b \\cdot (S+I)$"), correct=FALSE),
+ answer(sprintf("$InfectionRate = b \\cdot S$"), correct=FALSE),
+ answer(sprintf("$InfectionRate = b \\cdot I$"), correct=FALSE),
+ answer(sprintf("$InfectionRate = b \\cdot S \\cdot I$"), correct=TRUE),
+ answer(sprintf("$InfectionRate = S \\cdot \\frac{I}{I+b}$"), correct=FALSE),
+ answer(sprintf("$InfectionRate = b \\cdot I^2 \\cdot S$"), correct=FALSE),
  
  incorrect=sprintf(msg),
  correct=sprintf(msg))
 ```
 <div id="infection_rate-hint">
 **Note:** The "chemical reaction" that occurs between susceptible and infected persons can be written as:
-$S + I \rightarrow 2 I$, i.e. it is a reaction between S and I that causes 2 persons to be infected as a result.
+$S + I \rightarrow 2\cdot I$, i.e. it is a reaction between S and I that causes 2 persons to be infected as a result.
 </div>
 
 ## Ecological interactions: predation
@@ -79,13 +79,14 @@ $S + I \rightarrow 2 I$, i.e. it is a reaction between S and I that causes 2 per
 msg <- "There are several correct answers. Answer 1 assumes a linear functional response (type I); answer 4 assumes a type II functional response, and answer 5 assumes a type III functional response."
 
 question("Foxes (F) predate on rabbits (R). What is a suitable expression for the predation rate?", type = "learnr_checkbox",
- answer(sprintf("$r \\times F \\times R$"), correct=TRUE),
- answer(sprintf("$r \\times F \\times R^2$"), correct=FALSE),
- answer(sprintf("$r \\times F \\times (1-\\frac{F}{R})$"), correct=FALSE),
- answer(sprintf("$r \\times F \\times \\frac{R}{R+ K_R}$"), correct=TRUE),
- answer(sprintf("$r \\times F \\times \\frac{R^2}{R^2+ K_R^2}$"), correct=TRUE),
- answer(sprintf("$r \\times F \\times (1-\\frac{F}{K}) \\times R$"), correct=FALSE),
+ answer(sprintf("$r \\cdot F \\cdot R$"), correct=TRUE),
+ answer(sprintf("$r \\cdot F \\cdot R^2$"), correct=FALSE),
+ answer(sprintf("$r \\cdot F \\cdot (1-\\frac{F}{R})$"), correct=FALSE),
+ answer(sprintf("$r \\cdot F \\cdot \\frac{R}{R+ K_R}$"), correct=TRUE),
+ answer(sprintf("$r \\cdot F \\cdot \\frac{R^2}{R^2+ K_R^2}$"), correct=TRUE),
+ answer(sprintf("$r \\cdot F \\cdot (1-\\frac{F}{K}) \\cdot R$"), correct=FALSE),
  
+ allow_retry = TRUE,
  incorrect=msg,  
  correct=msg)
 ```
@@ -95,14 +96,14 @@ question("Foxes (F) predate on rabbits (R). What is a suitable expression for th
 ```{r Nuptake, echo=FALSE}
 msg <- sprintf("Note that the inhibition term is equal to one minus the Michaelis-Menten term. Thus, both answers 2 and 5 are correct.")
 
-question("Algal N-uptake is stimulated by nitrate (NO3) and inhibited by ammonia (NH3) concentrations. What would be a suitable expression for the rate of algal growth?", type = "learnr_checkbox",
- answer(sprintf("$r \\times \\frac{[NO3]}{[NO3]+K_{NO3}} \\times [ALGAE] + \\frac{K_{NH3}}{[NH3]+K_{NH3}} \\times [ALGAE]$")),
- answer(sprintf("$r \\times \\frac{[NO3]}{[NO3]+K_{NO3}} \\times \\frac{K_{NH3}}{[NH3]+K_{NH3}} \\times [ALGAE]$"), correct=TRUE),
- answer(sprintf("$r \\times \\frac{[NO3]}{[NO3]+K_{NO3}} \\times \\frac{K_{NH3}}{[NH3]+K_{NH3}}$")),
- answer(sprintf("$r \\times \\frac{[NO3]}{[NO3]+K_{NO3}} \\times [NH3]$")),
- answer(sprintf("$r \\times \\frac{[NO3]}{[NO3]+K_{NO3}} \\times \\left(1 - \\frac{[NH3]}{[NH3]+K_{NH3}}\\right) \\times [ALGAE]$"), correct=TRUE),
- answer(sprintf("$\\frac{[NO3]}{[NO3]+K_{NO3}} \\times \\frac{K_{NH3}}{[NH3]+K_{NH3}} \\times [ALGAE]$")),
- answer(sprintf("$r \\times \\frac{K_{NO3}}{[NO3]+K_{NO3}} \\times [ALGAE]$")),
+question("Algal N-uptake is stimulated by nitrate $(NO_3)$ and inhibited by ammonia $(NH_3)$ concentrations. What would be a suitable expression for the rate of algal growth?", type = "learnr_checkbox",
+ answer(sprintf("$r \\cdot \\frac{[NO_3]}{[NO_3]+K_{NO3}} \\cdot [ALGAE] + \\frac{K_{NH3}}{[NH_3]+K_{NH3}} \\cdot [ALGAE]$")),
+ answer(sprintf("$r \\cdot \\frac{[NO_3]}{[NO_3]+K_{NO3}} \\cdot \\frac{K_{NH3}}{[NH_3]+K_{NH3}} \\cdot [ALGAE]$"), correct=TRUE),
+ answer(sprintf("$r \\cdot \\frac{[NO_3]}{[NO_3]+K_{NO3}} \\cdot \\frac{K_{NH_3}}{[NH_3]+K_{NH3}}$")),
+ answer(sprintf("$r \\cdot \\frac{[NO_3]}{[NO_3]+K_{NO3}} \\cdot [NH_3]$")),
+ answer(sprintf("$r \\cdot \\frac{[NO_3]}{[NO_3]+K_{NO3}} \\cdot \\left(1 - \\frac{[NH_3]}{[NH_3]+K_{NH3}}\\right) \\cdot [ALGAE]$"), correct=TRUE),
+ answer(sprintf("$\\frac{[NO_3]}{[NO_3]+K_{NO3}} \\cdot \\frac{K_{NH3}}{[NH_3]+K_{NH3}} \\cdot [ALGAE]$")),
+ answer(sprintf("$r \\cdot \\frac{K_{NO3}}{[NO_3]+K_{NO3}} \\cdot [ALGAE]$")),
  incorrect=paste("Incorrect. ", msg),  
  correct=paste("Correct. ", msg)
 )
@@ -125,18 +126,18 @@ question(sprintf("The change in time of a quantity M (in moles) is described by 
 
 ```{r diffeq1b, echo=FALSE}
 question(sprintf("The change in time of a quantity M (in moles) is described by the differential equation $$\\frac{dM}{dt} = -r \\cdot M,$$ where $r > 0$. Which of the following statements is true?"), type = "learnr_checkbox",
- answer("M decreases linearly with time"),
- answer("M decreases exponentially with time", correct=TRUE),
- answer("M increases linearly with time"),
- answer("M increases exponentially with time"),
- answer("M has logistic growth")
+ answer("M decreases linearly over time"),
+ answer("M decreases exponentially over time", correct=TRUE),
+ answer("M increases linearly over time"),
+ answer("M increases exponentially over time"),
+ answer("M has a logistic growth")
 )  
 ```
 
 ## Simple differential equations - II
 
 ```{r diffeq2, echo=FALSE}
-question(sprintf("The change in time of a quantity M (in moles) is described by the differential equation $$\\frac{dM}{dt} = -r,$$ where $r > 0$. Which of the following statements is true?"), type = "learnr_checkbox",
+question(sprintf("The change in time of a quantity M (in moles) is described by the differential equation $$\\frac{dM}{dt} = -r,$$ where $r > 0$ is a constant. Which of the following statements is true?"), type = "learnr_checkbox",
  answer("this describes zero-order kinetics", correct = TRUE),
  answer("this describes first-order kinetics"),
  answer("this describes second-order kinetics"),
@@ -149,19 +150,19 @@ question(sprintf("The change in time of a quantity M (in moles) is described by 
 ```
 
 ```{r diffeq2b, echo=FALSE}
-question(sprintf("The change in time of a quantity M (in moles) is described by the differential equation $$\\frac{dM}{dt} = -r,$$ where $r > 0$. Which of the following statements is true?"), type = "learnr_checkbox",
- answer("M decreases linearly with time", correct=TRUE),
- answer("M decreases exponentially with time"),
- answer("M increases linearly with time"),
- answer("M increases exponentially with time"),
- answer("M has logistic growth")
+question(sprintf("The change in time of a quantity M (in moles) is described by the differential equation $$\\frac{dM}{dt} = -r,$$ where $r > 0$ is a constant. Which of the following statements is true?"), type = "learnr_checkbox",
+ answer("M decreases linearly over time", correct=TRUE),
+ answer("M decreases exponentially over time"),
+ answer("M increases linearly over time"),
+ answer("M increases exponentially over time"),
+ answer("M has a logistic growth")
 )  
 ```
 
 ## Simple differential equations - III
 
 ```{r diffeq3, echo=FALSE}
-question(sprintf("The change in time of a quantity M (in moles) is described by the differential equation $$\\frac{dM}{dt} = r \\cdot M \\cdot \\left(1-\\frac{M}{K}\\right),$$ where $r > 0$ and $K>0$. Which of the following statements is true?"), type = "learnr_checkbox",
+question(sprintf("The change over time of a quantity M (in moles) is described by the differential equation $$\\frac{dM}{dt} = r \\cdot M \\cdot \\left(1-\\frac{M}{K}\\right),$$ where $r > 0$ and $K>0$ are constants. Which of the following statements is true?"), type = "learnr_checkbox",
  answer("this describes zero-order kinetics"),
  answer("this describes first-order kinetics"),
  answer("this describes second-order kinetics"),
@@ -170,7 +171,7 @@ question(sprintf("The change in time of a quantity M (in moles) is described by 
 ```
 
 ```{r diffeq3b, echo=FALSE}
-question(sprintf("The change in time of a quantity M (in moles) is described by the differential equation $$\\frac{dM}{dt} = r \\cdot M \\cdot \\left(1-\\frac{M}{K}\\right),$$ where $r > 0$ and $K>0$. Which of the following statements is true?"), type = "learnr_checkbox",
+question(sprintf("The change over time of a quantity M (in moles) is described by the differential equation $$\\frac{dM}{dt} = r \\cdot M \\cdot \\left(1-\\frac{M}{K}\\right),$$ where $r > 0$ and $K>0$ are constants. Which of the following statements is true?"), type = "learnr_checkbox",
  answer(sprintf("the unit of the rate constant $r$ is $day$")),
  answer(sprintf("the unit of the rate constant $r$ is $day^{-1}$"), correct=TRUE),
  answer(sprintf("the unit of the rate constant $r$ is $mol~day^{-1}$")),
@@ -185,12 +186,12 @@ question(sprintf("The change in time of a quantity M (in moles) is described by 
 ```
 
 ```{r diffeq3c, echo=FALSE}
-question(sprintf("The change in time of a quantity M (in moles) is described by the differential equation $$\\frac{dM}{dt} = r \\cdot M \\cdot \\left(1-\\frac{M}{K}\\right),$$ where $r > 0$ and $K>0$. Which of the following statements is true?"), type = "learnr_checkbox",
- answer("M decreases linearly with time"),
- answer("M decreases exponentially with time"),
- answer("M increases linearly with time"),
- answer("M increases exponentially with time"),
- answer("M has logistic growth", correct=TRUE)
+question(sprintf("The change over time of a quantity M (in moles) is described by the differential equation $$\\frac{dM}{dt} = r \\cdot M \\cdot \\left(1-\\frac{M}{K}\\right),$$ where $r > 0$ and $K>0$ are constants. Which of the following statements is true?"), type = "learnr_checkbox",
+ answer("M decreases linearly over time"),
+ answer("M decreases exponentially over time"),
+ answer("M increases linearly over time"),
+ answer("M increases exponentially over time"),
+ answer("M has a logistic growth", correct=TRUE)
 )  
 ```
 
@@ -202,7 +203,7 @@ A population is growing according to the logistic model $\frac{dM}{dt} = r \cdot
 ```{r logistic1, echo=FALSE}
 msg <- sprintf("For the population size that is much smaller than the carrying capacity, the term $(1-\\frac{M}{K})$ in the rate expression will be very close to 1. Thus, the differential equation is approximated as $$\\frac{dM}{dt} \\approx r \\cdot M.$$ The solution to this differential equation is an exponentially increasing function.")
 
-question(sprintf("How would you best characterize the growth of the population when the population density is about $10^5~ind~km^{-2}$?"), type = "learnr_radio",
+question(sprintf("How would you best characterize the growth of the population when the population density is about $10^5\\,ind\\,km^{-2}$?"), type = "learnr_radio",
  answer("The population growth is approximately linear", correct=FALSE),
  answer("The population growth is approximately exponential", correct=TRUE),
  answer("The population stays relatively constant"), 
@@ -215,7 +216,7 @@ question(sprintf("How would you best characterize the growth of the population w
 ```{r logistic2, echo=FALSE, eval=FALSE}
 msg <- sprintf("The logistic curve is well approximated by a line when the population size is around half of the carrying capacity.")
 
-question(sprintf("How would you best characterize the growth of the population when the population density is about $5\\times 10^5~ind~km^{-2}$?"), type = "learnr_radio",
+question(sprintf("How would you best characterize the growth of the population when the population density is about $5\\times 10^5\\,ind\\,km^{-2}$?"), type = "learnr_radio",
  answer("The population growth is approximately linear", correct=TRUE),
  answer("The population growth is approximately exponential"),
  answer("The population stays relatively constant"), 
@@ -229,7 +230,7 @@ question(sprintf("How would you best characterize the growth of the population w
 ```{r logistic3, echo=FALSE}
 msg <- sprintf("For the population size that is almost equal to the carrying capacity, the term $(1-\\frac{M}{K})$ in the rate expression will be very close to 0, implying that the population will remain (almost) constant.")
 
-question(sprintf("How would you best characterize the growth of the population when the population density is about $9.8\\times 10^5~ind~km^{-2}$?"), type = "learnr_radio",
+question(sprintf("How would you best characterize the growth of the population when the population density is about $9.8\\times 10^5\\,ind\\,km^{-2}$?"), type = "learnr_radio",
  answer("The population growth is approximately linear"),
  answer("The population growth is approximately exponential"),
  answer("The population size stays relatively constant", correct=TRUE), 
@@ -240,9 +241,9 @@ question(sprintf("How would you best characterize the growth of the population w
 ```
 
 ```{r logistic4, echo=FALSE}
-msg <- sprintf("When $M = 0$, then the time-derivative is zero ($\\frac{dM}{dt} = 0$) and the population will remain at 0.")
+msg <- sprintf("When $M = 0$, then the time-derivative is zero $(\\frac{dM}{dt} = 0)$ and the population will remain at 0.")
 
-question(sprintf("How would you best characterize the growth of the population when the population density is $0~ind~km^{-2}$?"), type = "learnr_radio",
+question(sprintf("How would you best characterize the growth of the population when the population density is $0\\,ind\\,km^{-2}$?"), type = "learnr_radio",
  answer("The population growth is approximately linear"),
  answer("The population growth is approximately exponential"),
  answer("The population stays constant", correct=TRUE), 
@@ -257,7 +258,7 @@ question(sprintf("How would you best characterize the growth of the population w
 ```{r RateLim, echo=FALSE}
 msg <- sprintf("Algal uptake of ammonia is less energy demanding than uptake of nitrate, and so the uptake of nitrate is inhibited by the presence of ammonia. Nitrate is the rate limiting substrate, so the dependence of the rate on nitrate concentration is described by the Michaelis-Menten kinetics. The work is performed by the algae, therefore the rate is first-order with respect to algae.")
 
-question(sprintf("The rate expression that describes the uptake of nitrate ($NO_3$) in the presence of ammonia ($NH_3$) by marine microscopic algae (ALG) is $$R = r \\cdot \\frac{[NO_3]}{[NO_3]+K_N} \\cdot \\frac{K_A}{[NH_3] + K_A} \\cdot [ALG].$$ Which of the following statements is true?"), 
+question(sprintf("The rate expression that describes the uptake of nitrate $(NO_3)$ in the presence of ammonia $(NH_3)$ by marine microscopic algae $(ALG)$ is $$R = r \\cdot \\frac{[NO_3]}{[NO_3]+K_N} \\cdot \\frac{K_A}{[NH_3] + K_A} \\cdot [ALG].$$ Which of the following statements is true?"), 
          type = "learnr_checkbox",
  answer("The process is limited by nitrate",  correct = TRUE),
  answer("The process is inhibited by nitrate"),
@@ -292,12 +293,12 @@ $$ B_{0} = 0.1~mol~C~m^{-3} \qquad DOC_{0}=100~mol~C~m^{-3}$$
 
 ```{r bact1, echo=FALSE}
 question(sprintf("Based on the model scheme and parameter definitions, which is the correct expression for the bacterial growth?"), type = "learnr_radio",
- answer(sprintf("$g \\times \\frac{B}{B+k_s} \\times DOC$"), message="this equations assumes that DOC is the active compartment"),
- answer(sprintf("$g \\times \\frac{DOC}{DOC+k_s} \\times B$"), message = "almost correct - this formulation represents DOC uptake - not growth"),
- answer(sprintf("$\\gamma \\times g \\times \\frac{B}{B+k_s} \\times DOC$"), message="this equations assumes that DOC is the active compartment"),
- answer(sprintf("$\\gamma \\times g \\times \\frac{DOC}{DOC+k_s} \\times B$"), correct=TRUE),
- answer(sprintf("$\\gamma \\times g \\times \\frac{DOC}{DOC+k_s}$"), message = "you forgot to add the active compartment here"),
- answer(sprintf("$\\gamma \\times g \\times \\frac{DOC_0}{DOC_0+k_s} \\times B_0$"), message = "Rate expressions use the concentrations of DOC and bacteria at the prevailing time steps; $B_0$ and $DOC_0$ are the initial conditions"),
+ answer(sprintf("$g \\cdot \\frac{B}{B+k_s} \\cdot DOC$"), message="this equations assumes that DOC is the active compartment"),
+ answer(sprintf("$g \\cdot \\frac{DOC}{DOC+k_s} \\cdot B$"), message = "almost correct - this formulation represents DOC uptake - not growth"),
+ answer(sprintf("$\\gamma \\cdot g \\cdot \\frac{B}{B+k_s} \\cdot DOC$"), message="this equations assumes that DOC is the active compartment"),
+ answer(sprintf("$\\gamma \\cdot g \\cdot \\frac{DOC}{DOC+k_s} \\cdot B$"), correct=TRUE),
+ answer(sprintf("$\\gamma \\cdot g \\cdot \\frac{DOC}{DOC+k_s}$"), message = "you forgot to add the active compartment here"),
+ answer(sprintf("$\\gamma \\cdot g \\cdot \\frac{DOC_0}{DOC_0+k_s} \\cdot B_0$"), message = "Rate expressions use the concentrations of DOC and bacteria at the prevailing time steps; $B_0$ and $DOC_0$ are the initial conditions"),
  allow_retry = TRUE
 )  
 ```
@@ -306,10 +307,10 @@ question(sprintf("Based on the model scheme and parameter definitions, which is 
 msg <- sprintf("The units of the mortality parameter indicate that the rate expression for mortality is second-order with respect to B.")
 
 question(sprintf("Based on the model scheme and parameter definitions, which is the correct expression for the bacterial mortality?"), type = "learnr_radio",
- answer(sprintf("$m \\times DOC$")),
- answer(sprintf("$m \\times B$")),
- answer(sprintf("$m \\times \\frac{DOC}{DOC+k_s} \\times B$")),
- answer(sprintf("$m \\times B^2$"), correct=TRUE),
+ answer(sprintf("$m \\cdot DOC$")),
+ answer(sprintf("$m \\cdot B$")),
+ answer(sprintf("$m \\cdot \\frac{DOC}{DOC+k_s} \\cdot B$")),
+ answer(sprintf("$m \\cdot B^2$"), correct=TRUE),
 incorrect = paste("Incorrect. ", msg),
  correct = paste("Correct. ", msg)
 )

@@ -57,11 +57,11 @@ $$
 msg <- "There are two correct answers; answer 1 assumes that the reaction rate R is expressed in mole of B per time; answer 4 assumes that R is expressed in mole of A per time - it is simplest to express the rate in terms of mole of B"
 
 question("Which of the following expressions correctly describe the reaction rate?", type = "learnr_checkbox",
- answer(sprintf("$R=r \\times [A]^2 \\times [B]$"), correct=TRUE),
- answer(sprintf("$R=r \\times [A] \\times [B]^2$"), correct=FALSE),
- answer(sprintf("$R=-r \\times [A_2B]$"), correct=FALSE),
- answer(sprintf("$R=r \\times [A] \\times [B]^{1/2}$"), correct=TRUE),
- answer(sprintf("$R=r \\times [A]^{1/2} \\times [B]$"), correct=FALSE),
+ answer(sprintf("$R=r \\cdot [A]^2 \\cdot [B]$"), correct=TRUE),
+ answer(sprintf("$R=r \\cdot [A] \\cdot [B]^2$"), correct=FALSE),
+ answer(sprintf("$R=-r \\cdot [A_2B]$"), correct=FALSE),
+ answer(sprintf("$R=r \\cdot [A] \\cdot [B]^{\\frac{1}{2}}$"), correct=TRUE),
+ answer(sprintf("$R=r \\cdot [A]^{\\frac{1}{2}} \\cdot [B]$"), correct=FALSE),
 
  incorrect=msg,  
  correct=msg)
@@ -76,23 +76,23 @@ $$
 
 Concentrations of A, B and $A_2B$ are expressed in $mol~m^{-3}$, and the expression for the reaction rate is 
 $$
-R=r \times [A]^2 \times [B]
+R=r \cdot [A]^2 \cdot [B]
 $$
 
 ```{r rate, echo=FALSE}
 question("What is the unit of the rate *R*?", type = "learnr_checkbox",
- answer(sprintf("$mol~m^{-3}$"), correct=FALSE),
- answer(sprintf("$mol~m^{-3} s^{-1}$"), correct=TRUE),
- answer(sprintf("$mol^2~m^{-6} s^{-1}$"), correct=FALSE)
+ answer(sprintf("$mol\\,m^{-3}$"), correct=FALSE),
+ answer(sprintf("$mol\\,m^{-3}\\, s^{-1}$"), correct=TRUE),
+ answer(sprintf("$mol^2\\,m^{-6}\\, s^{-1}$"), correct=FALSE)
 )
 ```
 
 
 ```{r ct, echo=FALSE}
 question("What is the unit of the rate constant *r*?", type = "learnr_checkbox",
- answer(sprintf("$mol~m^{-3}$"), correct=FALSE),
- answer(sprintf("$mol~m^{-3} s^{-1}$"), correct=FALSE),
- answer(sprintf("$(mol~m^{-3})^{-2} s^{-1}$"), correct=TRUE)
+ answer(sprintf("$mol\\,m^{-3}$"), correct=FALSE),
+ answer(sprintf("$mol\\,m^{-3}\\, s^{-1}$"), correct=FALSE),
+ answer(sprintf("$(mol\\,m^{-3})^{-2}\\, s^{-1}$"), correct=TRUE)
 )
 ```
 
@@ -103,21 +103,22 @@ $$
 2A + B \rightarrow A_2B
 $$
 $$
-R=r \times [A]^2 \times [B]
+R=r \cdot [A]^2 \cdot [B]
 $$
 
 ```{r massbal, echo=FALSE}
 question("Toggle the correct mass balance equations:", type = "learnr_checkbox",
  answer(sprintf("$\\frac{d[A]}{dt}=-R^2$"), correct=FALSE),
- answer(sprintf("$\\frac{d[A]}{dt}= -2\\times R$"), correct=TRUE),
- answer(sprintf("$\\frac{d[A]}{dt}= -R/2$"), correct=FALSE),
+ answer(sprintf("$\\frac{d[A]}{dt}= -2\\cdot R$"), correct=TRUE),
+ answer(sprintf("$\\frac{d[A]}{dt}= -\\frac{R}{2}$"), correct=FALSE),
  answer(sprintf("$\\frac{d[B]}{dt}= R$"), correct=FALSE),
  answer(sprintf("$\\frac{d[B]}{dt}= -R$"), correct=TRUE),
- answer(sprintf("$\\frac{d[B]}{dt}= -R/2$"), correct=FALSE),
+ answer(sprintf("$\\frac{d[B]}{dt}= -\\frac{R}{2}$"), correct=FALSE),
  answer(sprintf("$\\frac{d[A_2B]}{dt}= R$"), correct=TRUE),
  answer(sprintf("$\\frac{d[A_2B]}{dt}= R^2$"), correct=FALSE),
- answer(sprintf("$\\frac{d[A_2B]}{dt}= 2 \\times R$"), correct=FALSE),
- answer(sprintf("$\\frac{d[A_2B]}{dt}= R/2$"), correct=FALSE)
+ answer(sprintf("$\\frac{d[A_2B]}{dt}= 2 \\cdot R$"), correct=FALSE),
+ answer(sprintf("$\\frac{d[A_2B]}{dt}= \\frac{R}{2}$"), correct=FALSE),
+ allow_retry = TRUE
 )
 ```
 
@@ -126,10 +127,10 @@ question("Toggle the correct mass balance equations:", type = "learnr_checkbox",
 We repeat the equations from the previous question here:
 
 $$
-\frac{d[A]}{dt}=-2 \times R; \qquad
+\frac{d[A]}{dt}=-2 \cdot R; \qquad
 \frac{d[B]}{dt}= - R; \qquad
 \frac{d[A_2B]}{dt}= R \\
-R = r \times [A]^2 \times [B]
+R = r \cdot [A]^2 \cdot [B]
 $$
 
 It is quite easy to implement this chemical model in R, as shown here.

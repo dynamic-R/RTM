@@ -96,6 +96,7 @@ question("When creating a conceptual model, we additionally need to specify", ty
  answer("Boundary conditions for each state variable", correct=FALSE),
  answer("Initial conditions for each state variable", correct=FALSE),
  
+ allow_retry = TRUE,
  incorrect=msg,
  correct=msg)
 ```
@@ -108,7 +109,8 @@ question("Check boxes with a TRUE statement.", type = "learnr_checkbox",
  answer("All modelled state variables MUST have the same units.", correct=FALSE),
  answer("If possible, it is better to use a common currency for all state variables.", correct=TRUE),
  answer("For chemical species it is equally simple to use grams or moles.", correct=FALSE),
- answer("The natural unit of a chemical species A is *moles* of A per kilogram (e.g., of water) or *moles* of A per m3 (e.g. of water).", correct=TRUE)
+ answer("The natural unit of a chemical species A is *moles* of A per kilogram (e.g., of water) or *moles* of A per m3 (e.g. of water).", correct=TRUE),
+ allow_retry = TRUE
 )
 ```
 

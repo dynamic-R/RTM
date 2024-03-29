@@ -49,17 +49,17 @@ $$
 
 ```{r ammonia_eq, echo=FALSE}
 question("What is the correct expression for the rate of change in ammonia concentration?", type = "learnr_radio",
- answer(sprintf("$\\frac{d[NH_3]}{dt}=k_f \\times [NH_4^+] - k_b \\times [NH_3] \\times [H^+]$"), correct=TRUE),
- answer(sprintf("$\\frac{d[NH_3]}{dt}=k_f \\times [NH_4^+]$"), correct=FALSE),
- answer(sprintf("$\\frac{d[NH_3]}{dt}=k_f \\times [NH_4^+] - k_b \\times [NH_3]$"), correct=FALSE)
+ answer(sprintf("$\\frac{d[NH_3]}{dt}=k_f \\cdot [NH_4^+] - k_b \\cdot [NH_3] \\cdot [H^+]$"), correct=TRUE),
+ answer(sprintf("$\\frac{d[NH_3]}{dt}=k_f \\cdot [NH_4^+]$"), correct=FALSE),
+ answer(sprintf("$\\frac{d[NH_3]}{dt}=k_f \\cdot [NH_4^+] - k_b \\cdot [NH_3]$"), correct=FALSE)
 )
 ```
 
 ```{r proton_diffeq, echo=FALSE}
 question("What is the correct expression for the rate of change in proton concentration?", type = "learnr_radio",
- answer(sprintf("$\\frac{d[H^+]}{dt}=k_f \\times [NH_4^+]$"), correct=FALSE),
- answer(sprintf("$\\frac{d[H^+]}{dt}=k_f \\times [NH_4^+] - k_b \\times [NH_3]$"), correct=FALSE),
- answer(sprintf("$\\frac{d[H^+]}{dt}=k_f \\times [NH_4^+] - k_b \\times [NH_3] \\times [H^+]$"), correct=TRUE)
+ answer(sprintf("$\\frac{d[H^+]}{dt}=k_f \\cdot [NH_4^+]$"), correct=FALSE),
+ answer(sprintf("$\\frac{d[H^+]}{dt}=k_f \\cdot [NH_4^+] - k_b \\cdot [NH_3]$"), correct=FALSE),
+ answer(sprintf("$\\frac{d[H^+]}{dt}=k_f \\cdot [NH_4^+] - k_b \\cdot [NH_3] \\cdot [H^+]$"), correct=TRUE)
 )
 ```
 
@@ -75,24 +75,24 @@ $$
 * The rate constant for the backward reaction is $k_b$.
 
 ```{r unitsKf, echo=FALSE}
-msg <- sprintf("The unit of the rate is $mol~N~ m^{-3}~s^{-1}$, and it is expressed as $R_f = k_f \\cdot [NH_4^+]$. With $[NH_4^+]$ in $mol~N~m^{-3}$, $k_f$ must be in units of $s^{-1}$.")
+msg <- sprintf("The unit of the rate is $mol\\,N\\, m^{-3}\\,s^{-1}$, and it is expressed as $R_f = k_f \\cdot [NH_4^+]$. With $[NH_4^+]$ in $mol\\,N\\,m^{-3}$, $k_f$ must be in units of $s^{-1}$.")
   
 question(sprintf("What are the units of $k_f$?"), type = "learnr_radio",
- answer(sprintf("$(mol~N~ m^{-3})^{-1}~s^{-1}$"), correct=FALSE),
+ answer(sprintf("$(mol\\,N\\, m^{-3})^{-1}\\,s^{-1}$"), correct=FALSE),
  answer(sprintf("$s^{-1}$"), correct=TRUE),
- answer(sprintf("$mol~N~m^{-3}~s^{-1}$"), correct=FALSE),
+ answer(sprintf("$mol\\,N\\,m^{-3}\\,s^{-1}$"), correct=FALSE),
  
  incorrect=msg, 
  correct=msg)
 ```
 
 ```{r unitsKb, echo=FALSE}
-msg <- sprintf("The unit of the rate is $mol~N~ m^{-3}~s^{-1}$, and it is expressed as $R_b = k_b \\cdot [NH_3][H^+]$. With $[NH_3]$ and $[H^+]$ in $mol~N~m^{-3}$, $k_b$ must be in units of $(mol~N~m^{-3})^{-1}~s^{-1}$.")
+msg <- sprintf("The unit of the rate is $mol\\,N\\, m^{-3}\\,s^{-1}$, and it is expressed as $R_b = k_b \\cdot [NH_3]\\cdot [H^+]$. With $[NH_3]$ and $[H^+]$ in $mol\\,N\\,m^{-3}$, $k_b$ must be in units of $(mol\\,N\\,m^{-3})^{-1}\\,s^{-1}$.")
   
 question(sprintf("What are the units of $k_b$?"), type = "learnr_radio",
- answer(sprintf("$(mol~N~ m^{-3})^{-1}~s^{-1}$"), correct=TRUE),
+ answer(sprintf("$(mol\\,N\\,m^{-3})^{-1}\\,s^{-1}$"), correct=TRUE),
  answer(sprintf("$s^{-1}$"), correct=FALSE),
- answer(sprintf("$mol~N~m^{-3}~s^{-1}$"), correct=FALSE),
+ answer(sprintf("$mol\\,N\\,m^{-3}\\,s^{-1}$"), correct=FALSE),
  
  incorrect=msg,
  correct=msg)
@@ -116,7 +116,7 @@ Assume that
 * the equilibrium concentration of ammonia and ammonium is denoted as $[NH_3]^*$ and $[NH_4^+]^*$, respectively.
 
 ```{r KN, echo=FALSE}
-msg <- sprintf("If you find it difficult to remember this formula and do not want to derive it, think about the units of $K_N$ ($mol~m^{-3}$), and the units of $k_b$ [$(mol~m^{-3})^{-1}~s^{-1}$] and $k_f$ [$s^{-1}$]. Units of both sides of the equation must be the same.")
+msg <- sprintf("If you find it difficult to remember this formula and do not want to derive it, think about the units of $K_N$ $(mol\\,m^{-3})$, and the units of $k_b$ $((mol\\,m^{-3})^{-1}\\,s^{-1})$ and $k_f$ $(s^{-1})$. Units of both sides of the equation must be the same.")
 
 question("Which of the following statements is true?", type = "learnr_radio",
  answer(sprintf("$K_{N} = \\frac{k_f}{k_b}$"), correct=TRUE),
@@ -144,6 +144,7 @@ question("Which of the following statements is true?", type = "learnr_checkbox",
  answer(sprintf("$\\frac{d([NH_3]+[H^+]}{dt} =0$"), correct=FALSE),
  answer(sprintf("$\\frac{d([NH_3]-[H^+]}{dt} =0$"), correct=TRUE),
  
+ allow_retry = TRUE,
  incorrect=msg,
  correct=msg)
 ```
@@ -170,11 +171,11 @@ msg <- sprintf("If you find it difficult to remember which formula applies for w
 
 question("Which of the following statements is true?", type = "learnr_checkbox",
  answer(sprintf("$[NH_3]^* = \\frac{K_N}{K_N+[H^+]}$"), correct=FALSE),
- answer(sprintf("$[NH_3]^* = \\frac{K_N}{K_N+[H^+]} [\\sum NH_x]$"), correct=TRUE),
- answer(sprintf("$[NH_3]^* = \\frac{[H^+]}{K_N+[H^+]}[\\sum NH_x]$"), correct=FALSE),
+ answer(sprintf("$[NH_3]^* = \\frac{K_N}{K_N+[H^+]}\\cdot [\\sum NH_x]$"), correct=TRUE),
+ answer(sprintf("$[NH_3]^* = \\frac{[H^+]}{K_N+[H^+]}\\cdot [\\sum NH_x]$"), correct=FALSE),
  answer(sprintf("$[NH_4^+]^* = \\frac{K_N}{K_N+[H^+]}$"), correct=FALSE),
- answer(sprintf("$[NH_4^+]^* = \\frac{K_N}{K_N+[H^+]}[\\sum NH_x$]"), correct=FALSE),
- answer(sprintf("$[NH_4^+]^* = \\frac{[H^+]}{K_N+[H^+]}[\\sum NH_x$]"), correct=TRUE),
+ answer(sprintf("$[NH_4^+]^* = \\frac{K_N}{K_N+[H^+]}\\cdot [\\sum NH_x$]"), correct=FALSE),
+ answer(sprintf("$[NH_4^+]^* = \\frac{[H^+]}{K_N+[H^+]}\\cdot [\\sum NH_x$]"), correct=TRUE),
  
  incorrect=msg, 
  correct=msg)
@@ -222,17 +223,18 @@ Equilibrium constants for the reactions 1 and 2 are $K_1$ and $K_2$, respectivel
 
 
 ```{r eq2Reactions, echo=FALSE}
-msg <- sprintf("The equilibrium equations all depend on the DIC concentration, so the second option cannot be true. Also, the sum of $[H_2CO_3]$ (carbonic acid), $[HCO_3^-]$ (bicarbonate) and $[CO_3^{2-}]$ (carbonate) must be equal to $[DIC]$ (by definition), so the third equation cannot be true as the numerator is not part of the denominator. As for carbonate, the correct formula can be remembered as follows: carbonate is the most negatively charged ion, so it has in the numerator the least charged combination ($K_1\\times K_2$). The other species, which contain one or two extra protons, will need to have one or two proton concentrations in the numerator, respectively.")
+msg <- sprintf("The equilibrium equations all depend on the DIC concentration, so the second option cannot be true. Also, the sum of $[H_2CO_3]$ (carbonic acid), $[HCO_3^-]$ (bicarbonate) and $[CO_3^{2-}]$ (carbonate) must be equal to $[DIC]$ (by definition), so the third equation cannot be true as the numerator is not part of the denominator. As for carbonate, the correct formula can be remembered as follows: carbonate is the most negatively charged ion, so it has in the numerator the least charged combination $(K_1\\cdot K_2)$. The other species, which contain one or two extra protons, will need to have one or two proton concentrations in the numerator, respectively.")
 
 question("Which of the following equations correctly describe the relationships between the equilibrium concentrations of DIC, carbonic acid, bicarbonate, carbonate and protons?", type = "learnr_checkbox",
- answer(sprintf("$[HCO_3^-] = \\frac{K_1 \\times [H^+]}{[H^+] \\times [H^+] + K_1 \\times [H^+] + K_1 \\times K_2} [DIC]$"), correct=TRUE),
- answer(sprintf("$[DIC] = \\frac{K_1 \\times [H^+]}{[H^+] \\times [H^+] + K_1 \\times [H^+] + K_1 \\times K_2} [HCO_3^-]$"), correct=FALSE),
- answer(sprintf("$[HCO_3^-] = \\frac{K_2 \\times [H^+]}{[H^+] \\times [H^+] + K_1 \\times [H^+] + K_1 \\times K_2} [DIC]$"), correct=FALSE),
- answer(sprintf("$[CO_3^{2-}] = \\frac{[H^+] \\times [H^+]}{[H^+] \\times [H^+] + K_1 \\times [H^+] + K_1 \\times K_2} [DIC]$"), correct=FALSE),
- answer(sprintf("$[CO_3^{2-}] = \\frac{K_1 \\times K_2}{[H^+] \\times [H^+] + K_1 \\times [H^+] + K_1 \\times K_2} [DIC]$"), correct=TRUE),
- answer(sprintf("$[H_2CO_3] = \\frac{K_1 \\times [H^+]}{[H^+] \\times [H^+] + K_1 \\times [H^+] + K_1 \\times K_2} [DIC]$")),
- answer(sprintf("$[H_2CO_3] = \\frac{[H^+] \\times [H^+]}{[H^+] \\times [H^+] + K_1 \\times [H^+] + K_1 \\times K_2} [DIC]$"), correct=TRUE),
+ answer(sprintf("$[HCO_3^-] = \\frac{K_1 \\cdot [H^+]}{[H^+] \\cdot [H^+] + K_1 \\cdot [H^+] + K_1 \\cdot K_2} \\cdot[DIC]$"), correct=TRUE),
+ answer(sprintf("$[DIC] = \\frac{K_1 \\cdot [H^+]}{[H^+] \\cdot [H^+] + K_1 \\cdot [H^+] + K_1 \\cdot K_2}\\cdot [HCO_3^-]$"), correct=FALSE),
+ answer(sprintf("$[HCO_3^-] = \\frac{K_2 \\cdot [H^+]}{[H^+] \\cdot [H^+] + K_1 \\cdot [H^+] + K_1 \\cdot K_2}\\cdot [DIC]$"), correct=FALSE),
+ answer(sprintf("$[CO_3^{2-}] = \\frac{[H^+] \\cdot [H^+]}{[H^+] \\cdot [H^+] + K_1 \\cdot [H^+] + K_1 \\cdot K_2}\\cdot [DIC]$"), correct=FALSE),
+ answer(sprintf("$[CO_3^{2-}] = \\frac{K_1 \\cdot K_2}{[H^+] \\cdot [H^+] + K_1 \\cdot [H^+] + K_1 \\cdot K_2}\\cdot [DIC]$"), correct=TRUE),
+ answer(sprintf("$[H_2CO_3] = \\frac{K_1 \\cdot [H^+]}{[H^+] \\cdot [H^+] + K_1 \\cdot [H^+] + K_1 \\cdot K_2}\\cdot [DIC]$")),
+ answer(sprintf("$[H_2CO_3] = \\frac{[H^+] \\cdot [H^+]}{[H^+] \\cdot [H^+] + K_1 \\cdot [H^+] + K_1 \\cdot K_2}\\cdot [DIC]$"), correct=TRUE),
  
+ allow_retry = TRUE,
  incorrect=msg, 
  correct=msg)
 ```
@@ -284,15 +286,15 @@ $$
 To make use of the local equilibrium, we need to find combinations of species that are not affected by the above reactions.
 
 ```{r eq2Lumpsum, echo=FALSE}
-msg <- sprintf("The lump sum $ALK_C=[HCO_3^-] + 2 [CO_3^{2-}] - [H^+]$ is unaffected by reaction 1 because: production of 1 $HCO_3^-$ causes production of 1 $ALK_C$, production of $H^+$: -1 $ALK_C$. It is also unaffected by reaction 2 (consumption of 1 $HCO_3^-$: -1 $ALK_C$, production of 1 $H^+$: -1 $ALK_C$, production of 1 $CO_3^{2-}$: +2 $ALK_C$). This lump sum is called the *carbonate alkalinity* or *excess negative charge*. The fifth lump sum is the *total dissolved inorganic carbon (DIC)*. The last lump sum ($2[H_2CO_3] + [HCO_3^-] + [H^+]$) would also be suitable - it accounts for the excess protons - but it is never used in models.")
+msg <- sprintf("The lump sum $ALK_C=[HCO_3^-] + 2\\cdot [CO_3^{2-}] - [H^+]$ is unaffected by reaction 1 because: production of 1 $HCO_3^-$ causes production of 1 $ALK_C$, production of $H^+$: -1 $ALK_C$. It is also unaffected by reaction 2 (consumption of 1 $HCO_3^-$: -1 $ALK_C$, production of 1 $H^+$: -1 $ALK_C$, production of 1 $CO_3^{2-}$: +2 $ALK_C$). This lump sum is called the *carbonate alkalinity* or *excess negative charge*. The fifth lump sum is the *total dissolved inorganic carbon (DIC)*. The last lump sum $(2\\cdot[H_2CO_3] + [HCO_3^-] + [H^+])$ would also be suitable - it accounts for the excess protons - but it is never used in models.")
 
 question("Which of the following lump sums would be suitable to reformulate a model that involves these equilibrium reactions?", type = "learnr_checkbox",
- answer(sprintf("$[HCO_3^-] + 2 [CO_3^{2-}] - [H^+]$"), correct=TRUE),
+ answer(sprintf("$[HCO_3^-] + 2\\cdot [CO_3^{2-}] - [H^+]$"), correct=TRUE),
  answer(sprintf("$[HCO_3^-] + [CO_3^{2-}] - [H^+]$"), correct=FALSE),
  answer(sprintf("$[HCO_3^-] - [CO_3^{2-}] + [H^+]$"), correct=FALSE),
- answer(sprintf("$[HCO_3^-] - 2[CO_3^{2-}] + [H^+]$"), correct=FALSE),
+ answer(sprintf("$[HCO_3^-] - 2\\cdot [CO_3^{2-}] + [H^+]$"), correct=FALSE),
  answer(sprintf("$[H_2CO_3] + [HCO_3^-] + [CO_3^{2-}]$"), correct=TRUE),
- answer(sprintf("$2[H_2CO_3] + [HCO_3^-] + [H^+]$"), correct=TRUE),
+ answer(sprintf("$2\\cdot[H_2CO_3] + [HCO_3^-] + [H^+]$"), correct=TRUE),
  
  incorrect=msg, 
  correct=msg)
@@ -322,12 +324,14 @@ If we define the lump sum *carbonate alkalinity* as $$[ALK_C] = [HCO_3^-] + 2\cd
 Consider the following chemical reactions:
 
 $$
-Reaction~1: \qquad H_2CO_3 \leftrightarrow HCO_3^- + H^+ \\
-Reaction~2: \qquad HCO_3^- \leftrightarrow CO_3^{2-} + H^+\\
-Reaction~3: \qquad NH_4^+ \leftrightarrow NH_3 + H^+\\
-Reaction~4: \qquad HNO_3 \leftrightarrow NO_3^- + H^+\\
-Reaction~5: \quad CH_2O(NH_3)_{NC} + O_2 \rightarrow H_2CO_3 + NC \cdot NH_3\\
-Reaction~6: \quad NH_3 + 2O_2 \rightarrow NO_3^- + H^+ + H_2O
+\begin{array}{rl}
+Reaction~1: & H_2CO_3 \leftrightarrow HCO_3^- + H^+ \\
+Reaction~2: & HCO_3^- \leftrightarrow CO_3^{2-} + H^+\\
+Reaction~3: & NH_4^+ \leftrightarrow NH_3 + H^+\\
+Reaction~4: & HNO_3 \leftrightarrow NO_3^- + H^+\\
+Reaction~5: & CH_2O(NH_3)_{NC} + O_2 \rightarrow H_2CO_3 + NC \cdot NH_3\\
+Reaction~6: & NH_3 + 2\cdot O_2 \rightarrow NO_3^- + H^+ + H_2O
+\end{array}
 $$
 
 * Assume that reactions 1–4 are fast and reversible, whereas reactions 5–6 correspond to slow irreversible processes (mediated by microbes). 
@@ -335,7 +339,7 @@ $$
 * Reaction 6, which corresponds to *nitrification*, occurs at a rate $R_{nit}$.
 
 ```{r eqmultLumpsum, echo=FALSE}
-msg <- sprintf("The lump sums should only include species that participate in the fast reversible reactions. This rules out answer 2 and 3.  The sum $[H_2CO_3] + [HCO_3^-] + [CO_3^{2-}]$ is the total dissolved inorganic carbon (DIC) concentration comprising species that only feature in the first 2 reactions. DIC is conserved when those 2 reactions occur. Similarly, $[NH_4^+] + [NH_3]$ and $[NO_3^-] + [HNO_3]$ are the total ammonium and total nitrate concentrations, respectively, which only feature, and are conserved, in reactions 3 and 4. One more lump sum is needed to constrain the proton concentration. As protons feature in reactions 1, 2, 3, and 4, this lump sum should be conserved by all these equilibrium reactions. The sum $[HCO_3^-] + 2 [CO_3^{2-}] - [H^+]$ is not suitable, as it is not conserved in reactions 3 and 4. Only the last two lump sums are suitable, as can be verified by a similar approach (direct substitution of time derivatives) as in the previous question.")
+msg <- sprintf("The lump sums should only include species that participate in the fast reversible reactions. This rules out answer 2 and 3.  The sum $[H_2CO_3] + [HCO_3^-] + [CO_3^{2-}]$ is the total dissolved inorganic carbon (DIC) concentration comprising species that only feature in the first 2 reactions. DIC is conserved when those 2 reactions occur. Similarly, $[NH_4^+] + [NH_3]$ and $[NO_3^-] + [HNO_3]$ are the total ammonium and total nitrate concentrations, respectively, which only feature, and are conserved, in reactions 3 and 4. One more lump sum is needed to constrain the proton concentration. As protons feature in reactions 1, 2, 3, and 4, this lump sum should be conserved by all these equilibrium reactions. The sum $[HCO_3^-] + 2\\cdot [CO_3^{2-}] - [H^+]$ is not suitable, as it is not conserved in reactions 3 and 4. Only the last two lump sums are suitable, as can be verified by a similar approach (direct substitution of time derivatives) as in the previous question.")
   
 question("Which of the following lump sums would be suitable to reformulate a model that involves the fast reversible reactions 1-4?", type = "learnr_checkbox",
  answer(sprintf("$[H_2CO_3] + [HCO_3^-] + [CO_3^{2-}]$"), correct=TRUE),
@@ -344,12 +348,13 @@ question("Which of the following lump sums would be suitable to reformulate a mo
  answer(sprintf("$[NH_4^+] + [NH_3]$"), correct=TRUE),
  answer(sprintf("$[NO_3^-] + [NH_3]$"), correct=FALSE),
  answer(sprintf("$[NO_3^-] + [HNO_3]$"), correct=TRUE),
- answer(sprintf("$[HCO_3^-] + 2 [CO_3^{2-}] - [H^+]$"), correct=FALSE),
- answer(sprintf("$[HCO_3^-] + 2 [CO_3^{2-}] +[NH_3] - [H^+]$"), correct=FALSE),
- answer(sprintf("$[HCO_3^-] + 2 [CO_3^{2-}] +[NO_3^-] - [H^+]$"), correct=FALSE),
- answer(sprintf("$[HCO_3^-] + 2 [CO_3^{2-}] +[NO_3^-] + [NH_3] - [H^+]$"), correct=TRUE),
- answer(sprintf("$[HCO_3^-] + 2 [CO_3^{2-}] -[HNO_3] + [NH_3] - [H^+]$"), correct=TRUE),
+ answer(sprintf("$[HCO_3^-] + 2\\cdot [CO_3^{2-}] - [H^+]$"), correct=FALSE),
+ answer(sprintf("$[HCO_3^-] + 2\\cdot [CO_3^{2-}] +[NH_3] - [H^+]$"), correct=FALSE),
+ answer(sprintf("$[HCO_3^-] + 2\\cdot [CO_3^{2-}] +[NO_3^-] - [H^+]$"), correct=FALSE),
+ answer(sprintf("$[HCO_3^-] + 2\\cdot [CO_3^{2-}] +[NO_3^-] + [NH_3] - [H^+]$"), correct=TRUE),
+ answer(sprintf("$[HCO_3^-] + 2\\cdot [CO_3^{2-}] -[HNO_3] + [NH_3] - [H^+]$"), correct=TRUE),
  
+ allow_retry = TRUE,
  incorrect=msg,
  correct=msg)
 ```
@@ -359,12 +364,14 @@ question("Which of the following lump sums would be suitable to reformulate a mo
 Consider the following reactions:
 
 $$
-Reaction~1: \qquad H_2CO_3 \leftrightarrow HCO_3^- + H^+ \\
-Reaction~2: \qquad HCO_3^- \leftrightarrow CO_3^{2-} + H^+\\
-Reaction~3: \qquad NH_4^+ \leftrightarrow NH_3 + H^+\\
-Reaction~4: \qquad HNO_3 \leftrightarrow NO_3^- + H^+\\
-Reaction~5: \quad CH_2O(NH_3)_{NC} + O_2 \rightarrow H_2CO_3 + NC \cdot NH_3\\
-Reaction~6: \quad NH_3 + 2O_2 \rightarrow NO_3^- + H^+ + H_2O
+\begin{array}{rl}
+Reaction~1: & H_2CO_3 \leftrightarrow HCO_3^- + H^+ \\
+Reaction~2: & HCO_3^- \leftrightarrow CO_3^{2-} + H^+\\
+Reaction~3: & NH_4^+ \leftrightarrow NH_3 + H^+\\
+Reaction~4: & HNO_3 \leftrightarrow NO_3^- + H^+\\
+Reaction~5: & CH_2O(NH_3)_{NC} + O_2 \rightarrow H_2CO_3 + NC \cdot NH_3\\
+Reaction~6: & NH_3 + 2\cdot O_2 \rightarrow NO_3^- + H^+ + H_2O
+\end{array}
 $$
 
 * Assume that reactions 1–4 are fast and reversible, whereas reactions 5–6 correspond to slow irreversible processes (mediated by microbes). 
@@ -374,28 +381,29 @@ $$
 Use the following lump sums (TA stands for total alkalinity):
 
 $$
-[DIC] = [H_2CO_3] + [HCO_3^-] + [CO3^{2-}]\\
+[DIC] = [H_2CO_3] + [HCO_3^-] + [CO_3^{2-}]\\
 [NH_x] = [NH_4^+] + [NH_3]\\
 [H_xNO_3] = [HNO_3] + [NO_3^-]\\
-[TA] = [HCO_3^−] + 2 [CO_3^{2−}] + [NH_3] + [NO_3^-] − [H^+]
+[TA] = [HCO_3^−] + 2\cdot [CO_3^{2−}] + [NH_3] + [NO_3^-] − [H^+]
 $$
 
 ```{r eqmultirrev, echo=FALSE}
-msg <- sprintf("The slow reaction only affects the lump sums, which rules out answer 2, 4 and 5.  Answers 1, 6, and 7 describe the effects on DIC, $NH_x$, and $H_xNO_3$, and are correct. TA as defined here is affected by two processes. First, aerobic organic matter mineralization produces $NH_3$ and thus increases TA at a rate $NC\\cdot R_{aero}$. Second, nitrification leads to the consumption of $NH_3$ (-1TA), production of $NO_3^-$ (+1TA), and production of protons (-1TA, because $[H^+]$ contributes negatively to TA). Thus, nitrification yields a net TA consumption of 1 ($-1+1-1=-1$).")
+msg <- sprintf("The slow reaction only affects the lump sums, which rules out answer 2, 4 and 5.  Answers 1, 6, and 7 describe the effects on DIC, $NH_x$, and $H_xNO_3$, and are correct. TA as defined here is affected by two processes. First, aerobic organic matter mineralization produces $NH_3$ and thus increases TA at a rate $NC\\cdot R_{aero}$. Second, nitrification leads to the consumption of $NH_3$ (-1TA), production of $NO_3^-$ (+1TA), and production of protons (-1TA, because $[H^+]$ contributes negatively to TA). Thus, nitrification yields a net TA consumption of 1 $(-1+1-1=-1)$.")
   
 question("Which of the following mass balance equations correctly account for the effects of aerobic mineralization and nitrification?", type = "learnr_checkbox",
  answer(sprintf("$\\frac{d[DIC]}{dt} = R_{aero}$"), correct=TRUE),
- answer(sprintf("$\\frac{d[H2CO3]}{dt} = R_{aero}$"), correct=FALSE),
+ answer(sprintf("$\\frac{d[H_2CO_3]}{dt} = R_{aero}$"), correct=FALSE),
  answer(sprintf("$\\frac{d[CH_2O(NH_3)_{NC}]}{dt} = -R_{aero}$"), correct=TRUE),
- answer(sprintf("$\\frac{d[NH_3]}{dt} = NC \\times R_{aero}$"), correct=FALSE),
- answer(sprintf("$\\frac{d[NH_3]}{dt} = NC \\times R_{aero} - R_{nit}$"), correct=FALSE),
- answer(sprintf("$\\frac{d[NH_x]}{dt} = NC \\times R_{aero} - R_{nit}$"), correct=TRUE),
+ answer(sprintf("$\\frac{d[NH_3]}{dt} = NC \\cdot R_{aero}$"), correct=FALSE),
+ answer(sprintf("$\\frac{d[NH_3]}{dt} = NC \\cdot R_{aero} - R_{nit}$"), correct=FALSE),
+ answer(sprintf("$\\frac{d[NH_x]}{dt} = NC \\cdot R_{aero} - R_{nit}$"), correct=TRUE),
  answer(sprintf("$\\frac{d[H_xNO_3]}{dt} = R_{nit}$"), correct=TRUE),
  answer(sprintf("$\\frac{d[TA]}{dt} = R_{aero} + R_{nit}$"), correct=FALSE),
- answer(sprintf("$\\frac{d[TA]}{dt} = NC \\times R_{aero} + R_{nit}$"), correct=FALSE),
- answer(sprintf("$\\frac{d[TA]}{dt} = NC \\times R_{aero} - R_{nit}$"), correct=TRUE),
+ answer(sprintf("$\\frac{d[TA]}{dt} = NC \\cdot R_{aero} + R_{nit}$"), correct=FALSE),
+ answer(sprintf("$\\frac{d[TA]}{dt} = NC \\cdot R_{aero} - R_{nit}$"), correct=TRUE),
  answer(sprintf("$\\frac{d[TA]}{dt} = 0$"), correct=FALSE),
  
+ allow_retry = TRUE,
  incorrect=msg,
  correct=msg)
 ```

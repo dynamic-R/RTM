@@ -58,7 +58,8 @@ question("Which of the following statements is true?", type = "learnr_checkbox",
  answer("The reaction term is the first on the right hand side", correct=TRUE),  
  answer("The reaction term is the second on the right hand side"),  
  answer("The transport term is the first on the right hand side"),  
- answer("The transport term is the second on the right hand side", correct=TRUE)  
+ answer("The transport term is the second on the right hand side", correct=TRUE),
+ allow_retry = TRUE
 )
 ```
 
@@ -98,9 +99,10 @@ question("Which of the following statements is true?", type = "learnr_checkbox",
  answer(sprintf("J denotes the net production rate in $mol~m^{-2}~s^{-1}$"), correct = FALSE),
  answer(sprintf("J denotes the net production rate in $mol~m^{-3}~s^{-1}$"), correct = FALSE),
  answer(sprintf("J denotes the transport flux in x-direction, in $mol~m^{-2}~s^{-1}$"), correct = TRUE),
- answer(sprintf("A is the length, in $m$, through which the substance is transported"), correct = FALSE),
- answer(sprintf("A is the surface area, in $m^2$, through which the substance is transported"), correct = TRUE),
- answer(sprintf("A is the volume, in $m^3$, through which the substance is transported"), correct = FALSE)
+ answer(sprintf("A is the length, in $m$ and parallel to $x$, across which the substance is transported"), correct = FALSE),
+ answer(sprintf("A is the surface area, in $m^2$ and perpendicular to $x$, through which the substance is transported"), correct = TRUE),
+ answer(sprintf("A is the volume, in $m^3$, through which the substance is transported"), correct = FALSE),
+ allow_retry = TRUE
 )  
 ```  
 
@@ -124,6 +126,7 @@ question("Which of the following statements is true?", type = "learnr_checkbox",
  answer(sprintf("The SI unit of the transport flux is $mol~m^{-3}~s^{-1}$.")),
  answer(sprintf("The SI unit of the transport flux is $mol~m^{-1}~s^{-1}$.")),  
 
+ allow_retry = TRUE,
  incorrect=msg,
  correct=msg)
 ```

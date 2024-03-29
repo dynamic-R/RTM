@@ -67,6 +67,8 @@ question(sprintf("What is the name of the parameter $K_A$ in the Michaelis-Mente
  answer("Rate constant", correct = FALSE),
  answer("Solubility concentration"),
  answer("Affinity concentration",  correct = TRUE),
+ 
+ allow_retry = TRUE,
  incorrect = paste("Incorrect. ", msg0),
  correct = paste("Correct!")
 )
@@ -99,7 +101,7 @@ plot(x=A,y=atan(A/20)/(pi/2), main="Arc-tan", ylab="", xlab="[A]", type="l", lwd
 ## Michaelis-Menten use
 
 ```{r enzUse, echo=FALSE}
-msg <- "When [A] is very small ( $ [A] << K_A $ ), the Michaelis-Menten rate expression can be approximated according to $\\frac{[A]}{[A]+K_A}\\approx \\frac{[A]}{K_A} = \\frac{1}{K_A}\\cdot [A]$, which is first-order in [A]."
+msg <- "When [A] is very small $([A] \\ll K_A)$, the Michaelis-Menten rate expression can be approximated according to $\\frac{[A]}{[A]+K_A}\\approx \\frac{[A]}{K_A} = \\frac{1}{K_A}\\cdot [A]$, which is first-order in [A]."
 question("Michaelis-Menten kinetics is approximated by first-order kinetics when the substrate concentration is", type = "learnr_radio",
  answer("around the affinity concentration"),
  answer("much lower than the affinity concentration", correct = TRUE),
@@ -111,7 +113,7 @@ question("Michaelis-Menten kinetics is approximated by first-order kinetics when
 ```
 
 ```{r enzUse2, echo=FALSE}
-msg <- "When [A] is very large ($[A] >> K_A$), the Michaelis-Menten rate expression can be approximated as $\\frac{[A]}{[A]+K_A} \\approx \\frac{[A]}{[A]} \\equiv 1$, which is zero-order in [A]."
+msg <- "When [A] is very large $([A] \\gg K_A)$, the Michaelis-Menten rate expression can be approximated as $\\frac{[A]}{[A]+K_A} \\approx \\frac{[A]}{[A]} \\equiv 1$, which is zero-order in [A]."
 
 question("Michaelis-Menten kinetics is approximated by zero-order kinetics when the substrate concentration is", type = "learnr_radio",
  answer("around the affinity concentration"),
@@ -140,9 +142,9 @@ lines(x=A2,y=rep(1, times=301), ylab="", xlab="[A]", type="l",
 ## Recognizing rate-limitation
 
 ```{r enzRateLim, echo=FALSE}
-msg <- sprintf("The dependency of the process on A is given by the Michaelis-Menten kinetics $\\frac{[A]}{[A]+K_A}$; the dependency on B is given by $\\frac{K_B}{[B] + K_B}$ which is equal to $1-\\frac{[B]}{[B] + K_B}$, and this function will decrease with increasing $[B]$ (inhibition); the dependency on C is given by $r \\times [C]$, which is first-order with respect to [C].")
+msg <- sprintf("The dependency of the process on A is given by the Michaelis-Menten kinetics $\\frac{[A]}{[A]+K_A}$; the dependency on B is given by $\\frac{K_B}{[B] + K_B}$ which is equal to $1-\\frac{[B]}{[B] + K_B}$, and this function will decrease with increasing $[B]$ (inhibition); the dependency on C is given by $r \\cdot [C]$, which is first-order with respect to [C].")
 
-question(sprintf("How would you characterize a process whose rate is described by the following rate expression (where $r$, $K_A$ and $K_B$ are constants): $R = r \\times \\frac{[A]}{[A]+K_A} \\times \\frac{K_B}{[B] + K_B} \\times [C]$?"), type = "learnr_checkbox",
+question(sprintf("How would you characterize a process whose rate is described by the following rate expression (where $r$, $K_A$ and $K_B$ are constants): $R = r \\cdot \\frac{[A]}{[A]+K_A} \\cdot \\frac{K_B}{[B] + K_B} \\cdot [C]$?"), type = "learnr_checkbox",
  answer("The process is stimulated by substrate A",  correct = TRUE),
  answer("The process is inhibited by substrate A"),
  answer("The process is stimulated by substrate B"),
@@ -150,7 +152,8 @@ question(sprintf("How would you characterize a process whose rate is described b
  answer("The process is first-order with respect to substrate C",  correct = TRUE),
  answer("The process is zero-order with respect to substrate C"),
  incorrect = paste("Incorrect. ", msg),
- correct = paste("Correct. ", msg)
+ correct = paste("Correct. ", msg),
+ allow_retry = TRUE
  )
 ```
 

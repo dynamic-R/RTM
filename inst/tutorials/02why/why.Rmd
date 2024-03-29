@@ -69,6 +69,7 @@ question("Why do we develop scientific models?", type = "learnr_checkbox",
  answer("they allow us to generate hypotheses", correct=TRUE),
  answer("because it is a lot of fun", correct=FALSE),
  
+ allow_retry = TRUE,
  incorrect=msg,
  correct=msg)
 ```
@@ -87,6 +88,7 @@ question("What is the focus of the models that we will develop in this course?",
  answer("Predicting the weather", correct=FALSE),
  answer("Predicting stock markets", correct=FALSE),
  
+ allow_retry = TRUE,
  incorrect =msg,
  correct=msg)
 ```
@@ -106,6 +108,7 @@ question("In this course we will ...", type = "learnr_checkbox",
  answer("Solve differential equations with a pen and paper", correct=FALSE),
  answer("Learn how to formulate differential equations", correct=TRUE),
  
+ allow_retry = TRUE,
  incorrect=msg,
  correct=msg)
 ```
