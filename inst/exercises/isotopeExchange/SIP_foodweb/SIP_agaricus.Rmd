@@ -1,13 +1,13 @@
 ---
-title: "Isotope exchange in a simple foodweb of Agaricus"
+title: "Foodweb associated with *Agaricus bisporus*"
 author: "Lubos Polerecky"
-subtitle: "Work in progress"
 date: "19-09-2022"
+abstract: "\\noindent Model of the flow of carbon isotopes during an isotope labeling experiment designed to probe the foodweb in a compost inhabited by *Agaricus bisporus*. (Work in progress.)"
 output:
   pdf_document:
-    toc: yes
+    toc: no
   word_document:
-    toc: yes
+    toc: no
 ---
 
 ```{r setup, include=FALSE}

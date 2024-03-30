@@ -1,8 +1,8 @@
 ---
 title: "Modelling carbon flow during culturing of an aerobic methanotroph"
 author: "Lubos Polerecky"
-subtitle: "Based on data from Paul Bodelier"
 date: "05-04-2022"
+abstract: "\\noindent Model used for the analysis of data presented in the paper *Methanotrophy by a Mycobacterium species that dominates a cave microbial ecosystem* by van Spanning et al. (2022). Data acquired by Paul Bodelier."
 output:
   pdf_document:
     toc: no
@@ -12,90 +12,29 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-d <- c(F, T, F)
 ```
 
-# Data set L+`r paste(which(d))`
+# Choice of data and model parameters
 
-```{r, echo=FALSE}
-# experimental data, set3
-t.exp    <- c(0, 22, 94, 166, 262, 358, 430, 526)
-CH4.exp  <- c(23.66, 23.48, 21.22, 19.77, 16.41, 14.58, 13.43, 10.87)
-CO2.exp  <- c(2.96, 3.74, 11.86, 15.38, 17.68, 20.69, 23.54, 24.17)
-xCO2.exp <- c(NA, 9.46, 10.40, 13.81, 16.32, 17.62, 18.24, 18.91)*1e-2
-DATA3     <- data.frame(time = t.exp, CH4 = CH4.exp, CO2 = CO2.exp, xCO2 = xCO2.exp)
+```{r}
+dataset <- 3
+d       <- c(dataset==1, dataset==2, dataset==3)
 ```
 
-```{r, echo=FALSE}
-# experimental data, set2
-t.exp    <- c(0, 22, 94, 166, 262, 358, 430, 526)
-CH4.exp  <- c(23.80, 23.00, 20.28, 19.10, 14.89, 11.98, 10.73, 9.38)
-CO2.exp  <- c(2.00, 4.87, 9.67, 12.20, 14.10, 16.05, 18.87, 21.71)
-xCO2.exp <- c(NA, 15.95, 16.37, 19.70, 23.30, 23.86, 23.56, 23.22)*1e-2
-DATA2     <- data.frame(time = t.exp, CH4 = CH4.exp, CO2 = CO2.exp, xCO2 = xCO2.exp)
-```
+# All data sets and default model parameters
 
-```{r, echo=FALSE}
+## Data set 1
+
+```{r}
 # experimental data, set1
 t.exp    <- c(0, 22, 94, 166, 262, 358, 430, 526)
 CH4.exp  <- c(22.18, 21.74, 20.08, 18.46, 14.08, 11.31, 10.20, 8.91)
 CO2.exp  <- c(2.95, 4.51, 10.10, 12.10, 13.03, 14.04, 17.35, 17.95)
 xCO2.exp <- c(NA, 12.90, 17.65, 21.60, 24.83, 26.26, 27.21, 28.10)*1e-2
 DATA1     <- data.frame(time = t.exp, CH4 = CH4.exp, CO2 = CO2.exp, xCO2 = xCO2.exp)
-```
 
-```{r, eval=d[3], echo=d[3]}
 # default model parameters
-pars <- c(
-  CH4.ini    = 23.65,     # all values in umol/bottle
-  CO2.ini    = 2.96,
-  Cdead.ini  = 11.63-2.96,
-  Clive.ini  = 1,         # arbitrary
-  rMO        = 0.0245,    # CH4 removal rate (umol/bottle/h),
-  kMin       = 3*3/530,   # mineralization of dead biomass (/h)
-  eff        = 0,         # assimilation efficiency
-  xCH4.src   = 0.278,
-  xCdead.src = 0.13,
-  xCO2.ini   = 0.01,
-  xClive.ini = 0.01
-)
-# sensitivity analysis
-p0 <- p1 <- p2 <- p3 <- pars3 <- pars
-p1["Cdead.ini"] <- 0
-p1["xCH4.src"]  <- 0.23
-p2["eff"]       <- 0.7
-p2["xCH4.src"]  <- 0.5
-p3["xCH4.src"]  <- 0.5
-DATA <- DATA3
-```
-
-```{r, eval=d[2], echo=d[2]}
-# default model parameters
-pars <- c(
-  CH4.ini    = 23.80,   # all values in umol/bottle
-  CO2.ini    = 2.0,
-  Cdead.ini  = 6.2,
-  Clive.ini  = 1,
-  rMO        = 0.031,  # CH4 removal rate (umol/bottle/h),
-  kMin       = 3*3/530, # mineralization of dead biomass (/h)
-  eff        = 0.2,    # assimilation efficiency
-  xCH4.src   = 0.26,     #0.41,
-  xCdead.src = 0.27,     #0.23,
-  xCO2.ini   = 0.01,
-  xClive.ini = 0.01
-)
-# sensitivity analysis
-p0 <- p1 <- p2 <- p3 <- pars2 <- pars
-p1["Cdead.ini"]  <- 0
-p1["xCH4.src"]   <- 0.28
-p2["eff"]        <- 0.0
-p3["xCH4.src"]   <- 0.5
-DATA <- DATA2
-```
-
-```{r, eval=d[1], echo=d[1]}
-# default model parameters
-pars <- c(
+pars1 <- c(
   CH4.ini    = 22.18,   # all values in umol/bottle
   CO2.ini    = 2.95,
   Cdead.ini  = 1.15*8.69-2.95,
@@ -108,19 +47,63 @@ pars <- c(
   xCO2.ini   = 0.01,
   xClive.ini = 0.01
 )
-# sensitivity analysis
-p0 <- p1 <- p2 <- p3 <- pars1 <- pars
-p1["Cdead.ini"]  <- 0
-p1["xCH4.src"]   <- 0.4
-p2["eff"]        <- 0.0
-p2["xCH4.src"]   <- 0.38
-p3["xCH4.src"]   <- 0.4
-p3["xCdead.src"] <- 0.26
-DATA <- DATA1
 ```
 
-```{r, echo=FALSE}
+## Data set 2
+
+```{r}
+# experimental data, set2
+t.exp    <- c(0, 22, 94, 166, 262, 358, 430, 526)
+CH4.exp  <- c(23.80, 23.00, 20.28, 19.10, 14.89, 11.98, 10.73, 9.38)
+CO2.exp  <- c(2.00, 4.87, 9.67, 12.20, 14.10, 16.05, 18.87, 21.71)
+xCO2.exp <- c(NA, 15.95, 16.37, 19.70, 23.30, 23.86, 23.56, 23.22)*1e-2
+DATA2     <- data.frame(time = t.exp, CH4 = CH4.exp, CO2 = CO2.exp, xCO2 = xCO2.exp)
+
+# default model parameters
+pars2 <- c(
+  CH4.ini    = 23.80,   # all values in umol/bottle
+  CO2.ini    = 2.0,
+  Cdead.ini  = 6.2,
+  Clive.ini  = 1,
+  rMO        = 0.031,  # CH4 removal rate (umol/bottle/h),
+  kMin       = 3*3/530, # mineralization of dead biomass (/h)
+  eff        = 0.2,    # assimilation efficiency
+  xCH4.src   = 0.26,     #0.41,
+  xCdead.src = 0.27,     #0.23,
+  xCO2.ini   = 0.01,
+  xClive.ini = 0.01
+)
+```
+
+## Data set 3
+
+```{r}
+# experimental data, set3
+t.exp    <- c(0, 22, 94, 166, 262, 358, 430, 526)
+CH4.exp  <- c(23.66, 23.48, 21.22, 19.77, 16.41, 14.58, 13.43, 10.87)
+CO2.exp  <- c(2.96, 3.74, 11.86, 15.38, 17.68, 20.69, 23.54, 24.17)
+xCO2.exp <- c(NA, 9.46, 10.40, 13.81, 16.32, 17.62, 18.24, 18.91)*1e-2
+DATA3     <- data.frame(time = t.exp, CH4 = CH4.exp, CO2 = CO2.exp, xCO2 = xCO2.exp)
+
+# default model parameters
+pars3 <- c(
+  CH4.ini    = 23.65,     # all values in umol/bottle
+  CO2.ini    = 2.96,
+  Cdead.ini  = 11.63-2.96,
+  Clive.ini  = 1,         # arbitrary
+  rMO        = 0.0245,    # CH4 removal rate (umol/bottle/h),
+  kMin       = 3*3/530,   # mineralization of dead biomass (/h)
+  eff        = 0,         # assimilation efficiency
+  xCH4.src   = 0.278,
+  xCdead.src = 0.13,
+  xCO2.ini   = 0.01,
+  xClive.ini = 0.01
+)
+```
+
 # Model function
+
+```{r}
 C13model <-function(t, state, parms) { 
   with (as.list(c(state, parms)),{
  
@@ -151,7 +134,7 @@ C13model <-function(t, state, parms) {
   })
 }
 
-# calculate initial state from the model parameters
+# function for calculating initial state from model parameters
 state.ini <- function(parms){
   with(as.list(parms), {
   c(CH4   = CH4.ini,   CH4_C13   = CH4.ini*xCH4.src,
@@ -162,8 +145,46 @@ state.ini <- function(parms){
 }
 ```
 
-```{r, echo=FALSE, message=FALSE}
-# solve the model
+# Selected data set: L+`r paste(which(d))`
+
+```{r, echo=FALSE}
+if (d[1]){ DATA <- DATA1; pars <- pars1 }
+if (d[2]){ DATA <- DATA2; pars <- pars2 }
+if (d[3]){ DATA <- DATA3; pars <- pars3 }
+```
+
+## Model parameters for sensitivity analysis
+
+```{r, eval=d[1], echo=d[1]}
+p0 <- p1 <- p2 <- p3 <- pars
+p1["Cdead.ini"]  <- 0
+p1["xCH4.src"]   <- 0.4
+p2["eff"]        <- 0.0
+p2["xCH4.src"]   <- 0.38
+p3["xCH4.src"]   <- 0.4
+p3["xCdead.src"] <- 0.26
+```
+
+```{r, eval=d[2], echo=d[2]}
+p0 <- p1 <- p2 <- p3 <- pars
+p1["Cdead.ini"]  <- 0
+p1["xCH4.src"]   <- 0.28
+p2["eff"]        <- 0.0
+p3["xCH4.src"]   <- 0.5
+```
+
+```{r, eval=d[3], echo=d[3]}
+p0 <- p1 <- p2 <- p3 <- pars
+p1["Cdead.ini"] <- 0
+p1["xCH4.src"]  <- 0.23
+p2["eff"]       <- 0.7
+p2["xCH4.src"]  <- 0.5
+p3["xCH4.src"]  <- 0.5
+```
+
+## Solve the model
+
+```{r, message=FALSE}
 require(deSolve)
 outtimes <- seq(from = 0, to = 530, length.out = 100)
 out0 <- ode(y = state.ini(p0), parms = p0, func = C13model, times = outtimes)
@@ -172,7 +193,9 @@ out2 <- ode(y = state.ini(p2), parms = p2, func = C13model, times = outtimes)
 out3 <- ode(y = state.ini(p3), parms = p3, func = C13model, times = outtimes)
 ```
 
-```{r, eval=FALSE, echo=FALSE, fig.height = 6, fig.width = 8, fig.align='center'}
+## Full model results
+
+```{r, echo=FALSE, fig.height = 7, fig.width = 8, fig.align='center'}
 # display complete output (for debugging)
 plot(out0, out1, out2, out3,
      which = c("CH4", "CO2", "Cdead", "Clive",
@@ -181,29 +204,40 @@ plot(out0, out1, out2, out3,
      xlab="time (h)", lty=1, lwd=c(1,2,1,2), mfrow=c(3,4))
 ```
 
+## Model results with experimental data
+
 ```{r, fig.height = 3, fig.width = 8, fig.align='center', echo=FALSE}
 # display exp. data and model predictions
 plot(out0, out1, out2, out3, 
-     # obs = list(DATA1, DATA2, DATA3), 
-     # obspar = list(pch=16, col=1:3),
      obs = DATA,
      obspar = list(pch=16, col=which(d)),
      mfrow=c(1,3), lty=c(1,2,1,2), lwd=c(1,2,1,2))
 legend("bottomright", legend=0:3, lty=c(1,2,1,2), lwd=c(1,2,1,2), col=1:4)
 ```
 
-```{r, echo=FALSE, message=FALSE}
-outtimes <- seq(from = 0, to = 530, length.out = 100)
+# All experimental data and model results
+
+```{r, message=FALSE, echo=FALSE}
 out1 <- ode(y = state.ini(pars1), parms = pars1, func = C13model, times = outtimes)
 out2 <- ode(y = state.ini(pars2), parms = pars2, func = C13model, times = outtimes)
 out3 <- ode(y = state.ini(pars3), parms = pars3, func = C13model, times = outtimes)
+pars1_50 <- pars1; pars1_50["xCH4.src"] <- 0.5
+pars2_50 <- pars2; pars2_50["xCH4.src"] <- 0.5
+pars3_50 <- pars3; pars3_50["xCH4.src"] <- 0.5
+out1_50 <- ode(y = state.ini(pars1_50), parms = pars1_50, func = C13model, times = outtimes)
+out2_50 <- ode(y = state.ini(pars2_50), parms = pars2_50, func = C13model, times = outtimes)
+out3_50 <- ode(y = state.ini(pars3_50), parms = pars3_50, func = C13model, times = outtimes)
 ```
 
 ```{r, fig.height = 3, fig.width = 8, fig.align='center', echo=FALSE}
 # display exp. data and model predictions
-plot(out1, out2, out3, 
+plot(out1, out2, out3, out1_50, out2_50, out3_50,
      obs = list(DATA1, DATA2, DATA3), 
      obspar = list(pch=16, col=1:3),
-     mfrow=c(1,3), lty=1, lwd=2)
-legend("bottomright", legend=0:3, lty=1, lwd=2, col=1:3)
+     mfrow=c(1,3), lty=c(1,1,1,2,2,2), col=c(1,2,3,1,2,3), lwd=1)
+legend("bottomright", legend=1:3, lty=1, lwd=2, col=1:3)
 ```
+
+# Reference
+
+- Rob J. M. van Spanning, Qingtian Guan, Chrats Melkonian, James Gallant, Lubos Polerecky, Jean-François Flot, Bernd W. Brandt, Martin Braster, Paul Iturbe Espinoza, Joost W. Aerts, Marion M. Meima-Franke, Sander R. Piersma, Catalin M. Bunduc, Roy Ummels, Arnab Pain, Emily J. Fleming, Nicole N. van der Wel, Vasile D. Gherman, Serban M. Sarbu, Paul L. E. Bodelier, and Wilbert Bitter (2022) *Methanotrophy by a Mycobacterium species that dominates a cave microbial ecosystem.* **Nature Microbiology 7**, 2089–2100. https://doi.org/10.1038/s41564-022-01252-3
