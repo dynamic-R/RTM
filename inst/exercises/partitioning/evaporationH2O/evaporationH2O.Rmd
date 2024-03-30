@@ -1,0 +1,34 @@
+---
+title: "Evaporation and precipitation of water"
+subtitle: "Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
+author: "Lubos Polerecky, Utrecht University"
+date: "January 2022"
+abstract: \noindent Consider a water body surrounded by air. If the relative humidity of the air is below 100%, water will evaporate. In contrast, if the relative air humidity exceeds 100%, which occurs, for instance, when air with a given water vapor content sufficiently cools down, water will precipitate from the gas phase to form a liquid. In both cases, the process will continue until an equilibrium is reached, i.e., until the relative air humidity reaches 100%. In this reader, we will show how these processes can be modeled in R.
+output: 
+  pdf_document:
+    toc: no
+  html_document:
+    toc: yes
+    df_print: paged
+  header-includes: 
+    \usepackage{float} 
+    \floatplacement{figure}{ht}
+---
+
+```{r child = 'evaporationH2O_Q.Rmd'}
+```
+
+\newpage
+```{r child = 'evaporationH2O_A.Rmd'}
+```
+
+# References
+
+R Core Team (2020). R: A language and environment for statistical computing. R Foundation for
+  Statistical Computing, Vienna, Austria. URL https://www.R-project.org/.
+  
+Karline Soetaert, Thomas Petzoldt, R. Woodrow Setzer (2010). Solving Differential Equations in R:
+  Package deSolve. Journal of Statistical Software, 33(9), 1--25. URL
+  http://www.jstatsoft.org/v33/i09/ DOI 10.18637/jss.v033.i09
+
+Carrier W. H. (1918). “The Temperature of Evaporation,” Trans. Am. Soc. Heat. Vent. Eng., vol. 24, p. 25.

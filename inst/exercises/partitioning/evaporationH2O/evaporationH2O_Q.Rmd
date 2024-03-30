@@ -1,0 +1,132 @@
+---
+title: "Evaporation and precipitation of water"
+subtitle: "Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
+author: "Lubos Polerecky, Utrecht University"
+date: "January 2022"
+output: pdf_document
+---
+
+# Theoretical background
+
+Consider a closed container filled with water and air (Figure 1). The volume and amount of water in the liquid phase are $V_{liq}$ ($m^3$) and $N_{liq}$ ($mol$), respectively. The gas phase has a volume $V_{gas}$ and contains a mixture of air (amount $N_{air}$) and water vapor (amount $N_{vap}$). The liquid water can evaporate to form water vapor, and vice versa, water vapor can precipitate to form liquid water. These processes occur across the liquid-gas boundary (area $A_{liq}$). 
+
+![Gas-tight container filled with liquid water and moist air.](liquid_vapor.pdf){width=30%}
+
+In the first approximation, precipitation is assumed to be described by *first-order* kinetics, i.e., the rate is linearly proportional to $N_{vap}$ (more specifically to the concentration of water vapor molecules, $N_{vap}/V_{gas}$), whereas evaporation is assumed to follow *zero-order* kinetics, i.e., the rate is independent of $N_{vap}$ (as long as the liquid water is present). Additionally, because the exchange of water molecules occurs at the interface between the liquid and gas phase, both rates are assumed to be proportional to $A_{liq}$. Thus, the change over time in the number of water vapor molecules above the liquid is described by the following differential equation:
+\begin{equation}
+\label{eq1}
+\frac{dN_{vap}}{dt} = k_f\cdot A_{liq} 
+  - k_b\cdot A_{liq} \cdot \frac{N_{vap}}{V_{gas}},
+\end{equation}
+where the rate constants $k_f$ (in $mol~m^{-2}~s^{-1}$) and $k_b$ (in $m~s^{-1}$) correspond to the forward (evaporation) and backward (precipitation) reaction, respectively. Considering that the system is closed, the total amount of water molecules must be conserved. Thus, the amount of molecules of liquid water changes over time at the same rate as the amount of vapor molecules but with the opposite sign:
+
+\begin{equation}
+\label{eq2}
+\frac{dN_{liq}}{dt} = - \frac{dN_{vap}}{dt}.
+\end{equation}
+
+When the time derivative $dN_{vap}/dt$ is equal to zero, the system reaches an equilibrium. Equation 1 implies that the corresponding equilibrium concentration of vapor molecules is equal to the ratio between the rate constants for the forward and backward reaction:\footnote{In this document, values of variables in a thermodynamic equilibrium are marked with an asterisk ($*$).} 
+\begin{equation}
+\label{eq3}
+\frac{dN_{liq}}{dt} = 0 \quad\rightarrow\quad
+\left( \frac{N_{vap}}{V_{gas}}\right)^* = \frac{k_f}{k_b}.
+\end{equation}
+Using this equilibrium concentration, Eq. 1 can be rewritten in the following form:
+\begin{equation}
+\label{eq4}
+\frac{dN_{liq}}{dt} = - \frac{dN_{vap}}{dt} = k_b\cdot A_{liq} \cdot
+\left[ \left(\frac{N_{vap}}{V_{gas}}\right)^* - 
+\left(\frac{N_{vap}}{V_{gas}}\right) \right].
+\end{equation}
+Thus, the process of evaporation and precipitation can be thought of as being driven by a chemical disequilibrium, i.e., the net rate of exchange of water molecules between the liquid and gas phase is proportional to the difference between the equilibrium and instantaneous concentration of vapor molecules above the liquid.
+
+## Reformulation of the equations using vapor pressure
+
+If water vapor behaves as an ideal gas, the concentration of water vapor molecules is related to the vapor pressure, $P_{vap}$, through the ideal gas law,
+\begin{equation}
+\label{eq5}
+\frac{N_{vap}}{V_{gas}} = \frac{P_{vap}}{R\cdot T},
+\end{equation}
+where $R=8.314~J~K^{-1}~mol^{-1}$ is the gas constant, and $T$ is the vapor temperature (in $K$). Using this relationship, Eq. 4 can be rewritten in the form
+\begin{equation}
+\label{eq6}
+\frac{dN_{vap}}{dt} = \frac{k_b}{R\cdot T} \cdot A_{liq}\cdot \left( P_{vap}^* - P_{vap} \right),
+\end{equation}
+where $P_{vap}^*$ denotes the equilibrium vapor pressure.\footnote{$P_{vap}^*$ is related to the equilibrium concentration $(N_{vap}/V_{gas})^*$ through the ideal gas law (Eq. 5).} This form is equivalent to the empirical relationship developed by Carrier (1918) to describe water evaporation and precipitation: 
+\begin{equation}
+\label{eq7}
+\frac{dN_{vap}}{dt} = \frac{c_1 + c_2\cdot v}{\Delta\bar{H}_{vap}} \cdot A_{liq}\cdot \left( P_{vap}^* - P_{vap} \right),
+\end{equation}
+where $\Delta \bar{H}_{vap}$ is the molar enthalpy of vaporization of water ($\approx 40.66~kJ~mol^{-1}$), $v$ is the wind velocity (in $m~s^{-1}$), and $c_1 = 0.0888~m~s^{-1}$ and $c_2=0.0783$ are empirical constants. 
+
+By comparing Eqs. 6 and 7, we see that the precipitation rate constant $k_b$ in Eq. 1 can be calculated from the empirical constants $c_1$ and $c_2$ according to
+\begin{equation}
+\label{eq8}
+k_b = \frac{R\cdot T}{\Delta \bar{H}_{vap}}\cdot (c_1+c_2\cdot v).
+\end{equation}
+Additionally, by combining this result with Eqs. 3 and 5, the evaporation rate constant $k_f$ in Eq. 1 can be calculated from $k_b$, temperature, and the equilibrium vapor pressure according to 
+\begin{equation}
+\label{eq9}
+k_f = k_b \cdot \frac{P_{vap}^*}{R\cdot T}.
+\end{equation}
+
+## Equilibrium vapor pressure
+
+The equilibrium vapor pressure depends on the temperature of the system comprising liquid water and water vapor and can be calculated if the temperature is known. For example, we know that water boils at a temperature of $100~^\circ C$ when the external pressure is $1~atm$. Thus, the equilibrium vapor pressure at a temperature of $T_{boil} = 373.15~K$ is $P_{vap}^*(T_{boil}) = 1~atm = 101325~Pa$. At any other temperature, $T$, the equilibrium vapor pressure is calculated using the Clausius-Clapeyron equation:
+\begin{equation}
+\label{eq10}
+\ln\left[\frac{P_{vap}^*(T)}{P_{vap}^*(T_{boil})}\right] =
+-\frac{\Delta \bar{H}_{vap}}{R}\cdot \left(\frac{1}{T} - \frac{1}{T_{boil}}\right).
+\end{equation}
+This result follows from equilibrium thermodynamics and assumes that the molar enthalpy of vaporisation of water, $\Delta \bar{H}_{vap}$, is temperature-independent.
+
+## Molar fraction and partial pressure
+
+When dealing with mixtures, properties of individual components in the mixture are described by *partial molar* quantities. One of the most basic partial molar quantities is *molar fraction*, typically denoted by $x$. For a component $A$, this quantity is defined as the ratio between the amount of component $A$ and the total amount of the mixture (both amounts are in moles):
+\begin{equation}
+\label{eq11}
+x_A = N_A / N_{tot}\quad (mol~mol^{-1}).
+\end{equation}
+
+When dealing with gas mixtures, such as atmospheric air, individual components are typically characterized by another quantity: *partial pressure*. If a mixture behaves as an ideal gas, partial pressures are *additive*. Thus, partial pressure of an individual component is equal to the product of the total pressure, $P_{tot}$, and the molar fraction of that component: $P_A=x_A\cdot P_{tot}$. Because moist air at typical conditions behaves as an ideal gas, partial pressure of water vapor is calculated as
+\begin{equation}
+\label{eq12}
+P_{vap} = x_{vap}\cdot P_{air},
+\end{equation}
+where $x_{vap}$ is the molar fraction of water vapor in air and $P_{air}$ is the total air pressure. For example, if the total air pressure is $1~atm$ and 1 in every 1000 molecules of air is water, the molar fraction of water vapor is $x_{vap}=0.001$ and the corresponding partial pressure of water vapor is $P_{vap}= 1~matm$.
+
+## Relative air humidity
+
+Rather than using a molar fraction, the water content of air is very often expressed in terms of a *relative humidity*, $\phi$. This quantity is defined as the ratio between the vapor pressure and the equilibrium vapor pressure. Thus, if the relative humidity of air is known, the vapor pressure is calculated according to
+\begin{equation}
+\label{eq13}
+P_{vap} = \phi \cdot P_{vap}^*.
+\end{equation}
+
+Because the molar fraction of water vapor in air and the relative humidity of air are relative quantities, they are often expressed in %. This can cause confusion. We emphasize here that these two quantities are fundamentally different: while the molar fraction of water vapor in air is the ratio between the vapor pressure and the *total* air pressure (Eq. 12), the relative humidity of air is the ratio between the vapor pressure and the *equilibrium* vapor pressure (Eq. 13).
+
+# Task 1
+
+Calculate the equilibrium vapor pressure, $P_{vap}^*$, for temperatures of $10~^\circ C$, $20~^\circ C$, and $50~^\circ C$. What are the corresponding vapor pressures, $P_{vap}$, and molar fractions, $x_{vap}$, if the total air pressure is $0.95~atm$ and the relative air humidity is 80 %?
+
+# Task 2
+
+Consider a closed container filled with liquid water and moist air (Figure 1). Initially, the volume of the liquid water is $V_{liq} = 1~L$, the total volume of the container ($V_{liq}+V_{gas}$) is $1~m^3$, and the relative air humidity is 0 % (dry air). The system is kept at a constant temperature of $20~^\circ C$ for $0.5~hr$. Then, the system is cooled and kept at a constant temperature of $10~^\circ C$ for another $0.5~hr$. Through the entire process the system is kept at a constant pressure of $1~atm$.
+
+* Write a model that calculates the amount of water vapor above the liquid water as a function of time. Express this amount in moles, as a molar fraction, and as a relative air humidity. 
+
+* Evaluate the gross and net amounts of water transferred between the liquid and gas phase during the first and second half-hour intervals.
+
+## Assumptions
+
+* Area of the liquid water surface is constant ($A_{liq} = 1~m^2$). 
+
+* Air is stagnant. Thus, you can assume the wind velocity of $v=0$ (see Eq. 7 and 8).
+
+* Dissolution in water of air components such as $N_2$ or $O_2$ can be ignored.
+
+* The air and water vapor behave as an ideal gas. Since the total pressure of the gas phase and the temperature of the entire system are kept constant, the evaporation and precipitation processes as well as the isobaric cooling phase will lead to a volume change for the liquid water, the gas phase (air + water vapor), as well as the total volume (liquid + gas phase). Except for the change in volume of the liquid water during cooling, these changes cannot be neglected. You can assume that the walls of the container are *flexible* to allow for such changes to occur without the need to perform an extra work.
+
+* To evaporate $N$ moles of water at a constant pressure and temperature, a certain amount of heat is required ($q=N\cdot \Delta\bar{H}_{vap}$). You can assume that this heat is *supplied externally* such that the pressure and temperature of the system *can* remain constant during the modeled time interval. Similarly, you can assume that the heat produced during precipitation is transferred to the surrounding. The cooling from $20~^\circ C$ to $10~^\circ C$ is also done by transferring heat to the surrounding.
+
+* The liquid and gas phases are well mixed (i.e., homogeneous). Thus, you can ignore transport processes and base your model entirely on mass balances (Eqs. 1 and 2) and the ideal gas law (Eq. 5).

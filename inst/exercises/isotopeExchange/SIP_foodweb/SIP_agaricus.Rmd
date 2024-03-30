@@ -1,0 +1,186 @@
+---
+title: "Foodweb associated with *Agaricus bisporus*"
+author: "Lubos Polerecky"
+date: "19-09-2022"
+abstract: "\\noindent Model of the flow of carbon isotopes during an isotope labeling experiment designed to probe the foodweb in a compost inhabited by *Agaricus bisporus*. (Work in progress.)"
+output:
+  pdf_document:
+    toc: no
+  word_document:
+    toc: no
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, eval = TRUE, cache = FALSE, echo = TRUE, warning=FALSE, message=FALSE}
+
+tmax <- 1*21
+C.com.ini <- 1e3 # compost
+x.ini <- 0.01
+
+eff.glu2bac    <- 0.5
+m.bac          <- 0.2/2
+eff.glu2fun    <- 0.5
+m.fun          <- 0.1/2
+r.comp2glu.fun <- 0.1*3.25
+eff.glu2aga <- 0.5
+
+# calculate rate constants and initial bac population based on the assumption
+# of a steady state. assume specific initial fun and glu pool sizes
+C.fun.ini <- 1
+C.glu.ini <- 0.2
+r.glu2bac <- m.bac/(eff.glu2bac*C.glu.ini)
+r.glu2fun <- m.fun/(eff.glu2fun*C.glu.ini)
+C.bac.ini <- (r.comp2glu.fun*C.fun.ini - r.glu2fun*C.fun.ini*C.glu.ini) / 
+             (r.glu2bac*C.glu.ini)
+
+# this is now the concentration and atom fraction of the initial glu pool,
+# after the addition of 13C-glu.
+x.glu.ini <- 0.2
+C.glu.ini <- 0.25 # a little more than 0.2 above
+
+# Model parameters
+pars <- c(
+  r.glu2aga = 0,
+  r.comp2glu.aga = 0,
+  K.aga = 20
+)
+
+# Model function: calculates time-derivatives and other output
+Agaricus.model <-function(t, state, pars) { 
+  # t: time, state: state variables, pars: model parameters
+  with (as.list(c(state, pars)),{
+ 
+  x.aga  <- C13.aga/C.aga
+  x.fun  <- C13.fun/C.fun
+  x.glu  <- C13.glu/C.glu
+  x.bac  <- C13.bac/C.bac
+  x.com  <- C13.com/C.com
+  
+  # production of glu by agaricus from compost
+  glu.production <- r.comp2glu.aga * C.aga + r.comp2glu.fun * C.fun
+  
+  
+  # removal of glu by agaricus, fungus, and bacteria leads to their growth
+  # as well as production of CO2
+  uptake.bac <- r.glu2bac * C.bac * C.glu
+  death.bac  <- m.bac * C.bac
+  
+  uptake.fun <- r.glu2fun * C.fun * C.glu
+  death.fun  <- m.fun * C.fun
+  
+  # rate constant of agaricus increases from 0 to the full potential is delayed
+  # -> lag-phase
+  #r.glu2aga.t <- r.glu2aga * (1 - 1/(1+exp((t-4)/0.5)))
+  #uptake.aga <- r.glu2aga.t * C.aga * C.glu
+  # different approach: logistic growth of agaricus (Robert-Jan's data)
+  uptake.aga <- r.glu2aga * C.aga * (1-C.aga/K.aga)
+  r.glu2aga.t <- r.glu2aga
+
+  dCdt.bac   <- uptake.bac * eff.glu2bac       - death.bac
+  d13Cdt.bac <- uptake.bac * eff.glu2bac*x.glu - death.bac*x.bac
+  dCdt.fun   <- uptake.fun * eff.glu2fun       - death.fun
+  d13Cdt.fun <- uptake.fun * eff.glu2fun*x.glu - death.fun*x.fun
+  
+  dCdt.com   <- -glu.production
+  d13Cdt.com <- -glu.production * x.com
+  
+  dCdt.glu   <- (glu.production 
+                 - uptake.aga - uptake.bac - uptake.fun)
+  d13Cdt.glu <- (glu.production*x.com 
+                 - uptake.aga*x.glu - uptake.bac*x.glu - uptake.fun*x.glu)
+  dCdt.aga   <- uptake.aga       * eff.glu2aga
+  d13Cdt.aga <- uptake.aga*x.glu * eff.glu2aga
+  dCdt.CO2   <- uptake.aga * (1-eff.glu2aga) + 
+                uptake.bac * (1-eff.glu2bac) + 
+                uptake.fun * (1-eff.glu2fun)
+  d13Cdt.CO2 <- uptake.aga*x.glu * (1-eff.glu2aga) + 
+                uptake.bac*x.glu * (1-eff.glu2bac) +
+                uptake.fun*x.glu * (1-eff.glu2fun)
+
+  list(
+    c(dCdt.com, d13Cdt.com, 
+      dCdt.glu, d13Cdt.glu, 
+      dCdt.aga, d13Cdt.aga, 
+      dCdt.bac, d13Cdt.bac,
+      dCdt.fun, d13Cdt.fun,
+      dCdt.CO2, d13Cdt.CO2), 
+      C.tot = C.com + C.glu + C.aga + C.bac + C.fun + C.CO2,
+      C13.tot = C13.com + C13.glu + C13.aga + C13.bac + C13.fun + C13.CO2,
+      x.aga  = x.aga,
+      x.glu  = x.glu,
+      x.bac  = x.bac,
+      x.fun  = x.fun,
+      x.com  = x.com,
+      glu.production = glu.production,
+      growth.aga     = uptake.aga * eff.glu2aga,
+      growth.bac     = uptake.bac * eff.glu2bac,
+      growth.fun     = uptake.fun * eff.glu2fun,
+      r.glu2aga.t = r.glu2aga.t
+      )
+  })
+}
+```
+
+```{r, message=FALSE}
+require(deSolve)  # package with integration methods
+
+# integrate the model with the new parameters
+outtimes <- seq(from = 0, to = tmax, length.out = 100)
+
+# default initial condition
+yini <- c(C.com = C.com.ini, C13.com = x.ini*C.com.ini,
+          C.glu = C.glu.ini, C13.glu = x.glu.ini*C.glu.ini, 
+          C.aga = 1e-9, C13.aga = x.ini*1e-9, 
+          C.bac = C.bac.ini, C13.bac = x.ini*C.bac.ini, 
+          C.fun = C.fun.ini, C13.fun = x.ini*C.fun.ini,
+          C.CO2 = 0, C13.CO2 = 0)
+
+# scenarios
+
+# default (steady state)
+yini1 <- yini
+pars1 <- pars
+
+# add glu production by agaricus, but no growth
+yini2 <- yini
+yini2["C.aga"] <- 0.01
+yini2["C13.aga"] <- 0.01*x.ini
+pars2 <- pars1
+pars2["r.comp2glu.aga"] <- 50
+
+# add growth of agaricus
+yini3 <- yini2
+pars3 <- pars2
+pars3["r.glu2aga"] = 0.1*2
+
+out1 <- ode(y = yini1, parms = pars1, func = Agaricus.model, times = outtimes)
+out2 <- ode(y = yini2, parms = pars2, func = Agaricus.model, times = outtimes)
+out3 <- ode(y = yini3, parms = pars3, func = Agaricus.model, times = outtimes)
+
+```
+
+\newpage
+
+```{r, fig.height = 4, fig.width = 8, fig.align='center', echo=FALSE}
+# total C pools
+plot(out1,out2,out3, xlab="time (d)", lwd=2, lty=c(1,2,4),
+     which = c("C.glu", "C.aga", "C.bac", "C.fun", "C.CO2", "C.tot"))
+```
+
+```{r, eval=FALSE, echo=FALSE, fig.height = 5, fig.width = 8, fig.align='center'}
+# 13C pools
+plot(out1,out2,out3, xlab="time (d)", lwd=2, lty=c(1,2,4),
+     which = c("C13.glu", "C13.aga", "C13.bac", "C13.fun", "C13.CO2", "C13.tot"))
+```
+
+```{r, fig.height = 6, fig.width = 8, fig.align='center', echo=FALSE}
+# 13C atom fractions
+plot(out1,out2,out3, xlab="time (d)", lwd=2, lty=c(1,2,4),
+     which = c("x.glu", "x.aga", "x.bac", "x.fun", "r.glu2aga.t",
+               "glu.production","growth.bac","growth.fun","growth.aga"), mfrow=c(3,3))
+print(c(r.comp2glu.fun*C.fun.ini, r.glu2fun*C.fun.ini*C.glu.ini))
+```
+

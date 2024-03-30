@@ -6,9 +6,9 @@ subtitle: "Exercises Accompanying the Course Reaction Transport Modelling in the
 author: "Lubos Polerecky and Karline Soetaert, Utrecht University"
 date: "February 2021"
 output:
+  html_document: default
   pdf_document:
     number_sections: true
-  html_document: default
 ---
 
 ```{r child = 'equilibriumHCO3_Q.Rmd'}
