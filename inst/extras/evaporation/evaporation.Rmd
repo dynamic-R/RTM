@@ -15,10 +15,10 @@ output:
     \floatplacement{figure}{ht}
 ---
 
-```{r child = 'evaporationH2O_Q.Rmd'}
+```{r child = 'evaporation_Q.Rmd'}
 ```
 
-```{r child = 'evaporationH2O_A.Rmd'}
+```{r child = 'evaporation_A.Rmd'}
 ```
 
 # References
