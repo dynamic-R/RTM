@@ -4,6 +4,7 @@ subtitle: "Exercises Accompanying the Course Reaction Transport Modelling in the
 author: "Lubos Polerecky, Utrecht University"
 date: "January 2022"
 output: pdf_document
+linestretch: 1.15
 ---
 
 ```{r setup, include=FALSE}

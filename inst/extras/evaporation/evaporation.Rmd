@@ -13,6 +13,7 @@ output:
   header-includes: 
     \usepackage{float} 
     \floatplacement{figure}{ht}
+linestretch: 1.15
 ---
 
 ```{r child = 'evaporation_Q.Rmd'}

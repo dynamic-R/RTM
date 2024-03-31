@@ -1,0 +1,30 @@
+---
+title: "18O exchange between water reservoirs"
+subtitle: "Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
+author: "Lubos Polerecky, Utrecht University"
+date: "February 2022"
+output: pdf_document
+header-includes: 
+  \usepackage{float} 
+  \floatplacement{figure}{th}
+  \usepackage{siunitx}
+abstract: \noindent Water molecules continuously exchange between the liquid phase and gas phase due to evaporation and precipitation. Because at a given temperature the lighter ($H_2{}^{16}O$) and heavier ($H_2{}^{18}O$) isotopologues of water move on average at different velocities and experience on average slightly different interactions within the liquid phase, the ${}^{18}O/{}^{16}O$ isotope ratio differs between the water vapor and liquid water. In this reader, we will show how to model the dynamics of this isotope exchange. We will apply the model to study how fast the equilibrium isotope fractionation between the liquid water and water vapor is reached. Additionally, we will apply the model to explore isotope exchange between two isotopically distinct water reservoirs enclosed in a gas-tight container filled with air.
+linestretch: 1.15
+---
+
+```{r child = 'O18exchange_Q.Rmd'}
+```
+
+```{r child = 'O18exchange_A.Rmd'}
+```
+
+# References
+
+R Core Team (2020). R: A language and environment for statistical computing. R Foundation for
+  Statistical Computing, Vienna, Austria. URL https://www.R-project.org/.
+  
+Karline Soetaert, Thomas Petzoldt, R. Woodrow Setzer (2010). Solving Differential Equations in R:
+  Package deSolve. Journal of Statistical Software, 33(9), 1--25. URL
+  http://www.jstatsoft.org/v33/i09/ DOI 10.18637/jss.v033.i09
+
+Carrier W. H. (1918). “The Temperature of Evaporation,” Trans. Am. Soc. Heat. Vent. Eng., vol. 24, p. 25.
