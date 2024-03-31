@@ -93,10 +93,10 @@ RTMexercise <- function(x = c("?",
     "equilibriumOMD", "detritus", "npzd",  "crops_weed", 
     "covid", "virus", "bears_salmon", "plant_coexistence", 
     "hyacinth_algae", "aquaculture", "estuaryAnoxia", 
-    "Pdiagenesis", "diagenesis"), 
+    "Pdiagenesis", "diagenesis", "evaporation", "O18exchange"), 
     type=c("R", "massbalance", "linearmodels", "chemistry", 
            "biogeochemistry", "epidemiology", "ecology", 
-           "individualbased", "reaction_transport"),
+           "individualbased", "reaction_transport", "isotopes"),
             output = c("HTML", "PDF", "RMD", "WORD"))
 RTMexerciseFULL(x=x, type=type, output=output, sub="_Q")
 
@@ -130,10 +130,12 @@ RTMexerciseFULL <- function(x = c("?",
                               "aquaculture", 
                               "estuaryAnoxia", 
                               "Pdiagenesis", 
-                              "diagenesis"), 
+                              "diagenesis",
+                              "evaporation",
+                              "O18exchange"), 
                             type=c("R", "massbalance", "linearmodels", "chemistry", 
                             "biogeochemistry", "epidemiology", "ecology", 
-                            "individualbased", "reaction_transport"),
+                            "individualbased", "reaction_transport", "isotopes"),
                             output = c("HTML", "PDF", "RMD", "WORD"), sub="") {
 
   LL <- as.character(formals(RTMexercise)$x[-(1:2)])
@@ -146,7 +148,8 @@ RTMexerciseFULL <- function(x = c("?",
                   rep("epidemiology", times=2),
                   rep("ecology", times=3),
                   "individualbased",
-                  rep("reaction_transport", times=3))
+                  rep("reaction_transport", times=3),
+                  rep("isotopes", times=2))
     exercise <- data.frame(x=LL, description = 
     c("Introduction to R for modellers",
       "Translating problems into a conceptual diagram", 
@@ -169,7 +172,9 @@ RTMexerciseFULL <- function(x = c("?",
       "Model of scallop aquaculture, including economics",
       "Anoxia in an estuary (1D model)",    
       "Simple phosphorus diagenesis in marine sediments (1D)",
-      "Complex diagenesis in marine sediments (C,O,N,S)"
+      "Complex diagenesis in marine sediments (C,O,N,S)",
+      "Water evaporation and precipitation",
+      "O18 exchange between water reservoirs"
       ),type=subdirectory)
   if (x[1] == "?") {
       return(exercise[exercise$type %in% type,])

@@ -17,23 +17,23 @@ The dissolution rate is expressed in terms of the surface of the spherical parti
 We first use Eq. 2 and calculate $r$ as a function of $C_s$. We obtain
 
 $$
-r = \left( C_{s} \times \frac{V}{N} \times \frac{MW}{\frac{4\pi\rho}{3}}\right)^{1/3}.\qquad (3)
+r = \left( C_{s} \cdot \frac{V}{N} \cdot \frac{MW}{\frac{4\pi\cdot \rho}{3}}\right)^{1/3}.\qquad (3)
 $$
 
 By substituting this expression into Eq. 1  we obtain
 
 $$
-\frac{dC}{dt} = -k_2 \times C_s^{2/3} \times (C-C_{eq}), \qquad (4)
+\frac{dC}{dt} = -k_2 \cdot C_s^{2/3} \cdot (C-C_{eq}), \qquad (4)
 $$
 
 $$
-\frac{dC_s}{dt} = k_2 \times C_s^{2/3} \times (C-C_{eq}), \qquad (5)
+\frac{dC_s}{dt} = k_2 \cdot C_s^{2/3} \cdot (C-C_{eq}), \qquad (5)
 $$
 
 where the modified rate constant $k_2$ is calculated from the original rate constant $k_p$ according to
 
 $$
-k_2 = 4\pi k_p \times \left( \frac{N}{V}\right)^{1/3} \times \left( \frac{MW}{\frac{4}{3}\pi\rho} \right)^{2/3}. \qquad (6)
+k_2 = 4\pi\cdot k_p \cdot \left( \frac{N}{V}\right)^{1/3} \cdot \left( \frac{MW}{\frac{4}{3}\pi\cdot \rho} \right)^{2/3}. \qquad (6)
 $$
 Note that the dissolution/precipitation rate does not linearly depend on the solid silica concentration, but on this quantity raised to the power of 2/3.
 

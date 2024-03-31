@@ -19,7 +19,7 @@ $$ Reaction~1:\quad SiO_2(s) + 2 H_2O \leftrightarrow Si(OH)_4(aq)$$
 
 This reaction is governed by the differential equation
 $$
-\frac{dC_s}{dt} = -\frac{dC}{dt} = k_p \times \frac{A}{V} \times (C-C_{eq}), \qquad (1)
+\frac{dC_s}{dt} = -\frac{dC}{dt} = k_p \cdot \frac{A}{V} \cdot (C-C_{eq}), \qquad (1)
 $$
 where $C$ is the concentration of silicic acid (i.e., dissolved silica), and $C_s$ is the concentration of  solid silica (both in $mol~Si~m^{-3}$). $A$ is the area of the reactive silica surface in a volume of water $V$, $k_p$ is the rate constant of the precipitation reaction, and $C_{eq}$ is the silica solubility.
 
@@ -31,7 +31,7 @@ Our model system contains $N$ spherical silica particles suspended in a volume $
 
 Because the solid silica is in the form of many small spherical particles, the total concentration of solid silica, $C_s$, and the radius of each particle, $r$, are related according to:  
 $$
-C_{s} = \frac{N}{V}\times \frac{4\pi r^3}{3} \frac{\rho}{MW}, \qquad (2)
+C_{s} = \frac{N}{V}\cdot \frac{4\pi\cdot  r^3}{3}\cdot \frac{\rho}{MW}, \qquad (2)
 $$
 where $MW$ and $\rho$ is, respectively, the molar weight (60.08 $g~mol^{-1}$) and the density (2196 $kg~m^{-3}$) of amorphous silica.
 

@@ -216,6 +216,8 @@ To learn more about modelling of partitioning between phases, solve additional e
 ```
 require(RTM)
 RTMexercise("dissolutionSi")
+RTMexercise("evaporation", output="PDF")
+RTMexercise("O18exchange", output="PDF")
 ```
 
 ## Textbook and Slides
