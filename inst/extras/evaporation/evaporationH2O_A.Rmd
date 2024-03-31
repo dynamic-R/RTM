@@ -6,9 +6,16 @@ date: "January 2022"
 output: pdf_document
 ---
 
-# Task 1 --- solution
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+require(deSolve)
+```
 
-First, we implement the Clausius-Clapeyron equation (Eq. 10) to calculate the equilibrium vapor pressure, then use Eq. 13 to calculate the vapor pressure, and finally use Eq. 12 to calculate the molar fraction.
+# Answer
+
+## Task 1
+
+First, we implement the Clausius-Clapeyron equation to calculate the equilibrium vapor pressure (Eq. 9), then use Eq. 12 to calculate the vapor pressure, and finally we use Eq. 11 to calculate the molar fraction.
 ```{r, echo=TRUE, eval=TRUE}
 # implement Clausius-Clapeyron equation
 Peq_vapor <- function(TK=300)   # input temperature in K!
@@ -17,30 +24,31 @@ Peq_vapor <- function(TK=300)   # input temperature in K!
 # conditions
 Pair  <- 0.95*101325            # air pressure, in Pa
 humid <- 0.8                    # relative air humidity
-TK    <- c(10, 20, 50) + 273.15 # temperature, in K
+TC    <- c(10, 20, 50)          # temperature, in degC
+TK    <- TC + 273.15            # temperature, in K
 Peq   <- Peq_vapor(TK)          # equilibrium vapor pressure, in Pa
 Pvap  <- humid*Peq              # vapor pressure, in Pa
 xvap  <- Pvap/Pair              # molar fraction of water vapor
 
 # display results as a data.frame
-data.frame(T_K = TK, Peq_Pascal = Peq, xvap_percent = xvap*100)
+data.frame(T_C = TC, T_K = TK, Peq_Pascal = Peq, xvap_percent = xvap*100)
 ```
 
-The above results show that although the relative air humidity is constant, the molar fraction of water vapor steeply increases with temperature from about 1 % to about 11 %. This increase is caused by the steep increase in the equilibrium vapor pressure with temperature.
+The above results show that although the relative air humidity is constant, the molar fraction of water vapor steeply increases with temperature from about 1% at $10\,^\circ C$ to about 11% at $50\,^\circ C$. This increase is caused by the steep increase in the equilibrium vapor pressure with temperature.
 
-# Task 2 --- solution
+## Task 2
 
-## Model implementation in R
+### Model implementation in R
 
-First, we define model parameters and empirical constants.
+First, we define model parameters and empirical constants. We strictly use SI units for all parameters, except for time, for which we use $hr$ instead of $s$.
 
 ```{r}
 # model parameters
 Aliq     <- 1           # liquid water area (m2) 
 Ptot     <- 101325      # total pressure (Pa)
 wind_v   <- 0           # wind speed (m h-1)
-TK1      <- 293.15      # temperature during first period (K)
-TK2      <- 283.15      # temperature during second period (K)
+TK1      <- 20 + 273.15 # temperature during first period (K)
+TK2      <- 10 + 273.15 # temperature during second period (K)
 
 # empirical constants or parameters
 Rgas     <- 8.314       # gas constant (J mol-1 K-1)
@@ -51,33 +59,33 @@ rho      <- 1e3         # water density (kg m-3)
 MW       <- 18e-3       # molar weight of water (kg mol-1)
 ```
 
-Then, we define auxillary functions for calculating the amounts of water molecules from the volume of the water vapor and liquid, respectively, and the rate constants from the temperature. We use the ``Peq_vapor()`` function defined above.
+Next, we define auxiliary functions for calculating the amounts of water molecules in a given volume of (i) water vapor and (ii) liquid water, and (iii) the rate constants from a given temperature. We use the ``Peq_vapor()`` function defined above.
 
 ```{r}
-Nwater_vapor <- function(humid, TK, V){ # calculate Nvap from volume, T, and humidity
-  humid*Peq_vapor(TK)*V/(TK*Rgas)       # based on the ideal gas law (Eq. 5) and Eq. 13
+Nwater_vapor <- function(humid, TK, Vgas){ # calculate Nvap from volume, T, and humidity
+  humid*Peq_vapor(TK)*Vgas/(TK*Rgas)    # based on the ideal gas law (Eq. 4) and Eq. 12
 }
 
-Nwater_liquid <- function(V){           # calculate Nliq from volume
-  rho*V/MW                              # using density and molar weight
+Nwater_liquid <- function(Vliq){        # calculate Nliq from volume
+  rho*Vliq/MW                           # using density and molar weight
 }
 
 kbT <- function(TK, v=0){               # rate constant of water precipitation (m h-1)
-  Rgas*TK/dHvap*(c1+c2*v)               # Eq. 8
+  Rgas*TK/dHvap*(c1+c2*v)               # Eq. 7
 }
 
 kfT <- function(TK, v=0){               # rate constant of water evaporation (mol m-2 h-1)
-  kbT(TK, v) * Peq_vapor(TK)/(Rgas*TK)  # Eq. 9
+  kbT(TK, v) * Peq_vapor(TK)/(Rgas*TK)  # Eq. 2 and 7
 }
 ```
 
-Finally, we define the model function based on the differential equations 1 and 2. 
+Finally, we define the model function based on the differential equations 1. 
 
 ```{r, eval = TRUE, cache = FALSE, echo = TRUE, warning=FALSE, message=FALSE}
 WaterEvapPrecip <-function(t, state, pars) {
   with (as.list(c(state, pars)),{
     
-    # rate constants at the given temperature (TK given in pars)
+    # rate constants at the given temperature (TK and v given in pars)
     kb <- kbT(TK, v)
     kf <- kfT(TK, v)
     
@@ -95,10 +103,10 @@ WaterEvapPrecip <-function(t, state, pars) {
     dNliq.dt <- -evaporation + precipitation
     
     # extra output quantities 
-    Pvap  <- Nvap/Vgas * Rgas * TK # partial pressure of vapor, Eq. 5
+    Pvap  <- Nvap/Vgas * Rgas * TK # partial pressure of vapor, Eq. 4
     Pair  <- Nair/Vgas * Rgas * TK # partial pressure of air
     Pgas  <- Pvap + Pair           # total pressure of the gas phase
-    humid <- Pvap/Peq_vapor(TK)    # relative air humidity, Eq. 13
+    humid <- Pvap/Peq_vapor(TK)    # relative air humidity, Eq. 12
     Vliq  <- Nliq*MW/rho           # volume of the liquid water
     Vtot  <- Vgas + Vliq           # total volume (liquid + gas)
     
@@ -137,8 +145,6 @@ WaterEvapPrecip <-function(t, state, pars) {
 
 ```
 
-## Model application
-
 ### Initial conditions and run 1
 
 First, we define a function that returns the values of state variables (i.e., initial amounts of water vapor and liquid water molecules) and model parameters (i.e., temperature and amount of air molecules) based on the conditions defined by the problem (i.e., initial total volume, initial volume of the liquid water, initial relative air humidity, and initial temperature).
@@ -148,8 +154,8 @@ find_state_pars <- function(Vtot, Vliq, humid, TK, v){
   Vgas <- Vtot - Vliq  # volume of the gas phase = Vtotal - Vliquid
 
   # amounts of vapor, liquid, and air in the gas phase
-  Nvap <- Nwater_vapor(humid=humid, TK=TK, V=Vgas)
-  Nliq <- Nwater_liquid(V=Vliq)
+  Nvap <- Nwater_vapor(humid=humid, TK=TK, Vgas=Vgas)
+  Nliq <- Nwater_liquid(Vliq=Vliq)
   Nair <- Ptot * Vgas/(Rgas*TK) - Nvap
   
   # output: state variables and parameters
@@ -158,16 +164,15 @@ find_state_pars <- function(Vtot, Vliq, humid, TK, v){
 }
 ```
 
-Now, we use the above function to generate the initial conditions and model parameters and solve the model over the first half-hour.
+Next, we use the above function to generate the initial conditions and model parameters and solve the model over the first half-hour.
 
 ```{r, message=FALSE}
-# initial conditions
+# initial conditions (dry air)
 Vtot.ini <- 1; Vliq.ini <- 1e-3; humid.ini <- 0
 ini   <- find_state_pars(Vtot=Vtot.ini, Vliq=Vliq.ini, humid=humid.ini, TK=TK1, v=wind_v)
 
 # solve the model over the first half-hour
 outtimes <- seq(from = 0, to = 0.5, length.out = 400) # time in hr
-require(deSolve)
 out1 <- ode(y = ini$SV, parms = ini$pars, func = WaterEvapPrecip, times = outtimes)
 ```
 
@@ -191,13 +196,13 @@ out2 <- ode(y = ini2$SV, parms = ini2$pars, func = WaterEvapPrecip, times = outt
 out2[,"time"] <- out2[,"time"] + max(outtimes) # modify time (for a better display)
 ```
 
-## Results & Discussion
+### Results & Discussion
 
-The first set of graphs (see below) shows that, due to net evaporation at the higher (initial) temperature, the relative air humidity increases from the initial 0 % to 100 % **within about 15 minutes**. This is associated with an increase in the molar fraction (from 0 to 0.028), vapor pressure (from 0 Pa to 2800 Pa) and a transfer of about 1.2 moles of water from the liquid to the gas phase. 
+Figure 2 shows that, due to net evaporation at the higher (initial) temperature, the relative air humidity increases **within about 15 minutes** from the initial 0% to 100%. This is associated with an increase in the molar fraction (from 0 to 0.028), vapor pressure (from 0 Pa to 2800 Pa) and a net transfer of about 1.2 moles of water from the liquid to the gas phase. 
 
-The cooling of the 100 % humid air after $30~min$ increases the relative air humidity to about 180 %, leading to net precipitation. The new equilibrium is reached, again, in about 15 minutes, but the total changes in $x_{vap}$, $P_{vap}$, and $N_{vap}$ are smaller.
+The (rapid) cooling of the 100% humid air after $30~min$ increases the relative air humidity to about 180%, leading to net precipitation. The new equilibrium is reached, again, in about 15 minutes, but the total changes in $x_{vap}$, $P_{vap}$, and $N_{vap}$ are smaller.
 
-```{r, fig.height=4.4, fig.width=8}
+```{r, fig.height=4.4, fig.width=8, fig.cap="State variables and related quantities as a function of time during the modeled scenario.", echo=FALSE}
 plot(out1, out2,
      which=c("humid", "xvap", "Pvap", "Pair", 
              "Nvap", "Nliq", "Nair", "Nwater"),
@@ -209,9 +214,9 @@ legend("bottomright", title="temperature (K):",
        lty=1, lwd=2, col=1:2, bty="n")
 ```
 
-The second set of graphs (see below) shows that evaporation occurs at a rate of about ``r sprintf("%.1f", out1[1,"R.evaporation"])`` $mol~h^{-1}$ and ``r sprintf("%.1f", out2[1,"R.evaporation"])`` $mol~h^{-1}$ at the higher and lower temperature, respectively. During the first and second half-hour period, the precipitation rate increases and decreases towards the evaporation rate, respectively, reaching the level in about 15 minutes. Rate constants remain constant during each half-hour interval because the temperature is constant, but the values differ for the different temperatures (see Eqs. 8 and 9, where $c_1$ and $c_2$ are assumed to be temperature-independent).
+Figure 3 shows that evaporation occurs at a rate of about ``r sprintf("%.1f", out1[1,"R.evaporation"])`` $mol~h^{-1}$ and ``r sprintf("%.1f", out2[1,"R.evaporation"])`` $mol~h^{-1}$ at the higher and lower temperature, respectively. During the first and second half-hour period, the precipitation rate increases and decreases towards the evaporation rate, respectively, reaching the level in about 15 minutes. Rate constants remain constant during each half-hour interval because the temperature is constant, but the values differ for the different temperatures (see Eq. 7, where $c_1$ and $c_2$ are assumed to be temperature-independent).
 
-```{r, fig.height=2.5, fig.width=8}
+```{r, fig.height=2.5, fig.width=8, echo=FALSE, fig.cap="Process rates and rate constants as a function of time during the modeled scenario."}
 plot(out1, out2,
      which=c("R.evaporation", "R.precipitation", "kf","kb"),
      xlab="time (hr)", lty=1, las=1, lwd=2, mfrow=c(1,4),
@@ -222,16 +227,16 @@ legend("right", title="temperature (K):",
        lty=1, lwd=2, col=1:2, bty="n")
 ```
 
-The third set of graphs (see below)  shows that, due to net evaporation at the higher (initial) temperature, the volume of the gas phase (air + water vapor) increases by about ``r sprintf("%.2f", 1e3*diff(out1[c(1,nrow(out1)),"Vgas"]))`` $L$ and the volume of the liquid water decreases by ``r sprintf("%.1f", 1e6*diff(out1[c(nrow(out1),1),"Vliq"]))`` $mL$. Thus, the overall volume of the system increases by about ``r sprintf("%.2f", 1e3*diff(out1[c(1,nrow(out1)),"Vtot"]))`` $L$. Because the total pressure is constant, these changes are associated with an increase in the vapor pressure but a decrease in the air pressure (i.e., pressure of air components other than the water vapor; see Pvap and Pair in the first set of graphs). The trends are opposite at the lower temperature during the second half-hour. The isobaric cooling in between the two half-hour intervals has a similar effect on the gas and total volumes as the evaporation/precipitation, but no effect on the liquid volume (as assumed).
+Figure 4 shows that, due to net evaporation at the higher (initial) temperature, the volume of the gas phase (air + water vapor) increases by about ``r sprintf("%.2f", 1e3*diff(out1[c(1,nrow(out1)),"Vgas"]))`` $L$ and the volume of the liquid water decreases by ``r sprintf("%.1f", 1e6*diff(out1[c(nrow(out1),1),"Vliq"]))`` $mL$. Thus, the overall volume of the system increases by about ``r sprintf("%.2f", 1e3*diff(out1[c(1,nrow(out1)),"Vtot"]))`` $L$. Because the total pressure is constant, these changes are associated with an increase in the vapor pressure but a decrease in the air pressure (i.e., pressure of air components other than the water vapor; see Pvap and Pair in the first set of graphs). The trends are opposite at the lower temperature during the second half-hour. The isobaric cooling in between the two half-hour intervals has a similar effect on the gas and total volumes as the evaporation/precipitation, but no effect on the liquid volume (as assumed).
 
-```{r, fig.height=2.5, fig.width=8}
+```{r, fig.height=2.5, fig.width=8, fig.cap="Changes in volume as a function of time during the modeled scenario.", echo=FALSE}
 plot(out1, out2,  which=c("Vgas", "Vliq", "Vtot"),
      xlab="time (hr)", lty=1, las=1, lwd=2, mfrow=c(1,3), ylab="m3")
 ```
 
-## Water budgets
+### Water budgets
 
-Finally, we construct the water budgets by integrating\footnote{We use the ``integrateTrapezoid`` function from the ``oce`` package to perform the integration.} the evaporation and precipitation rates over time, which yields *gross* amounts of evaporated and precipitated water, respectively. We also calculate the net amount of evaporated water as the difference in the gross amounts, which should be equal to the difference in the final and initial amounts of water vapor (it is). We also convert the amount of liquid water (in moles) to the volume of liquid water (in $mL$), which is easier to imagine.
+Finally, we construct the water budgets by integrating the evaporation and precipitation rates over time, which yields the *gross* amounts of evaporated and precipitated water, respectively. (Note: we use the ``integrateTrapezoid`` function from the ``oce`` package to perform the integration.) We also calculate the net amount of evaporated water as the difference in the gross amounts, which should be equal to the difference in the final and initial amounts of water vapor (it is, as expected). We also convert the amount of liquid water (in moles) to the corresponding volume of liquid water (in $mL$), as the latter is easier to imagine.
 
 ```{r, message=FALSE}
 require(oce)
@@ -246,13 +251,9 @@ dN   <- diff(out1[c(1,nrow(out1)),"Nvap"])                     # difference fina
 (budget_ml <- budget_mol*MW/rho * 1e6)
 ```
 
-The above results show that, when going from ``r humid.ini`` % to ``100`` % humid air at ``r TK1-273.15`` $^\circ C$, about ``r sprintf("%.2f", budget_mol["evap"])`` and ``r sprintf("%.2f", budget_mol["prec"])`` moles of water is evaporated and precipitated, respectively, whereas the net increase in the amount of water vapor is only ``r sprintf("%.2f mol", budget_mol["net"])``. These amounts correspond to ``r sprintf("%.0f mL", budget_ml["evap"])`` of water evaporated, ``r sprintf("%.0f mL", budget_ml["prec"])`` of water precipitated, and ``r sprintf("%.0f mL", budget_ml["net"])`` of net-evaporated water. Thus, the **gross** exchange of water between the liquid and gas phase is about **10-fold larger** than the **net** increase in water vapor. Moreover, for an initial setup consisting of ``r Vliq.ini*1e3`` L of liquid water surrounded by ``r (Vtot.ini-Vliq.ini)*1e3`` L of air with a relative humidity of ``r humid.ini*100`` % (surface area of ``r Aliq`` $m^2$), about 
-``r sprintf("%.0f", budget_ml["evap"] / (Vliq.ini*1e6) * 1e2)`` %
-of water evaporates, 
-``r sprintf("%.0f", budget_ml["prec"] / (Vliq.ini*1e6) * 1e2)`` %
-of water precipitates, and
-``r sprintf("%.0f", budget_ml["net"] / (Vliq.ini*1e6) * 1e2)`` %
-of the liquid water eventually ends up as water vapor within about 15 minutes. 
+The above results show that during a change from ``r humid.ini``% to ``100``% humid air at ``r TK1-273.15`` $^\circ C$ (total volume of about $1\,m^3$), about ``r sprintf("%.2f", budget_mol["evap"])`` moles of water evaporate and ``r sprintf("%.2f", budget_mol["prec"])`` moles of water precipitate, whereas the net increase in the amount of water vapor is only ``r sprintf("%.2f mol", budget_mol["net"])``. These amounts correspond to ``r sprintf("%.1f mL", budget_ml["evap"])`` of water evaporated, ``r sprintf("%.1f mL", budget_ml["prec"])`` of water precipitated, and ``r sprintf("%.1f mL", budget_ml["net"])`` of net-evaporated water. Thus, the **gross** exchange of water between the liquid and gas phase is about **10-fold greater** than the **net** increase in water vapor. Moreover, for an initial setup consisting of ``r Vliq.ini*1e3`` L of liquid water surrounded by ``r (Vtot.ini-Vliq.ini)*1e3`` L of air with a relative humidity of ``r humid.ini*100``% (surface area of ``r Aliq`` $m^2$), about ``r sprintf("%.0f", budget_ml["evap"] / (Vliq.ini*1e6) * 1e2)``% of water evaporates, 
+``r sprintf("%.0f", budget_ml["prec"] / (Vliq.ini*1e6) * 1e2)``%
+of water precipitates, and ``r sprintf("%.0f", budget_ml["net"] / (Vliq.ini*1e6) * 1e2)``% of the liquid water eventually ends up as water vapor within about 15 minutes. 
 
 For completeness, we also construct a similar water budget for the second half-hour.
 
@@ -265,8 +266,8 @@ dN   <- diff(out2[c(1,nrow(out2)),"Nvap"])                     # difference fina
 # water budget in milliliters
 (budget_ml2 <- c(evap=evap, prec=prec, net=evap-prec, net2=dN)*MW/rho * 1e6)
 ```
-Thus, the decrease in temperature from ``r TK1-273.15`` $^\circ C$ to ``r TK2-273.15`` $^\circ C$ resulted in about ``r sprintf("%.0f mL", budget_ml2["prec"])`` of water precipitated, ``r sprintf("%.0f mL", budget_ml2["evap"])`` of water evaporated, and ``r sprintf("%.0f mL", -budget_ml2["net"])`` of water net-precipitated. 
+Thus, the decrease in temperature from ``r TK1-273.15`` $^\circ C$ to ``r TK2-273.15`` $^\circ C$ resulted in about ``r sprintf("%.0f mL", budget_ml2["prec"])`` of water precipitated, ``r sprintf("%.0f mL", budget_ml2["evap"])`` of water evaporated, and ``r sprintf("%.0f mL", -budget_ml2["net"])`` of water net-precipitated during the 15 minute interval.
 
 # Conclusion
 
-The model results illustrate that much more water evaporation and precipitation occurs than "meets the eye"! The exchange occurs on the time-scale of minutes, consistent with our daily experience.
+Our simple model illustrates that during evaporation and precipitation of water, much more water is exchanged than meets the eye! Furthermore, the exchange occurs on the time scale of minutes, consistent with our daily experience.
