@@ -3,7 +3,7 @@ title: "Evaporation and precipitation of water"
 subtitle: "Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
 author: "Lubos Polerecky, Utrecht University"
 date: "January 2022"
-abstract: \noindent Consider a water body surrounded by air. If the relative humidity of the air is below 100%, water will evaporate. In contrast, if the relative air humidity exceeds 100%, which occurs, for instance, when air with a given water vapor content sufficiently cools down, water will precipitate from the gas phase to form a liquid. In both cases, the process will continue until an equilibrium is reached, i.e., until the relative air humidity reaches 100%. In this reader, we will show how these processes can be modeled in R.
+abstract: \noindent If liquid water is surrounded by a gas phase (e.g., atmospheric air), some water molecules will transfer from the liquid phase to the gas phase by a process called evaporation, while some others will transfer back from the gas phase to the liquid phase by a process called precipitation. Generally, the rates of these two processes differ from each other, leading to either net evaporation or net precipitation. However, if the system is enclosed in a fixed volume and its temperature is kept constant, the rates become at some point equal to each other, leading to zero net transfer of water between the two phases. This state corresponds to a thermodynamic equilibrium. In this reader, we will show how to model evaporation and precipitation of water as two dynamic processes occuring at the same time.
 output: 
   pdf_document:
     toc: no
