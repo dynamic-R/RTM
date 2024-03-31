@@ -19,10 +19,11 @@ RTMexercise(x = c("?", "introductionR", "conceptual", "massbalance_chemistry",
                "equilibriumNH3", "equilibriumHCO3", "equilibriumOMD", "detritus",           
                "npzd", "crops_weed", "covid", "virus", "bears_salmon",  
                "plant_coexistence", "hyacinth_algae", "aquaculture", 
-               "estuaryAnoxia", "Pdiagenesis", "diagenesis"),               
+               "estuaryAnoxia", "Pdiagenesis", "diagenesis",
+               "evaporation", "O18exchange"),               
             type = c("R", "massbalance", "linearmodels", "chemistry", 
                "biogeochemistry", "epidemiology", "ecology", 
-               "individualbased", "reaction_transport"),            
+               "individualbased", "reaction_transport", "isotopes"),
             output = c("HTML", "PDF", "RMD", "WORD"))
             
 RTManswer(x, output = c("HTML", "PDF", "RMD", "WORD"))
