@@ -35,21 +35,17 @@ $$
 \end{array}
 $$
 
-where the individual *net* rates ($R_1$--$R_3$) are defined as the sum of the forward and backward reaction rates:
+where the individual *net* rates ($R_1$, $R_2$ and $R_3$) are defined as the difference between the forward and backward reaction rates:
 
 $$
-R_1 = k_{1f} \cdot [H_2CO_3] - k_{1b} \cdot [HCO_3^-] \cdot [H^+] 
-\qquad\hspace{2cm} (2a)
-$$
-
-$$
-R_2 = k_{2f} \cdot [HCO_3^{-}] - k_{2b} \cdot [CO_3^{2-}] \cdot [H^+] 
-\qquad\hspace{2cm} (2b)
-$$
-
-$$
-R_3 = k_{3f} \cdot [H_2O] - k_{3b} \cdot [OH^{-}] \cdot [H^+] 
-\qquad\hspace{2cm} (2c)
+\begin{array}{rcll}
+R_1 & = & k_{1f} \cdot [H_2CO_3] - k_{1b} \cdot [HCO_3^-] \cdot [H^+] 
+& \hspace{2cm} (2a) \\[5mm]
+R_2 & = & k_{2f} \cdot [HCO_3^{-}] - k_{2b} \cdot [CO_3^{2-}] \cdot [H^+] 
+& \hspace{2cm} (2b) \\[5mm]
+R_3 & = & k_{3f} \cdot [H_2O] - k_{3b} \cdot [OH^{-}] \cdot [H^+] 
+& \hspace{2cm} (2c)
+\end{array}
 $$
 
 Note that the rate of the slow process, $R_C$, only affects $H_2CO_3$.
@@ -73,7 +69,7 @@ K_w'  = \frac{ [OH^-] \cdot [H^+] }{[H_2O]}.
 $$
 Here, we defined the dissociation constants according to $K_1 = k_{1f}/k_{1b}$, $K_2 = k_{2f}/k_{2b}$, and $K_w' = k_{3f}/k_{3b}$. If relationships 3a--3c are valid, then the time derivatives in equations 1b, 1d and 1e are zero as well. This means that these latter three equations do *not* provide any *extra* information for the equilibrium concentrations.
 
-\textbf{Note:} In literature, the *ionic product of water*, $K_w = [OH^-]\cdot [H^+] \approx 10^{-14}~mol^2~L^{-2}$ is more commonly reported in the context of water self-ionization. This value should, however, *not* be confused with the equilibrium constant $K_w'$. The correct value of $K_w'$ is calculated by dividing $K_w$ with the concentration of water, $[H_2O]\approx 55.3~mol~L^{-1}$, as shown in Eq. 3c (see table in Task 2).
+**Note:** In literature, the *ionic product of water*, $K_w = [OH^-]\cdot [H^+] \approx 10^{-14}~mol^2~L^{-2}$ is more commonly reported in the context of water self-ionization. This value should, however, *not* be confused with the equilibrium constant $K_w'$. The correct value of $K_w'$ is calculated by dividing $K_w$ with the concentration of water, $[H_2O]\approx 55.3~mol~L^{-1}$, as shown in Eq. 3c (see table in Task 2).
 
 ## Task 3: Lump-sum species
 
@@ -129,79 +125,77 @@ $$
 \qquad\hspace{2cm} (5c)
 $$
 
-Regarding the concentration of $[OH^-]$, it can be calculated from $[H^+]$ based on the relationship 3c. First, by substituting $[H_2O]$ based on the definition of $H_xO$, we obtain
+Regarding the concentrations of $[OH^-]$ and $[H_2O]$, they can be calculated from the relationship 3c. First, by substituting $[H_2O]$ based on the definition of the lump-sum $H_xO$, we obtain
 $$
 K_w' = \frac{[OH^-]\cdot [H^+]}{[H_xO] - [OH^-]},
 $$
-which upon rearrangement yields the relationship
+which upon rearrangement yields the expression for $[OH^-]$ as a function of the lump-sum $[H_x0]$ and $[H^+]$:
 $$
 \boxed{~[OH^-] = \frac{K_w'}{K_w' + [H^+]}\cdot [H_xO]~} \qquad\hspace{2cm} (5d)
 $$
-This relationship can be simplified by considering that for typical pH values of 1--12, the concentrations of $H^+$ are in the range of $10^{-12}$--$10^{-1}~mol~L^{-1}$. Thus, the dissociation constant $K_w' \approx 1.8\times10^{-16}~mol~L^{-1}$ in the denominator can be neglected, yielding 
+Finally, by combining this last result with the definition of $H_xO$, we obtain
 $$
-[OH^-] \approx \frac{K_w'}{[H^+]}\cdot [H_xO].
+[H_2O] = [H_xO] - [OH^-] = \left( 1-\frac{K_w'}{K_w' + [H^+]} \right)
+\cdot [H_xO],
 $$
-Using the same argument, the ratio $K_w'/[H^+]$ is in the range of $10^{-15}$--$10^{-4}$, which makes the concentration of $[OH^-]$ negligible in comparison to the concentration of $H_2O$ (i.e., $[H_xO]\approx [H_2O]$). Thus, using the last equation, the expression for $[OH^-]$ can be well approximated by
+which yields the expression for $[H_2O]$ as a function of the lump-sum $[H_x0]$ and $[H^+]$:
 $$
-\boxed{~[OH^-] \approx \frac{K_w}{[H^+]}~} \qquad\hspace{2cm} (5d')
+\boxed{~[H_2O] = \frac{[H^+]}{K_w' + [H^+]}\cdot [H_xO].~} \qquad\hspace{2cm} (5e)
 $$
-Note that this result is equivalent to the commonly used expression governing the water self-ionization equilibrium: $K_w = [OH^-]\cdot [H^+]$. Our analysis above shows, however, that this is only an approximation; the accurate relationship is given by Eq. 5d.
 
-Once the concentrations $[HCO_3^-]$, $[CO_3^{2-}]$, and $[OH^-]$ are calculated from equations 5a--5c and $\mathrm{5d'}$ based on the values of $[DIC]$ and $[H^+]$, the alkalinity is calculated from the definition:
+Once the concentrations $[HCO_3^-]$, $[CO_3^{2-}]$ and $[OH^-]$ are calculated from equations 5a--5d based on the values of $[DIC]$, $[H_xO]$ and $[H^+]$, the alkalinity is calculated from the definition:
 
 $$
 [ALK] = [HCO_3^-] + 2\cdot [CO_3^{2-}] + [OH^-] - [H^+]
-\qquad\hspace{2cm} (5e)
+\qquad\hspace{2cm} (5f)
 $$
 
 ### Key take-home message
 
-Because $[HCO_3^-]$ and $[CO_3^{2-}]$ depend on $[DIC]$ and $[H^+]$ (see equations $5a$ and $5c$), and $[OH^-]$ depends on $[H^+]$ (see equations $5d$ or $5d'$), \bf equation 5e provides an intimate relationship between $[ALK]$, $[DIC]$ and $[H^+]$ \rm when the carbonate species are in equilibrium. Using this relationship, one can calculate 
+Because $[HCO_3^-]$ and $[CO_3^{2-}]$ depend on $[DIC]$ and $[H^+]$ (Eqs. $5a$ and $5c$), and $[OH^-]$ depends on $[H_xO]$ and $[H^+]$ (Eq. $5d$), **equation 5f provides an intimate relationship between $[ALK]$, $[DIC]$, $[H_xO]$ and $[H^+]$** when the carbonate and water species are in equilibrium. Using this relationship, one can calculate 
 
-1. $[ALK]$ if the values of $[DIC]$ and $[H^+]$ are known, or
+1. $[ALK]$ if the values of $[DIC]$, $[H_xO]$ and $[H^+]$ are known, or
 
-2. $[DIC]$ if the values of $[H^+]$ and $[ALK]$ are known, or
+2. $[DIC]$ if the values of $[H^+]$, $[H_xO]$ and $[ALK]$ are known, or
 
-3. $[H^+]$ if the values of $[DIC]$ and $[ALK]$ are known.
+3. $[H^+]$ if the values of $[DIC]$, $[ALK]$ and $[H_xO]$ are known.
 
-Note that equation $5e$ is highly non-linear; thus these calculations need to be done *numerically*. This contrasts to part I of this reader series, where it was possible to also find an analytical solution. Although this is no longer possible when the number of fast acid-base reactions (e.g., Reactions 1--3) increases, we can proceed thanks to numerical solvers (see next section).
+Note that equation $5f$ is highly non-linear; thus these calculations need to be done *numerically*. This contrasts to part I of this reader series, where it was possible to also find an analytical solution. Although this is no longer possible when the number of fast acid-base reactions (e.g., Reactions 1--3) increases, we can proceed thanks to numerical solvers (see next section).
 
-Another important point to note here is the statement 3: $[H^+]$ *can be calculated* if the values of $[DIC]$ and $[ALK]$ are known. This statement is the basis for the *general* approach in $pH$ modeling: one needs to first *identify the appropriate lump-sum species* (e.g., $DIC$ and $ALK$) and then formulate the *effect of each slow process* on these lump-sum species (e.g., addition or removal of $DIC$ [e.g., equation 4a] and $ALK$ [e.g., equation 4b]). Then, by solving the differential equations for the lump-sum species numerically, one can quantify the corresponding evolution of $pH$ based on the statement 3, i.e., by numerically solving for $[H^+]$ from Eq. 5e. This will be illustrated in the following section. 
-
-\textbf{Note:} Strictly speaking, one should also identify the effects of the slow processes on the lump-sum species $H_xO = H_2O + OH^-$. However, due to the vastly larger concentration of $H_2O$ in an aquatic setting compared to all other species involved, the effects of processes such as mineral dissolution/precipitation, redox or acid-base reactions, etc., are typically negligible and the water concentration can be considered as constant.
+Another important point to note here is the statement 3: $[H^+]$ *can be calculated* if the values of $[DIC]$, $[ALK]$ and $[H_xO]$ are known. This statement is the basis for the *general* approach in $pH$ modeling: one needs to first *identify the appropriate lump-sum species* (e.g., $DIC$, $ALK$ and $H_xO$) and then formulate the *effect of each slow process* on these lump-sum species. For example, in this particular exercise, the effects are: (i) the addition or removal of $DIC$ (Eq. 4a), (ii) conservation of $ALK$ (Eq. 4b), and (iii) conservation of $H_xO$ (Eq. 4c). Then, by solving the differential equations for the lump-sum species numerically, one can quantify the corresponding evolution of $pH$ based on the statement 3, i.e., by numerically solving for $[H^+]$ from Eq. 5f. This approach will be illustrated in the following section. 
 
 ## Task 5: Application to atmospheric CO$_2$ exchange 
 
 ### Implementation in R
 
-First, we define a function that calculates carbonate alkalinity from the known concentration of $DIC$ and $pH$ (equation 5e).
+First, we define a function that calculates alkalinity from the known concentrations of $DIC$ and $H_xO$ and $pH$ (equation 5f).
 
 ```{r}
-solveALK <- function(K1 = 4.44e-07, K2 = 4.67e-11, Kw = 9.91e-15, DIC, pH){
+solveALK <- function(K1 = 4.44e-07, K2 = 4.67e-11, Kw.prime = 1.79e-16, 
+                     HxO = 55.3, DIC, pH){
   
   H      <- 10^(-pH)
   HCO3   <- K1*H  / (H^2 + K1*H + K1*K2) * DIC    # eq 5a
   CO3    <- K1*K2 / (H^2 + K1*H + K1*K2) * DIC    # eq 5c
-  OH     <- Kw/H                                  # eq 5d'
-  ALK    <- HCO3 + 2*CO3 + OH - H                 # eq 5e
-  
+  OH     <- Kw.prime / (Kw.prime + H) * HxO       # eq 5d
+  ALK <- HCO3 + 2*CO3 + OH - H                    # eq 5f
   return(ALK)
 }
 ```
 
-Next, we define a function that calculates $[H^+]$ from the known carbonate alkalinity and $DIC$ concentration (equation 5e). This is done by finding the root of a function defined as the left-hand-side minus the right-hand-side of equation 5e, using a numerical solver implemented in ``uniroot``.
+Next, we define a function that calculates $[H^+]$ from the known concentrations of $DIC$, $ALK$ and $H_xO$ (equation 5f). This is done by finding the root of a function defined as the left-hand-side minus the right-hand-side of equation 5f, using a numerical solver implemented in ``uniroot``.
 
 ```{r}
-solveH <- function(K1 = 4.44e-07, K2 = 4.67e-11, Kw = 9.91e-15, DIC, ALK){
+solveH <- function(K1 = 4.44e-07, K2 = 4.67e-11, Kw.prime = 1.79e-16,
+                   HxO = 55.3, DIC, ALK){
   
   # function whose root has to be sought
   rootFun <- function(H) {
-    
-    HCO3    <- K1*H  / (H^2 + K1*H + K1*K2) * DIC   # eq 5a
-    CO3     <- K1*K2 / (H^2 + K1*H + K1*K2) * DIC   # eq 5c
-    OH      <- Kw/H                                 # eq 5d'
-    ALK.est <- HCO3 + 2*CO3 + OH - H # right-hand-side of eq. 5e
-    
+
+    HCO3    <- K1*H  / (H^2 + K1*H + K1*K2) * DIC    # eq 5a
+    CO3     <- K1*K2 / (H^2 + K1*H + K1*K2) * DIC    # eq 5c
+    OH      <- Kw.prime / (Kw.prime + H) * HxO       # eq 5d
+    ALK.est <- HCO3 + 2*CO3 + OH - H                 # eq 5f
     return(ALK.est - ALK)
   }
   
@@ -211,17 +205,17 @@ solveH <- function(K1 = 4.44e-07, K2 = 4.67e-11, Kw = 9.91e-15, DIC, ALK){
 }
 ```
 
-It is always good to test the functions. For $[DIC] = 2~mmol~L^{-1}$ and $[ALK] = 2~mmol~L^{-1}$, we expect $pH$ to be around $8$, and when we substitute that $pH$ value to calculate back $[ALK]$, we expect to get the original value. Indeed, the results are as expected:
-
-```{r}
-(pH.new  <- -log10(solveH(DIC = 2e-3, ALK = 2e-3)))
-(ALK <- solveALK(DIC = 2e-3, pH = pH.new))
-```
-
-On the other hand, if the water is pure, i.e., it has zero $[DIC]$ and $[ALK]$, we expect its $pH$ to be close to 7 (i.e., $pH=-log_{10}(\sqrt{K_w})$, as follows from Eqs. $5e$ and $5d'$). Indeed, that is what we obtain:
+It is always good to test the functions. For pure water with zero $[DIC]$ and $[ALK]$, we expect to get $pH$ of about 7 (i.e., neutral $pH$). This follows from Eqs. 3c and 5f, because at these conditions, we have $[OH^-]=[H^+]$ and $[OH^-]\cdot [H^+] = K_w'\cdot [H_2O]$, which yields $[H^+]=\sqrt{K_w'\cdot [H_xO]}\approx 10^{-7}$ and so $pH=-log_{10}([H^+])=7$. The result is as expected:
 
 ```{r}
 (pH.neutral  <- -log10(solveH(DIC = 0, ALK = 0)))
+```
+
+In contrast, for $[DIC] = 2~mmol~L^{-1}$ and $[ALK] = 2~mmol~L^{-1}$, we expect to get $pH$ of around $8$. Furthermore, when we substitute that $pH$ value to calculate back $[ALK]$, we expect to get the original value. Indeed, the results are as expected:
+
+```{r}
+(pH.new  <- -log10(solveH(DIC = 2e-3, ALK = 2e-3)))
+(ALK     <-  solveALK(DIC = 2e-3, pH = pH.new))
 ```
 
 Next, we implement the model function based on the local equilibrium assumption. Note that the equilibrium constants (dissociation constants) are in $mol~L^{-1}$, so all species must be in this unit, too!
@@ -233,15 +227,18 @@ CO2dissol <- function(t, state, parms) {
     # mass balance equations
     dDIC <- RC
     dALK <- 0
+    dHxO <- 0
 
     # calculate the relevant species for the output
-    H    <- solveH(K1 = K1, K2 = K2, Kw = Kw, DIC = DIC, ALK = ALK)
+    H    <- solveH(K1 = K1, K2 = K2, Kw.prime = Kw.prime, 
+                   HxO = HxO, DIC = DIC, ALK = ALK)
     HCO3 <- K1*H  / (H^2 + K1*H + K1*K2) * DIC   # eq 5a
     CO3  <- K1*K2 / (H^2 + K1*H + K1*K2) * DIC   # eq 5c
-    OH   <- Kw/H                                 # eq 5d'
-    
-    return(list(c(dDIC, dALK), 
-                pH = -log10(H), H = H, OH = OH,
+    OH   <- Kw.prime / (Kw.prime + H) * HxO      # eq 5d
+
+    return(list(c(dDIC, dALK, dHxO), 
+                pH = -log10(H), 
+                H = H, OH = OH, H2O = HxO - OH,
                 H2CO3 = DIC - HCO3 - CO3,
                 HCO3 = HCO3,
                 CO3  = CO3))
@@ -254,21 +251,22 @@ We run the model for 10 days, using the initial conditions given in the task.
 ```{r, fig.height=6, fig.width=10, message=FALSE}
 require(deSolve)
 
-pars    <- c(RC = 0.1e-3,    # [mol/L/day]
-             K1 = 4.44e-07,  # [mol/L]
-             K2 = 4.67e-11,  # [mol/L]
-             Kw = 9.91e-15)  # [mol^2/L^2]
+pars    <- c(RC = 0.1e-3,          # [mol/L/day]
+             K1 = 4.44e-07,        # [mol/L]
+             K2 = 4.67e-11,        # [mol/L]
+             Kw.prime = 1.79e-16)  # [mol/L]
 
 pH.ini  <- 8
 DIC.ini <- 2e-3
-ALK.ini <- solveALK(DIC = DIC.ini, pH = pH.ini)
+HxO.ini <- 55.3
+ALK.ini <- solveALK(HxO = HxO.ini, DIC = DIC.ini, pH = pH.ini)
 
-yini    <- c(DIC = DIC.ini, ALK = ALK.ini)
+yini    <- c(DIC = DIC.ini, ALK = ALK.ini, HxO = HxO.ini)
 times   <- seq(from=0, to=10, length.out=100)
 
 out     <- ode(y=yini, times=times, func=CO2dissol, parms=pars)
 
-plot(out, mfrow = c(2,4), las = 1)
+plot(out, mfrow = c(2,5), las = 1)
 ```
 
-We see that the addition of $CO_2$ at a rate or `r pars["RC"]` $mol~L^{-1}~d^{-1}$ leads to water acidification, i.e., a decrease in $pH$ from 8 to about 6.6 after 10 days.
+We see that after 10 days, the addition of $CO_2$ at a rate or `r pars["RC"]` $mol~L^{-1}~d^{-1}$ leads to water acidification, i.e., a decrease in $pH$ from 8 to about 6.6.
