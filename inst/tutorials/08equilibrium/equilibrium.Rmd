@@ -416,9 +416,9 @@ To learn more about modelling of chemical reactions --- and specifically of chem
 
 ```
 require(RTM)
-RTMexercise("equilibriumNH3")
-RTMexercise("equilibriumHCO3")
-RTMexercise("equilibriumOMD")
+RTMexercise("equilibriumNH3",  output="PDF")
+RTMexercise("equilibriumHCO3", output="PDF")
+RTMexercise("equilibriumOMD",  output="PDF")
 ```
 
 ## Textbook and Slides

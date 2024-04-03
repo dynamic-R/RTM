@@ -1,7 +1,7 @@
 ---
 title: |
   | Local Equilibrium Chemistry in R --- part III:
-  | Mixed Equilibrium-Irreversible Reactions
+  | Four Equilibrium Reactions
 subtitle: "Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
 author: "Karline Soetaert and Lubos Polerecky, Utrecht University"
 date: "February 2021"
@@ -9,9 +9,10 @@ output:
   pdf_document:
     number_sections: false
   html_document: default
+linestretch: 1.15
 ---
 
-# Answers
+# Answer
 
 ## Task 1: Mass balance equations of the carbonate system
 
@@ -20,45 +21,40 @@ Assuming that the forward and backward reactions are elementary, we can use the 
 $$
 \begin{array}{rclr}
 \displaystyle
-\frac{d[H_2CO_3]}{dt} & = & R_1 + \color{red}{R_C} & \qquad (1a)\\[5mm]
+\frac{d[H_2CO_3]}{dt} & = & -R_1 + \color{red}{R_C} & \qquad (1a)\\[5mm]
 \displaystyle
-\frac{d[HCO_3^-]}{dt} & = & -R_1 + R_2 & \qquad (1b) \\[5mm]
+\frac{d[HCO_3^-]}{dt} & = & R_1 - R_2 & \qquad (1b) \\[5mm]
 \displaystyle
-\frac{d[CO_3^{2-}]}{dt} & = & -R_2  & \qquad (1c)\\[5mm]
+\frac{d[CO_3^{2-}]}{dt} & = & R_2  & \qquad (1c)\\[5mm]
 \displaystyle
-\frac{d[NH_4^+]}{dt} & = & R_3 & \qquad (1d) \\[5mm]
+\frac{d[NH_4^+]}{dt} & = & -R_3 & \qquad (1d) \\[5mm]
 \displaystyle
-\frac{d[NH_3]}{dt} & = & -R_3 + \color{red}{R_N} & \qquad (1e) \\[5mm]
+\frac{d[NH_3]}{dt} & = & R_3 + \color{red}{R_N} & \qquad (1e) \\[5mm]
 \displaystyle
-\frac{d[H_2O]}{dt} & = & R_4 & \qquad (1f) \\[5mm]
+\frac{d[H_2O]}{dt} & = & -R_4 & \qquad (1f) \\[5mm]
 \displaystyle
-\frac{d[OH^-]}{dt} & = & -R_4 & \qquad (1g) \\[5mm]
+\frac{d[OH^-]}{dt} & = & R_4 & \qquad (1g) \\[5mm]
 \displaystyle
-\frac{d[H^+]}{dt} & = & -R_1 - R_2 - R_3 - R_4 & \qquad (1h) \\[5mm]
+\frac{d[H^+]}{dt} & = & R_1 + R_2 + R_3 + R_4 & \qquad (1h) \\[5mm]
 \end{array}
 $$
 
-where the individual rates are defined as the sum of the rates of the forward and backward reactions:
+where the individual rates ($R_1$, $R_2$, $R_3$ and $R_4$) are defined as the difference between the forward and backward reaction rates:
 
 $$
-R_1 = - k_{1f} \cdot [H_2CO_3] + k_{1b} \cdot [HCO_3^-] \cdot [H^+] 
-\qquad\hspace{2cm} (2a)
-$$
-
-$$
-R_2 = - k_{2f} \cdot [HCO_3^{-}] + k_{2b} \cdot [CO_3^{2-}] \cdot [H^+] 
-\qquad\hspace{2cm} (2b)
-$$
-
-$$
-R_3 = - k_{3f} \cdot [NH_4^{+}] + k_{3b} \cdot [NH_3] \cdot [H^+] 
-\qquad\hspace{2cm} (2c)
-$$
-
-$$
-R_4 = - k_{4f} \cdot [H_2O] + k_{4b} \cdot [OH^-] \cdot [H^+] 
+\begin{array}{rclr}
+R_1 &=& k_{1f} \cdot [H_2CO_3] - k_{1b} \cdot [HCO_3^-] \cdot [H^+] &
+\qquad\hspace{2cm} (2a) \\[4mm]
+R_2 &=& k_{2f} \cdot [HCO_3^{-}] - k_{2b} \cdot [CO_3^{2-}] \cdot [H^+] &
+\qquad\hspace{2cm} (2b) \\[4mm]
+R_3 &=& k_{3f} \cdot [NH_4^{+}] - k_{3b} \cdot [NH_3] \cdot [H^+]  &
+\qquad\hspace{2cm} (2c) \\[4mm]
+R_4 &=& k_{4f} \cdot [H_2O] - k_{4b} \cdot [OH^-] \cdot [H^+] &
 \qquad\hspace{2cm} (2d)
+\end{array}
 $$
+
+Note that the slow processes, $R_C$ and $R_N$, only affect $H_2CO_3$ and $NH_3$.
 
 ## Task 2: Equilibrium conditions
 
@@ -88,11 +84,11 @@ K_{w}'  = \frac{ [OH^-] \cdot [H^+] }{[H_2O]}.
 \qquad\hspace{2cm} (3d)
 $$
 
-Here, we defined the dissociation constants $K_1$, $K_2$, $K_n$, $K_w'$ according to $K_1 = k_{1f}/k_{1b}$, $K_2 = k_{2f}/k_{2b}$, $K_n = k_{3f}/k_{3b}$, and $K_w' = k_{4f}/k_{4b}$. If these relationships are true, then the time derivatives in equations 1a--h are zero. This means that these four equations do *not* provide any *extra* information for the equilibrium concentrations.
+Here, we defined the dissociation constants $K_1$, $K_2$, $K_n$, $K_w'$ according to $K_1 = k_{1f}/k_{1b}$, $K_2 = k_{2f}/k_{2b}$, $K_n = k_{3f}/k_{3b}$, and $K_w' = k_{4f}/k_{4b}$. If these relationships are valid, then the time derivatives in equations 1b, 1e, 1g and 1h are zero. This means that these four equations do *not* provide any *extra* information for the equilibrium concentrations.
 
 ## Task 3: Lump-sum species
 
-Here we combine equations 1a--h and see what they imply for the suggested lump-sum species. By summing equations 1a, 1b and 1c, we obtain 
+Here we combine equations 1a--1h and see what they imply for the suggested lump-sum species. By summing equations 1a, 1b and 1c, we obtain 
 
 $$
 \frac{d[DIC]}{dt} = {\color{red}{R_C}} \qquad\hspace{2cm} (4a)
@@ -114,78 +110,65 @@ Finally, by summing equations according to (1b) + $2\times$(1c) + (1g) $-$ (1d) 
 $$
 \frac{d[ALK]}{dt} = 0 \qquad\hspace{2cm} (4d)
 $$
-These equations show that DIC is *added* at a rate of the *slow process*, $R_C$, $NH_x$ is *added* at a rate of the *slow process*, $R_N$, while $H_xO$ and ALK are *conserved* (not changing over time). Specifically, *none* of the lump-sum species DIC, $NH_x$, $H_xO$, and ALK is affected by the fast reversible reactions.
+These equations show that DIC is *added* at a rate of the *slow process*, $R_C$, $NH_x$ is *added* at a rate of the *slow process*, $R_N$, while $H_xO$ and $ALK$ are *conserved* (i.e., not changing over time). Specifically, *none* of the lump-sum species $DIC$, $NH_x$, $H_xO$ and $ALK$ is affected by the fast reversible reactions.
 
 ## Task 4: From lump-sum species to the original species
 
-This task has been solved in Parts I and II of the Reader. Here we only summarize the results:
+This task has been solved in parts I and II of this reader series. Here we only summarize the results:
 
 $$
-[HCO_3^-]= \frac{K_{1}[H^+]}{[H^+][H^+] + K_{1}[H^+] +  K_{1} K_{2}}\cdot [DIC]
-\qquad\hspace{2cm} (5a)
+\begin{array}{rclr}
+[HCO_3^-] &=& \displaystyle \frac{K_{1}[H^+]}{[H^+][H^+] + K_{1}[H^+] +  K_{1} K_{2}}\cdot [DIC] &
+\qquad\hspace{2cm} (5a) \\[5mm]
+[H_2CO_3] &=& \displaystyle \frac{[H^+][H^+]}{[H^+][H^+] + K_{1}[H^+] +  K_{1} K_{2}}\cdot [DIC] &
+\qquad\hspace{2cm} (5b) \\[5mm]
+[CO_3^{2-}] &=& \displaystyle \frac{K_1 K_2}{[H^+][H^+] + K_{1}[H^+] +  K_{1} K_{2}}\cdot [DIC] &
+\qquad\hspace{2cm} (5c) \\[5mm]
+[NH_3] &=& \displaystyle \frac{K_n}{K_n + [H^+]}\cdot [NH_x] & \qquad\hspace{2cm} (5d) \\[5mm]
+[NH_4^+] &=& \displaystyle \frac{[H^+]}{K_n + [H^+]} \cdot [NH_x] & \qquad\hspace{2cm} (5e) \\[5mm]
+[OH^-] &=& \displaystyle \frac{K_w'}{K_w' + [H^+]}\cdot [H_xO] & \qquad\hspace{2cm} (5f) \\[5mm]
+[H_2O] &=&  \displaystyle \frac{[H^+]}{K_w' + [H^+]}\cdot [H_xO] & \qquad\hspace{2cm} (5g)
+\end{array}
 $$
 
-$$
-[H_2CO_3] = \frac{[H^+][H^+]}{[H^+][H^+] + K_{1}[H^+] +  K_{1} K_{2}}\cdot [DIC]
-\qquad\hspace{2cm} (5b)
-$$
-
-$$
-[CO_3^{2-}] = \frac{K_1 K_2}{[H^+][H^+] + K_{1}[H^+] +  K_{1} K_{2}}\cdot [DIC]
-\qquad\hspace{2cm} (5c)
-$$
-
-$$
-[NH_3] = \frac{K_n}{K_n + [H^+]}\cdot [NH_x] \qquad\hspace{2cm} (5d)
-$$
-
-$$
-[NH_4^+] = \frac{[H^+]}{K_n + [H^+]} \cdot [NH_x] \qquad\hspace{2cm} (5e)
-$$
-
-$$
-[OH^-] = \frac{K_w'}{K_w' + [H^+]}\cdot [H_xO] \approx \frac{K_w}{[H^+]} \qquad\hspace{2cm} (5f)
-$$
-Note that we provide both the accurate and approximate relationship between $[OH^-]$ and $[H^+]$ (see notes on this topic in Part II of the Reader). The accurate relationship will be relevant when evaluating the model in the limit $H_xO \rightarrow 0$, as requested in Task 6.
-
-Once the concentrations $[HCO_3^-]$, $[CO_3^{2-}]$, $[NH_4^+]$, $[OH^-]$, and $[H^+]$ are known, the alkalinity can be calculated from the definition,
+Once the concentrations $[HCO_3^-]$, $[CO_3^{2-}]$, $[NH_4^+]$ and $[OH^-]$ are calculated from equations 5a, 5c, 5e and 5f, respectively, the alkalinity is calculated from the definition:
 $$
 [ALK] = [HCO_3^-] + 2\cdot [CO_3^{2-}] + [OH^-] - [NH_4^+] - [H^+]
-\qquad\hspace{2cm} (5g)
+\qquad\hspace{2cm} (5h)
 $$
-Because $[HCO_3^-]$ and $[CO_3^{2-}]$ depend on $[DIC]$ and $[H^+]$ (Eqs. 5a and 5c), $[NH_4^+]$ depends on $[NH_x]$ and $[H^+]$ (Eq. 5d), and $[OH^-]$ depends on $[H^+]$ (Eq. 5f), \bf equation 5g provides an intimate relationship between $[ALK]$, $[DIC]$, $[NH_x]$, and $[H^+]$ \rm when the system is in an equilibrium. Using this relationship, one can calculate any of the species provided that the other \emph{three} species are known. Because equation 5g is highly non-linear, these calculations are done numerically.
+Because $[HCO_3^-]$ and $[CO_3^{2-}]$ depend on $[DIC]$ and $[H^+]$ (Eqs. 5a and 5c), $[NH_4^+]$ depends on $[NH_x]$ and $[H^+]$ (Eq. 5d), and $[OH^-]$ depends on $[H_xO]$ and $[H^+]$ (Eq. 5f), **equation 5h provides an intimate relationship between $[ALK]$, $[DIC]$, $[NH_x]$, $[H_xO]$ and $[H^+]$** when the carbonate, ammonium and water species are in equilibrium. Using this relationship, one can calculate any of the five species provided that the other \emph{four} species are known. Because equation 5h is highly non-linear, these calculations are done numerically.
 
 ## Task 5: Application to organic matter mineralization
 
 ### R implementation
 
-First, we expand the function that calculates alkalinity by including the concentration of $NH_4^+$ (Eq. $5g$). Additionally, in contrast to the approach in Part II, we will now use the accurate expression for calculating $[OH^-]$ from $[H^+]$ and $[H_xO]$ (Eq. $5f$). Thus, we include the concentration of $H_xO$ as an additional input to the function and the equilibrium constant $K_w'$ instead of $K_w$.
+First, we expand the function that calculates alkalinity by including the concentration of $NH_4^+$ (Eq. $5e$).
 
 ```{r}
 solveALK <- function(K1=4.44e-07, K2=4.67e-11, Kn=5.68e-10, Kw.prime=1.79e-16,
-                     DIC=0, NHx=0, HxO=55.3, pH=7){
+                     HxO=55.3, DIC=0, NHx=0, pH=7){
   
   H      <- 10^(-pH)
   HCO3   <- K1*H /  (H^2 + K1*H + K1*K2) * DIC    # eq 5a
   CO3    <- K1*K2 / (H^2 + K1*H + K1*K2) * DIC    # eq 5c
   NH4    <- H / (H + Kn) * NHx                    # eq 5e
-  OH     <- Kw.prime / (Kw.prime + H) * HxO       # eq 5f, accurate
-  ALK    <- HCO3 + 2*CO3 + OH - NH4 - H           # eq 5g
+  OH     <- Kw.prime / (Kw.prime + H) * HxO       # eq 5f
+  ALK    <- HCO3 + 2*CO3 + OH - NH4 - H           # eq 5h
   
   return(ALK)
 }
 ```
 
-Next, we update the function that calculates $[H^+]$ from given concentrations of $ALK$, $DIC$, $NH_x$, and $H_xO$ (Eq. $5g$). This is done by finding a root of a function defined as the left-hand-side minus the right-hand-side of Eq. $5g$.
+Next, we update the function that calculates $[H^+]$ from given concentrations of $ALK$, $DIC$, $NH_x$ and $H_xO$ (Eq. $5h$). This is done by finding a root of a function defined as the left-hand-side minus the right-hand-side of Eq. $5h$.
 
 ```{r}
 solveH <- function(K1=4.44e-07, K2=4.67e-11, Kn=5.68e-10, Kw.prime=1.79e-16,
-                     DIC=0, NHx=0, HxO=55.3, ALK=0){
+                   HxO=55.3, DIC=0, NHx=0, ALK=0){
   
   # function whose root has to be sought
   rootFun <- function(H) {
     ALK.est <- solveALK(K1=K1, K2=K2, Kn=Kn, Kw.prime=Kw.prime,
-                        DIC=DIC, NHx=NHx, HxO=HxO, pH=-log10(H))
+                        HxO=HxO, DIC=DIC, NHx=NHx, pH=-log10(H))
     return(ALK.est - ALK)
   }
   
@@ -195,20 +178,20 @@ solveH <- function(K1=4.44e-07, K2=4.67e-11, Kn=5.68e-10, Kw.prime=1.79e-16,
 }
 ```
 
-It is always good to test the functions.
+It is always good to test the functions. We see that the results are consistent with expectations.
 
 ```{r}
 pH.new     <- -log10(solveH(DIC=2e-3, NHx=1e-5, ALK=2e-3))
-ALK        <- solveALK(DIC=2e-3, NHx=1e-5, pH = pH.new)
+ALK        <-  solveALK(DIC=2e-3, NHx=1e-5, pH = pH.new)
 pH.neutral <- -log10(solveH(DIC=0, NHx=0, ALK=0))
 c(pH.new=pH.new, ALK=ALK, pH.neutral=pH.neutral)
 ```
 
-The function that implements the model based on the local equilibrium assumption is defined below. Note that 
+Next, we implement the model function based on the local equilibrium assumption. Note that 
 
-1. the equilibrium constants (dissociation constants) are in $mol~L^{-1}$, so all species must be in this unit, too! 
+1. The equilibrium constants (dissociation constants) are in $mol~L^{-1}$, so all species must be in this unit, too! 
 
-2. $OM$ is added to the model as a state variable removed by the slow process, and $H_xO$ is added to the model as a conserved state variable (Eq. 4c).
+2. $OM$ is added to the model as a state variable removed by the slow process.
 
 3. Because we will additionally want to use the function for modelling ammonia degassing (Task 6), the effect of this process is added, too. Its rate constant ($\lambda$) will be set to 0 by default.
 
@@ -218,11 +201,11 @@ OMMpHmodel <- function(t, state, parms) {
 
     # variables needed as output and for regulation of process rates
     H       <- solveH(K1=K1, K2=K2, Kn=Kn, Kw.prime=Kw.prime, 
-                      DIC=DIC, NHx=NHx, HxO=HxO, ALK=ALK)
+                      HxO=HxO, DIC=DIC, NHx=NHx, ALK=ALK)
     HCO3    <- K1*H /  (H^2 + K1*H + K1*K2) * DIC   # eq 5a
     CO3     <- K1*K2 / (H^2 + K1*H + K1*K2) * DIC   # eq 5c
     NH4     <- H / (H + Kn) * NHx                   # eq 5e
-    OH      <- Kw.prime / (Kw.prime + H) * HxO      # eq 5f, accurate
+    OH      <- Kw.prime / (Kw.prime + H) * HxO      # eq 5f
     NH3     <- NHx - NH4          # from definition of NHx
     H2CO3   <- DIC - HCO3 - CO3   # from definition of DIC
     H2O     <- HxO - OH           # from definition of HxO
@@ -239,14 +222,15 @@ OMMpHmodel <- function(t, state, parms) {
     dALK    <-  0               # Eq. 4d
     
     return(list(c(dOM, dDIC, dNHx, dHxO, dALK), 
-                pH = -log10(H), H = H, OH = OH, H2O = H2O,
+                pH = -log10(H), 
+                H = H, OH = OH, H2O = H2O,
                 H2CO3 = H2CO3, HCO3 = HCO3, CO3  = CO3,
-                NH4 = NH4, NH3  = NH3))
+                NH4 = NH4, NH3 = NH3))
   })
 }
 ```
 
-Now we run the model for 10 days, using the initial conditions given in the task.
+We run the model for 10 days, using the initial conditions given in the task.
 
 ```{r, message=FALSE}
 require(deSolve)
@@ -264,7 +248,7 @@ OM.ini  <- 100*1e-6            # mol/L
 DIC.ini <- 2000*1e-6           # mol/L
 NHx.ini <- 10*1e-6             # mol/L
 HxO.ini <- 55.3                # mol/L
-ALK.ini <- solveALK(DIC = DIC.ini, NHx = NHx.ini, HxO = HxO.ini, pH = pH.ini)
+ALK.ini <- solveALK(HxO = HxO.ini, DIC = DIC.ini, NHx = NHx.ini, pH = pH.ini)
 
 state.ini <- c(OM=OM.ini, DIC=DIC.ini, NHx=NHx.ini, HxO=HxO.ini, ALK=ALK.ini)
 times     <- seq(from=0, to=10, length.out=100)
@@ -275,7 +259,7 @@ out       <- ode(y=state.ini, times=times, func=OMMpHmodel, parms=pars)
 plot(out, mfrow = c(4,4), las = 1)
 ```
 
-We see that as a result of the mineralization of about 60 $\mu mol~L^{-1}$ of organic matter over the period of 10 days, pH decreased from 7.9 to about 7.63. As expected, $ALK$ and $H_xO$ are conserved and changes in the concentration of $H_2O$ are negligible due to vastly larger concentrations of water compared to all the other species in the system.
+We see that mineralization of about $60~\mu mol~L^{-1}$ of organic matter over the period of 10 days leads to a decrease in $pH$ from 7.9 to about 7.63. As expected, $ALK$ and $H_xO$ are conserved and changes in the concentration of $H_2O$ are negligible due to vastly larger concentrations of water compared to all the other species in the system.
 
 ## Task 6: Does the formulation of slow reversible processes matter?
 
@@ -295,7 +279,7 @@ $$
 \frac{d[H^+]}{dt} & = & -R_1 - R_2 - R_3 - R_4 + \color{red}{R_C} & \qquad (1h') \\[5mm]
 \end{array}
 $$
-This change, however has *no* effect on the differential equations for the lump-sum variables $DIC$, $NH_x$, $H_xO$, and $ALK$, as can easily be verified by following the same derivation steps as those leading to equations 4a--d. This can also be shown more easily: although $R_C$ adds $HCO3^-$ instead of $H_2CO_3$, these two species are both included in the $DIC$ pool, thus summing them up yields the same result for the time-derivative of $DIC$. Similarly, although the process *increases* $ALK$ at a rate $R_C$ due to the addition of $HCO3^-$, it also *decreases* $ALK$ at the same rate $R_C$ due to the addition of $H^+$, as follows from the *negative* sign in front of $[H^+]$ in the definition of $ALK$.
+This change, however, has *no* effect on the differential equations for the lump-sum variables $DIC$, $NH_x$, $H_xO$ and $ALK$, as can easily be verified by following the same derivation steps as those leading to equations 4a--d. This can also be shown more easily: although $R_C$ adds $HCO_3^-$ instead of $H_2CO_3$, these two species are both included in the $DIC$ pool, thus summing them up yields the same result for the time-derivative of $DIC$. Similarly, although the process *increases* $ALK$ at a rate $R_C$ due to the addition of $HCO_3^-$, it also *decreases* $ALK$ at the same rate $R_C$ due to the addition of $H^+$, as follows from the *negative* sign in front of $[H^+]$ in the definition of $ALK$.
 
 This result has important implications: the specific "chemical" formulation of the slow reversible process has *no effect* on the dynamics of the lump-sum variables, as long as the chemical reactions are correctly balanced in terms of the elements and charges and the local equilibrium conditions can be assumed. 
 
@@ -327,7 +311,7 @@ AmmoniaDegassing <- function(t, state, parms) {
 }
 ```
 
-We define the initial conditions and run the model. In this step, we reuse the parameters defined for the \texttt{OMMpHmodel} model with the value of the degassing rate constant, $\lambda$, changed to $1~d^{-1}$.
+We define the initial conditions and run the model. In this step, we reuse the parameters defined for the ``OMMpHmodel`` model with the value of the degassing rate constant, $\lambda$, changed to $1~d^{-1}$.
 
 ```{r, message=FALSE}
 # update model parameters
@@ -345,7 +329,7 @@ state.ini1 <- c(NHx = NHx.ini, Hx = Hx.ini)
 out1 <- ode(y=state.ini1, times=times, func=AmmoniaDegassing, parms=pars1)
 ```
 
-Next, we run the \texttt{OMMpHmodel} model with the same initial conditions. By setting the OM degradation rate constant to 0, and further setting the concentrations of $DIC$ and $H_xO$ to 0, we expect to make the model equivalent to the \texttt{AmmoniaDegassing} model.
+Next, we run the ``OMMpHmodel`` model with the same initial conditions. By setting the OM degradation rate constant to 0, and further setting the concentrations of $DIC$ and $H_xO$ to 0, we expect that the model becomes equivalent to the ``AmmoniaDegassing`` model.
 
 ```{r}
 # update model parameters
@@ -353,14 +337,14 @@ pars2       <- pars1
 pars2["rC"] <- 0
 
 # initial conditions
-ALK.ini    <- solveALK(DIC=0, NHx=NHx.ini, HxO=0, pH=pH.ini)
+ALK.ini    <- solveALK(HxO=0, DIC=0, NHx=NHx.ini, pH=pH.ini)
 state.ini2 <- c(OM=OM.ini, DIC=0, NHx=NHx.ini, HxO=0, ALK=ALK.ini)
 
 # run the model
 out2 <- ode(y=state.ini2, times=times, func=OMMpHmodel, parms=pars2)
 ```
 
-Thus, we expect the obtain the same results, at least for the state variables that are common for both models. This is indeed the case when we plot the results.
+Thus, we expect to obtain the same results, at least for the state variables that are common for both models. This is indeed the case when we plot the results.
 
 ```{r, fig.width=10, fig.height=2.5}
 plot(out2, obs=out1, which=c("NHx", "NH4", "NH3", "pH"), 
@@ -368,21 +352,21 @@ plot(out2, obs=out1, which=c("NHx", "NH4", "NH3", "pH"),
      obspar = list(lty=2,lwd=2,col=2,type="l"))
 ```
 
-Now that we have verified that the \texttt{OMMpHmodel} can be used for solving the ammonia degassing problem, too, we can illustrate the buffering role of $DIC$ in natural waters. We will use the same initial conditions and the ammonia degassing rate constant as above and perform the calculations for $DIC$ concentrations of 0, 1, and $2~mmol~L^{-1}$.
+Now that we have verified that the model ``OMMpHmodel`` can be used for solving the ammonia degassing problem, too, we can illustrate the $pH$ buffering role of $DIC$ in natural waters. We will use the same initial conditions and the ammonia degassing rate constant as above and perform the calculations for $DIC$ concentrations of 0, 1, and $2~mmol~L^{-1}$.
 
 ```{r}
 # without DIC (but with ammonia and water!)
-ALK.ini3   <- solveALK(DIC=0, NHx=NHx.ini, HxO=HxO.ini, pH=pH.ini)
+ALK.ini3   <- solveALK(DIC=0, HxO=HxO.ini, NHx=NHx.ini, pH=pH.ini)
 state.ini3 <- c(OM=OM.ini, DIC=0, NHx=NHx.ini, HxO=HxO.ini, ALK=ALK.ini3)
 out3       <- ode(y=state.ini3, times=times, func=OMMpHmodel, parms=pars2)
 
 # model with DIC=1 mmol/L
-ALK.ini4   <- solveALK(DIC=1e-3, NHx=NHx.ini, HxO=HxO.ini, pH=pH.ini)
+ALK.ini4   <- solveALK(DIC=1e-3, HxO=HxO.ini, NHx=NHx.ini, pH=pH.ini)
 state.ini4 <- c(OM=OM.ini, DIC=1e-3, NHx=NHx.ini, HxO=HxO.ini, ALK=ALK.ini4)
 out4       <- ode(y=state.ini4, times=times, func=OMMpHmodel, parms=pars2)
 
 # model with DIC=2 mmol/L
-ALK.ini5   <- solveALK(DIC=2e-3, NHx=NHx.ini, HxO=HxO.ini, pH=pH.ini)
+ALK.ini5   <- solveALK(DIC=2e-3, HxO=HxO.ini, NHx=NHx.ini, pH=pH.ini)
 state.ini5 <- c(OM=OM.ini, DIC=2e-3, NHx=NHx.ini, HxO=HxO.ini, ALK=ALK.ini5)
 out5       <- ode(y=state.ini5, times=times, func=OMMpHmodel, parms=pars2)
 ```
@@ -405,4 +389,4 @@ legend("topright", legend = c("DIC=0", "DIC=1 mmol/L", "DIC=2 mmol/L"), bty="n",
        col = 1:3, lwd = 2, lty = 1:3)
 ```
 
-The results show that when DIC is present, the protons released due to ammonia degassing are scavenged by both $CO_3^{2-}$ and $HCO_3^-$ in the solution, leading to an increase in $H_2CO_3$. As a result, the increase in  proton concentrations, and thus the decrease in pH, is smaller when DIC is present, illustrating the pH buffering effect by the carbonate system. The magnitude of the effect does not, however, scale linearly with $DIC$. 
+The results show that when $DIC$ is present, the protons released due to ammonia degassing are scavenged by both $CO_3^{2-}$ and $HCO_3^-$ in the solution, leading to an increase in $H_2CO_3$. Consequently, the increase in the concentration of protons, and thus the decrease in $pH$, is smaller in the presence of $DIC$, illustrating the $pH$ buffering effect by the carbonate system. The magnitude of the effect does not, however, scale linearly with the $DIC$ concentration. 

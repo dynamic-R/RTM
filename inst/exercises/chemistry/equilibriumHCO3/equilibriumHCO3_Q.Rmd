@@ -7,42 +7,39 @@ author: "Lubos Polerecky and Karline Soetaert, Utrecht University"
 date: "February 2021"
 output:
   pdf_document:
-    number_sections: false
+    number_sections: true
   html_document: default
+linestretch: 1.15
 ---
 
-```{echo = FALSE, include = FALSE}
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{Equilibrium chemistry II, two equilibrium reactions: modelling exercise}
-  %\VignetteEngine{knitr::rmarkdown}
-  \usepackage[utf8]{inputenc}
-```
+# Introduction and aim
 
-# Aim
+In part I of the Reader *Local equilibrium chemistry in R*, we have shown how to model situations where *one* fast reversible reaction involving *three* chemical species --- ammonium ($NH_4^+$), ammonia ($NH_3$) and protons ($H^+$) --- is coupled to a slow irreversible process that affects (adds or removes) one of the species ($NH_3$). We have seen that if we are only interested in modelling the dynamics due to the slow process, we can significantly simplify the model by reformulating it in terms of new state variables --- so-called *lump-sum species*. For the fast equilibration reaction $NH_4^+ \rightleftarrows NH_3 + H^+$, these new lump-sum species were the total ammonia, $NH_x = NH_3 + NH_4^+$, and the total positive charge, $H_x = NH_4^+ + H^+$.
 
-In part I of the Reader "Local equilibrium chemistry in R", we have shown how to model situations where *one* fast reversible reaction involving *three* chemical species --- ammonium ($NH_4^+$), ammonia ($NH_3$) and protons ($H^+$) --- is coupled to a slow irreversible process that affects (adds or removes) one of the species ($NH_3$). We have seen that if we are only interested in modelling the dynamics due to the slow process, we can significantly simplify the model by reformulating it in terms of new state variables --- so-called "lump-sum species". For the fast equilibration reaction $NH_4^+ \leftrightarrow NH_3 + H^+$, these new lump-sum species were the total ammonia, $NH_x = NH_3 + NH_4^+$, and the total positive charge, $H_x = NH_4^+ + H^+$.
+Here, we will illustrate how the generic approach developed in part I can be expanded towards more complicated scenarios involving more than one fast reversible reaction. Specifically, we will consider a diprotic acid ($H_2CO_3$), which sequentially dissociates according to the following reactions: 
+$$Reaction~1: \quad H_2CO_3\rightleftarrows HCO_3^- + H^+$$
+$$Reaction~2: \quad HCO_3^- \rightleftarrows CO_3^{2-} + H^+$$
 
-Here, we will illustrate how the generic approach developed in Part I can be expanded towards more complicated scenarios involving more than one fast reversible reaction. Specifically, we will consider a diprotic acid ($H_2CO_3$), which sequentially dissociates according to reactions 1--2. Because these reactions occur in water, which undergoes self-ionization,\footnote{A proton ($H^+$) does not exist as such in water because it reacts fast and strongly with water to form a hydrated proton (hydronium, $H_3O^+$), which in turn associates via hydrogen bonds to additional water molecules. It is macroscopically not possible to distinguish between the various hydrated proton species. In chemistry, they are typically bundled together and denoted as $H^+$, and we will employ this convention here, too. As a chemical reaction, water self-ionization is expressed according to $2H_2O \leftrightarrow OH^- + H_3O^+$, but we will use its conventional form $H_2O \leftrightarrow OH^- + H^+$.} we will additionally consider reaction 3 as another fast reversible process.
+In contrast to part I, here we will additionally account for *self-ionization of water*, which also affects the $pH$. Specifically, we will consider that $H^+$ (proton) does not exist as such in water because it reacts rapidly and strongly with water to form $H_3O^+$ (hydrated proton, also called *hydronium*), which in turn associates via hydrogen bonds to additional water molecules. Macroscopically, it is not possible to distinguish between the various hydrated proton species. In chemistry, they are typically bundled together and denoted as $H^+$, and we will employ this convention here, too. As a chemical reaction, water self-ionization is expressed according to $2\,H_2O \rightleftarrows OH^- + H_3O^+,$
+but we will use its more conventional form:
+$$ Reaction~3: \quad H_2O \rightleftarrows OH^- + H^+$$
 
-$$Reaction~1: \quad H_2CO_3\leftrightarrow HCO_3^- + H^+$$
-$$Reaction~2: \quad HCO_3^- \leftrightarrow CO_3^{2-} + H^+$$
-$$ Reaction~3: \quad H_2O \leftrightarrow OH^- + H^+$$
+Taken together, we will consider a system of *six* chemical species --- carbonic acid ($H_2CO_3$), bicarbonate ($HCO_3^-$), carbonate ($CO_3^{2-}$), water ($H_2O$), hydroxide ($OH^-$), and protons ($H^+$) --- all of them coupled via the fast reversible reactions 1--3. Our aim is to model how this coupling affects the dynamics of $pH$ if one of the components, specifically $H_2CO_3$, is added to/removed from the system at a rate that is much slower than the rate of the reversible reactions. 
 
-We will therefore consider a system of *six* chemical species --- carbonic acid ($H_2CO_3$), bicarbonate ($HCO_3^-$), carbonate ($CO_3^{2-}$), water ($H_2O$), hydroxide ($OH^-$), and protons ($H^+$) --- all of them coupled via the fast reversible reactions 1--3. The aim here is to model how this coupling affects the dynamics of pH if one of the components, specifically $H_2CO_3$, is added to/removed from the system at a rate that is much slower than the rate of the reversible reactions.\footnote{This process could be, for example, the addition of $H_2CO_3$ due to the exchange with atmospheric CO$_2$ or due to the mineralization of organic matter. Note that each of these processes is already a two-step process: the addition of CO$_2$ to water, which is a slow irreversible process, followed by a chemical reaction $CO_2 + H_2O \leftrightarrow H_2CO_3$, which is a fast reversible process. However, because the rate of the overall process is limited by the rate of the slow process, we can consider the net effect of these two processes to be a slow addition of $H_2CO_3$. Depending on the perspective, and given the reactions 1 and 2, one can also consider it as a slow addition of $HCO_3^- + H^+$ or $CO_3^{2-} + 2H^+$. However, here we will consider $H_2CO_3$ as the added species because the ultimate source is the $CO_2$ molecule from the atmosphere or mineralized organic matter.} 
+(**Note:** This process could be, for example, the addition of $H_2CO_3$ due to the exchange with atmospheric $CO_2$ or due to the mineralization of organic matter. Note that each of these processes is already a two-step process: the addition of $CO_2$ to water, which is a slow irreversible process, followed by a chemical reaction $CO_2 + H_2O \rightleftarrows H_2CO_3$, which is a fast reversible process. However, because the rate of the overall process is limited by the rate of the slow process, we can consider the net effect of these two processes to be a slow addition of $H_2CO_3$. Depending on the perspective, and given the reactions 1 and 2, one can also consider it as a slow addition of $HCO_3^- + H^+$ or $CO_3^{2-} + 2H^+$. However, here we will consider $H_2CO_3$ as the added species because the ultimate source is the $CO_2$ molecule from the atmosphere or mineralized organic matter.)
 
-The overall approach will be analogous to that developed in Part I, although the mathematical treatment will be more challenging due to the greater number of species (6 instead of 3) and reactions (3 instead of 1) involved. Specifically, since we are only interested in modelling the dynamics due to the slow process, we can significantly simplify the model by reformulating it in terms of "lump-sum" species. We will show that for the fast equilibration reactions 1--3, these new lump-sum species are the total dissolved inorganic carbon, $DIC = H_2CO_3  + HCO_3^- + CO_3^{2-}$, alkalinity (representing the total excess negative charge), $ALK = HCO_3^- + 2\cdot CO_3^{2-} + OH^- - H^+$, and the total hydroxide, $H_xO = H_2O + OH^-$. 
+The overall approach will be analogous to that developed in part I, although the mathematical treatment will be more challenging due to the greater number of species (6 instead of 3) and reactions (3 instead of 1) involved. Specifically, since we are only interested in modelling the dynamics due to the slow process, we can significantly simplify the model by reformulating it in terms of *lump-sum* species. We will show that for the fast equilibration reactions 1--3, these new lump-sum species are the total dissolved inorganic carbon, $DIC = H_2CO_3  + HCO_3^- + CO_3^{2-}$, alkalinity (representing the total excess negative charge), $ALK = HCO_3^- + 2\cdot CO_3^{2-} + OH^- - H^+$, and the total hydroxide, $H_xO = H_2O + OH^-$. 
 
-Ultimately, we will illustrate here how pH modelling is gradually developed when the number of fast acid-base reactions is increased from 1 (as in Part I) to 3. Once this is understood, one can further expand the approach to any number of acid-base reactions.
+Ultimately, we will illustrate here how $pH$ modelling is gradually developed when the number of fast acid-base reactions is increased from 1 (as in part I) to 3. Once this is understood, one can further expand the approach to any number of acid-base reactions.
 
 # Tasks
 
-The aproach followed in this Reader is based on a set of tasks that you should be able to solve on your own if you have understood the material presented in Part I of the Reader. It is challenging --- but possible, if you are motivated, persistent, and patient. If you feel you are stuck, you can of course look up the solutions provided at the end of this document. But we encourage you to try first on your own.
+The aproach followed in this reader is based on a set of tasks that you should be able to solve on your own if you have understood the material presented in part I of this reader series. It is challenging, but possible, if you are motivated, persistent and patient. If you feel you are stuck, you can of course look up the solutions provided at the end of this document. But we encourage you to try first on your own.
 
 
 ## Task 1: Mass balance equations of the dissolved carbonate system
 
-Assume that the forward and backward reactions 1--3 are *elementary reactions*. Denote the corresponding rate constants as $k_{1f}$ (units of $s^{-1}$) and $k_{1b}$ (units of $(mol~L^{-1})^{-1}~s^{-1}$) for the reaction 1, $k_{2f}$ and $k_{2b}$ (the same units) for the reaction 2, and $k_{3f}$ and $k_{3b}$ (the same units) for the reaction 3. Additionally, assume that the species $H_2CO_3$ is added at a rate $R_C$ ($mol~L^{-1}~s^{-1}$).\footnote{In this exercise, we stick to \emph{one} slow process that adds \emph{one} specific species to the system. Addition of multiple slow processes, each affecting a specific species in the system, would be entirely analogous.}
+Assume that the forward and backward reactions 1--3 are *elementary reactions*. Denote the corresponding rate constants as $k_{1f}$ (units of $s^{-1}$) and $k_{1b}$ (units of $(mol~L^{-1})^{-1}~s^{-1}$) for the reaction 1, $k_{2f}$ and $k_{2b}$ (the same units) for the reaction 2, and $k_{3f}$ and $k_{3b}$ (the same units) for the reaction 3. Additionally, assume that the species $H_2CO_3$ is added at a *net* rate $R_C$ ($mol~L^{-1}~s^{-1}$). (**Note:** In this exercise, we limit ourselves to *one* slow process that adds *one* specific species to the system. Analogous approach could be taken to include the addition of multiple slow processes, each affecting a different species in the system.)
 
 * Formulate mass balance equations considering the four processes including the acid-base reactions 1--3 and the process that adds $H_2CO_3$ to the system at a rate $R_C$. 
 
@@ -52,9 +49,9 @@ You should arrive at 6 differential equations for the state variables $[H_2CO_3]
 
 Assume that the rate of the slow process is zero ($R_C=0$). Using the mass balance equations formulated in Task 1, 
 
-* derive relationships between the equilibrium concentrations of the state variables describing the system. Hint: consider that the time-derivatives of the state variables are zero when the system is in equilibrium.
+* derive relationships between the equilibrium concentrations of the state variables describing the system. **Hint:** consider that the time-derivatives of the state variables are zero when the system is in equilibrium.
 
-You should arrive at *three* equations that relate the equilibrium concentrations of [$H_2CO_3$], [$HCO_3^-$], [$CO_3^{2-}$], [$H_2O$], [$OH^-$], and [$H^+$]. To simplify the relationships, define the ratios between the forward and backward rate constants as the so-called dissociation constants: $K_1 = k_{1f}/k_{1b}$, $K_2 = k_{2f}/k_{2b}$, and $K_w' = k_{3f}/k_{3b}$, where the latter value is related to the \emph{ionic product of water}, $K_w = [OH^-]\cdot [H^+]$, and water concentration, $[H_2O]$, according to $K_w' = K_w/[H_2O]$. For water with different salinities and temperatures, their values can be calculated using the *AquaEnv* package (Hofmann et al., 2010). At $25\,^\circ$C, salinity 0, and pressure of 1 bar, the corresponding values are 
+You should arrive at *three* equations that relate the equilibrium concentrations of [$H_2CO_3$], [$HCO_3^-$], [$CO_3^{2-}$], [$H_2O$], [$OH^-$], and [$H^+$]. To simplify the relationships, define the ratios between the forward and backward rate constants as the so-called dissociation constants: $K_1 = k_{1f}/k_{1b}$, $K_2 = k_{2f}/k_{2b}$, and $K_w' = k_{3f}/k_{3b}$, where the latter value is related to the *ionic product of water*, $K_w = [OH^-]\cdot [H^+]$, and water concentration, $[H_2O]$, according to $K_w' = K_w/[H_2O]$. For water with different salinities and temperatures, the values of the dissociation constants and other relevant parameters can be calculated using the *AquaEnv* package (Hofmann et al., 2010). At $25\,^\circ$C, salinity 0, and pressure of 1 bar, the corresponding values are 
 ```{r, message=FALSE}
 require(AquaEnv)
 
@@ -64,7 +61,7 @@ rho   <- a$density  # density, g/L
 MW    <- 18.0153    # molar weight, g/mol
 cH2O  <- rho/MW     # concentration, mol/L
 
-# dissociation constants (converted from mol/kg-soln -> mol/L)
+# dissociation constants (converted from mol/kg-soln to mol/L)
 K1       <- a$K_CO2  * 1e-3 * rho   # mol/L
 K2       <- a$K_HCO3 * 1e-3 * rho   # mol/L
 KW       <- a$K_W    * 1e-6 * rho^2 # (mol/L)^2
@@ -79,27 +76,36 @@ knitr::kable(cbind(c("$K_1$", "$K_2$", "$K_w$", "$K_w'$", "density", "concentrat
 ## Task 3: Lump-sum species
 
 * Show that if you define the lump-sum species according to 
-$$DIC = H_2CO_3  + HCO_3^- + CO_3^{2-},$$
-$$ALK = HCO_3^- + 2\cdot CO_3^{2-} + OH^- - H^+,$$ 
-$$H_xO = H_2O + OH^-,$$
+$$
+\begin{array}{rcl}
+DIC & = & H_2CO_3  + HCO_3^- + CO_3^{2-}, \\[4mm]
+ALK & = & HCO_3^- + 2\cdot CO_3^{2-} + OH^- - H^+, \\[4mm]
+H_xO & = & H_2O + OH^-,
+\end{array}
+$$
 their time derivatives are only affected by the slow process but *not* by the reversible reactions 1--3. 
 
-Note that these new state variables correspond to the *total concentration of dissolved inorganic carbon* (DIC), the *excess concentration of negatively charged species* (ALK), and the *total hydroxide concentration* ($H_xO$) in the system. 
+Note that these new state variables correspond to the *total concentration of dissolved inorganic carbon* (DIC), the *excess concentration of negatively charged species* (also called *carbonate alkalinity*, ALK), and the *total hydroxide concentration* ($H_xO$) in the system. 
 
 ## Task 4: From lump-sum species to original species
 
-Assume that the system is in an equilibrium, and that the concentrations $[DIC]$, $[ALK]$ and $[H^+]$ are *known*. Note that $pH = -\log{[H^+]}$, where $[H^+]$ is expressed in mol/liter of solution. Using the equilibrium relationships found in Task 2, 
+Assume that the system is in equilibrium and that the concentrations $[DIC]$, $[ALK]$ and $[H^+]$ are *known*. Note that $pH = -\log_{10}{[H^+]}$, where $[H^+]$ is expressed in mol/liter of solution. Using the equilibrium relationships found in Task 2, 
 
-* derive expressions for $[H_2CO_3]$, $[HCO_3^-]$, $[CO_3^{2-}]$, and $[OH^-]$ as a function of $[DIC]$ and $[H^+]$.
-* find a relationship between $[ALK]$, $[DIC]$ and $[H^+]$ from which one of the three state variables can be calculated provided that the other two are known.
+* derive expressions for $[H_2CO_3]$, $[HCO_3^-]$, $[CO_3^{2-}]$, and $[OH^-]$ as a function of $[DIC]$, $[H_xO]$ and $[H^+]$;
 
-This will be somewhat laborious, but technically (mathematically) rather straight-forward. 
+* find a relationship between $[ALK]$, $[DIC]$, $[H_xO]$ and $[H^+]$ from which one of the four quantities can be calculated provided that the other three are known.
+
+Solving this exercise will be somewhat laborious, but technically (mathematically) rather straight-forward. 
 
 ## Task 5: Application to atmospheric CO2 exchange
 
-Consider freshwater with a pH of 8 and a DIC concentration of $2~mmol~L^{-1}$. Assume that dissolved $CO_2$ is added to the water at a rate of $0.1~mmol~L^{-1}~d^{-1}$, and that this is a slow process in comparison to the reactions 1--3. Additionally, assume that the reactions 1--3 and the slow process with the rate $R_C$ are the only processes in the system.
+Consider freshwater with a $pH$ of 8 and a $DIC$ concentration of $2~mmol~L^{-1}$. Assume that dissolved $CO_2$ is added to the water at a rate of $0.1~mmol~L^{-1}~d^{-1}$ and that this is a slow process in comparison to the reactions 1--3. Additionally, assume that the reactions 1--3 and the slow process with the rate $R_C$ are the only processes in the system.
 
-* Write a model to predict the dynamics of the carbonate species, alkalinity and pH due to this process. You can start with the R-markdown template model file *RTM_equilibrium.Rmd*.\footnote{You can obtain this file from Rstudio: File $\rightarrow$ new File $\rightarrow$ Rmarkdown $\rightarrow$ from template $\rightarrow$ RTM\_equilibrium. Save this file under a different name, do not forget to change the heading of this file.}
+* Write a model to predict the dynamics of the carbonate species, alkalinity and $pH$ due to this process. 
 
-Implement the model for the temperature of 25 $^\circ$C, salinity of 0, and pressure of 1 bar. For these conditions, the approximate values of the dissociation constants $K_1$, $K_2$, and $K_w'$ are given above. You can start with the R-markdown template model file *RTMtemplate0D.Rmd* to implement this model.\footnote{You can obtain this file from Rstudio: File $\rightarrow$ new File $\rightarrow$ Rmarkdown $\rightarrow$ from template $\rightarrow$ RTMtemplate0D. Save this file under a different name, do not forget to change the heading of this file.}
+You can start with the R-markdown template model file ``RTM_equilibrium.Rmd``. (You can obtain this file from Rstudio: File $\rightarrow$ new File $\rightarrow$ Rmarkdown $\rightarrow$ from template $\rightarrow$ RTM\_equilibrium. Save this file under a different name, do not forget to change the heading of this file.)
+
+* Implement the model for the temperature of $25\,^\circ$C, salinity of 0, and pressure of $1\,bar$. For these conditions, the approximate values of the dissociation constants $K_1$, $K_2$, and $K_w'$ are given above. 
+
+You can start with the R-markdown template model file ``RTMtemplate0D.Rmd`` to implement this model. (You can obtain this file from Rstudio: File $\rightarrow$ new File $\rightarrow$ Rmarkdown $\rightarrow$ from template $\rightarrow$ RTMtemplate0D. Save this file under a different name, do not forget to change the heading of this file.)
 

@@ -9,12 +9,12 @@ output:
   pdf_document:
     number_sections: true
   html_document: default
+linestretch: 1.15
 ---
 
 ```{r child = 'equilibriumNH3_Q.Rmd'}
 ```
 
-\newpage
 ```{r child = 'equilibriumNH3_A.Rmd'}
 ```
 
