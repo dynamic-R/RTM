@@ -38,7 +38,7 @@ RTMreader(x = c("?", "events", "forcings", "observations",
 RTMtemplate(x = c("?", "rtm0D", "rtm1D", "porous1D", "porous1D_extensive", 
                   "rtmEquilibrium", "npzd", "rmarkdown_small"))
                   
-RTMreport(dest_folder = path_to_destination_folder)
+RTMreport(dest_folder = path.expand("~"))
 
 }
 
