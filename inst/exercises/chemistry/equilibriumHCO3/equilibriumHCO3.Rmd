@@ -1,7 +1,7 @@
 ---
 title: |
-  | Three Equilibrium Reactions
   | Local Equilibrium Chemistry in R --- part II:
+  | Three Equilibrium Reactions
 subtitle: "Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
 author: "Lubos Polerecky and Karline Soetaert, Utrecht University"
 date: "February 2021"
