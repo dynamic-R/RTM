@@ -110,7 +110,7 @@ In addition to tutorials and exercises, the RTM package provides a number of sma
 
 ## Model templates
 
-Although students develop their models from scratch, they do not necessarily start from an empty sheet when implementing them in R. Instead, they start from a number of R Markdown templates (Allaire et al., 2021) that are provided by the RTM package. Thus, rather then becoming easily confused or frustrated by the need to generate a syntactically correct R-code, students can focus on the implementation of the modelled processes and generation and visualisation of outputs using R-code chunks provided by the templates. The templates included in the package facilitate the development of
+Although students develop their models from scratch, they do not necessarily start from an empty sheet when implementing them in R. Instead, they start from a number of R Markdown templates (Allaire et al., 2021) that are provided by the RTM package. Thus, rather than becoming easily confused or frustrated by the need to generate a syntactically correct R-code, students can focus on the implementation of the modelled processes and generation and visualisation of outputs using R-code chunks provided by the templates. The templates included in the package facilitate the development of
 
 * dynamic models without the spatial component (*RTM_0D*),
 * dynamic one-dimensional reaction-transport models (*RTM_1D*),
