@@ -4,8 +4,8 @@ subtitle: "Exercises Accompanying the Course Reaction Transport Modelling in the
 author: "Karline Soetaert and Lubos Polerecky, Utrecht University"
 date: 'June 2021'
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
