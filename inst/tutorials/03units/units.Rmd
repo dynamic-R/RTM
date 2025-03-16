@@ -2,7 +2,7 @@
 title: "RTM course - Units"
 author: "Lubos Polerecky and Karline Soetaert"
 description: "exercises on working with units"
-date: "June 2021"
+date: "March 2025"
 output: 
   learnr::tutorial:
     progressive: true
@@ -15,102 +15,26 @@ knitr::opts_chunk$set(echo = TRUE)
 library(learnr)
 ```
 
-## Units
+## Tutorial
 
-WORK IN PROGRESS
+In this tutorial, we aim to show you some tips when calculating with quantities that have units.
 
-In quantitative problems, units play an important role. In this course, units will be practically 'everywhere'. For example,
+You are advised to look through the following slides.
 
-- we will often need to *convert between different units* when setting up our models or defining model parameters;
-
-- the first *quality check* of our models will very often include a *check on units*;
-
-In our experience, *most frequent mistakes* made by students when solving quantitative problems occur *during units conversions.* To avoid such mistakes, we recommend that you learn and adopt the following approach.
-
-1. At the beginning of your calculations, *convert all quantities to SI units*. 
-
-   In this course, we will most often use these SI units: m (meter), s (second), mol (mole), kg (kilogram), and K (Kelvin). 
-
-2. Be aware that you can *subtract* or *add* quantities if, and only if, they have the *same units*. 
-
-3. On the other hand, multiplying or dividing quantities with different units is no problem. In this case, the *units* of the different quantities also need to be *multiplied* or *divided*.
-
-## Converting units to SI units
-
-### Prefixes
-
-In practical life, we often use prefixes such as kilo ($10^3$), mega ($10^6$), milli ($10^{-3}$), micro ($10^{-6}$), etc. We do this mostly for convenience, e.g., if we want to avoid reporting too large or too small numbers. 
-
-### Recommended practice
-
-When dealing with quantities in such units, it is best to first convert those prefixes to the corresponding magnitude in the form $10^n$, where $n$ is an integer number. For example, 
-
-- $22~mm \rightarrow 22\times 10^{-3}~m$
-- $45~\mu s \rightarrow 45\times 10^{-6}~s$
-- $300~\mu g \rightarrow 300\times10^{-6}~ g =$ $300 \times (10^{-9} \times 10^3)~g=$ $300 \times 10^{-9} \times (10^3~g) =$ $300\times 10^{-9} ~kg$. 
-
-**Note**: Although, technically, $k$ (kilo) refers to $10^3$, in the last example we converted $\mu g$ to $kg$, not to $g$. This is because, oddly, *kilogram* (kg) is the SI unit of mass. 
-
-This is important to do when dealing with *derived* SI units, such as Newton (N), Joule (J), etc., which are defined in terms of SI base units. For example, $N= kg\cdot m\cdot s^{-2}$, whereas $J=N\cdot m =  kg\cdot m^2\cdot s^{-2}$. This will be important later, when we get to the multiplication and division of units. 
-
-### Conventional units
-
-In other practical situations, we use non-SI units. For example, we use 'liters' ($L$) when talking about volumes, the 'tonne' ($t$) when talking about heavy objects, 'molars' ($M$) when talking about concentrations of solutes in a liquid, or 'degrees Celsius' ($^\circ C$) when talking about temperature.
-
-We need to be aware of their relationship to the SI units:
-
-- $1~L = 0.001~m^3 = 10^{-3}~m^3$
-- $1~t = 1000~kg = 10^3~kg$
-- $1~M = 1~mol~L^{-1}$
-- $T~(K) = T~(^\circ C) + 273.15$
-
-### Recommended practice
-
-When dealing with quantities in non-SI units, it is best to first convert them to SI units. If there are prefixes, those should be converted to the corresponding magnitude in the form $10^n$, where $n$ is an integer number. For example, 
-
-$$
-\begin{array}{rcl}
-220~\mu M & = & 220~\times \underbrace{10^{-6}}_{\mu}~\underbrace{mol~L^{-1}}_{M} \\  
-& = & 220 \times 10^{-6}~mol~(\underbrace{10^{-3}~m^3}_L)^{-1} \\
-& = & 220 \times 10^{-6}~mol~10^{3}~m^{-3} \\
-& = & 220 \times (10^{-6}\times 10^3)~mol~m^{-3}\\
-& = & 220\times 10^{-3}~mol~m^{-3} \\
-& = & 0.22~mol~m^{-3}
-\end{array}
-$$
-
-## Adding or subtracting quantities
-
-1. Consider the following quantities:
-
-- lengths: $L_1 = 1~m$, $L_2 = 2~m$; time intervals: $T_1 = 10~s$, and $T_2 = 20~s$.
-
-   You *can* add lengths $L_1$ an $L_2$, which yields $L_1+L_2=3~m$. 
-
-   You can also add time intervals $T_1$ and $T_2$, which yields $T_1 + T_2 = 30~s$. 
-
-   However, you *cannot* add or subtract length with a time interval, for example, $L_1$ with $T_1$, or $L_1$ with $T_2$, as the quantities do not have the same unit.
-
-2. Next, consider the following quantities:
-
-- lengths: $L_1 = 1~m$, $L_2 = 150~mm$; time intervals: $T_1 = 1~min$, and $T_2 = 20~s$.
-
-   As before, you should be able to add lengths $L_1$ and $L_2$. However, you can only do so if they have the same units! We use SI units. So, we have $L_1+L_2 = 1~m + 0.15~m = 1.15~m$. 
-
-   Similarly, you can add time intervals $T_1$ and $T_2$ only if they have the same units! We use SI units. So, we have $T_1 + T_2 = 60~s + 20~s = 80~s$. 
-
-   As before, you *cannot* add or subtract lengths and time intervals.
+Slides available at <a href="Link_will_be_added" target="_blank">google-drive</a>
 
 ## Test yourself
 
-```{r Organism_Currency, echo=FALSE}
-msg <- "Carbon is used both for biomass and energy production, so this is the best model currency."
+```{r uM, echo=FALSE}
+msg <- "If you made a mistake, revise the steps explained in the tutorial and try to follow them."
 
-question("What would be a good model currency for such a model?", type = "learnr_radio",
- answer("C (carbon)", correct=TRUE),
- answer("N (nitrogen)"),
- answer("A mix of N and C"),
+question("Convert the concentration of $20~nM$ to $mol~m^{-3}$. Note that there are multiple correct answers.", type = "learnr_checkbox",
+ answer("$0.2 \\times 10^{-3} \\,mol\\, m^{-3}$"),
+ answer("$2 \\times 10^{-6}\\,mol\\,m^{-3}$"),
+ answer("$20 \\times 10^{-6}\\,mol\\,m^{-3}$", correct=TRUE),
+ answer("$0.02 \\times 10^{-3}\\,mol\\,m^{-3}$", correct=TRUE),
  
+ allow_retry = TRUE,
  incorrect=msg,
  correct=msg)
 ```
