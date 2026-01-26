@@ -15,7 +15,7 @@ The package is created with the R-package *learnr*.
 
 ### Total beginner?
 
-If you are totally new to R and Rstudio, it is a good idea to first read through the file ``introductionR.pdf``, which you can find in the sub-folder <a href="inst/exercises/R/introductionR" target="_blank"> inst/exercises/R/introductionR </a> of this repository. 
+If you are totally new to R and Rstudio, it is a good idea to first read through the file ``introductionR.pdf``, which you can find in the sub-folder [inst/exercises/R/introductionR](inst/exercises/R/introductionR) of this repository. 
 
 ### Somewhat familiar with R and Rstudio?
 
