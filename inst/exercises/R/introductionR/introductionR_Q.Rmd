@@ -39,11 +39,11 @@ We assume here that you use Microsoft Windows. The sequence of steps for Linux o
 
 R is the programming language that we will use in the course. It can be downloaded from \url{http://www.r-project.org/}. Click on the *download R* link, choose a mirror, and download the precompiled binary distribution for your system. On this website, you will also find useful documentation.
 
-First, install the *base* R (e.g., installation file ``R-4.1.0-win.exe`` or some later version). Subsequently, install *Rtools* (e.g., installation file ``rtools40v2-x86_64.exe``). The later step will allow you to compile R-packages on your computer, which will be quite important later on. Ensure that you complete the instructions described in the section *Putting Rtools on the PATH* after you have installed *Rtools*.
+First, install the *base* R (e.g., installation file ``R-4.5.2-win.exe`` or some later version). Subsequently, install *Rtools* (e.g., installation file ``rtools45-6691-6492.exe``, available under the *Installing Rtools45* section of the website describing Rtools installation). The later step will allow you to compile R-packages on your computer, which will be quite important later on. Depending on the version you are installing, you may need to read through the instructions to ensure that everything will work as intended.
   
 ## Rstudio
 
-To execute R code in a nice and comprehensive environment, we will use *Rstudio*.  Go to \url{http://rstudio.org}, choose *Download*, choose *Rstudio Desktop Free*, download the installation package for your system (e.g., ``RStudio-1.4.1717.exe`` or some later version), and install it.
+To execute R code in a nice and comprehensive environment, we will use *Rstudio*.  Go to \url{https://posit.co/downloads/}, choose *Download Rstudio*, download the installation package for your system (e.g., ``RStudio-2026.01.0-392.exe`` or some later version), and install it.
 
 Open *Rstudio* and test whether you can compile an R-package from source, as described in the instructions for installing *Rtools* (see above).
 
@@ -71,18 +71,24 @@ In this course, we will use several packages. We recommend that you install them
 
 * ``RTM`` --- This package contains much of the teaching material for the course. This package is currently available from a Github repository ``dynamic-R/RTM`` (\url{https://github.com/dynamic-R/RTM}). You can install it by entering the following command in the R-console:
 
-  ```devtools::install_github("dynamic-R/RTM", depend=TRUE)```
-
+  ```
+  devtools::install_github("dynamic-R/RTM", depend=TRUE)
+  ```
   More information about the RTM package is provided in Section 2 of this document.
 
 ## LaTeX distribution
 
-We will use the typesetting program \LaTeX\ to produce beautifully typeset documents. This program is extremely powerful and versatile, and it is widely used especially by people who want to write equations in their documents. In this course we will use it to convert documents written in *markdown* into PDF.
-To install \LaTeX, go to \url{https://miktex.org/}, choose *Download*, download the installation file (e.g., ``basic-miktex-21.6-x64.exe``), and install it.\footnote{The MacTex distribution (\url{https://tug.org/mactex/}) is recommended for Mac-OS users, the TexLive distribution is recommended for Linux users. Follow the installation instructions on the respective websites.} During the installation process, select *yes* when asked *Install missing packages on-the-fly*. Also, run the *MikTeX console* from the star menu just after the installation has finished, select *check updates*, and update any packages suggested by this check. At the end, restart *Rstudio* if it was running before \LaTeX\ installation.
+We will use the typesetting program \LaTeX\ to produce beautifully typeset documents (like this one ``;-)``). This program is extremely powerful and versatile, and it is widely used especially by people who want to insert (many) equations in their documents in a convenient way. In this course we will use it to convert documents written in *markdown* into PDF.
+
+To install \LaTeX, go to \url{https://miktex.org/}, choose *Download*, download the installation file compatible with your operating system, and install it following the installation instructions. During the installation process, select *yes* when asked *Install missing packages on-the-fly*. Also, run the *MikTeX console* from the start menu just after the installation has finished, select *check updates*, and update any packages suggested by this check. At the end, restart *Rstudio* if it was running before \LaTeX\ installation.
 
 ## Check whether everything is working 
 
-To check whether everything is working at this point, open *Rstudio*, and create a new R Markdown file. This is done from the menu by selecting File $\rightarrow$ New file $\rightarrow$ R Markdown $\rightarrow$ Document. Type the title, your name in the author box, check the ``PDF`` checkbox, and click *Ok*. If everything goes as expected, your *Rstudio* session should look similar as shown in Figure 1. 
+To check whether everything is working at this point, open *Rstudio* and create a new R Markdown file. This is done from the menu by selecting 
+
+* File $\rightarrow$ New file $\rightarrow$ R Markdown $\rightarrow$ Document.
+
+Type the title, your name in the author box, check the ``PDF`` checkbox, and click *Ok*. If everything goes as expected, your *Rstudio* session should look similar as shown in Figure 1. 
 
 ![Screenshot of Rstudio with the default Rmd file.](images/Rstudio.png){width=98%}
 
@@ -104,23 +110,25 @@ After completing the debugging steps above, everything should work well and you 
 
 # Learning reaction-transport modelling using the package RTM
 
-Now that you have installed the required software, you can proceed by studying other material prepared for the reaction-transport modelling course. This material is put together in the R-package called *RTM*. You can install this package in *Rstudio* by entering in the R-console:
-
-```devtools::install_github("dynamic-R/RTM", depend=TRUE)```
-
+After installing the required software, you can proceed by studying other material prepared for the reaction-transport modelling course. This material is put together in the R-package called *RTM*. You can install this package in *Rstudio* by entering the following command in the R-console:
+```
+devtools::install_github("dynamic-R/RTM", depend=TRUE)
+```
 The RTM package contains *tutorials*, *exercises* and extra *readers*. This division reflects the main course activities, as described in this section.
 
 ## RTM tutorials
 
-The *tutorials* contain short videos about a specific modelling topic. The topics range from basic principles (e.g., conceptual diagrams, mass balance equations) to more advanced (e.g., rate laws) and very advanced topics (e.g., pH modelling, reaction-transport modelling in porous media). The tutorials also contain simple tasks and exercises, which allow you to test your knowledge gained from the videos and prepare you for the exam. 
+The *tutorials* contain short knowledge clips about a specific modelling topic. The topics range from basic principles (e.g., conceptual diagrams, mass balance equations) to more advanced (e.g., rate laws) and very advanced topics (e.g., reaction-transport modelling in porous media, pH modelling). The tutorials also contain simple tasks and exercises, which allow you to test your knowledge gained from the videos and prepare you for the exam. 
 
-We recommend that you study the tutorials in advance, i.e., *before the class*. You try to learn as much as possible by watching the short videos (once, but preferably multiple times), consult the textbook, and solve the tasks and exercises within the individual tutorials. In the process, you note questions about topics that you have not fully understood. You will be able to consult these questions with your peers and with the lecturers during the class.
+We recommend that you study the tutorials *in advance*, i.e., *before the class*. Try to learn as much as possible by watching the knowledge clips (preferably multiple times), consult the textbook, and solve the tasks and exercises within the individual tutorials. In the process, note questions about topics that you have not fully understood. You will be able to consult these questions with your peers and with the lecturers during the class.
+
+### How to start a tutorial?
 
 If you installed the *RTM* package, you will find the tutorials in the *Tutorial* tab of the *Rstudio* program (Figure 3). Run the *tutorial* by clicking the *Start Tutorial* button.
 
 ![Left: Rstudio with the Tutorial tab selected. Right: RTM tutorial *conceptual* run as a web-based app, created using the *learnr* package.](images/Rstudio_tutorial.png)
 
-Alternatively, enter the following command in the R-console to see the complete list of available tutorials (output shown in table below):
+Alternatively, enter the following command in the R-console to see the complete list of available tutorials (output is shown in the table below):
 ```
 RTMtutorial("?")
 ```
@@ -134,17 +142,21 @@ Then, choose a tutorial you want to view (e.g., ``conceptual``), and start it by
 ```
 RTMtutorial("conceptual")
 ```
-Note that the tutorials are sorted from basics to intermediate and advanced topics. By studying the tutorials in the same order, you will be able to build up your knowledge of modelling in R in a gradual way. We will adhere to the same order during the course.
+Note that the tutorials are sorted from basics to intermediate and advanced topics. By studying the tutorials in this order, you will be able to build up your knowledge of modelling in R in a gradual way. We will adhere to the same order during the course.
 
 ## RTM exercises
 
-Each tutorial comes with a set of *exercises*, which contain more complicated problems that you should be able to solve once you have learned the basics from the tutorial. These exercises will be solved *during the class*. This means that you will be able to consult your questions, ideas, and solutions with the lecturers in a direct and interactive way. 
+Each tutorial comes with a set of *exercises*, which contain more complicated problems that you should be able to solve once you have learned the basics from the tutorial. You will be working on these exercises *during the class* and thus be able to consult your questions, ideas, and solutions with the lecturers in a *direct and interactive way*. 
+
+Note that the level of exercises will vary greatly as we progress with the course. We will take a slower start, but some of the exercises will get quite advanced relatively soon. It is entirely up to you to choose the pace of learning that suits you best. Note that you do *not* need to solve all the exercises. If you only want to learn the basics of modelling, it is totally fine if you only focus on the simpler exercises. However, if you do like to challenge yourself, there are couple of advanced exercises that you can try to solve. You will learn in this course as much as you are willing to dedicate to it in terms of time and effort. The lecturers will be eager to help you in the process. 
+
+### How to start an exercise?
 
 The exercises recommended for a given tutorial are listed at the end of the tutorial (section *More exercises*). For example, the tutorial on *Reversible reactions and equilibrium chemistry* recommends three additional exercises (*equilibriumNH3*, *equilibriumHCO3*, *equilibriumOMD*) (Figure 4).
 
 ![Screenshot of an RTM tutorial *Reversible reactions and equilibrium chemistry*, showing the suggestions for extra exercises to solidify the knowledge gained in the tutorial.](images/RTMexercises.png)
 
-Enter the following command in the R-console to see the complete list of available exercises (output shown in table below):
+Enter the following command in the R-console to see the complete list of available exercises (output is shown in the table below):
 ```
 RTMexercise("?")
 ```
@@ -161,9 +173,11 @@ If you want to export the exercise in a HTML or DOC format, change the value of 
 
 ## RTM readers
 
-Finally, the *RTM* package contains extra readers. These readers explain topics that are not part of the course but are nevertheless useful in the context of reaction-transport modelling. They explain, e.g., how to visualise multi-dimensional data generated by the models, implement events and forcing functions based on data, fit data with a model, create interactive model applications, analyse the response times of perturbed systems, or model pH gradients. 
+Finally, the *RTM* package contains *extra readers*. These readers explain topics that are not part of the course but are nevertheless useful in the context of reaction-transport modelling. For example, they explain how to visualize multi-dimensional data generated by the models, implement events and forcing functions based on data, fit data with a model, create interactive model applications, develop models collaboratively using ``git`` and the Github repository, and other topics.
 
-Enter the following command in the R-console to see the complete list of available readers (output shown in table below):
+### How to view a reader?
+
+Enter the following command in the R-console to see the complete list of available readers (output is shown in the table below):
 ```
 RTMreader("?")
 ```
@@ -226,12 +240,12 @@ Even better is to have the text, the code and the output in one document. This i
 
 There are several parts in the *R Markdown* document:
 
-* The title section (called *yaml header*) is between the two '- - -' sections at the start of the document. Here you can give a title, specify the author, include a date, abstract, etc.
+* The title section (called *yaml header*) is between the two ``---`` sections at the start of the document. Here you can give a title, specify the author, include a date, abstract, etc.
 * Headings are defined with ``#``, or ``##``, or ``###`` for first, second and third level headings, respectively.
 * Text sections can include many features. For instance, lists are created by using an asterisk (``*``) for bullets and numbers such as ``1``, ``2``, etc., for numbered lists. Figures, tables, equations can be added as well, and so on.
-* The R-code is embedded between the symbols $`\,`\,`\{r\}$ and $`\,`\,`$. These are called R-code chunks, or R-chunks for short, and they can be inserted using the shortcut \texttt{Ctrl+Alt+I}. In the top-right position of each R-chunk, you will find three symbols (two of them are marked with an orange circle in Figure 6). Pressing the middle symbol will run all R-chunks above (shortcut: \texttt{Ctrl+Alt+Shift+P}), while the right symbol will run the current R-chunk (shortcut: \texttt{Ctrl+Shift+Enter}). If you move with the cursor to a specific line within the R-chunk and press \texttt{Ctrl+Enter}, the code on that line will be executed. If there is any output, it will be displayed in the R-console.
+* The R-code is embedded between the symbols ```` ``` ````\{r\} and ```` ``` ````. These are called **R-code chunks**, or **R-chunks** for short, and they can be inserted using the shortcut \texttt{Ctrl+Alt+I}. In the top-right position of each R-chunk, you will find three symbols (two of them are marked with an orange circle in Figure 6). Pressing the middle symbol will run all R-chunks above (shortcut: \texttt{Ctrl+Alt+Shift+P}), while the right symbol will run the current R-chunk (shortcut: \texttt{Ctrl+Shift+Enter}). If you move with the cursor to a specific line within the R-chunk and press \texttt{Ctrl+Enter}, the code on that line will be executed. If there is any output, it will be displayed in the R-console.
 
-Finally, the *Knit* button (encircled in blue in Figure 6) will compile the *R Markdown* document and generate the document on the right. This final document contains both the R-code and the results. It fully documents the analysis.
+Finally, the *Knit* button (encircled in blue in Figure 6; shortcut: \texttt{Ctrl+Shift+K}) will compile the *R Markdown* document and generate the nicely typeset document (shown on the right in Figure 6). This final document contains both the R-code and the results. Thus, it provides a full documentation of the analysis.
 
 ## Getting started with R Markdown
 
@@ -260,7 +274,7 @@ An R-code is easy to read once you realise that:
 
 ## Console versus R-scripts versus R Markdown
 
-There are three ways in which to work with R.
+There are three ways to work with R, as described next.
 
 ### Console
 
@@ -272,7 +286,7 @@ We can type commands into the R console window at the command prompt (``>``) and
 
 Here ``sqrt``, ``log`` and ``log10`` are built-in functions in R, ``pi``  is a built-in constant, and the semi-colon (``;``) is used to separate R-commands entered on one line.
 
-In the console window, the "UP" and "DOWN" arrow keys can be used to navigate through previously typed commands (command history). Note that typing commands in the console is not the most efficient way of using R, especially if you want to debug and save your work for later use (see next).
+In the console window, the ``up`` and ``down`` arrow keys can be used to navigate through previously typed commands (i.e., the command history). Note that typing commands in the console is not the most efficient way of using R, especially if you want to debug and save your work for later use (see next).
 
 Throughout these notes, the following convention is used:
 
@@ -353,20 +367,20 @@ For instance, typing into the console window:
 will run all the examples from the pairs help file.
 (Try this, ``pairs`` is a very powerful way of visualizing pair-wise relationships.)
 
-Alternatively, you may select one example from the help file, copy it to the clipboard (ctrl-C for  windows users) and then paste it (ctrl-V) in the console window. 
+Alternatively, you may select one example from the help file, copy it to the clipboard (ctrl+C for Windows users) and then paste it (ctrl+V) in the console window. 
 In addition, the R main software and many R-packages come with demonstration material. Typing 
   
 ```{R, eval = FALSE }
  demo()
 ```
 
-will give a list of available demonstrations in the main software.
+will give a list of available demonstrations in the main software, whereas
   
 ```{R, eval = FALSE }
  demo(transport1D)
 ```
   
-will demonstrate some modelling output generated with package  *ReacTran*.
+will demonstrate some modelling output generated with the package *ReacTran*.
   
 ## Small things to remember
 
