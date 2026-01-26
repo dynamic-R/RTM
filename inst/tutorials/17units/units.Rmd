@@ -1,0 +1,82 @@
+---
+title: "RTM course - Units"
+author: "Lubos Polerecky and Karline Soetaert"
+description: "exercises on working with units"
+date: "January 2026"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(learnr)
+```
+
+## Tutorial
+
+In this tutorial, we show you some tips that you can apply when converting units.
+
+First, we recommend that you watch the following video.
+
+![](https://www.youtube.com/watch?v=hOesrlBnf8U&list=PLx8PHcDdmF-uD1Pr07TU9SzlhlGpfrxqn&index=15)
+
+Slides are available via <a href="https://drive.google.com/drive/folders/1Bys0-xzXLCpFpWhD-HrH6jDKOyl8iJMd" target="_blank">google-drive</a>: folder **01-lecture-slides**, file **03_Units_conversion_tips.pdf**.
+
+## Exercise 1
+
+```{r uM, echo=FALSE}
+msg2 <- "Not fully correct. Be sure to select all correct answers. If you made a mistake, revise the steps explained in the tutorial and try to follow them."
+msg1 <- "Perfect answer!"
+
+question("Convert the concentration of $20~nM$ to $mol~m^{-3}$. Note that there are multiple correct answers.", type = "learnr_checkbox",
+ answer("$0.2 \\times 10^{-3} \\,mol\\, m^{-3}$"),
+ answer("$2 \\times 10^{-6}\\,mol\\,m^{-3}$"),
+ answer("$20 \\times 10^{-6}\\,mol\\,m^{-3}$", correct=TRUE),
+ answer("$0.02 \\times 10^{-3}\\,mol\\,m^{-3}$", correct=TRUE),
+ allow_retry = TRUE,
+ incorrect=msg2,
+ correct=msg1,
+ try_again = msg2)
+```
+
+## Exercise 2
+
+```{r mM, echo=FALSE}
+question("Precipitation of a mineral is described by a rate constant $k_p = 4~m~h^{-1}$, while the dissolution of the same mineral is described by a rate constant $k_d = 0.48~mol~cm^{-2}~d^{-1}$. The equilibrium concentration of the dissolved mineral is calculated according to $c_{eq} = k_d/k_p$. What is the value of $c_{eq}$? Note that there are multiple correct answers.", type = "learnr_checkbox",
+ answer("$0.5 \\,mol\\, m^{-3}$"),
+ answer("$5.0 \\,mol\\, m^{-3}$"),
+ answer("$50 \\,mol\\, m^{-3}$", correct=TRUE),
+ answer("$500 \\,mol\\, m^{-3}$"),
+ answer("$0.05 \\,mol\\, L^{-1}$", correct=TRUE),
+ answer("$5 \\,mol\\, L^{-1}$"),
+ answer("$50 \\,mol\\, L^{-1}$"),
+ answer("$50 \\,mmol\\, L^{-1}$", correct=TRUE),
+ answer("$5 \\,mmol\\, L^{-1}$"),
+ allow_retry = TRUE,
+ incorrect=msg2,
+ correct=msg1,
+ try_again = msg2)
+```
+
+## Exercise 3
+
+```{r molL, echo=FALSE}
+question("Henry's law constant for $O_2$ dissolution in water at $25\\,^\\circ C$ is about $1.3\\,mM\\,atm^{-1}$. What is the concentration of dissolved $O_2$ in equilibrium with an atmosphere with a total pressure of $P_{tot} = 800\\,hPa$ and $O_2$ partial pressure of $20\\,\\%$? Consider that $1~atm = 101325~Pa$ and $1~M = 1~mol~L^{-1}$. Note that there are multiple correct answers.", 
+         type = "learnr_checkbox",
+ answer("$\\approx 0.205 \\,mol\\, m^{-3}$", correct=TRUE),
+ answer("$\\approx 20.5 \\,mol\\, m^{-3}$"),
+ answer("$\\approx 0.205 \\,mol\\, L^{-1}$"),
+ answer("$\\approx 205 \\,mmol\\, L^{-1}$"),
+ answer("$\\approx 205 \\,\\mu mol\\, L^{-1}$", correct=TRUE),
+ answer("$\\approx 0.205 \\,mM$", correct=TRUE),
+ answer("$\\approx 205 \\,\\mu M$", correct=TRUE),
+ answer("$\\approx 20.5 \\,mmol\\, m^{-3}$"),
+ allow_retry = TRUE,
+ incorrect=msg2,
+ correct=msg1,
+ try_again = msg2)
+```
+
