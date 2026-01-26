@@ -11,28 +11,29 @@
 RTMtutorial(x = c("?", "introduction", "why", "conceptual", "massbalance",     
                "Rmodels", "largescale", "chemical", "equilibrium", "enzymatic", 
                "partitioning", "ecology", "transportProcesses", "transportFluxes", 
-               "transportPorous", "transportBoundaries", "transportR"), 
+               "transportPorous", "transportBoundaries", "transportR", "units"), 
             output = c("tutorial", "RMD"))
             
-RTMexercise(x = c("?", "introductionR", "conceptual", "massbalance_chemistry",     
-               "massbalance_ecology", "carbonCycle", "ozone", "dissolutionSi",              
-               "equilibriumNH3", "equilibriumHCO3", "equilibriumOMD", "detritus",           
-               "npzd", "crops_weed", "covid", "virus", "bears_salmon",  
-               "plant_coexistence", "hyacinth_algae", "aquaculture", 
-               "estuaryAnoxia", "Pdiagenesis", "diagenesis",
-               "evaporation", "O18exchange"),               
+RTMexercise(x = c("?", "introductionR", "conceptual", "massbalance_chemistry",
+               "massbalance_ecology", "carbonCycle", "ozone", 
+               "dissolutionSi", "evaporation", "O18exchange",             
+               "equilibriumNH3", "equilibriumHCO3", "equilibriumOMD", 
+               "detritus", "npzd", "crops_weed", "covid", "virus", 
+               "bears_salmon", "plant_coexistence", "hyacinth_algae", "aquaculture", 
+               "estuaryAnoxia", "Pdiagenesis", "diagenesis", "pHprofiles"
+               ),               
             type = c("R", "massbalance", "linearmodels", "chemistry", 
                "biogeochemistry", "epidemiology", "ecology", 
-               "individualbased", "reaction_transport", "isotopes"),
+               "individualbased", "reaction_transport"),
             output = c("HTML", "PDF", "RMD", "WORD"))
             
 RTManswer(x, output = c("HTML", "PDF", "RMD", "WORD"))
 
 RTMreader(x = c("?", "events", "forcings", "observations", 
-               "fitting", "visualisation", "pHprofiles", 
-               "perturbation_I", "perturbation_II", 
+               "fitting", "visualisation",
                "interactive", "interactive2", "interactive_1D",
-               "numericalR", "git_sharing_code"),
+               "git_sharing_code", 
+               "perturbation_I", "perturbation_II", "numericalR"),
             output = c("HTML", "PDF", "RMD", "WORD"))
 
 RTMtemplate(x = c("?", "rtm0D", "rtm1D", "porous1D", "porous1D_extensive", 

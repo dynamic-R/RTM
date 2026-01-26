@@ -1,28 +1,33 @@
 ---
-title: 'Estimating pH in a 1D Reaction Transport Model in R'
-subtitle: "Reader Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
+title: "Estimating pH in a 1D Reaction Transport Model in R"
 author: "Karline Soetaert and Lubos Polerecky, Utrecht University"
 date: "April 2021"
 output:
-  pdf_document: default
-  html_document: default
-abstract: \noindent In two other readers, we have shown how to implement in R (i) a model that can predict the variation of pH in time due to reactions that add/remove chemical species capable of accepting/donating protons, and (ii) a reaction-transport model that can predict the variation of ammonia, nitrate and oxygen along an estuary. Here we combine and expand the two models to illustrate how to implement in R a reaction-transport model that can predict the spatial variation of pH. The overall approach involves two steps. First, the \texttt{ReacTran} package is used to calculate the steady-state distribution of the lump-sum species that include total ammonia ($\Sigma NH_4$), total nitrate ($\Sigma HNO_3$), total dissolved inorganic carbon ($\Sigma CO_2$), and (titration) proton alkalinity ($TA$). Then, based on these profiles, the \texttt{AquaEnv} package is used to calculate the steady-state distribution of pH.
+  pdf_document:
+    toc: false
+  html_document:
+    toc: false
+    df_print: paged
+subtitle: Reader accompanying the course Reaction Transport Modelling in the Hydrosphere
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+## Abstract
 
-# Before you start reading
+In two other readers, we have shown an implementation of two models in R: (i) a box model that can predict pH variation over time due to reactions that add/remove chemical species capable of accepting/donating protons (i.e., acid-base reactions), and (ii) a one-dimensional reaction-transport model that can predict the variation of ammonia, nitrate and oxygen along an estuary. Here we combine and expand these two models to illustrate how to implement in R a reaction-transport model that can predict the \textbf{spatial variation of pH}. The overall approach involves two steps. First, the \texttt{ReacTran} package is used to calculate the steady-state distribution of the lump-sum species that include total ammonia ($\Sigma NH_4$), total nitrate ($\Sigma HNO_3$), total dissolved inorganic carbon ($\Sigma CO_2$), and (titration) proton alkalinity ($TA$). Then, based on these profiles, the \texttt{AquaEnv} package is used to calculate the steady-state distribution of pH.
+
+## Before you start reading
 
 The basic principles that we are going to expand upon here are explained in the following readers:
 
 * Local Equilibrium Chemistry in R --- part III: Mixed Equilibrium -- Irreversible Reactions
 * Anoxia in the Scheldt estuary 
 
-It is important that you have fully understood the material covered in those readers before you start reading the following text. Type ``RTMexercise("equilibriumOMD")`` and ``RTMexercise("estuaryAnoxia")`` in the R-console to view the readers.
+It is important that you have fully understood the material covered in those readers before you start reading the following text. Type the following commands in the R-console to view the readers:
 
-# Modelled chemical reactions
+* ``RTMexercise("equilibriumOMD", output="PDF")``
+* ``RTMexercise("estuaryAnoxia", output="PDF")`` 
+
+## Modelled chemical reactions
 
 In the simplified model of the Scheldt estuary, we assumed that changes in water chemistry are only driven by two processes: nitrification (Reaction 1) and the air-water exchange of oxygen (Reaction 2).
 
@@ -46,7 +51,7 @@ Reaction~7: & H_2O \leftrightarrow H^+ + OH^-
 $$
 These reactions need to be considered for two reasons: (i) Reactions 3 and 4 are affected by Reaction 1, and (ii) Reactions 5--7 involve chemical species with the most important contributions (in terms of concentrations) to alkalinity, which is a central lump-sum species in models involving pH. The reasoning behind the second point is provided further down.
 
-## Lump-sum species
+### Lump-sum species
 
 As a first step in solving for pH, we need to identify lump-sum species that are not affected by any of the fast reversible reactions 3--7. In class, you saw that they include the total dissolved inorganic carbon
 $$\Sigma CO_2 = H_2CO_3 + HCO_3^- + CO_3^{2-},$$
@@ -64,7 +69,7 @@ Here we use the proton alkalinity:
 $$TA = 2[CO_3^{2-}] +[HCO_3^-]+[NH_3]+[OH^-]-[HNO_3]-[H^+].$$
 This definition is very close to the titration alkalinity measured by chemists, and it is also used within the R-package \texttt{AquaEnv} that we will use below to calculate pH. We recommend that, before you continue reading, you verify that the lump-sum species $\Sigma CO_2$, $\Sigma NH_4$, $\Sigma HNO_3$, and $TA$ are *not* affected by any of the fast reversible Reactions 3--7.
   
-## Mass-balance equations for the lump-sum species
+### Mass-balance equations for the lump-sum species
 
 Assuming local equilibrium, the above analysis implies the following mass-balance equations for the lump-sum species:
 $$
@@ -85,13 +90,13 @@ In these equations, $Tran(X)$ refers to the transport term for species $X$, $R_{
 
 We emphasise that pH *is* affected by nitrification, because nitrification consumes 2 moles of alkalinity per mole of total ammonia oxidised\footnote{Nitrification removes one mole of $NH_3$ and adds one mole of $H^+$. Thus, because protons contribute negatively to $TA$, this translates to 2 moles of TA removed per mole of $NH_3$ in Reaction 1. Note that although Reaction 1 \emph{adds} one mole of $NO_3^-$, this addition does \emph{not} affect $TA$ because the $NO_3^-$ species is \emph{not} part of the definition of $TA$!}  (Reaction 1, Eq. 4). In contrast, pH is *not* affected by aeration, because aeration only affects $O_2$, which is not part of $TA$. 
 
-# Calculation of pH
+## Calculation of pH
 
 In the reader entitled "Local Equilibrium Chemistry in R --- part III: Mixed Equilibrium -- Irreversible Reactions", we have shown that, in an equilibrium, there is an intimate relationship between the alkalinity, $pH$, and the concentrations of the lump-sum species $\Sigma CO_2$ and $\Sigma NH_4$ (see Equations 5a--5f in that reader). This made it possible to calculate $pH$ from the known values of $\Sigma CO_2$, $\Sigma NH_4$ and alkalinity (see function \texttt{solveH} on p. 6 of that reader).
 
 This conclusion is also valid for the proton alkalinity defined above, or for the complete $TA$ defined in footnote 1. Thus, in analogy to the function \texttt{solveH}, we could construct a function that calculates $pH$ from the value of $TA$ and the concentrations of the lump-sum species $\Sigma CO_2$, $\Sigma NH_4$, $\Sigma HNO_3$, etc. We are not going to do it here, however, because such function is already available. Specifically, the simplest (albeit not the fastest) way to estimate pH is to use the function \texttt{aquaenv} from the R-package *AquaEnv*.
 
-## The aquaenv function
+### The aquaenv function
 
 An example of an output of the \texttt{aquaenv} function is shown below. By providing the total alkalinity and the concentrations of the lump-sum species as input, we get in return a lot of output, including the $pH$: 
 
@@ -130,7 +135,7 @@ plot(x=AE$TA, y=AE$pH, xlab="Alkalinity [mol/kg Liquid]", ylab="pH",
      main="aquaenv output", las=1)
 ```
 
-# The extended model of the Scheldt estuary
+## The extended model of the Scheldt estuary
 
 Here we reproduce the model in the reader entitled "Anoxia in the Scheldt estuary" and expand it by including $\Sigma CO_2$ and $TA$ as state variables in addition to $O_2$, $\Sigma HNO_3$ and $\Sigma NH_4$. Note that because the modelled concentrations are in $mol~m^{-3}$, we will need the water density (\texttt{RHO}) to convert them to $mol~kg^{-1}~Liquid$ when calculating the $pH$.
 
@@ -139,7 +144,7 @@ RHO <- aquaenv(S=35, t=20)$density
 RHO
 ```
 
-## Model implementation
+### Model implementation
 
 First, we define the model domain, state variables, and parameters, including the boundary conditions for the new state variables. The concentrations of $\Sigma CO_2$ and *TA* in the river were obtained from literature (Frankignoulle et al., 1996).
 
@@ -235,7 +240,7 @@ Scheldt1D <- function(t, state, parms,
 }
 ```
 
-## Model solution
+### Model solution
 
 Solving the model for the situation in the 1970s and 2000s is now done in two steps. First, we find the steady-state solution without calculating $pH$ (\texttt{pHCalc=FALSE}). Subsequently, $pH$ is estimated by calling the model function (\texttt{Scheldt1D}) with the input argument \texttt{C} set to the steady-state solution (\texttt{ScheldtXX\$y}) and \texttt{pHCalc} set to TRUE.
 
@@ -268,21 +273,3 @@ plot(Scheldt00, Scheldt70, grid=Grid$x.mid/1000, lwd=2, lty=1,
      which="pH", mfrow=NULL, ylab="-", xlab="distance (km)")
 legend("top", legend = c("2000s", "1970s"), lty = 1, col = 1:2)
 ```
-
-
-# References
-
-R Core Team (2020). R: A language and environment for statistical computing. R Foundation for Statistical
-  Computing, Vienna, Austria. URL https://www.R-project.org/.
-  
-Soetaert Karline (2009).  rootSolve: Nonlinear root finding, equilibrium and steady-state analysis of ordinary
-  differential equations.  R-package version 1.6
-  
-Soetaert, Karline and Meysman, Filip, (2012). Reactive transport in aquatic ecosystems: Rapid model
-  prototyping in the open source software R Environmental Modelling & Software, 32, 49-60.
-
-Andreas F. Hofmann, Karline Soetaert, Jack J. Middelburg and Filip J. R. Meysman, 2010. AquaEnv - an Aquatic acid-base modelling Environment in R. Aquatic Geochemistry. DOI: 10.1007/s10498-009-9084-1.
-
-Karline Soetaert, Andreas F. Hofmann, Jack J. Middelburg, Filip J.R. Meysman, Jim Greenwood, 2007.  The effect of biogeochemical processes on pH. Marine Chemistry 105 30--51.  DOI: 10.1016/j.marchem.2006.12.012
-
-Frankignoulle, M., I.Bourge, R. Wollast, 1996. Atmospheric CO, fluxes in a highly polluted estuary (the Scheldt). Limnol. Oceanogr., 41(2), 1996, 365--369. DOI: 10.4319/lo.1996.41.2.0365

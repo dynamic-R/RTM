@@ -1,0 +1,16 @@
+---
+title: "Estimating pH in a 1D Reaction Transport Model in R"
+author: "Karline Soetaert and Lubos Polerecky, Utrecht University"
+date: "April 2021"
+output:
+  html_document:
+    toc: false
+    df_print: paged
+  pdf_document:
+    toc: false
+subtitle: Reader accompanying the course Reaction Transport Modelling in the Hydrosphere
+---
+
+## Answers
+
+Since this reader deals with fairly advanced topics, the solutions are provide by default in the text above.

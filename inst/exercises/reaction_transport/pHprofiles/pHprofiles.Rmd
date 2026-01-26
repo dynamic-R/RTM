@@ -1,0 +1,36 @@
+---
+title: "Estimating pH in a 1D Reaction Transport Model in R"
+author: "Karline Soetaert and Lubos Polerecky, Utrecht University"
+date: "April 2021"
+output:
+  pdf_document:
+    toc: false
+  html_document:
+    toc: false
+    df_print: paged
+subtitle: Reader accompanying the course Reaction Transport Modelling in the Hydrosphere
+---
+
+```{r child = 'pHprofiles_Q.Rmd'}
+```
+
+\newpage
+```{r child = 'pHprofiles_A.Rmd'}
+```
+
+# References
+
+R Core Team (2020). R: A language and environment for statistical computing. R Foundation for Statistical
+  Computing, Vienna, Austria. URL https://www.R-project.org/.
+  
+Soetaert Karline (2009).  rootSolve: Nonlinear root finding, equilibrium and steady-state analysis of ordinary
+  differential equations.  R-package version 1.6
+  
+Soetaert, Karline and Meysman, Filip, (2012). Reactive transport in aquatic ecosystems: Rapid model
+  prototyping in the open source software R Environmental Modelling & Software, 32, 49-60.
+
+Andreas F. Hofmann, Karline Soetaert, Jack J. Middelburg and Filip J. R. Meysman, 2010. AquaEnv - an Aquatic acid-base modelling Environment in R. Aquatic Geochemistry. DOI: 10.1007/s10498-009-9084-1.
+
+Karline Soetaert, Andreas F. Hofmann, Jack J. Middelburg, Filip J.R. Meysman, Jim Greenwood, 2007.  The effect of biogeochemical processes on pH. Marine Chemistry 105 30--51.  DOI: 10.1016/j.marchem.2006.12.012
+
+Frankignoulle, M., I.Bourge, R. Wollast, 1996. Atmospheric CO, fluxes in a highly polluted estuary (the Scheldt). Limnol. Oceanogr., 41(2), 1996, 365--369. DOI: 10.4319/lo.1996.41.2.0365

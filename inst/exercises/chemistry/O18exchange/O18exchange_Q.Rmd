@@ -18,7 +18,7 @@ linestretch: 1.15
 
 It is recommended that you first become familiar with the model describing water evaporation and precipitation. You can do this by typing the following command in the R-console:
 ```
-RTMexercise("evaporation")
+RTMexercise("evaporation", output = "PDF")
 ```
 The key equations governing that model are summarized here.
 

@@ -267,12 +267,13 @@ plot(std, grid=Grid$x.mid, xyswap=TRUE, lty=1, las=1,
 
 If you finished this tutorial but some of your answers were incorrect, you are encouraged to do the quiz again. You can do this by clicking on <span style="color:red">**Start Over**</span> at the bottom of the menu to the left.
 
-To learn more about 1D reaction-transport modeling in R, try to solve the following exercises.
+To learn more about 1D reaction-transport modeling in R, try to solve the following exercises. Note that the level of their complexity progressively increases.
 
 ```
-RTMexercise("estuaryAnoxia")
-RTMexercise("Pdiagenesis")
-RTMexercise("diagenesis")
+RTMexercise("estuaryAnoxia", output="PDF")
+RTMexercise("Pdiagenesis", output="PDF")
+RTMexercise("diagenesis", output="PDF")
+RTMexercise("pHprofiles", output="PDF")
 ```
 
 ## References
