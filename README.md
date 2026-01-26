@@ -13,6 +13,12 @@ The package is created with the R-package *learnr*.
 
 ## Installation
 
+### Total beginner?
+
+If you are totally new to R and Rstudio, it is a good idea to first read through the file ``introductionR.pdf``, which you can find in the sub-folder [main/inst/exercises/R/introductionR](main/inst/exercises/R/introductionR) of this repository. 
+
+### Somewhat familiar with R and Rstudio?
+
 Before installing the *RTM* package, you need to first install the following R-packages and their dependencies:
 
 * *deSolve*, *rootSolve*, *ReacTran* (required for creating reaction-transport models in R);
