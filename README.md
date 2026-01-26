@@ -154,4 +154,4 @@ To uninstall the package manually, type the following command in the R-console (
   ```
 
 ---
-Last updates: 2022-02-04, 2024-04-03
+Last updates: 2022-02-04, 2024-04-03, 2026-01-26
