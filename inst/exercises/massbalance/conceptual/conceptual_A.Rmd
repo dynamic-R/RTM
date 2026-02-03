@@ -53,3 +53,7 @@ The assumptions are:
 
 * The approach 'fertilize once before planting' can be implemented by increasing the initial concentration of P in the upper layer.
 * The approach 'fertilize regularly after planting' is implemented as a flux (called *Paddition* in the scheme).
+
+# Exercise 5 ANSWER.	Phosphorus cycling in marine sediments
+
+![Conceptual scheme of P cycling in marine sediments.](images/conceptual_Pcycling.png){width=85%}

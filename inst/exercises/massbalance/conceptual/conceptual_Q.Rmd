@@ -90,3 +90,15 @@ Devise a model that could be used to mimic this agriculture, and be used to opti
 * What are the components in your model? Draw the conceptual scheme.
 * How do you conceptualize the farmer’s two fertilization approaches of 'fertilize once before planting' vs. 'fertilize regularly after planting'? 
 
+# Exercise 5.	Phosphorus cycling in marine sediments
+
+The dynamics of phosphorus ($P$) in sediments is complex because it is impacted by biogeochemical and physical processes. Among other processes, phosphate that is released by mineralization of organic matter (biogeochemistry) can adsorb to iron oxides, precipitate as apatite (calcium phosphate mineral), or adsorb to calcium carbonate ($CaCO_3$). Adsorption to iron oxides occurs in the oxic zone, while phosphate is released again when iron oxides are reduced in the anoxic zone of the sediment. The last two processes (authigenic apatite formation and $P$ adsorption to $CaCO_3$) can play an important role in the long-term removal of $P$.
+
+## Tasks
+
+Use the above information to create a conceptual diagram for studying $P$ dynamics in marine sediments. 
+
+* Start with a simple model, assuming that $P$ is only exchanging between three pools: particulate organic phosphate (part of organic matter), dissolved phosphate ($H_2PO_4$), and the phosphate adsorbed to $CaCO_3$ ($P_{ads}$, solid phase). Additionally, consider sedimentation of organic matter, solute exchange across the sediment-water interface (e.g., by diffusion or bioirrigation), and burial due to sediment accretion, as the relevant input and output fluxes of $P$ across the boundaries of a sediment column.
+
+* When you are done with the simple model, try to make it more realistic by including additional processes including input of iron oxides (solids) into the sediment via sedimentation, iron cycling within the sediment (iron reduction and iron oxidation), $P$ adsorption to iron oxides, $P$ release due to iron reduction, and burial. Carefully consider which new state variables you will need to include in this more complicated model.
+
