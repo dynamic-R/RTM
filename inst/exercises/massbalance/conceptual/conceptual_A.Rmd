@@ -1,7 +1,7 @@
 ---
 title: "Conceptual Diagram - ANSWERS"
 author: "Lubos Polerecky and Karline Soetaert, Utrecht University"
-date: "June 2021"
+date: "June 2021, updated February 2026"
 output:
   pdf_document: default
   html_document: default
@@ -56,4 +56,4 @@ The assumptions are:
 
 # Exercise 5 ANSWER.	Phosphorus cycling in marine sediments
 
-![Conceptual scheme of P cycling in marine sediments.](images/conceptual_Pcycling.png){width=85%}
+![Conceptual scheme of P cycling in marine sediments.](images/conceptual_Pcycling.png){width=100%}
