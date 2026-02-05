@@ -1,39 +1,42 @@
 ---
-title: "Visualisation of a Reaction Transport Model Output together with Observed Data in R"
+title: "Visualization of the model output with observed data in R"
 subtitle: "Reader Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
-author: "Karline Soetaert and Lubos Polerecky, Utrecht University"
-date: "March 2021"
+author: "Lubos Polerecky and Karline Soetaert, Utrecht University"
+date: "March 2021, update: February 2026"
 output:
   pdf_document: default
   html_document: default
-abstract: \noindent Here we show how to include observed data in the same graph as the output of a reaction-transport model. This can be used to estimate values of model parameters that best fit the observed data.
+abstract: \noindent Here we show how to include observed data in the same graph as the output of 0D and 1D dynamic models. Such visualization can be used, for instance, to estimate values of model parameters that best fit the observed data. We illustrate different possibilities using the ``plot`` function implemented in the ``deSolve`` package but also using functions in the ``ggplot2`` package. Along the way, we will also show how to import the observed data into R.
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, 
+                      message = FALSE, fig.align='center')
 ```
 
-```{r, message = FALSE}
-require(deSolve)    
-require(marelac)
-require(ReacTran)
-require(rootSolve)
-```
-
-# Data visualisation with model output
+# Data visualisation with a model output
 
 It is relatively simple to visualise observed data together with model output, provided that:
 
-* The names of data columns are the same as the names of the (state) variables in the model.
+* The names of data columns are the same as the names of the state variables in the model.
+
 * The first column contains *time* for dynamic models, or the *space* variable for 1D steady-state models.
 
-To plot the data together with the model output, all you need to do is to specify the name of the data object (matrix or data.frame) in the argument ``obs`` when calling the ``plot`` function. You can also set the characteristics of the observed data through the argument ``obspar``.
+To plot the data together with the model output, all you need to do is to specify the name of the data object (matrix or data.frame) in the argument ``obs`` when calling the ``plot`` function. You can also modify the appearance of the observed data through the argument ``obspar``.
 
-## Dynamic model
+## Dynamic 0D model
 
-Consider the simple SIR model that you made in the class:
+First, we load the necessary package to solve 0D models.
 
-```{r, warning = FALSE, message = FALSE}
+```{r}
+require(deSolve)
+```
+
+### SIR model
+
+As an example, we consider the simple SIR model that you made in the class:
+
+```{r}
 state.SIR   <- c(S = 17500000, I = 1000, R = 0, Deceased = 0)
 
 pars.SIR   <- c(
@@ -59,55 +62,201 @@ SIR <- function(t, state, parms) {
 }
 ```
 
-The output of the model looks as shown in the following figure:
-```{r, fig.width=9, fig.height=3, warning = FALSE, message = FALSE, fig.align="center"}
-time.seq   <- seq(from=0, to=100, by=1)   # time sequence, in days
-out <- ode(y=state.SIR, times=time.seq, func=SIR, parms=pars.SIR)
-plot(out, las=1, col=1:2, lty=1, mfrow=c(1,4))
-```
-
-### Compare to data
-
-Suppose we have the following records of people that died (cumulatively). 
+We run the model for two values of the parameter ``b`` and store it in output variables ``out1`` and ``out2``.
 
 ```{r}
-SIRdata <- data.frame(
-     time = seq(from = 0, to = 100, by = 10),
-     Deceased = c(0, 50, 150, 250, 350, 450, 600, 700, 850, 1050, 1250))
-head(SIRdata, n=2)
-```
-
-In the model this state variable is called "Deceased", so we use the same name in the data.frame. Additionally, because the model output is a function of time, we use the name "time" for the first column in the data.frame.
-
-We run the model with different values of the parameter *b*:
-
-```{r, message = FALSE}
-p1 <- p2 <- p3 <- pars.SIR
-p1["b"] <- pars.SIR["b"]/2
-p2["b"] <- pars.SIR["b"]/5
-p3["b"] <- pars.SIR["b"]/10
+p1 <- p2 <- pars.SIR
+p1["b"]  <- 6e-9
+p2["b"]  <- 5e-9
+time.seq <- seq(from=0, to=100, by=1) # time sequence, in days
 
 out1 <- ode(y=state.SIR, times=time.seq, func=SIR, parms=p1)
 out2 <- ode(y=state.SIR, times=time.seq, func=SIR, parms=p2)
-out3 <- ode(y=state.SIR, times=time.seq, func=SIR, parms=p3)
 ```
 
-Now we compare the model output to our records by setting "SIRdata" as the value of the input parameter ``obs``:
-```{r, fig.width=6, fig.height=4, message = FALSE, warning=FALSE, fig.align="center"}
-plot(out, out1, out2, out3, 
-     obs=SIRdata,  # include external data
-     log="y", las=1, lty=1, lwd=2)
-legend("topleft", legend=c(pars.SIR["b"],p1["b"],p2["b"],p3["b"]), 
-      col=1:4, lty=1, lwd=2, title="b")
+The output of the model looks as shown in the following figure:
+
+```{r, fig.width=6.5, fig.height=2.5}
+plot(out1, out2, las=1, col=1:2, lty=1, mfrow=c(1,4))
 ```
 
-It is not so difficult to extract the best parameter value from the above figure.
+### Load external data
+
+Next, we load the observed data from an external CSV file ``SIPdata.csv``.
+
+```{r}
+SIRdata <- read.csv("SIRdata.csv")
+head(SIRdata)
+```
+
+We see that the file contains the number of people (fictitious) that died due to the viral infection in NL and BE as a function of time (in days). Additionally, it contains uncertainties of these values (quantified as standard errors, columns ``NL.se`` and ``BE.se``). Note that some of the values are not available (``NA``).
+
+### Compare data with model output
+
+To plot these data together with the model output, we first need to *rearrange* it a little. Specifically, we create two separate data-frames for the NL and BE populations, each containing both the best estimates and uncertainties. Note that we also need to rename the ``NL`` and ``BE`` columns to ``Deceased`` in order to make them compatible with the names of (one of) the state variable in the SIR model. We do not need to do this for the ``time`` column, as this is already the correct name.
+
+```{r}
+SIRdata.NL <- SIRdata[, c("time", "NL", "NL.se")]
+SIRdata.BE <- SIRdata[, c("time", "BE", "BE.se")]
+names(SIRdata.NL)[2:3] <- c("Deceased","se")
+names(SIRdata.BE)[2:3] <- c("Deceased","se")
+```
+
+Now we are ready to compare the model output and external data. To do this, we simply need to pass the data as the value of the input parameter ``obs``. However, to include *both* datasets, we need pass them as a ``list``:
+
+```{r, fig.width=6, fig.height=4}
+plot(out1, out2, lty=1,
+     obs = list(SIRdata.NL, SIRdata.BE))  # include external data
+```
+
+To make the graph a little more appealing and informative, we change colors and symbols for the different datasets, add a legend, and change the line widths. We use ``arrows`` as a way to add error-bars based on the values in the ``se`` column. Check the comments in the R-code below to learn how to do this in detail.
+
+```{r, fig.height=4.5, fig.width=4.5}
+plot(out1, out2, # include model outputs
+     # add x and y labels
+     xlab = "time (days)", ylab = "deceased (ind)",
+     # add graph title  
+     main = "SIR model",
+     # adjust y-axis limits
+     ylim = c(0,5000),
+     # specify line type, line width and colors
+     lty=1, lwd=2, col=c("red","green"),
+     # include external data as a LIST of different datasets
+     obs = list(SIRdata.BE, SIRdata.NL),
+     # specify symbols and colors for the external data
+     obspar = list(pch = c(16,17),         # symbols 
+                   col = c("red","green")) # colors
+     )
+
+# add error-bars as arrows without arrow heads
+arrows(x0 = SIRdata.BE$time, y0 = SIRdata.BE$Deceased - SIRdata.BE$se,
+       x1 = SIRdata.BE$time, y1 = SIRdata.BE$Deceased + SIRdata.BE$se,
+       length=0, col="red")
+arrows(x0 = SIRdata.NL$time, y0 = SIRdata.NL$Deceased - SIRdata.NL$se,
+       x1 = SIRdata.NL$time, y1 = SIRdata.NL$Deceased + SIRdata.NL$se,
+       length=0, col="green")
+
+# add a legend
+legend("topleft", # placement
+       legend = c(paste(p1["b"], "(BE)"), # text
+                  paste(p2["b"], "(NL)")),
+       col = c("red","green"), # colors
+       lty=1, lwd=2, # line type and width
+       title="b-value (country):") # legend title
+```
+### Approach using ggplot2
+
+``ggplot2`` is an R-packages that offers much more flexibility to plot fancy graphs. Here, we demonstrate how a graph similar to the one above can be plotted using this package. Depending on the perspective, it may look more or less laborious. 
+
+First, we bind the two outputs ``out1`` and ``out2`` into one data frame. We add the value of the parameter ``b`` as the last column, which will help us distinguish between the NL and BE populations.
+
+```{r}
+out <- rbind(             # bind the rows of out1 and out2
+  cbind(out1, b=p1["b"]), # add a column called 'b'
+  cbind(out2, b=p2["b"])  # add a column called 'b'
+  )
+out <- data.frame(out)
+head(out, n=3)
+```
+
+At this moment, the column ``b`` contains the values of the parameter ``b``. However, when plotting the data, we will want to use this parameter to distinguish between the NL and BE populations. Thus, we set this column as a ``factor``. Additionally, we change the ``levels`` of this parameter such that the first dataset will be considered as first, and the second one as second. This is necessary because the ``ggplot`` function sorts the levels in an ascending order, which is what we do *not* want now.
+
+```{r}
+out$b <- factor(out$b)
+# this would be the default order of Levels (ascending):
+head(out$b)
+# but we actually want the Levels to be in the same order as the values
+# of the parameter b
+out$b <- factor(out$b, levels=c(p1["b"], p2["b"]))
+# this is the correct order now
+head(out$b)
+```
+
+Next, we bind the two outputs ``BE`` and ``NL`` datasets created above into one data frame. We add a column ``Country`` to distinguish between the BE and NL populations.
+
+```{r}
+SIRdata <- rbind(
+  cbind(SIRdata.BE, Country="BE"),
+  cbind(SIRdata.NL, Country="NL")
+)
+head(SIRdata, n = 3)
+tail(SIRdata, n = 3)
+```
+
+Now, we are ready to plot everything using the ``ggplot2`` functions. We start with the smallest code, which yields the default appearance. Note the ``+`` at the end of the separate commands. This is how plotting with ``ggplot2`` works; essentially, you are adding more and more objects to a plot.
+
+```{r, fig.height=4, fig.width=5}
+library(ggplot2)
+ggplot() + 
+  # include the model data as lines
+  geom_line(data = out,
+            aes(x = time, y = Deceased, color = b)) +
+  # include the external data as points
+  geom_point(data = SIRdata,
+             aes(x = time, y = Deceased, color = Country),
+             size=2)
+```
+
+Next, we add some extra commands to make the graph look more appealing and informative. Check the comments in the code to learn more. If you want to learn even more, best is to search the internet for tutorials and help on the different ``ggplot2`` functions. Be careful, however, that you do NOT fall into a rabbit hole during this process!
+
+```{r, fig.height=4, fig.width=5}
+ggplot() + 
+  # include the model data as lines
+  geom_line(data = out,
+    aes(x = time, y = Deceased, color = b)) +
+  # include the external data as points
+  geom_point(data = SIRdata,
+    aes(x = time, y = Deceased, color = Country),
+    size = 2) +
+  # include error bars based on the se column
+  geom_errorbar(data = SIRdata,
+    aes(x = time, ymin = Deceased-se, ymax = Deceased+se, 
+        color = Country),
+    width=0.2) +
+  # add labels and a title
+  labs(color = "b-values:", x = "time (days)", title = "SIR model") +
+  # restyle the graph
+  theme_bw() +
+  theme(legend.position = "right",
+        panel.grid = element_blank()) +
+  # set colors manually
+  scale_color_manual(values = rep(c("red", "green"),2))
+```
+
+To illustrate few more capabilities of ``ggplot2``, we also plot the data as bars with error-bars.
+
+```{r, fig.height=3, fig.width=6}
+# see more examples here:
+# https://ggplot2.tidyverse.org/reference/position_dodge.html
+ggplot(data = SIRdata,
+       aes(x = as.factor(time), y=Deceased, fill=Country)) +
+  geom_col(position = "dodge") + 
+  geom_errorbar(aes(ymin=Deceased-se, ymax=Deceased+se, 
+                    color=Country), 
+                width=0.2,
+                position = position_dodge(width = 0.9)) +
+  xlab("time (days)") + 
+  theme_bw() + 
+  theme(legend.position = "right", 
+        panel.grid = element_blank())
+```
+
 
 ## Steady-state 1D model
 
-Consider a very simple model that describes first-order consumption of oxygen in the sediment.
+First, we load the necessary packages to solve 1D models.
 
-```{r, warning = FALSE, message = FALSE}
+```{r}
+require(marelac)
+require(ReacTran)
+require(rootSolve)
+```
+
+### Oxygen consumption model
+
+As an example, we consider a very simple model that describes first-order consumption of oxygen in the sediment.
+
+```{r}
 N      <- 100           # number of boxes
 L      <- 0.1           # depth of sediment [m] 
 por    <- 0.8           # porosity
@@ -131,7 +280,8 @@ O2func <- function(t, state, parms){
   with (as.list(parms), {
     
     O2 <- state
-    O2.tran <- tran.1D(C=O2, C.up = O2BW, D = DO2, VF = por, dx = Grid)
+    O2.tran <- tran.1D(C=O2, C.up = O2BW, 
+                       D = DO2, VF = por, dx = Grid)
     O2cons  <- rO2cons*O2
     
     dO2 <- O2.tran$dC - O2cons
@@ -140,38 +290,7 @@ O2func <- function(t, state, parms){
 }
 ```
 
-The model output for the default model parameters looks as follows:
-```{r, fig.height=3.5, fig.width=3.5, fig.align="center"}
-std <- steady.1D(y=state.ini, func=O2func, parms=pars.O2, 
-      nspec=nspec, dimens=N, names=names, positive=TRUE)
-plot(std, xyswap=TRUE, grid=Grid$x.mid, las=1, ylab="m", xlab="mM")
-```
-
-### Including data stored in a file
-
-Assume we measured oxygen concentrations in the sediment porewater every cm and stored the data in a file ``obsdata.csv``. It is simple to include this data together with the model results in the same graph.
-
-First, we load the data from the input file:
-
-```{r}
-# load data from a csv file and convert it to a data.frame
-O2dat.ext <- read.csv(file="obsdata.csv")
-O2dat.ext <- data.frame(O2dat.ext)
-
-# display to see column names and 1 data row
-head(O2dat.ext, n=1)
-```
-
-Because the names of the data columns do not match the names of the state variables, we modify them:
-
-```{r}
-# modify column names to match the state variables
-colnames(O2dat.ext) <- c("x", "O2")
-# display to see column names
-head(O2dat.ext, n=1)
-```
-
-We run the model with different values of the parameter *rO2cons*. 
+We run the model with different values of the parameter ``rO2cons``. 
 
 ```{r}
 p1 <- p2 <- p3 <- pars.O2
@@ -187,25 +306,45 @@ std3 <- steady.1D(y=state.ini, func=O2func, parms=p3,
       nspec=nspec, dimens=N, names=names, positive=TRUE)
 ```
 
-```{r, eval=FALSE, echo=FALSE}
-# export data
-out.depth <- seq(min(Grid$x.mid), max(Grid$x.mid), length.out = 10)
-out.A <- spline(Grid$x.mid, std2$y[, "O2"], xout=out.depth)$y +
-    (runif(length(out.depth))-0.5)*0.01
-out <- data.frame(depth_m=out.depth, O2_mM=out.A)
-out <- round(out, digits = 4)
-write.csv(out, file="data1.csv", row.names=FALSE)
+
+### Load external data
+
+We load the observed data from an external CSV file ``O2data.csv``:
+
+```{r}
+O2dat.ext <- read.csv("O2data.csv")
+head(O2dat.ext, n=3)
 ```
 
-Finally, we plot the model results together with the external data. We include the external data by setting ``O2dat.ext`` as the value of the input parameter ``obs``. Here, we additionally modify the shape and color of the data points by specifying the value for the input parameter ``obspar``.
+We must modify the names of the data columns to match the names of the model state variable (which is ``O2``):
 
-```{r, fig.height=3.5, fig.width=4, fig.align="center"}
-plot(std, std1, std2, std3, xyswap=TRUE, grid=Grid$x.mid, 
-     obs = O2dat.ext, # external data included
-     obspar = list(pch=16, col="green"),
-     lty=1, lwd=2, las=1, ylab="m", xlab="mM")
-legend("bottomright", col=1:4, lty=1, lwd=2, title="rO2cons [/d]", 
-   legend=c(pars.O2["rO2cons"], p1["rO2cons"], p2["rO2cons"], p3["rO2cons"]))
+```{r}
+# see the names of the state variables
+colnames(std1$y)
+# modify column names to match the state variables
+colnames(O2dat.ext) <- c("x", "O2")
+head(O2dat.ext, n=3)
+```
+
+### Compare data with model output
+
+Finally, we plot the model results together with the external data. We include the external data by setting ``O2dat.ext`` as the value of the input parameter ``obs``. We additionally modify the shape and color of the data points by specifying the value for the input parameter ``obspar``.
+
+```{r, fig.height=3.5, fig.width=4}
+plot(std1, std2, std3, xyswap=TRUE, grid=Grid$x.mid, 
+     # include external data
+     obs = O2dat.ext,
+     # specify symbols and colors for the external data
+     obspar = list(pch=16, col="blue"),
+     # specify line type and width for the model output
+     lty=1, lwd=2, 
+     # specify labels
+     ylab="depth (m)", xlab="O2 (mM)")
+
+# add a legend
+legend("bottomright", col=1:3, lty=1, lwd=2, 
+       title="rO2cons [/d]", 
+       legend=c(p1["rO2cons"], p2["rO2cons"], p3["rO2cons"]))
 ```
 
 # References
