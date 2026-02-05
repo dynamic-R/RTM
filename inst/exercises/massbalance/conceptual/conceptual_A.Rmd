@@ -3,8 +3,8 @@ title: "Conceptual Diagram - ANSWERS"
 author: "Lubos Polerecky and Karline Soetaert, Utrecht University"
 date: "June 2021, updated February 2026"
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 subtitle: Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere
 ---
 
@@ -56,4 +56,12 @@ The assumptions are:
 
 # Exercise 5 ANSWER.	Phosphorus cycling in marine sediments
 
-![Conceptual scheme of P cycling in marine sediments.](images/conceptual_Pcycling.png){width=100%}
+## Without iron cycling
+
+![Conceptual scheme of a simple model of P cycling in marine sediments.](images/conceptual_Pcycling1.png){width=100%}
+
+## With iron cycling 
+
+![Conceptual scheme of a more realistic model of P cycling in marine sediments.](images/conceptual_Pcycling2.png){width=100%}
+
+Note the division of the sediment column into the oxic (oxygen and nitrate are available) and anoxic (oxygen and nitrate are not available) zones.
