@@ -77,6 +77,7 @@ out2 <- ode(y=state.SIR, times=time.seq, func=SIR, parms=p2)
 The output of the model looks as shown in the following figure:
 
 ```{r, fig.width=6.5, fig.height=2.5}
+par(mar=c(2.7,3.7,1,0.5)+0.1,mgp=c(1.8,0.7,0))
 plot(out1, out2, las=1, col=1:2, lty=1, mfrow=c(1,4))
 ```
 
@@ -104,14 +105,16 @@ names(SIRdata.BE)[2:3] <- c("Deceased","se")
 
 Now we are ready to compare the model output and external data. To do this, we simply need to pass the data as the value of the input parameter ``obs``. However, to include *both* datasets, we need pass them as a ``list``:
 
-```{r, fig.width=6, fig.height=4}
+```{r, fig.width=5, fig.height=4}
+par(mar=c(2.7,2.7,1,0.5)+0.1,mgp=c(1.8,0.7,0))
 plot(out1, out2, lty=1,
      obs = list(SIRdata.NL, SIRdata.BE))  # include external data
 ```
 
 To make the graph a little more appealing and informative, we change colors and symbols for the different datasets, add a legend, and change the line widths. We use ``arrows`` as a way to add error-bars based on the values in the ``se`` column. Check the comments in the R-code below to learn how to do this in detail.
 
-```{r, fig.height=4.5, fig.width=4.5}
+```{r, fig.height=4, fig.width=4}
+par(mar=c(2.7,2.7,1,0.5)+0.1,mgp=c(1.8,0.7,0))
 plot(out1, out2, # include model outputs
      # add x and y labels
      xlab = "time (days)", ylab = "deceased (ind)",
@@ -331,6 +334,7 @@ head(O2dat.ext, n=3)
 Finally, we plot the model results together with the external data. We include the external data by setting ``O2dat.ext`` as the value of the input parameter ``obs``. We additionally modify the shape and color of the data points by specifying the value for the input parameter ``obspar``.
 
 ```{r, fig.height=3.5, fig.width=4}
+par(mar=c(2.7,2.7,1,0.5)+0.1,mgp=c(1.8,0.7,0))
 plot(std1, std2, std3, xyswap=TRUE, grid=Grid$x.mid, 
      # include external data
      obs = O2dat.ext,
