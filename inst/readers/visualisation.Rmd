@@ -1,5 +1,7 @@
 ---
-title: "Visualization of Dynamic Outputs from a 1D Reaction Transport Model in R"
+title: |
+  | Visualization of dynamic outputs 
+  | from a 1D reaction transport model in R
 subtitle: "Reader Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
 author: "Lubos Polerecky and Karline Soetaert, Utrecht University"
 date: "April 2021"
@@ -15,7 +17,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # The salinity model
 
-The "toy model" used in this reader describes salinity as a function of distance in an estuary. We assume that water in the estuary is mixed due to tidal dispersion, and that the water flow (advection rate, *v*) changes periodically over an annual cycle (e.g., due to a seasonal cycle in precipitation upstream).
+The "toy model" used in this reader describes salinity as a function of distance in an estuary. We assume that water in the estuary is mixed due to tidal dispersion, and that the water flow (advection rate, ``v``) changes periodically over an annual cycle (e.g., due to a seasonal cycle in precipitation upstream).
 
 First, we load the necessary packages, and define the model parameters and the model function. 
 
@@ -57,7 +59,7 @@ Estuary1D <- function(t, state, parms) {
 }
 ```
 
-Now, we calculate the steady-state solution, and use it as the initial condition to calculate a dynamic solution. Note that, by default, the steady-state solution is found assuming that $t=0$. That is, the velocity in the model function is $v=v_{mean} + v_{amp}$ when the steady-state solution is calculated using the *steady.1D* function.
+Now, we calculate the steady-state solution, and use it as the initial condition to calculate a dynamic solution. Note that, by default, the steady-state solution is found assuming that $t=0$. That is, the velocity in the model function is $v=v_{mean} + v_{amp}$ when the steady-state solution is calculated using the ``steady.1D`` function.
 
 ```{r}
 # model run: steady
@@ -71,15 +73,15 @@ out <- ode.1D(y = std$y, times = seq(0,2*365,by=2), parms = pars,
 
 # Default graphical display
 
-The package *deSolve* contains functions that work with dynamic 1D objects (*subset*, *image*, *matplot.1D*, *plot.1D*) and with 0D objects (*plot*, *matplot.0D*), etc.  To get help on these functions, type in the console:
+The package ``deSolve`` contains functions that work with dynamic 1D objects (``subset``, ``image``, ``matplot.1D``, ``plot.1D``) and with 0D objects (``plot``, ``matplot.0D``), etc.  To get help on these functions, type in the console:
 
 ```{}
 ?plot.deSolve
 ```
 
-By default, the plotting functions will determine a suitable arrangement of the graphs (by setting its argument *mfrow*). This can be overruled by specifying your own *mfrow* when calling the functions. Alternatively, you can set *mfrow = NULL*, which will not change the mfrow setting.
+By default, the plotting functions will determine a suitable arrangement of the graphs (by setting its argument ``mfrow``). This can be overruled by specifying your own ``mfrow`` when calling the functions. Alternatively, you can set ``mfrow = NULL``, which will not change the mfrow setting.
 
-In the code below, it is first specified that the *image* should be positioned in an arrangement that will have two rows and two columns (*mfrow=c(2,2)*). Then, when calling the *plot* function, the argument (*mfrow=NULL*) tells R not to overrule this arrangement. In addition to a x--y plot, we also plot a histogram of velocities to illustrate how often valocities in a certain velocity interval occur throughout the modeled time domain.
+In the code below, it is first specified that the image should be positioned in an arrangement that will have two rows and two columns (``mfrow=c(2,2)``). Then, when calling the ``plot`` function, the argument (``mfrow=NULL``) tells R not to overrule this arrangement. In addition to a x--y plot, we also plot a histogram of velocities to illustrate how often valocities in a certain velocity interval occur throughout the modeled time domain.
 
 ```{r, fig.width=8, fig.height=8, message = FALSE, warning = FALSE}
 image(out, which="Salinity", grid=Grid$x.mid, mfrow=c(2,2))
@@ -89,24 +91,24 @@ hist(out, which = "v", mfrow=NULL)
 
 ## Subsetting and summary
 
-To get a summary of the output produced by *ode.1D*, we write:
+To get a summary of the output produced by ``ode.1D``, we write:
 ```{r}
 summary(out)
 ```
 
 ### Timeseries at specific positions
 
-We use the following steps to visualise how the salinity changes over time at specific locations in the estuary.
+We use the following steps to visualize how the salinity changes over time at specific locations in the estuary.
 
-* First, we extract the 2D salinity object (time, space) using the function *subset*. This function returns a matrix with the values arranged according to time (rows) and space (columns); the times are stored as an attribute.
-* Then, we use *matplot* for plotting the time variation at specific locations.
+* First, we extract the 2D salinity object (time, space) using the function ``subset``. This function returns a matrix with the values arranged according to time (rows) and space (columns); the times are stored as an attribute.
+* Then, we use ``matplot`` for plotting the time variation at specific locations.
 
-Note that, in the example code below, we plot the legend in *another* graph. Function *plot.new* just creates a new graph without doing any plotting. If you do not like the fact that the two "graphs" are equally large, you may use the function *layout*, which allows you to specify the size of the graphs. 
+Note that, in the example code below, we plot the legend in *another* graph. Function ``plot.new`` just creates a new graph without doing any plotting. If you do not like the fact that the two "graphs" are equally large, you may use the function ``layout``, which allows you to specify the size of the graphs. 
 We used "layout(mat = matrix(nrow = 1, ncol = 4, data = c(1,1,1,2)))", which will make the first graph 3 times as wide as the graph with the legend.
 
-Also note that the specific locations are defined using *indices* of the vector $x$, where $x[1]$ and $x[500]$ corresponds to the beginning and the end of the estuary, respectively.
+Also note that the specific locations are defined using ``indices`` of the vector $x$, where $x[1]$ and $x[500]$ corresponds to the beginning and the end of the estuary, respectively.
 
-```{r}
+```{r, fig.height=4, fig.width=6, fig.align='center'}
 Salinity <- subset(out, which = "Salinity")
 time     <- attributes(Salinity)$time
 select   <- c(1,100,200,300,400,500)  # indices, not real distances!
@@ -123,12 +125,12 @@ legend("center", col=1:6, lty=1, legend=Grid$x.mid[select]/1000,
 
 We use the following steps to visualise the varation of salinity in space at specific time points.
 
-* First, we extract the 2D salinity object (time, space) using the function *subset*. This function returns a matrix with the values arranged according to time (rows) and space (columns); the times are stored as an attribute.
-* Then, we use *matplot*.
+* First, we extract the 2D salinity object (time, space) using the function ``subset``. This function returns a matrix with the values arranged according to time (rows) and space (columns); the times are stored as an attribute.
+* Then, we use ``matplot``.
 
-Note that now we specify the time points as *days* rather than via indices. To find the indices in the vector *time* that correspond to these specific days, we use the function *which*.
+Note that now we specify the time points as *days* rather than via indices. To find the indices in the vector *time* that correspond to these specific days, we use the function ``which``.
 
-```{r}
+```{r, fig.height=5, fig.width=6, fig.align='center'}
 Salinity <- subset (out, which = "Salinity")
 time     <- attributes(Salinity)$time
 tselect  <- which(time %in% c(0,92,182,274,366)) # day 0, 92, 182, ...
@@ -141,7 +143,7 @@ legend("bottomright", col=1:5, lty=1, legend=time[tselect],
 
 # Richer graphical display
 
-The function *image2D* from the R-package *plot3D* is more flexible with respect to plotting of images. For instance, it allows you to label the color key (argument *clab*); add *contour*s, increase the plotting resolution (*resfac*), etc.
+The function ``image2D`` from the R-package ``plot3D`` is more flexible with respect to plotting of images. For instance, it allows you to label the color key (argument ``clab``); add ``contour``s, increase the plotting resolution (``resfac``), etc.
 
 See 
 ```{}
@@ -159,7 +161,7 @@ image(out, which="Salinity", grid=Grid$x.mid/1000, ylab="km", xlab="time (d)",
       method="image2D", clab="-", las=1, contour=TRUE)
 ```
 
-It is more flexible to first extract the salinity and then use the function image2D directly. Note that here we additionally change the colormap (argument *col*).
+It is more flexible to first extract the salinity and then use the function image2D directly. Note that here we additionally change the colormap (argument ``col``).
 
 ```{r, fig.height=3.5}
 S     <- subset(out, which = "Salinity")
@@ -169,7 +171,7 @@ image2D(x=times, y=Grid$x.mid/1000, z=S, ylab="km", xlab="time (d)", main="Salin
         contour=list(levels = c(10,20), col="darkred", labcex=1.5, lwd=2))
 ```
 
-Also, to use the *contour2D* function from *plot3D*, the data have to be extracted first, and the *x* and *y* variables have to be explicitly passed as input arguments:
+Also, to use the ``contour2D`` function from ``plot3D``, the data have to be extracted first, and the ``x`` and ``y`` variables have to be explicitly passed as input arguments:
 
 ```{r, fig.height=3.5}
 S <- subset(out, which = "Salinity")
