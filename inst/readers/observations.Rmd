@@ -101,6 +101,7 @@ SIRdata.NL <- SIRdata[, c("time", "NL", "NL.se")]
 SIRdata.BE <- SIRdata[, c("time", "BE", "BE.se")]
 names(SIRdata.NL)[2:3] <- c("Deceased","se")
 names(SIRdata.BE)[2:3] <- c("Deceased","se")
+head(SIRdata.NL, n=3)
 ```
 
 Now we are ready to compare the model output and external data. To do this, we simply need to pass the data as the value of the input parameter ``obs``. However, to include *both* datasets, we need pass them as a ``list``:
