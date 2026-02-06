@@ -101,26 +101,23 @@ SIRdata.NL <- SIRdata[, c("time", "NL", "NL.se")]
 SIRdata.BE <- SIRdata[, c("time", "BE", "BE.se")]
 names(SIRdata.NL)[2:3] <- c("Deceased","se")
 names(SIRdata.BE)[2:3] <- c("Deceased","se")
-head(SIRdata.NL, n=3)
+head(SIRdata.NL, n=2)
 ```
 
 Now we are ready to compare the model output and external data. To do this, we simply need to pass the data as the value of the input parameter ``obs``. However, to include *both* datasets, we need pass them as a ``list``:
 
-```{r, fig.width=5, fig.height=4}
-par(mar=c(2.7,2.7,1,0.5)+0.1,mgp=c(1.8,0.7,0))
+```{r, fig.width=4, fig.height=4}
 plot(out1, out2, lty=1,
      obs = list(SIRdata.NL, SIRdata.BE))  # include external data
 ```
 
 To make the graph a little more appealing and informative, we change colors and symbols for the different datasets, add a legend, and change the line widths. We use ``arrows`` as a way to add error-bars based on the values in the ``se`` column. Check the comments in the R-code below to learn how to do this in detail.
 
-```{r, fig.height=4, fig.width=4}
+```{r, fig.height=3.5, fig.width=4}
 par(mar=c(2.7,2.7,1,0.5)+0.1,mgp=c(1.8,0.7,0))
 plot(out1, out2, # include model outputs
-     # add x and y labels
-     xlab = "time (days)", ylab = "deceased (ind)",
-     # add graph title  
-     main = "SIR model",
+     # add x and y labels and a graph title
+     xlab = "time (days)", ylab = "deceased (ind)", main = "SIR model",
      # adjust y-axis limits
      ylim = c(0,5000),
      # specify line type, line width and colors
