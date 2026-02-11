@@ -257,7 +257,7 @@ Short help on the text format that can be used in Markdown documents can be foun
 
 ## Exercises --- Creating and exporting an Rmd document
 
-Open the *R Markdown* file called ``Rmarkdown_small.Rmd`` in *Rstudio*. The file is available via Blackboard and was used to generate Figure 5.
+In *Rstudio*, load the ``RTM`` package using the command ``require(RTM)``. Next, select the menu item File $\rightarrow$ New File $\rightarrow$ R Markdown. Then, select ``From Template`` and scroll through the list to find the ``rmarkdown_small.Rmd`` file, select it, and click ``OK`` to open it in the editor. This file was used to generate Figure 5.
 
 * Try the different buttons featuring on the top right of the R-code.
 * Change the title of the document and make yourself the author. 
@@ -266,7 +266,7 @@ Open the *R Markdown* file called ``Rmarkdown_small.Rmd`` in *Rstudio*. The file
 
 # A quick overview of R and Rstudio
 
-An R-code is easy to read once you realise that:
+An R-code is easy to read once you realize that:
 
 * ``<-`` is the assignment operator (e.g., ``A <- 1`` assigns the value of 1 to the variable A).\footnote{Note that within an R-code edited in \emph{Rstudio}, you can quickly type this operator by pressing a shortcut \textbf{Alt+minus}. This will also include spaces around the operator for increased legibility of the command. This works well for Windows and Linux users. Mac-OS users may need to search the internet for a suitable shortcut.}
 * everything starting with a hash-sign (``#``) is considered a comment.
@@ -600,12 +600,12 @@ V[seq(from = 1, to = 5, by = 2)]
 
 ### Logical expressions
 
-Logical expressions are often used to select elements from vectors and matrices that obey certain criteria. R distinguishes logical variables ``TRUE`` and ``FALSE``, represented by the integers $1$ and $0$.\footnote{Note that variables \textit{T} and \textit{F} are reserved in \textit{R} to represent the logical \textit{TRUE} and \textit{FALSE}, respectively. Therefore, if you want to avoid unexpected consequences, you should \textit{not} use \textit{T} and \textit{F} as variables to which you assign values. For example, it might be tempting to use \textit{T} to denote temperature, or \textit{F} to denote flux. It is recommended that you do \textit{not} do this, but use instead more intuitive names such as \textit{Temp} and \textit{Flux}.}
+Logical expressions are often used to select elements from vectors and matrices that obey certain criteria. R distinguishes logical variables ``TRUE`` and ``FALSE``, represented by the integers $1$ and $0$.\footnote{Note that in \textit{R}, variables \texttt{T} and \texttt{F} may be reserved to represent the logical \texttt{TRUE} and \texttt{FALSE}, respectively. Therefore, if you want to avoid unexpected behavior, you should \textit{not} use \texttt{T} and \texttt{F} as variables to which you assign values. For example, you might be tempted to use \texttt{T <- 20} for setting the temperature value to 20, or \texttt{F <- 0.1} for setting the flux value to 0.1. It is recommended that you do \textit{not} do this, but use instead more intuitive names such as \texttt{Temp} and \texttt{Flux}.}
 
-The following will return *TRUE* for values of sequence V that are greater than 1:
+The following will return ``TRUE`` for values of sequence V that are greater than 1:
 
 ```{r}
-(V <- seq(from = -2, to = 2, by = 0.5))
+V <- seq(from = -2, to = 2, by = 0.5)
 V > 1
 ```
 
@@ -618,26 +618,27 @@ V [V > 1]
 will select the values from V that are greater than 1, and 
 
 ```{r}
-V [V > 1] <- 0
+V [V >= 1] <- 0
+V
 ```
 
-will set to zero all elements in V that are greater than 1.
+will set to zero all elements in V that are greater or equal to 1.
 
-## Removing elements
+## Removing specific elements
 
-When the index is preceded by a ``-``, the element is removed. For example,
+When the index is preceded by a ``-`` (minus) sign, the element is removed. For example,
 
 ```{r}
  A[ ,-1]
 ```
 
-will show the contents of matrix ``A``, except the first column, while the command
+will select the content of the matrix ``A`` except for the first column, while the command
 
 ```{r}
-V[- V < 0]
+A[-2, ]
 ```
 
-will only show the positive or zero elements of ``V`` (i.e., elements that are *not* negative).
+will select the content of the matrix ``A`` except for the second row.
   
 
 ## More complex data structures
