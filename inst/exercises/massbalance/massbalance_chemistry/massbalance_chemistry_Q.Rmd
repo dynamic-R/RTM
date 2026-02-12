@@ -4,8 +4,8 @@ subtitle: "Exercises Accompanying the Course Reaction Transport Modelling in the
 author: "Karline Soetaert and Lubos Polerecky, Utrecht University"
 date: 'June 2021'
 output:
-  html_document: default
   pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -20,16 +20,13 @@ You are given a conceptual diagram for the carbon flow describing decay of parti
 
 ## Task
 
-Create the mass balance equations based on this diagram.
+Based on this diagram, formulate the corresponding mass balance equations.
 
 # Exercise 2. Methane dynamics in wetlands
 
-Methane ($CH_4$) is an important greenhouse gas, contributing more than 20% to global warming. 
-Methane emissions from wetlands are key to the global methane dynamics. 
+Methane ($CH_4$) is an important greenhouse gas, contributing more than 20% to global warming. Methane emissions from wetlands are key to the global methane dynamics. In this exercise, you will design a simple model of methane dynamics in wetland systems that can be used to assess the future role of methane in global warming. 
 
-You will devise a simple model of methane dynamics in these wetland systems that can be used to assess the future role of methane in global warming. 
-
-The model represents the upper part of the wetland soil that is in contact with the atmosphere. The model should include methane production and oxidation (biogeochemical processes), the storage (burial) of methane in wetland soils, and methane emissions to the atmosphere (the latter two as transport processes). 
+The modeled domain represents the upper part of the wetland soil that is in contact with the atmosphere. The relevant processes include methane production via organic matter decomposition, methane removal by oxidation, methane burial (storage) in deeper wetland soils, and methane emissions to the atmosphere. While the first two processes are biogeochemical, mediated by microbes, the latter two are physical, linked to transport. 
 
 In the soil, methane is produced (from acetic acid, $CH_3COOH$) under anaerobic conditions, which proceeds in two subsequent reactions:
 
@@ -42,18 +39,26 @@ $$Reaction~3:\qquad  CH_4 + 2O_2 \rightarrow CO_2 + 2H_2O$$
 
 ## Tasks
 
-### Create the model
-   1.	Draw a conceptual diagram of the model based on the processes described above. Identify state variables, process rates, import and export fluxes, and their corresponding units.
-   2.	Create mass balance equations for acetic acid, methane, $CO_2$ and oxygen, based on the conceptual diagram and the chemical reactions given above. $H_2$ is very abundant in soils, due to its continuous abiogenic and biogenic production, so its concentration will hardly be affected by the methane cycle. Thus, you do not need to create a mass balance equation for $H_2$.
-  3.	Add the transport terms to the mass balance equations. This includes storage (burial in the soil) of methane, $CO_2$ and acetic acid, the emission of methane and $CO_2$ to the atmosphere, the oxygen flux from the air into the sediment, and an input flux of acetic acid.
-  4.	What will be the model currency and the units of each state variable?
+  1. Draw a conceptual diagram of the model based on the processes described above. Identify state variables, process rates, import and export fluxes, and their corresponding units. 
+   
+  2. Formulate the corresponding mass balance equations.
+   
+  3. Use the mass balance equations together with data provided below to estimate the unknown fluxes in your model.
+  
+  * $CH_4$ and $CO_2$ efflux across the soil-air interface is 40 and $30~mmol~m^{-2}~d^{-1}$, respectively, while $O_2$ influx is $20~mmol~m^{-2}~d^{-1}$. 
+  
+  * The burial (storage) component is estimated at $1~mmol~m^{-2}~d^{-1}$ for both $CH_4$ and $CO_2$. 
 
-### Model application
-  5.	Use these mass balance equations together with observed data to estimate unknown fluxes.
-Assume we have measured the $CH_4$ and $CO_2$ effluxes to be 40 and $30~mmol~m^{-2}~d^{-1}$, respectively, while the oxygen influx is $20~mmol~m^{-2}~d^{-1}$. 
-Also, we have estimated the storage component to be $1~mmol~m^{-2}~d^{-1}$ for both $CH_4$ and $CO_2$. 
+### Hints:
+   
+   * Focus on carbon (different forms) and oxygen ($O_2$) as key elements. You can assume that $H_2$ is very abundant in soils, due to its continuous abiogenic and biogenic production, so its concentration will hardly be affected by the methane cycle. Similarly, $H_2O$ concentrations are not affected due to the high abundance of water in aquatic systems. Thus, you can simplify the model by excluding $H_2O$ and $H_2$.
+   
+  * Since the model describes methane exchange across the soil-air interface and a transfer of methane from upper to deeper soil, it is logical to normalize each state variable per square meter of soil.
 
-*Hints:* You can use these data to estimate the rates of processes described by reactions 1, 2 and 3 (denoted as $R_1$, $R_2$ and $R_3$). To do this, you may assume that the changes in concentrations (the time derivative on the left-hand side of your mass balance equations) are so much smaller than the individual fluxes (the terms on the right-hand side of the mass balance equations) that they can be ignored. Thus, you may set, in your mass balance equations, $dCH_4/dt = 0$, $dCO_2/dt =0$ and $dO_2/dt = 0$, and fill in the measured data. Then you use simple algebraic techniques to solve the linear equations to derive the rates $R_1$, $R_2$ and $R_3$. 
+  * As transport processes, consider storage (burial in the soil) of methane, $CO_2$ and acetic acid, the emission of methane and $CO_2$ to the atmosphere, $O_2$ flux from air into the soil, and an input flux of acetic acid.
+
+  * In task 3, you can use the provided data to estimate the rates of processes described by reactions 1, 2 and 3 (denoted as $R_1$, $R_2$ and $R_3$). To do this, you may assume that the changes in concentrations (the time derivative on the left-hand side of your mass balance equations) are so much smaller than the individual fluxes (the terms on the right-hand side of the mass balance equations) that they can be ignored. Thus, you may set, in your mass balance equations, $dCH_4/dt = 0$, $dCO_2/dt =0$ and $dO_2/dt = 0$, and fill in the provided data. Then you use simple algebraic techniques to solve the linear equations to derive the rates $R_1$, $R_2$ and $R_3$. 
+  
 
 # Exercise 3. Methane removal by anoxic processes in marine sediments
 
