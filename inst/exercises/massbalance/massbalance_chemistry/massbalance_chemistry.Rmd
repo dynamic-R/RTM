@@ -1,16 +1,18 @@
 ---
-title: "Mass Balance Equations"
+title: "Mass balances during biogeochemical processes"
 author: "Karline Soetaert and Lubos Polerecky, Utrecht University"
-subtitle: "Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
-date: "June 2021"
-output: 
+date: "June 2021, revised February 2026"
+output:
   pdf_document:
-    toc: no 
-  header-includes: 
-    \usepackage{float} 
-    \floatplacement{figure}{th}
+    number_sections: true
+  html_document:
+    df_print: paged
+  word_document: default
+subtitle: Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere
+header-includes:
+- \linespread{1.1}
+- \usepackage{float} \floatplacement{figure}{th}
 fontsize: 11pt
-linestretch: 1.15 
 ---
 
 ```{r child = 'massbalance_chemistry_Q.Rmd'}

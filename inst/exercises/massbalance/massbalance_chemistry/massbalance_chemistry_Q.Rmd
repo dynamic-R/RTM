@@ -1,18 +1,25 @@
 ---
-title: "Mass Balance Equations"
-subtitle: "Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
+title: "Mass balances during biogeochemical processes"
 author: "Karline Soetaert and Lubos Polerecky, Utrecht University"
-date: 'June 2021'
+date: "June 2021, revised February 2026"
 output:
-  pdf_document: default
-  html_document: default
+  html_document:
+    df_print: paged
+  pdf_document:
+    number_sections: true
+subtitle: Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere
+header-includes:
+- \linespread{1.1}
+- \usepackage{float} \floatplacement{figure}{th}
+fontsize: 11pt
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Exercise 1. Decay of particulate organic matter due to bacterial activity
+
+# Decay of particulate organic matter due to bacterial activity
 
 You are given a conceptual diagram for the carbon flow describing decay of particulate organic matter in marine sediments. 
 
@@ -22,7 +29,8 @@ You are given a conceptual diagram for the carbon flow describing decay of parti
 
 Based on this diagram, formulate the corresponding mass balance equations.
 
-# Exercise 2. Methane dynamics in wetlands
+
+# Methane dynamics in wetlands
 
 Methane ($CH_4$) is an important greenhouse gas, contributing more than 20% to global warming. Methane emissions from wetlands are key to the global methane dynamics. In this exercise, you will design a simple model of methane dynamics in wetland systems that can be used to assess the future role of methane in global warming. 
 
@@ -30,12 +38,12 @@ The modeled domain represents the upper part of the wetland soil that is in cont
 
 In the soil, methane is produced (from acetic acid, $CH_3COOH$) under anaerobic conditions, which proceeds in two subsequent reactions:
 
-$$Reaction~1:\qquad  CH_3COOH \rightarrow CH_4 + CO_2$$
-$$Reaction~2:\qquad  CO_2 + 4H_2 \rightarrow CH_4 + 2H_2O$$
+$$Reaction~1:\qquad  {CH_3COOH \rightarrow CH_4 + CO_2}$$
+$$Reaction~2:\qquad  {CO_2 + 4H_2 \rightarrow CH_4 + 2H_2O}$$
 
 Methane oxidation occurs under aerobic conditions via the following reaction:
 
-$$Reaction~3:\qquad  CH_4 + 2O_2 \rightarrow CO_2 + 2H_2O$$
+$$Reaction~3:\qquad  {CH_4 + 2O_2 \rightarrow CO_2 + 2H_2O}$$
 
 ## Tasks
 
@@ -45,118 +53,144 @@ $$Reaction~3:\qquad  CH_4 + 2O_2 \rightarrow CO_2 + 2H_2O$$
    
   3. Use the mass balance equations together with data provided below to estimate the unknown fluxes in your model.
   
-  * $CH_4$ and $CO_2$ efflux across the soil-air interface is 40 and $30~mmol~m^{-2}~d^{-1}$, respectively, while $O_2$ influx is $20~mmol~m^{-2}~d^{-1}$. 
+      * $CH_4$ and $CO_2$ efflux across the soil-air interface is 40 and 30 ${mmol.m^{-2}.d^{-1}}$, respectively, while $O_2$ influx is 20 ${mmol.m^{-2}.d^{-1}}$. 
   
-  * The burial (storage) component is estimated at $1~mmol~m^{-2}~d^{-1}$ for both $CH_4$ and $CO_2$. 
+      * The burial (storage) component is estimated at 1 ${mmol.m^{-2}.d^{-1}}$ for both $CH_4$ and $CO_2$. 
 
-### Hints:
+## Hints {-}
    
    * Focus on carbon (different forms) and oxygen ($O_2$) as key elements. You can assume that $H_2$ is very abundant in soils, due to its continuous abiogenic and biogenic production, so its concentration will hardly be affected by the methane cycle. Similarly, $H_2O$ concentrations are not affected due to the high abundance of water in aquatic systems. Thus, you can simplify the model by excluding $H_2O$ and $H_2$.
    
-  * Since the model describes methane exchange across the soil-air interface and a transfer of methane from upper to deeper soil, it is logical to normalize each state variable per square meter of soil.
+  * Since the model describes methane exchange across the soil-air interface and a transfer of methane from upper soil to deeper soil, it is logical to normalize each state variable per *square* meter of soil.
 
-  * As transport processes, consider storage (burial in the soil) of methane, $CO_2$ and acetic acid, the emission of methane and $CO_2$ to the atmosphere, $O_2$ flux from air into the soil, and an input flux of acetic acid.
+  * As transport processes, consider storage (burial in the soil) of $CH_4$, $CO_2$ and acetic acid, the emission of $CH_4$ and $CO_2$ to the atmosphere, $O_2$ flux from air into the soil, and an input flux of acetic acid.
 
-  * In task 3, you can use the provided data to estimate the rates of processes described by reactions 1, 2 and 3 (denoted as $R_1$, $R_2$ and $R_3$). To do this, you may assume that the changes in concentrations (the time derivative on the left-hand side of your mass balance equations) are so much smaller than the individual fluxes (the terms on the right-hand side of the mass balance equations) that they can be ignored. Thus, you may set, in your mass balance equations, $dCH_4/dt = 0$, $dCO_2/dt =0$ and $dO_2/dt = 0$, and fill in the provided data. Then you use simple algebraic techniques to solve the linear equations to derive the rates $R_1$, $R_2$ and $R_3$. 
+  * In task 3, you can use the provided data to estimate the rates of processes described by reactions 1, 2 and 3 (denoted as $R_1$, $R_2$ and $R_3$). To do this, you may assume that the changes in concentrations (the time derivative on the left-hand side of your mass balance equations) are so much smaller than the individual fluxes (the terms on the right-hand side of the mass balance equations) that they can be ignored. Thus, you may set, in your mass balance equations, $d{CH_4}/dt = 0$, $d{CO_2}/dt =0$ and $d{O_2}/dt = 0$, and fill in the provided data. Then you use simple algebraic techniques to solve the linear equations to derive the rates $R_1$, $R_2$ and $R_3$. 
   
 
-# Exercise 3. Methane removal by anoxic processes in marine sediments
+# Methane removal by anaerobic processes in marine sediments
 
-Methane ($CH_4$) within marine sediments is distributed in three pools: the hydrate pool (solid), the dissolved pool and the gas phase. 
+In marine sediments, methane ($CH_4$)  is present in three pools: the hydrate pool (solid), the dissolved pool (aq), and the gas phase (g, in the form of bubbles). 
 
-Dissolved methane is produced from organic matter in the anaerobic part of the sediment (by a process called methanogenesis). Methane is exchanged among these three pools, but it can also leave the sediment via ebullition (formation of gas bubbles and their escape due to buoyancy), or via diffusive transport of dissolved $CH_4$ to the overlying ocean water. (Note: we will ignore methane burial into deeper sediment layers in this exercise.) Especially the gas phase is important for the Earth's warming, as this readily adds to methane in the atmosphere. 
+Dissolved methane is produced from organic matter in the anaerobic part of the sediment (by a process called methanogenesis). Methane is exchanged among these three pools, but it can also leave the sediment via ebullition (escape of gas bubbles due to buoyancy), or via diffusive transport of dissolved $CH_4$ to the overlying ocean water. (Note: we will ignore methane burial into deeper sediment layers in this exercise.) The gas phase of methane is especially important for the Earth's warming, as this readily adds to methane in the atmosphere. 
 
-Fortunately, there is an important sink of methane in the marine sediments: microbial anaerobic oxidation of methane (AOM), which is the reaction of dissolved methane with sulphate according to the reaction:
+Fortunately, there is an important sink of methane in marine sediments:  anaerobic oxidation of methane (AOM). This process is mediated (catalyzed) by microbes and occurs according to the following stoichiometry, using sulfate ($SO_4^{2-}$) as the oxidant:
 
-$$CH_4 + SO_4^{2-} \rightarrow HCO_3^- + HS^- + H_2O$$
+$${CH_4(aq) + SO_4^{2-} \rightarrow HCO_3^- + HS^- + H_2O}$$
 
-There is some doubt in the extent that the AOM can function as a methane "filter" to prevent the escape of methane to the atmosphere.
+Although sulfate is highly abundant in seawater (about 28 mM ), there is some doubt about the extent by which AOM can function as a methane "filter" to prevent the escape of methane to the atmosphere.
 
 ## Tasks
 
-Make a model of the production of methane, the transformation of methane between the three phases (gas, dissolved, solid), and its removal via transport processes and the main chemical reaction. 
+Make a model of methane cycling in marine sediments. The model should include the production of methane by methanogenesis, transformation of methane between the three phases (gas, dissolved, solid), and removal of methane via transport processes and the main chemical reaction (AOM). 
 
-* For this model, it is simplest to first draw a conceptual scheme, displaying the transformations between the different phases, and the transport processes. 
-* Give comprehensible names to the arrows and use those names to create the mass balance equations for each of the phases. 
-* You may assume that the $CH_4$ pools are not in a thermodynamic equilibrium, so you should consider separately the forward and backward reaction. 
-* Finally, decide about the model currency and the units of each state variable.
+* Start with a conceptual diagram, displaying the transformations between the different phases and relevant transport processes. Then, formulate the corresponding mass balance equations.
 
-# Exercise 4. The coupled cycles of carbon, nitrogen and oxygen in marine sediments
+* Assume that the different $CH_4$ pools are *not* in a thermodynamic equilibrium. Hence, you need to consider the forward and backward reactions separately.
 
-In the natural environment, the cycles of many constituents are linked via chemical reactions that produce and consume them. We take the biogeochemical cycling of carbon ($C$), nitrogen ($N$) and oxygen ($O$) in a marine sediment as an example. 
+* Give comprehensive names to the arrows and use those names to create the mass balance equations for each of the phases. 
 
-In aquatic sediments, organic matter (OM) is the driver of a whole set of biogeochemical reactions. Here we simplify the sequence of reactions a bit, in the sense that we ignore the iron, manganese, and sulfur cycle. Additionally, we do not explicitly take into account the methane production. Rather, their impact is lumped so that their effect on oxygen and nitrogen cycle is represented.
+* Finally, decide about the model currency and the units of each state variable and flux.
 
-The organic matter is assumed to have Redfield stoichiometry, so the C:N:P (molar!) ratio is 106:16:1. We represent OM as  $$(CH_2O)_1(NH_3)_{NC}(H_3PO_4)_{PC},$$ where $NC$ = 16/106 and $PC$ = 1/106.
 
-OM is mineralized (oxidized) using a series of oxidants: oxygen ($O_2$), nitrate ($HNO_3$) and some other, unidentified oxidant ($XO_2$), which represents the lumpsum of manganese, iron oxides and sulphate. 
 
-The reduced byproducts of this mineralization process, ammonia ($NH_3$), and an unidentified reduced substance ($X$), which is the lump-sum of reduced manganese and iron ions and sulphide ($X = [2Mn^{2+} + 4 Fe^{2+} + 0.5 H_2S]$), can be re-oxidized by a reaction with oxygen. 
+# Coupled cycles of C, N and O in marine sediments
 
-All dissolved substances are exchanged with the water column. OM is added to the sediment by deposition from the water column. $N_2$, produced by the reaction of organic matter with nitrate, does not react in the sediment and does not need to be considered in the model. Also, the possibility that the unidentified reduced substance $X$ can additionally be re-oxidized by nitrate can be ignored.
+In the natural environment, element cycles are coupled via chemical reactions that produce or consume the elements in different forms. As an example, we take the biogeochemical cycling of carbon (C), nitrogen (N) and oxygen (O) in marine sediments. 
+In sediments, organic matter (OM) drives a complex network of biogeochemical reactions. Here, we simplify this network a bit by (i) ignoring the iron, manganese, and sulfur cycles and (ii) not explicitly taking into account methane production. Instead, we "lump" their impact so that their effect on the oxygen and nitrogen cycles is represented.
 
-The mineralization reactions can be written as (note that you need to know a little about balancing redox reactions in order to understand why the reactions, and specifically their stoichiometry, have the form as written here):
+We assume that OM has the so-called Redfield stoichiometry, i.e., its molar(!) C:N:P ratio is 106:16:1. Thus, we represent OM as the following molecule:
+$$
+{(CH_2O)_1(NH_3)_{NC}(H_3PO_4)_{PC}},
+$$ 
+where ${NC} = 16/106$ and ${PC} = 1/106$.
+
+OM is mineralized (oxidized) using a series of oxidants: oxygen ($O_2$), nitrate ($HNO_3$) and some other, unidentified oxidant ($XO_2$), which represents the "lump-sum" of manganese and iron oxides and sulfate. 
+
+The reduced by-products of this mineralization process, ammonia ($NH_3$), and an unidentified reduced substance (X), which is the lump-sum of reduced manganese and iron ions and sulfide (i.e., ${X} = {2\cdot Mn^{2+} + 4\cdot Fe^{2+} + 0.5\cdot H_2S}$), can be re-oxidized by a reaction with $O_2$. 
+
+All dissolved substances are exchanged with the water column. OM is added to the sediment by deposition from the water column. 
+
+$N_2$, produced by the reaction of organic matter with nitrate, does not react in the sediment and does not need to be considered in the model. 
+
+Although the unidentified reduced substance $X$ can additionally be re-oxidized by nitrate, you can ignore this process in your model.
+
+The relevant mineralization reactions can thus be written as shown below. (Note that you need to know a little about balancing redox reactions in order to understand why the reactions, and specifically their stoichiometry, have the form provided. Ask your peers or teachers, or search the internet, if your background knowledge on redox reaction balancing is insufficient.)
 
   - *aerobic mineralization*: 
-$$(CH_2O)_1(NH_3)_{NC}(H_3PO_4)_{PC} + O_2  \rightarrow  CO_2 + {NC} \cdot NH_3 + {PC} \cdot H_3PO_4 + H_2O $$ 
+$$
+{(CH_2O)_1(NH_3)_{NC}(H_3PO_4)_{PC} + O_2  \rightarrow  CO_2 + {NC} \cdot NH_3 + {PC} \cdot H_3PO_4 + H_2O}
+$$ 
+
   - *denitrification*: 
-$$(CH_2O)_1(NH_3)_{NC}(H_3PO_4)_{PC} + \frac{4}{5}\cdot HNO_3 \rightarrow CO_2 + \frac{2}{5}\cdot N_2 + {NC} \cdot NH_3 + {PC} \cdot H_3PO_4 + \frac75\cdot H_2O$$
+$$
+{(CH_2O)_1(NH_3)_{NC}(H_3PO_4)_{PC} + \frac{4}{5}\cdot HNO_3 \rightarrow CO_2 + \frac{2}{5}\cdot N_2 + {NC} \cdot NH_3 + {PC} \cdot H_3PO_4 + \frac75\cdot H_2O}
+$$
+
   - *anoxic mineralization*:
-$$(CH_2O)_1(NH_3)_{NC}(H_3PO_4)_{PC} + XO_2 \rightarrow CO_2 + X + {NC} \cdot NH_3 + {PC} \cdot H_3PO_4 + H_2O$$
+$${(CH_2O)_1(NH_3)_{NC}(H_3PO_4)_{PC} + XO_2 \rightarrow CO_2 + X + {NC} \cdot NH_3 + {PC} \cdot H_3PO_4 + H_2O}
+$$
 
 The secondary reactions to be considered are: 
 
   - *nitrification*:
-$$NH_3 + 2\cdot O_2   \rightarrow  HNO_3 + H_2O$$
+$$
+{NH_3 + 2\cdot O_2   \rightarrow  HNO_3 + H_2O}
+$$
+
   - *aerobic reoxidation* of the unidentified reduced substances:
-$$X + O_2  \rightarrow XO_2$$
+$$
+{X + O_2  \rightarrow XO_2}
+$$
 
 ## Tasks
 
-###	4.1. Mass balance equations
+### Mass balance equations {-}
 
-* Based on the above reactions and the exchanges with the water-column, create mass balance equations for the following sediment state variables:
+* Based on the above reactions, and additionally considering the exchanges of solutes with the water-column, formulate mass balance equations for the following state variables in the sediment:
 
-  -	Organic matter, $Corg$
+  -	organic matter, $C_{org}$
   -	molecular oxygen, $O_2$
   -	dissolved inorganic carbon, $CO_2$
   -	nitrate, $HNO_3$
   -	ammonia, $NH_3$
-  -	the unidentified reduced substances, $X$
-  -	the oxidized substance, $XO_2$
+  -	the unidentified reduced substances, $X$, and its oxidized form, $XO_2$
 
 * What are suitable units for the state variables? 
+
 * What are the units of the time derivatives (left-hand side of the mass balance equations) and of the rates (terms on the right-hand side of the equations)?
 
-### 4.2.	Interaction with the water column
+### Interaction with the water column {-}
 
-Now assume that we incubate a natural sediment in a small Perspex container (inner diameter $30~cm$), with $15~cm$ of water overlying the sediment. The water is stirred so that, at all times, the overlying water is completely mixed. Also, there is no activity in the water column itself, so that all changes in the overlying water are due to the exchange with the sediment. 
+Now assume that you incubate a natural sediment in a small plastic core (inner diameter 30 cm) containing sediment overlaid with 15 cm  of seawater. The seawater is stirred so that, at all times, the overlying water is completely mixed. Also, there is no activity in the water column itself, so that all changes in the overlying water are due to the solute exchange across the sediment-water interface. 
 
 We are interested in the dynamics of oxygen, nitrate, and ammonium in the overlying water. 
-The concentration of the other reduced substances in the sediment are assumed to be 0 (and so the flux from the sediment is also assumed to be 0). 
+You can assume that the concentration of the other reduced substances (X) in the sediment is 0, and so you can assume that also the flux of X from the sediment is 0. 
 
-* Create the mass balance equations for the following water column variables:
-  - Oxygen in the overlying water, $O_{2,wat}$
-  - Nitrate in the overlying water, $HNO_{3,wat}$
-  - Ammonia in the overlying water, $NH_{3,wat}$
-  - Unidentified reduced substances in the overlying water, $X_{wat}$
+* Formulate mass balance equations for the following water column variables:
+
+  - Oxygen in the overlying water, $O_{2,ow}$
+  - Nitrate in the overlying water, $HNO_{3,ow}$
+  - Ammonia in the overlying water, $NH_{3,ow}$
 
 * What are suitable units for these water-column state variables? What are the units of their time-derivatives? 
 
-# Exercise 5.	Benthic and pelagic primary producers in shallow seas
 
-In the ocean, most of the primary production (the creation of biomass from inorganic components) is done by microscopic organisms, called algae, that use light as a source of energy. 
-These algae either live in the water column (pelagic algae, also called phytoplankton), or on top of the sediment (benthic algae, also called phytobenthos). 
 
-The living conditions of these two types of algae are fundamentally different. In well mixed waters, the free-floating algae, when close to the water surface, have ample light, but their growth may be limited by the availability of inorganic nutrients such as nitrate and ammonium. In contrast, benthic algae experience much less light as they live at the bottom of the water column (the light intensity decreases significantly as it propagates through the water column; so-called light extinction). However, the benthic algae have ample supply of nutrients that are regenerated from the bottom detritus derived from pelagic algae and pelagic detritus that settle on the sediment. 
+# Benthic and pelagic primary producers in shallow seas
 
-In the environments where benthic algae can grow, they can take up significant amounts of nutrients that might otherwise benefit the pelagic algae. On the other hand, when the pelagic algae are able to grow vigorously in the waters, their large biomass may significantly reduce the light penetration in the water, thus hampering the production of benthic algae. Thus, there is a trade-off as to which of these algae will dominate in a system. 
+In the ocean, most of the primary production (the creation of biomass from inorganic components) is done by microscopic organisms (microalgae or cyanobacteria), that use light as a source of energy. These organisms live either in the water column (pelagic, also called phytoplankton), or on top of the sediment (benthic, also called microphytobenthos, MPB).
+
+The living conditions of these two types of organisms are fundamentally different. In well mixed waters, the free-floating phytoplankton cells, when close to the water surface, have ample light, but their growth may be limited by the availability of inorganic nutrients such as nitrate and ammonium. In contrast, MPB experience much less light as they live at the bottom of the water column (the light intensity decreases significantly as it propagates through the water column; so-called light extinction). However, MPB cells have ample supply of nutrients that are regenerated from the bottom detritus derived from pelagic phytoplankton and other detritus that settles on the sediment. 
+
+In environments where MPB can grow, they can take up significant amounts of nutrients that would otherwise benefit the phytoplankton cells. On the other hand, when phytoplankton cells are able to grow vigorously in the waters, their large biomass may significantly reduce the light penetration in the water, thus hampering the production of MPB. Thus, there is a trade-off as to which of these microbes will dominate in a system. 
 
 ## Tasks
 
-You are now challenged to make a simple model that is able to investigate these dynamics. Choose the relevant state variables in the water column and in the sediment. You do not need to distinguish between ammonium or nitrate, but rather lump these two in a pool of "Dissolved Inorganic Nitrogen" (DIN). This DIN is the only nutrient that might limit algal growth (i.e., you can ignore phosphorus dynamics in your model). 
+You are now challenged to make a simple model that is able to investigate the dynamics of phytoplankton and MPB biomass. Choose the relevant state variables in the water column and in the sediment. You do not need to distinguish between ammonium or nitrate, but rather lump these two species in a pool of "Dissolved Inorganic Nitrogen" (DIN). Assume that this DIN is the only nutrient that might limit the growth of the photosynthetic microbes (i.e., you can ignore phosphorus dynamics in your model). 
 
-* Create the conceptual diagram and the corresponding mass balance equations.
+* Create the conceptual diagram of this model and the corresponding mass balance equations.
+
   - Your model will have a mix of units, so take this into account when creating your mass balance equations. 
   - There is no need to make a mass balance equation for light, but you should consider the Lambert-Beer law, which says that the light intensity in the water-column decreases exponentially with water depth. 
   
