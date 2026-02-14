@@ -42,7 +42,8 @@ You can also read the following section(s) of the textbook:
 question("Check boxes with a TRUE statement", type = "learnr_checkbox",
  answer("Stoichiometric coefficients in an elementary chemical reaction directly determine the exponents in the expression for the reaction rate", correct=TRUE),
  answer("Stoichiometric coefficients in any chemical reaction directly determine the exponents in the expression for the reaction rate", correct=FALSE),
- answer("Monod kinetics can be derived from an enzymatic reaction", correct=TRUE) 
+ answer("Monod kinetics can be derived from an enzymatic reaction", correct=TRUE),
+ allow_retry = TRUE
 )
 ```
 
@@ -62,7 +63,7 @@ question("Which of the following expressions correctly describe the reaction rat
  answer(sprintf("$R=-r \\cdot [A_2B]$"), correct=FALSE),
  answer(sprintf("$R=r \\cdot [A] \\cdot [B]^{\\frac{1}{2}}$"), correct=TRUE),
  answer(sprintf("$R=r \\cdot [A]^{\\frac{1}{2}} \\cdot [B]$"), correct=FALSE),
-
+ allow_retry = TRUE,
  incorrect=msg,  
  correct=msg)
 ```
@@ -83,7 +84,8 @@ $$
 question("What is the unit of the rate *R*?", type = "learnr_checkbox",
  answer(sprintf("$mol\\,m^{-3}$"), correct=FALSE),
  answer(sprintf("$mol\\,m^{-3}\\, s^{-1}$"), correct=TRUE),
- answer(sprintf("$mol^2\\,m^{-6}\\, s^{-1}$"), correct=FALSE)
+ answer(sprintf("$mol^2\\,m^{-6}\\, s^{-1}$"), correct=FALSE),
+ allow_retry = TRUE
 )
 ```
 
@@ -92,7 +94,8 @@ question("What is the unit of the rate *R*?", type = "learnr_checkbox",
 question("What is the unit of the rate constant *r*?", type = "learnr_checkbox",
  answer(sprintf("$mol\\,m^{-3}$"), correct=FALSE),
  answer(sprintf("$mol\\,m^{-3}\\, s^{-1}$"), correct=FALSE),
- answer(sprintf("$(mol\\,m^{-3})^{-2}\\, s^{-1}$"), correct=TRUE)
+ answer(sprintf("$(mol\\,m^{-3})^{-2}\\, s^{-1}$"), correct=TRUE),
+ allow_retry = TRUE
 )
 ```
 

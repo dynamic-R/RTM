@@ -19,7 +19,7 @@ library(learnr)
 
 In this tutorial, we show you some tips that you can apply when converting units.
 
-First, we recommend that you watch the following video.
+First, we recommend that you watch the following video. Note that there is **no sound** in this video, only slides with text and examples. Do not hesitate to **pause the video** if you need more time during the derivations in the examples.
 
 ![](https://www.youtube.com/watch?v=hOesrlBnf8U&list=PLx8PHcDdmF-uD1Pr07TU9SzlhlGpfrxqn&index=15)
 
