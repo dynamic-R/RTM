@@ -57,14 +57,14 @@ Suppose that the *probability* that a susceptible person meets an infected perso
 ```{r infection_rate, echo=FALSE}
 msg <- "To become infected, a susceptible person needs to 'collide' with *one* infected person. Therefore, the infection rate is *first-order* with respect to the infected and susceptible persons, i.e., $InfectionRate = b\\cdot S\\cdot I$. The proportionality constant, $b$, describes the probability (expressed per individual per day) that a susceptible person meets an infected person and their encounter results in the susceptible person becoming infected."
 
-question(sprintf("What is a suitable expression for the infection rate?"), type = "learnr_checkbox",
+question(sprintf("What is a suitable expression for the infection rate?"), type = "learnr_radio",
  answer(sprintf("$InfectionRate = b \\cdot (S+I)$"), correct=FALSE),
  answer(sprintf("$InfectionRate = b \\cdot S$"), correct=FALSE),
  answer(sprintf("$InfectionRate = b \\cdot I$"), correct=FALSE),
  answer(sprintf("$InfectionRate = b \\cdot S \\cdot I$"), correct=TRUE),
  answer(sprintf("$InfectionRate = S \\cdot \\frac{I}{I+b}$"), correct=FALSE),
  answer(sprintf("$InfectionRate = b \\cdot I^2 \\cdot S$"), correct=FALSE),
- 
+ allow_retry = TRUE,
  incorrect=sprintf(msg),
  correct=sprintf(msg))
 ```
@@ -78,7 +78,7 @@ $S + I \rightarrow 2\cdot I$, i.e. it is a reaction between S and I that causes 
 ```{r predation, echo=FALSE}
 msg <- "There are several correct answers. Answer 1 assumes a linear functional response (type I); answer 4 assumes a type II functional response, and answer 5 assumes a type III functional response."
 
-question("Foxes (F) predate on rabbits (R). What is a suitable expression for the predation rate?", type = "learnr_checkbox",
+question("Foxes (F) predate on rabbits (R). What are suitable expressions for the predation rate?", type = "learnr_checkbox",
  answer(sprintf("$r \\cdot F \\cdot R$"), correct=TRUE),
  answer(sprintf("$r \\cdot F \\cdot R^2$"), correct=FALSE),
  answer(sprintf("$r \\cdot F \\cdot (1-\\frac{F}{R})$"), correct=FALSE),
@@ -86,6 +86,7 @@ question("Foxes (F) predate on rabbits (R). What is a suitable expression for th
  answer(sprintf("$r \\cdot F \\cdot \\frac{R^2}{R^2+ K_R^2}$"), correct=TRUE),
  answer(sprintf("$r \\cdot F \\cdot (1-\\frac{F}{K}) \\cdot R$"), correct=FALSE),
  
+ try_again = "Multiple answers are correct. Consider Type I, II and III responses.",
  allow_retry = TRUE,
  incorrect=msg,  
  correct=msg)
@@ -94,7 +95,8 @@ question("Foxes (F) predate on rabbits (R). What is a suitable expression for th
 ## Ecological interactions: algal N-uptake
 
 ```{r Nuptake, echo=FALSE}
-msg <- sprintf("Note that the inhibition term is equal to one minus the Michaelis-Menten term. Thus, both answers 2 and 5 are correct.")
+msg1 <- sprintf("Note that the inhibition term is equal to one minus the Michaelis-Menten term. Thus, you can find two correct answers.")
+msg2 <- sprintf("Note that the inhibition term is equal to one minus the Michaelis-Menten term. Thus, both answers 2 and 5 are correct.")
 
 question("Algal N-uptake is stimulated by nitrate $(NO_3)$ and inhibited by ammonia $(NH_3)$ concentrations. What would be a suitable expression for the rate of algal growth?", type = "learnr_checkbox",
  answer(sprintf("$r \\cdot \\frac{[NO_3]}{[NO_3]+K_{NO3}} \\cdot [ALGAE] + \\frac{K_{NH3}}{[NH_3]+K_{NH3}} \\cdot [ALGAE]$")),
@@ -104,69 +106,82 @@ question("Algal N-uptake is stimulated by nitrate $(NO_3)$ and inhibited by ammo
  answer(sprintf("$r \\cdot \\frac{[NO_3]}{[NO_3]+K_{NO3}} \\cdot \\left(1 - \\frac{[NH_3]}{[NH_3]+K_{NH3}}\\right) \\cdot [ALGAE]$"), correct=TRUE),
  answer(sprintf("$\\frac{[NO_3]}{[NO_3]+K_{NO3}} \\cdot \\frac{K_{NH3}}{[NH_3]+K_{NH3}} \\cdot [ALGAE]$")),
  answer(sprintf("$r \\cdot \\frac{K_{NO3}}{[NO_3]+K_{NO3}} \\cdot [ALGAE]$")),
- incorrect=paste("Incorrect. ", msg),  
- correct=paste("Correct. ", msg)
+ 
+ try_again = paste("Incorrect. ", msg1),
+ allow_retry = TRUE,
+ incorrect=paste("Incorrect. ", msg1),  
+ correct=paste("Correct. ", msg2)
 )
 ```
 
 ## Simple differential equations - I
 
 ```{r diffeq1, echo=FALSE}
-question(sprintf("The change in time of a quantity M (in moles) is described by the differential equation $$\\frac{dM}{dt} = -r \\cdot M,$$ where $r > 0$. Which of the following statements is true?"), type = "learnr_checkbox",
- answer("this describes zero-order kinetics"),
- answer("this describes first-order kinetics", correct = TRUE),
- answer("this describes second-order kinetics"),
- answer("this is a mix of first-order and second-order kinetics"),
+question(sprintf("The change over time of a quantity M (in moles) is described by the differential equation (DE) $$\\frac{dM}{dt} = -r \\cdot M,$$ where $r > 0$. Which of the following statements is true?"), type = "learnr_checkbox",
+ answer("this DE describes zero-order kinetics"),
+ answer("this DE describes first-order kinetics", correct = TRUE),
+ answer("this DE describes second-order kinetics"),
+ answer("this DE is a mix of first-order and second-order kinetics"),
  answer(sprintf("the unit of the rate constant $r$ is $day$")),
  answer(sprintf("the unit of the rate constant $r$ is $day^{-1}$"), correct=TRUE),
  answer(sprintf("the unit of the rate constant $r$ is $mol~day^{-1}$")),
- answer(sprintf("the unit of the rate constant $r$ is $day~mol^{-1}$"))
+ answer(sprintf("the unit of the rate constant $r$ is $day~mol^{-1}$")),
+ 
+ allow_retry = TRUE
 )  
 ```
 
 ```{r diffeq1b, echo=FALSE}
-question(sprintf("The change in time of a quantity M (in moles) is described by the differential equation $$\\frac{dM}{dt} = -r \\cdot M,$$ where $r > 0$. Which of the following statements is true?"), type = "learnr_checkbox",
+question(sprintf("The change over time of a quantity M (in moles) is described by the differential equation $$\\frac{dM}{dt} = -r \\cdot M,$$ where $r > 0$. Which of the following statements is true?"), type = "learnr_checkbox",
  answer("M decreases linearly over time"),
  answer("M decreases exponentially over time", correct=TRUE),
  answer("M increases linearly over time"),
  answer("M increases exponentially over time"),
- answer("M has a logistic growth")
+ answer("M has a logistic growth"),
+ 
+ allow_retry = TRUE
 )  
 ```
 
 ## Simple differential equations - II
 
 ```{r diffeq2, echo=FALSE}
-question(sprintf("The change in time of a quantity M (in moles) is described by the differential equation $$\\frac{dM}{dt} = -r,$$ where $r > 0$ is a constant. Which of the following statements is true?"), type = "learnr_checkbox",
- answer("this describes zero-order kinetics", correct = TRUE),
- answer("this describes first-order kinetics"),
- answer("this describes second-order kinetics"),
- answer("this is a mix of first-order and second-order kinetics"),
+question(sprintf("The change over time of a quantity M (in moles) is described by the differential equation (DE) $$\\frac{dM}{dt} = -r,$$ where $r > 0$ is a constant. Which of the following statements is true?"), type = "learnr_checkbox",
+ answer("this DE describes zero-order kinetics", correct = TRUE),
+ answer("this DE describes first-order kinetics"),
+ answer("this De describes second-order kinetics"),
+ answer("this DE is a mix of first-order and second-order kinetics"),
  answer(sprintf("the unit of the rate constant $r$ is $day$")),
  answer(sprintf("the unit of the rate constant $r$ is $day^{-1}$")),
  answer(sprintf("the unit of the rate constant $r$ is $mol~day^{-1}$"), correct=TRUE),
- answer(sprintf("the unit of the rate constant $r$ is $day~mol^{-1}$"))
+ answer(sprintf("the unit of the rate constant $r$ is $day~mol^{-1}$")),
+ 
+ allow_retry = TRUE
 )  
 ```
 
 ```{r diffeq2b, echo=FALSE}
-question(sprintf("The change in time of a quantity M (in moles) is described by the differential equation $$\\frac{dM}{dt} = -r,$$ where $r > 0$ is a constant. Which of the following statements is true?"), type = "learnr_checkbox",
+question(sprintf("The change over time of a quantity M (in moles) is described by the differential equation $$\\frac{dM}{dt} = -r,$$ where $r > 0$ is a constant. Which of the following statements is true?"), type = "learnr_checkbox",
  answer("M decreases linearly over time", correct=TRUE),
  answer("M decreases exponentially over time"),
  answer("M increases linearly over time"),
  answer("M increases exponentially over time"),
- answer("M has a logistic growth")
+ answer("M has a logistic growth"),
+ 
+ allow_retry = TRUE
 )  
 ```
 
 ## Simple differential equations - III
 
 ```{r diffeq3, echo=FALSE}
-question(sprintf("The change over time of a quantity M (in moles) is described by the differential equation $$\\frac{dM}{dt} = r \\cdot M \\cdot \\left(1-\\frac{M}{K}\\right),$$ where $r > 0$ and $K>0$ are constants. Which of the following statements is true?"), type = "learnr_checkbox",
- answer("this describes zero-order kinetics"),
- answer("this describes first-order kinetics"),
- answer("this describes second-order kinetics"),
- answer("this is a mix of first-order and second-order kinetics", correct = TRUE)
+question(sprintf("The change over time of a quantity M (in moles) is described by the differential equation (DE) $$\\frac{dM}{dt} = r \\cdot M \\cdot \\left(1-\\frac{M}{K}\\right),$$ where $r > 0$ and $K>0$ are constants. Which of the following statements is true?"), type = "learnr_checkbox",
+ answer("this DE describes zero-order kinetics"),
+ answer("this DE describes first-order kinetics"),
+ answer("this DE describes second-order kinetics"),
+ answer("this DE is a mix of first-order and second-order kinetics", correct = TRUE),
+ 
+ allow_retry = TRUE
 )
 ```
 
@@ -181,7 +196,9 @@ question(sprintf("The change over time of a quantity M (in moles) is described b
  answer(sprintf("the unit of the parameter $K$ is $day^{-1}$")),
  answer(sprintf("the unit of the parameter $K$ is $mol~day^{-1}$")),
  answer(sprintf("the unit of the parameter $K$ is $day~mol^{-1}$")),
- answer(sprintf("the unit of the parameter $K$ is $mol$"), correct=TRUE)
+ answer(sprintf("the unit of the parameter $K$ is $mol$"), correct=TRUE),
+ 
+ allow_retry = TRUE
 )  
 ```
 
@@ -191,7 +208,9 @@ question(sprintf("The change over time of a quantity M (in moles) is described b
  answer("M decreases exponentially over time"),
  answer("M increases linearly over time"),
  answer("M increases exponentially over time"),
- answer("M has a logistic growth", correct=TRUE)
+ answer("M has a logistic growth", correct=TRUE),
+ 
+ allow_retry = TRUE
 )  
 ```
 
@@ -209,7 +228,9 @@ question(sprintf("How would you best characterize the growth of the population w
  answer("The population stays relatively constant"), 
  answer("The population shrinks exponentially towards K"),
  incorrect = paste("Incorrect. ", msg),
- correct = paste("Correct. ", msg)
+ correct = paste("Correct. ", msg),
+ 
+ allow_retry = TRUE
 )  
 ```
 
@@ -222,7 +243,8 @@ question(sprintf("How would you best characterize the growth of the population w
  answer("The population stays relatively constant"), 
  answer("The population shrinks exponentially towards K"),
  incorrect = paste("Incorrect. ", msg),
- correct = paste("Correct. ", msg)
+ correct = paste("Correct. ", msg),
+ allow_retry = TRUE
 )  
 ```
 
@@ -236,7 +258,8 @@ question(sprintf("How would you best characterize the growth of the population w
  answer("The population size stays relatively constant", correct=TRUE), 
  answer("The population shrinks exponentially towards K"),
  incorrect = paste("Incorrect. ", msg),
- correct = paste("Correct. ", msg)
+ correct = paste("Correct. ", msg),
+ allow_retry = TRUE
 )  
 ```
 
@@ -249,7 +272,8 @@ question(sprintf("How would you best characterize the growth of the population w
  answer("The population stays constant", correct=TRUE), 
  answer("The population shrinks exponentially towards K"),
  incorrect = paste("Incorrect. ", msg),
- correct = paste("Correct. ", msg)
+ correct = paste("Correct. ", msg),
+ allow_retry = TRUE
 )  
 ```
 
@@ -268,7 +292,8 @@ question(sprintf("The rate expression that describes the uptake of nitrate $(NO_
  answer("The process is zero-order with respect to algae"),
  
  incorrect = paste("Incorrect. ", msg),
- correct = paste("Correct. ", msg)
+ correct = paste("Correct. ", msg),
+ allow_retry = TRUE
 )
 ```
 
@@ -282,11 +307,11 @@ You are given a table with parameter values:
 
 parameter   |  value      | description                 | unit                        |
 ------------|-------------|---------------------------- | --------------------------- |
-$g$         | 0.2         | uptake rate constant        |$hr^{-1}$                    |
+$g$         | 0.2         | uptake rate constant        |$h^{-1}$                    |
 $k_s$       | 10          | half-saturation concentration    |$mol~C~m^{-3}$               |
 $\gamma$    | 0.5         | bacterial growth efficiency  | -                           |
-$r$         | 0.01        | basal respiration parameter |$hr^{-1}$                    |
-$m$         | 0.0005      | mortality rate constant         |$(mol~C~m^{-3})^{-1} hr^{-1}$| 
+$r$         | 0.01        | basal respiration parameter |$h^{-1}$                    |
+$m$         | 0.0005      | mortality rate constant         |$(mol~C~m^{-3})^{-1} h^{-1}$| 
 
 The initial conditions are:
 $$ B_{0} = 0.1~mol~C~m^{-3} \qquad DOC_{0}=100~mol~C~m^{-3}$$
@@ -311,8 +336,9 @@ question(sprintf("Based on the model scheme and parameter definitions, which is 
  answer(sprintf("$m \\cdot B$")),
  answer(sprintf("$m \\cdot \\frac{DOC}{DOC+k_s} \\cdot B$")),
  answer(sprintf("$m \\cdot B^2$"), correct=TRUE),
-incorrect = paste("Incorrect. ", msg),
- correct = paste("Correct. ", msg)
+ incorrect = paste("Incorrect. ", msg),
+ correct = paste("Correct. ", msg),
+ allow_retry = TRUE
 )
 ```
 

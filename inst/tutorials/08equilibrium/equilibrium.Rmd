@@ -51,7 +51,8 @@ $$
 question("What is the correct expression for the rate of change in ammonia concentration?", type = "learnr_radio",
  answer(sprintf("$\\frac{d[NH_3]}{dt}=k_f \\cdot [NH_4^+] - k_b \\cdot [NH_3] \\cdot [H^+]$"), correct=TRUE),
  answer(sprintf("$\\frac{d[NH_3]}{dt}=k_f \\cdot [NH_4^+]$"), correct=FALSE),
- answer(sprintf("$\\frac{d[NH_3]}{dt}=k_f \\cdot [NH_4^+] - k_b \\cdot [NH_3]$"), correct=FALSE)
+ answer(sprintf("$\\frac{d[NH_3]}{dt}=k_f \\cdot [NH_4^+] - k_b \\cdot [NH_3]$"), correct=FALSE),
+ allow_retry = TRUE
 )
 ```
 
@@ -59,7 +60,8 @@ question("What is the correct expression for the rate of change in ammonia conce
 question("What is the correct expression for the rate of change in proton concentration?", type = "learnr_radio",
  answer(sprintf("$\\frac{d[H^+]}{dt}=k_f \\cdot [NH_4^+]$"), correct=FALSE),
  answer(sprintf("$\\frac{d[H^+]}{dt}=k_f \\cdot [NH_4^+] - k_b \\cdot [NH_3]$"), correct=FALSE),
- answer(sprintf("$\\frac{d[H^+]}{dt}=k_f \\cdot [NH_4^+] - k_b \\cdot [NH_3] \\cdot [H^+]$"), correct=TRUE)
+ answer(sprintf("$\\frac{d[H^+]}{dt}=k_f \\cdot [NH_4^+] - k_b \\cdot [NH_3] \\cdot [H^+]$"), correct=TRUE),
+ allow_retry = TRUE
 )
 ```
 
@@ -81,7 +83,7 @@ question(sprintf("What are the units of $k_f$?"), type = "learnr_radio",
  answer(sprintf("$(mol\\,N\\, m^{-3})^{-1}\\,s^{-1}$"), correct=FALSE),
  answer(sprintf("$s^{-1}$"), correct=TRUE),
  answer(sprintf("$mol\\,N\\,m^{-3}\\,s^{-1}$"), correct=FALSE),
- 
+ allow_retry = TRUE,
  incorrect=msg, 
  correct=msg)
 ```
@@ -93,7 +95,7 @@ question(sprintf("What are the units of $k_b$?"), type = "learnr_radio",
  answer(sprintf("$(mol\\,N\\,m^{-3})^{-1}\\,s^{-1}$"), correct=TRUE),
  answer(sprintf("$s^{-1}$"), correct=FALSE),
  answer(sprintf("$mol\\,N\\,m^{-3}\\,s^{-1}$"), correct=FALSE),
- 
+ allow_retry = TRUE,
  incorrect=msg,
  correct=msg)
 ```
@@ -121,7 +123,7 @@ msg <- sprintf("If you find it difficult to remember this formula and do not wan
 question("Which of the following statements is true?", type = "learnr_radio",
  answer(sprintf("$K_{N} = \\frac{k_f}{k_b}$"), correct=TRUE),
  answer(sprintf("$K_{N} = \\frac{k_b}{k_f}$"), correct=FALSE),
- 
+ allow_retry = TRUE,
  incorrect=msg, 
  correct=msg)
 ```
@@ -176,7 +178,7 @@ question("Which of the following statements is true?", type = "learnr_checkbox",
  answer(sprintf("$[NH_4^+]^* = \\frac{K_N}{K_N+[H^+]}$"), correct=FALSE),
  answer(sprintf("$[NH_4^+]^* = \\frac{K_N}{K_N+[H^+]}\\cdot [\\sum NH_x$]"), correct=FALSE),
  answer(sprintf("$[NH_4^+]^* = \\frac{[H^+]}{K_N+[H^+]}\\cdot [\\sum NH_x$]"), correct=TRUE),
- 
+ allow_retry = TRUE,
  incorrect=msg, 
  correct=msg)
 ```
@@ -295,7 +297,7 @@ question("Which of the following lump sums would be suitable to reformulate a mo
  answer(sprintf("$[HCO_3^-] - 2\\cdot [CO_3^{2-}] + [H^+]$"), correct=FALSE),
  answer(sprintf("$[H_2CO_3] + [HCO_3^-] + [CO_3^{2-}]$"), correct=TRUE),
  answer(sprintf("$2\\cdot[H_2CO_3] + [HCO_3^-] + [H^+]$"), correct=TRUE),
- 
+ allow_retry = TRUE,
  incorrect=msg, 
  correct=msg)
 ```

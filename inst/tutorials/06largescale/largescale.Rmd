@@ -67,7 +67,8 @@ question("What is the value of the rate constant $r_{AB}$? (Note: 'dot' is used 
  answer(sprintf("%.1f $yr^{-1}$", X/Z)),
  answer(sprintf("%.2f $yr^{-1}$", Z/X), correct=TRUE),
  incorrect = msg,   
- correct = msg
+ correct = msg,
+ allow_retry = TRUE
 )
 ```
 
@@ -75,7 +76,8 @@ question("What is the value of the rate constant $r_{AB}$? (Note: 'dot' is used 
 question("What is the value of the rate constant $r_{BA}$?", type = "learnr_radio",
  answer(sprintf("%.2f $yr^{-1}$", Z/Y), correct=TRUE),
  answer(sprintf("%.1f $yr^{-1}$", X/Z)),
- answer(sprintf("%.2f $yr^{-1}$", X/Y))
+ answer(sprintf("%.2f $yr^{-1}$", X/Y)),
+ allow_retry = TRUE
 )
 ```
 
@@ -112,7 +114,8 @@ question("What is the residence time of carbon in the reservoir $A$, $\\tau_{A}$
          type = "learnr_radio",
  answer(sprintf("%.2f $yr$", X/Y)),
  answer(sprintf("%.1f $yr$", X/Z), correct=TRUE),
- answer(sprintf("%.2f $yr$", Z/X))
+ answer(sprintf("%.2f $yr$", Z/X)),
+ allow_retry = TRUE
 )
 ```
 
@@ -120,7 +123,8 @@ question("What is the residence time of carbon in the reservoir $A$, $\\tau_{A}$
 question("What is the residence time of carbon in the reservoir $B$, $\\tau_{B}$?", type = "learnr_radio",
  answer(sprintf("%.2f $yr$", Y/Z), correct=TRUE),
  answer(sprintf("%.1f $yr$", Z/X)),
- answer(sprintf("%.2f $yr$", Z/Y))
+ answer(sprintf("%.2f $yr$", Z/Y)),
+ allow_retry = TRUE
 )
 ```
 
@@ -183,7 +187,8 @@ question("What is the value of the equilibrium carbon content in reservoir A?", 
  answer(sprintf("%.2f $Pg~C$", X/(X+Y)*(X+Y+80))),
  
  incorrect = paste("Incorrect.", msg),
- correct = paste("Correct.", msg) 
+ correct = paste("Correct.", msg),
+ allow_retry = TRUE
 )
 ```
 
@@ -196,8 +201,9 @@ question("What is the value of the equilibrium carbon content in reservoir B?", 
  answer(sprintf("%.2f $Pg~C$", Y/(X+Y)*(X+Y+80))),
  
  incorrect = paste("Incorrect.", msg),
- correct = paste("Correct.", msg)
-         )
+ correct = paste("Correct.", msg),
+ allow_retry = TRUE
+ )
 ```
 
 ## Implementation in R
