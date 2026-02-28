@@ -26,7 +26,7 @@ Methanogen = r_{Min} \cdot \frac{k_{O_2}}{O_2+k_{O_2}} \cdot \frac{k_{NO_3}}{NO_
 \end{array}
 $$
 
-Units of the rates:
+Using subscripts $S$ and $L$ to refer to the solid and liquid phase of the sediment, respectively, units of the rates are:
   
   * $AeroMin$, $Denitri$, $Sred$ and $Methanogen$ are in $mol~C~m^{-3}_S~d^{-1}$.
   
@@ -38,34 +38,44 @@ Note that $AeroMin+Denitri+Sred+Methanogen$ is equal to $rMIN \cdot Corg$, as fo
 
 ## Mass balance equations
 
-The updated mass balance equations that include all processes mentioned are:\footnote{Note the factors $\phi$ or $1-\phi$, which cannot be canceled out from the spatial derivative because the porosity varies with depth.}
+The updated mass balance equations that include all processes mentioned are:
 $$
-\begin{array}{l}
-\frac{\partial Corg}{\partial t} = \frac{1}{1-\phi}\cdot \frac{\partial}{\partial x}\left[(1-\phi)\cdot D_b\cdot \frac{ \partial Corg}{\partial x}\right] 
+\begin{array}{rcl}
+\frac{\partial Corg}{\partial t} & = & \frac{1}{1-\phi}\cdot \frac{\partial}{\partial x}\left[(1-\phi)\cdot D_b\cdot \frac{ \partial Corg}{\partial x}\right] 
 -\frac{1}{1-\phi}\cdot \frac{ \partial }{\partial x}\left[(1-\phi)\cdot v\cdot Corg\right]
-- AeroMin - Denitri - Sred - Methanogen \\[4mm]
-\frac{\partial O_2}{\partial t} = \frac{1}{\phi}\cdot \frac{\partial}{\partial x}\left[\phi \cdot D_{O2}\cdot \frac{ \partial O_2}{\partial x}\right]
--\frac{1}{\phi}\cdot \frac{ \partial }{\partial x}\left[\phi\cdot v\cdot O_2\right] - AeroMin \cdot f_{2L} - 2 \cdot Nitri - 2 \cdot Sox \\[4mm]
-\frac{\partial NH_3}{\partial t} = \frac{1}{\phi}\cdot  \frac{\partial}{\partial x}\left[\phi \cdot D_{NH_3}\cdot  \frac{ \partial NH_3}{\partial x}\right] 
+\\[6mm]
+& &- R_{Aero} - R_{Denitri} - R_{Sred} - R_{Methanogen} \\[6mm]
+\frac{\partial O_2}{\partial t} & = & \frac{1}{\phi}\cdot \frac{\partial}{\partial x}\left[\phi \cdot D_{O2}\cdot \frac{ \partial O_2}{\partial x}\right]
+-\frac{1}{\phi}\cdot \frac{ \partial }{\partial x}\left[\phi\cdot v\cdot O_2\right] 
+\\[6mm]
+& & - R_{Aero} \cdot f_{2L} - 2 \cdot R_{Nitri} - 2 \cdot R_{Sox} \\[6mm]
+\frac{\partial NH_3}{\partial t} & = & \frac{1}{\phi}\cdot  \frac{\partial}{\partial x}\left[\phi \cdot D_{NH_3}\cdot  \frac{ \partial NH_3}{\partial x}\right] 
 -\frac{1}{\phi}\cdot \frac{ \partial }{\partial x}\left[\phi\cdot v\cdot NH_3\right]
-+ \frac{16}{106} \cdot  (AeroMin + Denitri + Sred + Methanogen) \cdot  f_{2L} - Nitri \\[4mm]
-\frac{\partial NO_3^-}{\partial t} = \frac{1}{\phi} \cdot \frac{\partial}{\partial x}\left[\phi\cdot  D_{NO_3^-}\cdot  \frac{ \partial NO_3^-}{\partial x}\right] 
--\frac{1}{\phi}\cdot \frac{ \partial }{\partial x}\left[\phi\cdot v\cdot NO_3^-\right]- 0.8 \cdot Denitri \cdot f_{2L} + Nitri \\[4mm]
-\frac{\partial SO_4^{2-}}{\partial t} = \frac{1}{\phi}\cdot \frac{\partial}{\partial x}\left[\phi\cdot D_{SO_4^{2-}}\cdot \frac{ \partial SO_4^{2-}}{\partial x}\right] 
--\frac{1}{\phi}\cdot \frac{ \partial }{\partial x}\left[\phi\cdot v\cdot SO_4^{2-}\right] 
-- 0.5 \cdot Sred\cdot f_{2L} + Sox \\[4mm]
-\frac{\partial H_2S}{\partial t} = \frac{1}{\phi}\cdot \frac{\partial}{\partial x}\left[\phi\cdot D_{H_2S}\cdot \frac{ \partial H_2S}{\partial x}\right] 
+\\[6mm]
+& & + \frac{16}{106} \cdot  (R_{Aero} + R_{Denitri} + R_{Sred} + R_{Methanogen}) \cdot  f_{2L} - R_{Nitri} \\[6mm]
+\frac{\partial HNO_3}{\partial t} & = & \frac{1}{\phi} \cdot \frac{\partial}{\partial x}\left[\phi\cdot  D_{HNO_3}\cdot  \frac{ \partial HNO_3}{\partial x}\right] 
+-\frac{1}{\phi}\cdot \frac{ \partial }{\partial x}\left[\phi\cdot v\cdot HNO_3\right]
+\\[6mm]
+& & - 0.8 \cdot R_{Denitri} \cdot f_{2L} + R_{Nitri} \\[6mm]
+\frac{\partial H_2SO_4}{\partial t} & = & \frac{1}{\phi}\cdot \frac{\partial}{\partial x}\left[\phi\cdot D_{H_2SO_4}\cdot \frac{ \partial H_2SO_4}{\partial x}\right] 
+-\frac{1}{\phi}\cdot \frac{ \partial }{\partial x}\left[\phi\cdot v\cdot H_2SO_4\right] 
+\\[6mm]
+& & - 0.5 \cdot R_{Sred} \cdot f_{2L} + R_{Sox} \\[6mm]
+\frac{\partial H_2S}{\partial t} & = & \frac{1}{\phi}\cdot \frac{\partial}{\partial x}\left[\phi\cdot D_{H_2S}\cdot \frac{ \partial H_2S}{\partial x}\right] 
 -\frac{1}{\phi}\cdot \frac{ \partial }{\partial x}\left[\phi\cdot v\cdot H_2S\right]
-+ 0.5\cdot Sred\cdot f_{2L}- Sox \\[4mm]
-\frac{\partial CO_2}{\partial t} = \frac{1}{\phi} \cdot \frac{\partial}{\partial x}\left[\phi\cdot  D_{CO_2}\cdot  \frac{ \partial CO_2}{\partial x}\right] 
+\\[6mm]
+& & + 0.5\cdot R_{Sred} \cdot f_{2L}- R_{Sox} \\[6mm]
+\frac{\partial CO_2}{\partial t} & = & \frac{1}{\phi} \cdot \frac{\partial}{\partial x}\left[\phi\cdot  D_{CO_2}\cdot  \frac{ \partial CO_2}{\partial x}\right] 
 -\frac{1}{\phi}\cdot \frac{ \partial }{\partial x}\left[\phi\cdot v\cdot CO_2\right]
-+ (OxicMin + Denitri + Sred + 0.5\cdot Methanogen)\cdot f_{2L} \\[4mm]
-\frac{\partial CH_4}{\partial t} = \frac{1}{\phi} \cdot \frac{\partial}{\partial x}\left[\phi\cdot  D_{CH_4}\cdot  \frac{ \partial CH_4}{\partial x}\right] 
+\\[6mm]
+& & + (R_{Aero} + R_{Denitri} + R_{Sred} + 0.5\cdot R_{Methanogen})\cdot f_{2L} \\[6mm]
+\frac{\partial CH_4}{\partial t} & = & \frac{1}{\phi} \cdot \frac{\partial}{\partial x}\left[\phi\cdot  D_{CH_4}\cdot  \frac{ \partial CH_4}{\partial x}\right] 
 -\frac{1}{\phi}\cdot \frac{ \partial }{\partial x}\left[\phi\cdot v\cdot CH_4\right]
-+ 0.5\cdot Methanogen\cdot f_{2L}
+\\[6mm]
+& & + 0.5\cdot R_{Methanogen}\cdot f_{2L}
 \end{array}
 $$
-where $f_{2L}=(1-\phi)/\phi$.
+where $f_{2L}=(1-\phi)/\phi$. **Note** the presence of factors $\phi$ or $1-\phi$ in the equations. These factors *cannot* be canceled out from the spatial derivative because, in general, the porosity $\phi$ varies with depth. Also note how each mass balance equation comprises two key terms: one accounting for the effects of *transport* (by diffusion/dispersion and advection; first line), and the other accounting for the effects of *reactions* (second line).
 
 # R implementation
 
@@ -87,16 +97,16 @@ N         <- 500
 Grid      <- setup.grid.1D(L = Length, N = N, dx.1 = 0.05e-4)
 
 # function describing the variation of porosity (volume fraction of LIQUID) with depth
-porFun.L  <- function(x, por.SWI, por.deep, porcoef)
-  return( por.deep + (por.SWI-por.deep)*exp(-x*porcoef) )
+porFun.L  <- function(x, por.SWI, por.deep, k_phi)
+  return( por.deep + (por.SWI-por.deep)*exp(-x*k_phi) )
 
 # function describing the SOLID volume fraction (svf = 1-porosity)
-porFun.S  <- function(x, por.SWI, por.deep, porcoef)
-  return( 1-porFun.L(x, por.SWI, por.deep, porcoef) )
+porFun.S  <- function(x, por.SWI, por.deep, k_phi)
+  return( 1-porFun.L(x, por.SWI, por.deep, k_phi) )
 
 # calculate porosity and svf on the grid (mid-points and box interfaces, etc.)
-porLiquid <- setup.prop.1D(func=porFun.L, grid=Grid, por.SWI=0.9, por.deep=0.7, porcoef=100)
-porSolid  <- setup.prop.1D(func=porFun.S, grid=Grid, por.SWI=0.9, por.deep=0.7, porcoef=100)
+porLiquid <- setup.prop.1D(func=porFun.L, grid=Grid, por.SWI=0.9, por.deep=0.7, k_phi=100)
+porSolid  <- setup.prop.1D(func=porFun.S, grid=Grid, por.SWI=0.9, por.deep=0.7, k_phi=100)
 
 # molecular diffusion coefficients (m2/d) from the marelac package
 diff.O2   <- diffcoeff(S=35, t=20)$O2  * 3600*24
