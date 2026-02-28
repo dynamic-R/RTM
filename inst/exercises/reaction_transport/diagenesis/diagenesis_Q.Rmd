@@ -84,15 +84,15 @@ Formulate rate expressions for the remaining processes, assuming that
 
 * Denitrification is 
 
-  - limited by nitrate (Michaelis-Menten kinetics, half-saturation *limitation* parameter $k_{NO3} = 0.0001~mol~N~m^{-3}$), 
+  - limited by nitrate (Michaelis-Menten kinetics, half-saturation *limitation* parameter $k_{HNO_3} = 0.0001~mol~N~m^{-3}$), 
   - first-order with respect to organic carbon (rate constant $r_{Min} = 0.005~d^{-1}$),
   - inhibited by $O_2$ (use the previously defined parameter $k_{O_2}$ as the corresponding half-saturation *inhibition* constant).
 
 * Sulphate reduction is 
 
-  - limited by sulphate (Michaelis-Menten kinetics, $k_{SO4} = 0.1~mol~S~m^{-3}$),
+  - limited by sulphate (Michaelis-Menten kinetics, $k_{H_2SO_4} = 0.1~mol~S~m^{-3}$),
   - first-order with respect to organic carbon (rate constant $r_{Min} = 0.005~d^{-1}$), 
-  - inhibited by both oxygen ($k_{O_2}$) and nitrate ($k_{NO3}$).
+  - inhibited by both oxygen ($k_{O_2}$) and nitrate ($k_{HNO_3}$).
 
 * Sulphide oxidation is 
 
@@ -102,7 +102,7 @@ Formulate rate expressions for the remaining processes, assuming that
 * Methanogenesis is
  
   - first-order with respect to organic carbon (rate constant $r_{Min} = 0.005~d^{-1}$),
-  - inhibited by both oxygen ($k_{O_2}$), nitrate ($k_{NO3}$) and sulphate ($k_{SO4}$).
+  - inhibited by both oxygen ($k_{O_2}$), nitrate ($k_{HNO_3}$) and sulphate ($k_{H_2SO_4}$).
   
 What are the units of the rates?
 

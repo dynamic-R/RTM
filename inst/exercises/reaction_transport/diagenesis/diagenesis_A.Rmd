@@ -17,24 +17,24 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Rate expressions
 
 $$\begin{array}{l}
-AeroMin = r_{Min} \cdot \frac{O_2}{O_2+k_{O_2}} \cdot Corg \\[5mm]
-Nitri = r_{Nit} \cdot \frac{O_2}{O_2+k_{O_2}} \cdot NH_3 \\[5mm]
-Denitri = r_{Min} \cdot \frac{k_{O_2}}{O_2+k_{O_2}} \cdot \frac{NO_3^-}{NO_3^-+k_{NO_3}} \cdot Corg \\[5mm]
-Sred = r_{Min} \cdot \frac{k_{O_2}}{O_2+k_{O_2}} \cdot \frac{k_{NO_3}}{NO_3^-+k_{NO_3}} \cdot \frac{SO_4^{2-}}{SO_4^{2-}+k_{SO_4}} \cdot Corg \\[5mm]
-Sox = r_{Sox} \cdot \frac{O_2}{O_2+k_{O_2}} \cdot H_2S \\[5mm]
-Methanogen = r_{Min} \cdot \frac{k_{O_2}}{O_2+k_{O_2}} \cdot \frac{k_{NO_3}}{NO_3^-+k_{NO_3}} \cdot \frac{k_{SO_4}}{SO_4^{2-}+k_{SO_4}} \cdot Corg
+R_{Aero} = r_{Min} \cdot \frac{O_2}{O_2+k_{O_2}} \cdot Corg \\[5mm]
+R_{Nitri} = r_{Nit} \cdot \frac{O_2}{O_2+k_{O_2}} \cdot NH_3 \\[5mm]
+R_{Denitri} = r_{Min} \cdot \frac{k_{O_2}}{O_2+k_{O_2}} \cdot \frac{HNO_3}{HNO_3+k_{HNO_3}} \cdot Corg \\[5mm]
+R_{Sred} = r_{Min} \cdot \frac{k_{O_2}}{O_2+k_{O_2}} \cdot \frac{k_{HNO_3}}{HNO_3+k_{HNO_3}} \cdot \frac{H_2SO_4}{H_2SO_4 + k_{H_2SO_4}} \cdot Corg \\[5mm]
+R_{Sox} = r_{Sox} \cdot \frac{O_2}{O_2+k_{O_2}} \cdot H_2S \\[5mm]
+R_{Methanogen} = r_{Min} \cdot \frac{k_{O_2}}{O_2+k_{O_2}} \cdot \frac{k_{HNO_3}}{HNO_3+k_{HNO_3}} \cdot \frac{k_{H_2SO_4}}{H_2SO_4+k_{H_2SO_4}} \cdot Corg
 \end{array}
 $$
 
 Using subscripts $S$ and $L$ to refer to the solid and liquid phase of the sediment, respectively, units of the rates are:
   
-  * $AeroMin$, $Denitri$, $Sred$ and $Methanogen$ are in $mol~C~m^{-3}_S~d^{-1}$.
+  * $R_{Aero}$, $R_{Denitri}$, $R_{Sred}$ and $R_{Methanogen}$ are in $mol~C~m^{-3}_S~d^{-1}$.
   
-  * $Nitri$ is in $mol~N~m^{-3}_L~d^{-1}$.
+  * $R_{Nitri}$ is in $mol~N~m^{-3}_L~d^{-1}$.
   
-  * $Sox$ is in $mol~S~m^{-3}_L~d^{-1}$.
+  * $R_{Sox}$ is in $mol~S~m^{-3}_L~d^{-1}$.
 
-Note that $AeroMin+Denitri+Sred+Methanogen$ is equal to $rMIN \cdot Corg$, as follows directly from the fact that the sum of the limitation and inhibition terms for a specific substrate is 1. Thus, the *total* mineralisation rate is first-order with respect to $Corg$ and independent of the terminal electron acceptor. The limitation and inhibition terms only dictate the *contributions* of the different oxidants to the overall mineralisation process.
+Note that $R_{Aero}+R_{Denitri}+R_{Sred}+R_{Methanogen}$ is equal to $r_{Min} \cdot Corg$, as follows directly from the fact that the sum of the limitation and inhibition terms for a specific substrate is 1. Thus, the *total* mineralisation rate is first-order with respect to $Corg$ and independent of the terminal electron acceptor. The limitation and inhibition terms only dictate the *contributions* of the different oxidants to the overall mineralisation process.
 
 ## Mass balance equations
 
