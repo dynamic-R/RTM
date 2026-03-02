@@ -52,54 +52,73 @@ The second video gives a brief overview of the development of a 2D reaction-tran
 
 ## Sediment carbon dynamics
 
-The R-code below implements simple dynamics of particulate organic carbon (POC) in a fully saturated sediment. The code is based on the following differential equation:
+The R-code below implements simple dynamics of particulate organic carbon (POC) in a fully saturated sediment. The code is based on the following **differential equation**:
 
 $$
 \frac{\partial C}{\partial t} = \frac{1}{1-\phi_x} \cdot \frac{\partial}{\partial x}\left[(1-\phi_x) \cdot D_b \cdot \frac{ \partial C}{\partial x}\right] -
 \frac{1}{1-\phi_x} \cdot \frac{ \partial }{\partial x} \left[(1-\phi_x) \cdot v \cdot C\right]
 - r \cdot C
 $$
-where $C$ is in units of $mol~C~m^{-3}_S$, $x$ is sediment depth in $m$, $t$ is time in $days$, $\phi_x$ is the sediment porosity, $D_b$ is the bioturbation mixing coefficient ($m^2~day^{-1}$), $v$ is the advective velocity (in $m~day^{-1}$); equal to the sediment accretion velocity), and $r$ is the rate constant describing POC mineralization, (units $day^{-1}$) (mineralization is assumed to be described by first-order kinetics).
+where 
 
-The boundary conditions are as follows:
+  * $C$ is the POC concentration in $mol~C~m^{-3}_S$ ($S$ refers to the sediment's solid phase),
+  * $x$ is sediment depth in $m$, 
+  * $t$ is time in $d$ (days), 
+  * $\phi_x$ is the sediment porosity, thus $1-\phi_x$ is the corresponding solid volume fraction of the sediment (both are, in general, depth-dependent)
+  * $D_b$ is the bioturbation mixing coefficient in $m^2~d^{-1}$, 
+  * $v$ is the advective velocity in $m~d^{-1}$, equal to the sediment accretion velocity, and 
+  * $r$ is the rate constant in $d^{-1}$ describing POC mineralization (POC mineralization is assumed to follow first-order kinetics).
 
-* POC flux at the sediment-water interface is $1~mmol~C~m^{-2}~d^{-1}$, i.e., $(1-\phi_x) D_b \frac{ \partial C}{\partial x}|_{x=0} = 1\times 10^{-3}~mol~m^{-2}~d^{-1}$.
-* Zero-gradient deep in the sediment, i.e., $\left.\frac{\partial C}{\partial x}\right|_{x\rightarrow\infty}= 0$.
+The **boundary conditions** are as follows:
 
-The parameter values are as follows (all are assumed to be depth-independent):
+  * POC (deposition) flux at the sediment-water interface is $1~mmol~C~m^{-2}~d^{-1}$, i.e., 
+  
+    $(1-\phi_x) D_b \frac{ \partial C}{\partial x}|_{x=0} = 1\times 10^{-3}~mol~m^{-2}~d^{-1}$.
+
+  * Zero-gradient deep in the sediment, i.e., 
+  
+    $\left.\frac{\partial C}{\partial x}\right|_{x\rightarrow\infty}= 0$.
+
+Values of the **model parameters** are as follows (all are assumed to be depth-independent):
 
 * $r = 0.01~d^{-1}$
 * $\phi = 0.8$
 * $D_b = 1\times 10^{-6}~m^2~d^{-1}$
 * $v = 2\times 10^{-6}~m~d^{-1}$
 
-Our aim is to solve the model in a steady state in a sediment column with a depth of $L=20~cm$.
+Our **aim** is to find a steady-state solution of the model in a sediment column with a depth of $L=20~cm$.
 
-The following code specifies the model *grid* and *parameters*:
+To do that, we define the following code, which specifies 
 
-```{r Cdia_parms, echo = TRUE, message = FALSE}
-require(ReacTran)   # package with solution methods (includes deSolve, rootSolve)
-# units: space: m, time: days, concentration: mol/m3
+  * the model *grid*,
+  * the model *parameters*,
+  * the model *function*, which returns the **time-derivatives**.
+  
+Read the code carefully to recognize and understand the corresponding parts.
 
-# spatial domain: total length of 20 cm, 200 boxes
+```{r Cex-setup, echo = TRUE, message = FALSE}
+# load package with solution methods (includes deSolve, rootSolve)
+require(ReacTran)
+
+# UNITS: space: m, time: d, concentration: mol/m3
+
+# spatial domain: total length of 0.2m, 200 grid cells
 Length    <- 0.20   # [m]
 N         <- 200
 
-# grid with an exponentially increasing grid size, starting from 0.05 cm
+# model GRID with an exponentially increasing grid size, starting from 0.05 cm
 Grid      <- setup.grid.1D(L = Length, N = N, dx.1 = 0.05/100)
 
+# model PARAMETERS
 pars <- c(
- Db      = 1e-6,   # [m2/d]           sediment bioturbation coefficient (mixing)
- v       = 2e-6,   # [m/d]            sediment accretion velocity
- por     = 0.8,    # [-]              sediment porosity (constant)
- r       = 0.01,   # [/d]             POC consumption rate constant
- depoPOC = 0.001   # [mol/m2 BULK/d]  POC flux at SWI
+ depoPOC = 0.001, # [mol/m2 BULK/d]  POC flux at SWI
+ r       = 0.01,  # [/d]             POC mineralization rate constant
+ por     = 0.8,   # [-]              sediment porosity (depth-independent)
+ Db      = 1e-6,  # [m2/d]           sediment bioturbation (mixing) coefficient
+ v       = 2e-6   # [m/d]            sediment accretion velocity
 )
-```
 
-The following code specifies the model function, which returns the time-derivatives.
-
-```{r Cdia_func, echo = TRUE}
+# model FUNCTION, returning time derivatives
 Cmodel <- function (t, C, pars)   # C is a LONG vector
 {
   with (as.list(pars),{ 
@@ -110,62 +129,70 @@ Cmodel <- function (t, C, pars)   # C is a LONG vector
                       D = Db, v = v)            # mixing coef., advection velocity
  
     # reaction rate
-    Decay  <- r * C                             # [mol/m3 SOLID/d] 
+    Miner  <- r * C                             # [mol/m3 SOLID/d] 
 
     # time derivative
-    dC.dt  <- Tran.C$dC - Decay                 # mass balance
+    dC.dt  <- Tran.C$dC - Miner                 # mass balance
     
-    TotalDecay <- sum(Decay*Grid$dx*(1-por))    # depth-integrated decay rate
+    TotalMiner <- sum(Miner*Grid$dx*(1-por))    # depth-integrated mineralization rate
   
-    return(list(c(dC.dt),                       # time-derivative vector
-          TotalDecay = TotalDecay))             # [molC/m2 BULK/d]
+    return(list(c(dC.dt),                       # vector of time-derivatives
+          TotalMiner = TotalMiner))             # [molC/m2 BULK/d]
  })
 }
 ```
 
-```{r Cdia, echo = FALSE, message = FALSE}
-<<Cdia_parms>>
-<<Cdia_func>>
+```{r, echo = TRUE, message = FALSE}
+<<Cex-setup>>
 ```
 
 ### TASK
 
-In the code below, the steady-state solution is found for two values of the parameter $r$. Add another model run for $r=0.001~d^{-1}$, and plot all three results in one graph.
+In the code below, the steady-state solutions are found for two values of the parameter $r$. Add another model run for $r=0.001~d^{-1}$, and plot all three results in one graph.
 
-```{r Cex, exercise=TRUE, fig.height=4, fig.width=4, exercise.setup = "Cdia", exercise.lines = 15}
-state <- runif(n=N)   # initial guess of state variables
+```{r Cex, exercise=TRUE, fig.height=4, fig.width=4, exercise.lines = 15}
+state.ini <- runif(n=N)   # initial guess of the state variables in each grid box
 
-# run with default parameter values
-std0 <- steady.1D (y=state, func=Cmodel, parms=pars, nspec=1, dimens=N, names="POC",
-                   positive=TRUE) # to have only positive values! 
+# run with default model parameter values
+std0 <- steady.1D (y=state.ini, func=Cmodel, parms=pars, 
+                   names="POC", nspec=1, dimens=N, 
+                   positive=TRUE) # search for a solution with positive values! 
 
-# run with a different value of r (0.005 /day)
+# run with a different value of r (0.005 d-1)
 p1       <- pars
 p1["r"]  <- 0.005
-std1 <- steady.1D (y=state, func=Cmodel, parms=p1, nspec=1, dimens=N, names="POC",
+std1 <- steady.1D (y=state.ini, func=Cmodel, parms=p1, 
+                   names="POC", nspec=1, dimens=N,
                    positive=TRUE)
 
 ###### ADD YOUR CODE HERE #####
-std2 <-
+#std2 <-
 
+# plot results
 plot(std0, std1, std2, grid=Grid$x.mid, xyswap=TRUE, lty=1, las=1,
      ylab="depth (m)", xlab="POC (molC/m3 solid)")
+# add legend
+legend("bottomright", col=1:3, lty=1,
+       title="r", legend=c(pars["r"], p1["r"], p2["r"]))
 ```
 
 ## Adding DIC
 
-As the POC is consumed, DIC is produced. Add DIC, which is a *dissolved* substance, as a state variable to the model.
+DIC is produced as a result of POC mineralization. Your task now is to **add** DIC as another state variable to the model. Note that while POC is a solid substance, DIC is a solute.
 
-* Don't forget to convert from $m^3$ of solid to $m^3$ of liquid where appropriate.
-* Remember that the volume fraction for dissolved substances differs from that for solids.
-* Assume that the effective sediment diffusion coefficient of DIC is $D_{DIC} = 5\times 10^{-5}~m^2~d^{-1}$ and the bottom water DIC concentration is $2~mol~m^{-3}$. Add these two parameters to the parameter vector.
+  * Don't forget to convert from $m^3$ of solid ($m^3_S$) to $m^3$ of liquid ($m^3_L$), where appropriate.
+
+  * Remember that the volume fractions for solutes and solid substances differ from each other.
+  
+  * Assume that the effective sediment diffusion coefficient of DIC is $5\times 10^{-5}~m^2~d^{-1}$ and the bottom water DIC concentration is $2~mol~m^{-3}$. Note that these two values have already been added to the vector of model parameters.
 
 Expand the following code to include DIC dynamics.
 
 ```{r DICdia, exercise = TRUE, exercise.lines = 30}
 require(ReacTran)
+
 Length    <- 0.20   # sediment length [m]
-N         <- 200    # number of b oxes
+N         <- 200    # number of grid cells
 Grid      <- setup.grid.1D(L = Length, N = N, dx.1 = 0.05/100)
 
 pars <- c(
@@ -175,39 +202,40 @@ pars <- c(
  r       = 0.01,   # [/d]       POC consumption rate constant
  depoPOC = 1e-3,   # [mol/m2/d] POC flux at SWI
  bwDIC   = 2,      # [mol/m3]   NEW: bottom water concentration DIC
- dsDIC   = 5e-5    # [m2/d]     NEW: effective diffusion coefficient for DIC
+ diffDIC = 5e-5    # [m2/d]     NEW: effective diffusion coefficient for DIC
 )
 
-DICmodel <- function (t, y, pars)   # y is a LONG vector
+DICmodel <- function (t, state, pars)   # y is a LONG vector
 {
   with (as.list(pars),{
-    # NEW code: extract POC and DIC from the long input vector y
-    POC    <- y[1     :     N]   # first N values: POC
-    DIC    <- y[(N+1) : (2*N)]   # next  N values: DIC
+    # extract POC from the long input vector state
+    POC    <- state[1:N]         # first N values: POC
+    # NEW: extract DIC from the long input vector state
+    DIC    <- state[(  ):(  )]   # next  N values: DIC
     
     # POC: transport, reaction, mass balance
     Tran.POC <- tran.1D(C = POC, flux.up = depoPOC, # upper boundary: flux
                       dx=Grid, VF=1-por,            # grid, volume fraction
                       D=Db, v=v)                    # bioturbation, advection
-    Decay    <- r * POC                # reaction rate, [mol/m3 SOLID/d]
-    dPOC.dt  <- Tran.POC$dC - Decay    # time-derivative for POC, [mol/m3 SOLID/d]
+    Miner    <- r * POC                # reaction rate, [mol/m3 SOLID/d]
+    dPOC.dt  <- Tran.POC$dC - Miner    # time-derivative for POC, [mol/m3 SOLID/d]
 
-    # DIC: transport, time-derivative
+    # DIC: transport, mass balance
     ##### FILL IN THE CORRECT PARAMETERS HERE #####
-    Tran.DIC <- tran.1D(C = DIC, C.up =  ,  # upper boundary: concentration
-                      dx=Grid, VF=  ,       # grid, volume fraction
-                      D=  , v= )            # bioturbation, advection
+    Tran.DIC <- tran.1D(C = DIC, C.up = ,  # upper boundary: concentration
+                      dx=Grid, VF= ,       # grid, volume fraction
+                      D= , v= )            # diffusion, advection
     ##### SPECIFY THE CORRECT MASS BALANCE for DIC #####
     dDIC.dt <-    # time-derivative for DIC, [mol/m3 LIQUID/d]
     
-    TotalDecay <- sum(Decay*Grid$dx*(1-por)) # depth-integrated rate
-    return(list(c(dPOC.dt, dDIC.dt), TotalDecay = TotalDecay)) 
+    TotalMiner <- sum(Miner*Grid$dx*(1-por)) # depth-integrated rate
+    return(list(c(dPOC.dt, dDIC.dt), TotalMiner = TotalMiner)) 
  })
 }
 
-state <- runif(n=2*N)
-std <- steady.1D (y=state, func=DICmodel, parms=pars, nspec=2, dimens=N,
-                   names=c("POC","DIC"), positive = TRUE) 
+state.ini <- runif(n=2*N)
+std <- steady.1D (y=state.ini, func=DICmodel, parms=pars, 
+                  names=c("POC","DIC"), nspec=2, dimens=N, positive = TRUE) 
 plot(std, grid=Grid$x.mid, xyswap=TRUE, lty=1, las=1,
      ylab="depth (m)", xlab=c("molC/m3 SOLID", "molC/m3 LIQUID"))
 ```
@@ -215,7 +243,7 @@ plot(std, grid=Grid$x.mid, xyswap=TRUE, lty=1, las=1,
 ```{r DICdia-solution}
 require(ReacTran)
 Length    <- 0.20   # sediment length [m]
-N         <- 200    # number of b oxes
+N         <- 200    # number of grid cells
 Grid      <- setup.grid.1D(L = Length, N = N, dx.1 = 0.05/100)
 
 pars <- c(
@@ -224,41 +252,39 @@ pars <- c(
  por     = 0.8,    # [-]        sediment porosity (constant)
  r       = 0.01,   # [/d]       POC consumption rate constant
  depoPOC = 1e-3,   # [mol/m2/d] POC flux at SWI
- bwDIC   = 0.002,  # [mol/m3]   NEW: bottom water concentration DIC
- dsDIC   = 5e-5    # [m2/d]     NEW: effective diffusion coefficient for DIC
+ bwDIC   = 2,      # [mol/m3]   NEW: bottom water concentration DIC
+ diffDIC = 5e-5    # [m2/d]     NEW: effective diffusion coefficient for DIC
 )
 
-DICmodel <- function (t, y, pars)   # y is a LONG vector
+DICmodel <- function (t, state, pars)   # state is a LONG vector
 {
   with (as.list(pars),{
-    # NEW code: extract POC and DIC from the long input vector y
-    POC    <- y[1     :     N]   # first N values: POC
-    DIC    <- y[(N+1) : (2*N)]   # next  N values: DIC
+    # NEW code: extract POC and DIC from the long input vector state
+    POC    <- state[   1  :    N ]   # first N values: POC
+    DIC    <- state[(N+1) : (2*N)]   # next  N values: DIC
     
     # POC: transport, reaction, mass balance
     Tran.POC   <- tran.1D(C = POC, flux.up = depoPOC, # upper boundary: flux
                       dx=Grid, VF=1-por,              # grid, volume fraction
                       D=Db, v=v)                      # mixing, advection
-    Decay  <- r * POC                  # reaction rate, [mol/m3 SOLID/d]
-    dPOC.dt  <- Tran.POC$dC - Decay    # time-derivative for POC, [mol/m3 SOLID/d]
+    Miner   <- r * POC                # reaction rate, [mol/m3 SOLID/d]
+    dPOC.dt <- Tran.POC$dC - Miner    # time-derivative for POC, [mol/m3 SOLID/d]
 
-    # DIC: transport, time-derivative
-    ##### FILL IN THE CORRECT PARAMETERS HERE #####
+    # DIC: transport, mass balance
     Tran.DIC <- tran.1D(C = DIC, C.up = bwDIC,  # upper boundary: concentration
                       dx=Grid, VF=por,          # grid, volume fraction
-                      D=dsDIC, v=v)             # mixing, advection
-    ##### SPECIFY THE CORRECT MASS BALANCE for DIC #####
-    dDIC.dt <-  Tran.DIC$dC + Decay*(1-por)/por # time-derivative for DIC, [mol/m3 LIQUID/d]
+                      D=diffDIC, v=v)           # diffusion, advection
+    dDIC.dt  <- Tran.DIC$dC + Miner*(1-por)/por # time-derivative for DIC, [mol/m3 LIQUID/d]
     
-    TotalDecay <- sum(Decay*Grid$dx*(1-por)) # depth-integrated rate
-    return(list(c(dPOC.dt, dDIC.dt), TotalDecay = TotalDecay)) 
+    TotalMiner <- sum(Miner*Grid$dx*(1-por)) # depth-integrated rate
+    return(list(c(dPOC.dt, dDIC.dt), TotalMiner = TotalMiner)) 
  })
 }
 
 # find steady state and plot it
-state <- runif(n=2*N)
-std <- steady.1D (y=state, func=DICmodel, parms=pars, nspec=2, dimens=N,
-                   names=c("POC","DIC"), positive = TRUE) 
+state.ini <- runif(n=2*N)
+std <- steady.1D (y=state.ini, func=DICmodel, parms=pars, 
+                  names=c("POC","DIC"), nspec=2, dimens=N, positive = TRUE) 
 plot(std, grid=Grid$x.mid, xyswap=TRUE, lty=1, las=1,
      ylab="depth (m)", xlab=c("molC/m3 SOLID", "molC/m3 LIQUID"))
 ```

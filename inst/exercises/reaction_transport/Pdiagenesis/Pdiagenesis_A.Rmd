@@ -290,7 +290,7 @@ legend("bottomright",
 
 We see that the dissolved and adsorbed phases of P are in a *disequilibrium* close to the SWI, and *approaching an equilibrium* with depth. (This explains the increasing concentrations of $P_{ads}$ with depth, as a result of the *net* rate of P adsorption being positive.) The equilibrium between the dissolved and adsorbed phases is reached within the sediment column of ``r sprintf("%.2f",Length)`` $m$ for the scenario with $r_{des}=$ ``r sprintf("%.3f",p3["rPads"])`` $d^{-1}$. However, the equilibrium is *not* reached within the sediment column of ``r sprintf("%.2f",Length)`` $m$ for the scenario with $r_{des}=$ ``r sprintf("%.3f",p2["rPads"])`` $d^{-1}$. 
 
-This latter result changes if the model is run for the sediment column depth set to $1~m$. (Not shown in this document, but try to see it for yourself.) This is understandable because by changing the length of the spatial domain, we *also* we change the *boundary conditions* of the model! This highlights the importance of setting the boundary conditions so that they *realistically* represent the *in-situ* conditions of the studied system.
+This latter result changes if the model is run for the sediment column depth set to $1~m$. (Not shown in this document, but try to see it for yourself.) This is understandable because by changing the length of the spatial domain, we *also* change the *boundary conditions* of the model! This highlights the importance of setting the boundary conditions so that they *realistically* represent the *in-situ* conditions of the studied system.
 
 ## Task 3. Phosphorus Budget
 
