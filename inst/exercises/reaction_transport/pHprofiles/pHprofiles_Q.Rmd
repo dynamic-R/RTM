@@ -111,15 +111,17 @@ AE$density
 Note that \texttt{aquaenv} requires the input concentrations to be specified in [mol/kg solution], and returns alkalinity in the same unit. Also note that the default concentrations for most lump-sum species are set to zero, except for those with a default value set to \texttt{NULL}, for which the concentrations are calculated based on salinity assuming standard seawater composition.\footnote{This applies, for example, to borate ($\Sigma H(BO)_4^-$). See \texttt{?aquaenv} for more information.}
 
 It is useful to realise that although the total sulphate concentration in seawater ($\Sigma H_2SO_4 \approx 28~mM$) is much greater than the total DIC concentration ($\Sigma CO_2 \approx 2~mM$), including the contribution of sulphate leads only to minor differences in $TA$. This is because, for the seawater $pH$ of around 8, the concentrations of the sulphate species that contribute to $TA$ ($H_2SO_4$ and $HSO_4^-$) are *marginal* compared to the concentrations of the $\Sigma CO_2$ species ($CO_3^{2-}$ and $HCO_3^-$). To verify this, we calculate $TA$ for water with and without sulphate:
+
 ```{r, message=FALSE}
 AE <- aquaenv(S=35, t=20, pH=8.2, SumCO2=2e-3, 
               SumH2SO4=c(0, 28e-3)) # "seawater" without or with sulphate
 
-out <- 1e3*data.frame(TA=AE$TA,                       # contributions due to:
-                      HCO3=AE$HCO3, CO3=AE$CO3,       # carbonate ions
-                      HSO4=AE$HSO4, H2SO4=AE$H2SO4,   # sulphate
-                      BOH4=AE$BOH4,                   # borate
-                      OH=AE$OH, H=rep(10^(-AE$pH),2)) # dissociated water
+out <- 1e3*data.frame(
+  TA=AE$TA,                                 # contributions due to:
+  CO3=rep(AE$CO3,2), HCO3=rep(AE$HCO3,2),   # carbonate and bicarbonate ions
+  SO4=AE$SO4, HSO4=AE$HSO4, H2SO4=AE$H2SO4, # sulphate
+  BOH4=AE$BOH4,                             # borate
+  OH=AE$OH, H=rep(10^(-AE$pH),2))           # dissociated water
 
 knitr::kable(out)  # values in mmol/kg Liquid!
 ```

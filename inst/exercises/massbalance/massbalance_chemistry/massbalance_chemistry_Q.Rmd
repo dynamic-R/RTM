@@ -3,10 +3,10 @@ title: "Mass balances during biogeochemical processes"
 author: "Karline Soetaert and Lubos Polerecky, Utrecht University"
 date: "June 2021, revised February 2026"
 output:
-  html_document:
-    df_print: paged
   pdf_document:
     number_sections: true
+  html_document:
+    df_print: paged
 subtitle: Exercises Accompanying the Course Reaction Transport Modelling in the Hydrosphere
 header-includes:
 - \linespread{1.1}
