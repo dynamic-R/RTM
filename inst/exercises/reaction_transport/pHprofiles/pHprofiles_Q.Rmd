@@ -1,7 +1,7 @@
 ---
 title: "Estimating pH in a 1D Reaction Transport Model in R"
 author: "Karline Soetaert and Lubos Polerecky, Utrecht University"
-date: "April 2021"
+date: "April 2021, update: March 2026"
 output:
   pdf_document:
     toc: false
@@ -9,6 +9,9 @@ output:
     toc: false
     df_print: paged
 subtitle: Reader accompanying the course Reaction Transport Modelling in the Hydrosphere
+header-includes:
+  - \usepackage{caption}
+  - \captionsetup{width=5in}
 ---
 
 ## Abstract
@@ -117,13 +120,17 @@ AE <- aquaenv(S=35, t=20, pH=8.2, SumCO2=2e-3,
               SumH2SO4=c(0, 28e-3)) # "seawater" without or with sulphate
 
 out <- 1e3*data.frame(
-  TA=AE$TA,                                 # contributions due to:
-  CO3=rep(AE$CO3,2), HCO3=rep(AE$HCO3,2),   # carbonate and bicarbonate ions
-  SO4=AE$SO4, HSO4=AE$HSO4, H2SO4=AE$H2SO4, # sulphate
-  BOH4=AE$BOH4,                             # borate
-  OH=AE$OH, H=rep(10^(-AE$pH),2))           # dissociated water
+  TA    = AE$TA,                                                # contributions due to:
+  CO3   = ifelse(length(AE$CO3 )==1, rep(AE$CO3, 2), AE$CO3),   # carbonate 
+  HCO3  = ifelse(length(AE$HCO3)==1, rep(AE$HCO3,2), AE$HCO3),  # bicarbonate 
+  H2SO4 = AE$H2SO4, HSO4 = AE$HSO4, SO4  = AE$SO4,              # sulphate
+  BOH4  = AE$BOH4,                                              # borate
+  OH    = AE$OH, H = rep(10^(-AE$pH),2))                        # dissociated water
 
-knitr::kable(out)  # values in mmol/kg Liquid!
+# display results in a nice table
+require(knitr)
+kable(out,  
+      caption = "Concentrations of selected ions in seawater (in mmol/kg liquid).")
 ```
 
 The table illustrates why, in our simplified model, $\Sigma CO_2$ *must* be included but sulphate can be ignored. It also shows that the next most important contributions to $TA$ in standard seawater are $B(OH)_4^-$ (determined by the salinity) and $OH^-$ (due to dissociation of water; Reaction 7). However, their contribution is still marginal compared to that of carbonate ions. This marginal contribution of salinity to $TA$ might suggest that salinity variations can be ignored in our model. However, because salinity affects the dissociation constants of the chemical species quite a bit, salinity variations *cannot* be ignored. Nevertheless, for the sake of simplicity, we will assume salinity to be constant (and marine) in our model.
@@ -134,7 +141,7 @@ The \texttt{aquaenv} function also accepts vectors as input:
 AE <- aquaenv(S=35, t=20, TA=seq(from=1.0e-3, to=1.5e-3, length.out=100),
                SumCO2=1.2e-3, SumNH4=0.001e-3, SumHNO3=0.003e-3)
 plot(x=AE$TA, y=AE$pH, xlab="Alkalinity [mol/kg Liquid]", ylab="pH", 
-     main="aquaenv output", las=1)
+     main="aquaenv output", las=1, lwd=2, type="l")
 ```
 
 ## The extended model of the Scheldt estuary
@@ -156,7 +163,7 @@ require(ReacTran)  # package with solution methods
 # model grid
 Length  <- 100000                             # m
 N       <- 100                                # - number of boxes
-Grid    <- setup.grid.1D(L = Length, N = N)
+Grid    <- setup.grid.1D(L = Length, N = N, dx.1 = 10)
 Area    <- 20000                              # m2, cross-sectional area 
 day2sec <- 24*3600                            # number of seconds in a day
 
