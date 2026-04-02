@@ -2,11 +2,14 @@
 title: "Visualization of the model output with observed data in R"
 subtitle: "Reader Accompanying the Course Reaction Transport Modelling in the Hydrosphere"
 author: "Lubos Polerecky and Karline Soetaert, Utrecht University"
+abstract: "\\noindent Here we show how to include observed data in the same graph as the output of 0D and 1D dynamic models. Such visualization can be used, for instance, to estimate values of model parameters that best fit the observed data. We illustrate different possibilities using the ``plot`` function implemented in the ``deSolve`` package but also using functions in the ``ggplot2`` package. Along the way, we will also show how to import the observed data into R.<br><br>"
 date: "March 2021, update: February 2026"
 output:
-  pdf_document: default
-  html_document: default
-abstract: \noindent Here we show how to include observed data in the same graph as the output of 0D and 1D dynamic models. Such visualization can be used, for instance, to estimate values of model parameters that best fit the observed data. We illustrate different possibilities using the ``plot`` function implemented in the ``deSolve`` package but also using functions in the ``ggplot2`` package. Along the way, we will also show how to import the observed data into R.
+  html_document:
+    toc: true
+  pdf_document: 
+    toc: true
+    toc_depth: 3
 ---
 
 ```{r setup, include=FALSE}
@@ -145,6 +148,7 @@ legend("topleft", # placement
        lty=1, lwd=2, # line type and width
        title="b-value (country):") # legend title
 ```
+
 ### Approach using ggplot2
 
 ``ggplot2`` is an R-package that offers much more flexibility to plot graphs. Here, we demonstrate how a graph similar to the one above can be plotted using this package. Depending on the perspective, the coding approach may look more or less laborious. 
@@ -197,7 +201,9 @@ ggplot() +
              size=2)
 ```
 
-Next, we add some extra commands to make the graph look more appealing and informative. Check the comments in the code to learn more. If you want to learn even more, best is to search the internet for tutorials and help on the different ``ggplot2`` functions. Be careful, however, that you do NOT fall into a rabbit hole during this process!
+Next, we add some extra commands to make the graph look more appealing and informative. Check the comments in the code to learn more. If you want to learn even more, best is to search the internet for tutorials and help on the different ``ggplot2`` functions. 
+
+**Warning:** Be careful that you do **not** fall into a 'rabbit hole' during this process! Creating as fancy graphs as you want may lead you to spend way more time on aesthetics than on the substance you actually want to communicate graphically.
 
 ```{r, fig.height=4, fig.width=5}
 ggplot() + 
@@ -208,7 +214,7 @@ ggplot() +
   geom_point(data = SIRdata,
     aes(x = time, y = Deceased, color = Country),
     size = 2) +
-  # include error bars based on the se column
+  # include error bars based on the 'se' column
   geom_errorbar(data = SIRdata,
     aes(x = time, ymin = Deceased-se, ymax = Deceased+se, 
         color = Country),
@@ -348,6 +354,11 @@ legend("bottomright", bty = "n",
        title = expression(r[O[2]] ~~ paste("(", d^-1, "):")), 
        legend=c(p1["rO2cons"], p2["rO2cons"], p3["rO2cons"], "external"))
 ```
+
+### Approach using ggplot2
+
+We do not show here how a similar visualization could be achieved by ``ggplot2``. The example above should be sufficient for you to figure it out by yourself. 
+
 
 # References
 
